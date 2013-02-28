@@ -1,0 +1,29 @@
+Django
+-e git+https://github.com/tkopczuk/django-smartsettings.git@42cf028ebcad36d8815cd035acb276147696dd01#egg=smartsettings
+gunicorn==0.15.0
+path.py==2.4.1
+
+-e git+https://github.com/coffin/coffin.git#egg=coffin
+jinja2
+
+django-compressor
+django-storages
+slimit
+
+oauth2
+-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
+python-openid
+
+-e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
+-e git+git://github.com/comoga/django-constance#egg=django-constance
+django-celery-with-redis==3.0
+dj-database-url==0.2.1
+psycopg2==2.4.5
+South==0.7.6
+hiredis
+
+python-dateutil==1.5
+pytz
+
+pil
+requests

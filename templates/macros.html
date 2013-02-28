@@ -1,0 +1,46 @@
+{% macro render_user_stats(user) %}
+    {{ user }}
+{% endmacro %}
+
+{% macro render_event(event) %}
+    {{ event }}
+{% endmacro %}
+
+{% macro render_featured_event(event) %}
+  <a href="{% url 'events:event_detail' event_id=event.id %}">
+    <div class="event">
+      {% if event.small_image %}
+        <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         
+      {% endif %}
+      <h5>{{ event.title }}</h3>
+      <p>{{ event.short_title }}</p>
+    </div>
+  </a>
+{% endmacro %}
+
+{% macro render_events(events) %}
+   {% for event in events %}
+       {{ render_event(event) }}
+   {% endfor %}   
+{% endmacro %}
+
+{% macro render_featured_events(events) %}
+    <div class="featured-events-box">
+       {% for event in events %}
+           {{ render_featured_event(event) }}
+           {{ render_featured_event(event) }}
+           {{ render_featured_event(event) }}
+           {{ render_featured_event(event) }}
+       {% endfor %}
+   </div>
+{% endmacro %}
+
+{% macro render_my_bet(bet) %}
+    {{ bet }}
+{% endmacro %}
+
+{% macro render_my_bets(bets) %}
+   {% for bet in bets %}
+       {{ render_my_bet(bet) }}
+   {% endfor %}   
+{% endmacro %}
