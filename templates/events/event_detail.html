@@ -1,8 +1,76 @@
 {% extends "base.html" %}
 
+{% block js_includes %}
+    {{ super() }}
+    <script src="http://cdn.pubnub.com/pubnub-3.4.min.js"></script>
+{% endblock %}
+
+{% block script_document_ready %}
+    {{ super() }}
+
+    {{ macros.pubnub_init() }}
+
+    pubnub.subscribe({
+        channel    : "{{ event.publish_channel }}",
+        restore    : false,
+        callback   : function(message) {
+            alert(message)
+        },
+    });
+
+    eventPriceVM = new EventPrice({{ event.prices_dict | jsonify }});
+    betsVM = new BetsVM();
+
+    ko.applyBindings(eventPriceVM);
+    ko.applyBindings(betsVM);
+{% endblock %}
+
 {% block content %}
-    <h2>{{ event.title }}</h2>
-      {% if event.big_image %}
+    <h2 class="single-event-header">{{ event.title }}</h2>
+
+    {% if event.big_image %}
         <img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />         
-      {% endif %}
+    {% endif %}
+
+    <p>TODO: chart</p>
+    
+    <article class="description" id="description">
+        <p>{{ event.descrition }}</p>
+    </article>
+    <aside class="current-money well" id="current-money">
+        <h4 class="tac">{% trans %}Currently you have{% endtrans%}: <br/> <span class="money" data-bind="flashText:userVM.total_cash"></span></h4>
+    </aside>
+    <table class="buy-sell" data-bind="with: eventPriceVM">
+        <tr>
+            <td class="buy-for">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="buy_for_price" class="money" data-bind="flashText: buy_for_price"></span>
+                </p>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}">{% trans %}Buy for YES{% endtrans %}</button>
+            </td>
+            <td class="buy-against">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="buy_against_price" class="money" data-bind="flashText: buy_against_price"></span>
+                </p>                
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}">{% trans %}Buy for NO{% endtrans %}</button>
+            </td>
+            <td class="sell-for" style="display:none;">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="sell_for_price" class="money" data-bind="flashText: sell_for_price"></span>
+                </p>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}">{% trans %}Sell for YES{% endtrans %}</button>
+            </td>
+            <td class="sell-against" style="display:none;">
+                <p class="price-container">
+                {% trans %}Price{% endtrans %}: 
+                    <span id="sell_against_price" class="money" data-bind="flashText: sell_against_price"></span>
+                </p>
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}">{% trans %}Sell for NO{% endtrans %}</button>
+            </td>                 
+        </tr>
+    </table>
+
 {% endblock %}

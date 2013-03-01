@@ -1,6 +1,59 @@
+// http://bootswatch.com/journal/
+
+$home_site_boxes_margin: 15px 15px 15px 15px;
+$home_width: 715px;
+
+$event-stats-left-margin: 300px;
+$event-stats-internal-horiz-margin: 10px;
+$event-stats-height: 25px;
+
+a {
+    &.no-decoration, &.no-decoration:hover {
+        text-decoration: none;
+    }
+}
+
+.tac {
+    text-align: center;
+}
+
+.tal {
+    text-align: left;
+}
+
+.tar {
+    text-align: right;
+}
+
+#wrapper {
+    margin: auto;
+    
+    width: $home_width;
+}
+
+.valign-middle-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+    #position: absolute;
+    #top: 50%;
+}
+
+.valign-middle {
+    #position: relative;
+    #top: -50%;
+}
+
+footer {
+    height: 200px; // to make some margin
+}
+
+//
+// Main
+// --------------------------------------------------
+
 .featured-events-box {
-    width: 600px;
-    margin: 15px 15px 15px 15px;
+    width: $home_width;
+    margin: $home_site_boxes_margin;
 
     .event {
         display: inline-block;
@@ -9,4 +62,93 @@
 
         margin: 5px 10px 5px 10px;
     }
+}
+
+.events-box {
+    margin: $home_site_boxes_margin;
+    width: $home_width;
+
+    .event {
+        display: table;
+        position: relative;
+    
+        height: 2 * $event-stats-height;
+
+        img, .short-title {
+            display: none;
+        }
+
+        .title {
+            width: $event-stats-left-margin - $event-stats-internal-horiz-margin;
+
+        }
+
+        .stats {
+            position: absolute;
+
+            left: $event-stats-left-margin;
+            top: 0;
+            width: $home_width - $event-stats-left-margin;
+            height: $event-stats-height;
+
+            border: 1px solid #333;
+
+            font-size: 75%;
+
+            &.stats-yes {
+
+            }
+
+            &.stats-no {
+                top: $event-stats-height + 1px;
+            }
+
+            tr {
+                height: $event-stats-height;
+
+                td {
+                    vertical-align: middle;
+
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }            
+            }
+
+            .outcome {
+                width: 20%;
+            }
+            .price {
+                width: 30%;
+
+                .trend {}
+            }
+            .friends {
+                width: 50%;            
+            }
+        }
+    }
+}
+
+//
+// Event detail
+// --------------------------------------------------
+
+table.buy-sell {
+    width: $home_width;
+
+    td {
+        width: 50%;
+
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+
+.money {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #444;
+}
+
+.current-money p {
 }

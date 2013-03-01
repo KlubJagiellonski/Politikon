@@ -1,7 +1,18 @@
+import dj_database_url
 import os
 from path import path
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
+
+# ENV-defined settings
+FACEBOOK_APPLICATION_ID = os.environ.get('FACEBOOK_APPLICATION_ID')
+FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get('FACEBOOK_APPLICATION_SECRET_KEY')
+FACEBOOK_APPLICATION_NAMESPACE = os.environ.get('FACEBOOK_APPLICATION_NAMESPACE')
+
+PUBNUB_PUBLISH_KEY = os.environ.get('PUBNUB_PUBLISH_KEY')
+PUBNUB_SUBSCRIBE_KEY = os.environ.get('PUBNUB_SUBSCRIBE_KEY')
+PUBNUB_SECRET_KEY = os.environ.get('PUBNUB_SECRET_KEY')
+PUBNUB_IS_SSL = False
 
 # Django settings for politikon project.
 
@@ -34,7 +45,7 @@ CONSTANCE_CONFIG = {
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (365, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (255, 'small event image height'),
-    'BIG_EVENT_IMAGE_WIDTH': (745, 'big event image width'),
+    'BIG_EVENT_IMAGE_WIDTH': (715, 'big event image width'),
     'BIG_EVENT_IMAGE_HEIGHT': (300, 'big event image height'),
 }
 
@@ -99,6 +110,18 @@ TEMPLATE_LOADERS = (
     # 'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'bladepolska.context_processors.settings',
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'canvas.backends.FacebookCanvasFandjangoBackend'
+)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -125,6 +148,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'accounts',
+    'bladepolska',
     'canvas',
     'events',
 

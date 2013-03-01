@@ -79,6 +79,13 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
 
+    @property
+    def statistics_dict(self):
+        return {
+            'user_id': self.id,
+            'total_cash': self.total_cash,
+        }
+
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
 

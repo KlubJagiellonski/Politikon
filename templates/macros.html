@@ -1,32 +1,62 @@
+{% macro pubnub_init() %}
+      var pubnub = PUBNUB.init({
+        subscribe_key: "{{ settings.PUBNUB_SUBSCRIBE_KEY }}"
+    });
+{% endmacro %}
+
 {% macro render_user_stats(user) %}
 {% endmacro %}
 
 {% macro render_event(event) %}
-  <a href="{% url 'events:event_detail' event_id=event.id %}">
+  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}">
     <div class="event">
       {% if event.small_image %}
         <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         
       {% endif %}
-      <h5>{{ event.title }}</h3>
-      <p>{{ event.short_title }}</p>
+      <div class="valign-middle-wrapper">
+        <div class="valign-middle">
+        <h5 class="title">{{ event.title }}</h3>
+          </div>
+      </div>
+      <p class="short-title">{{ event.short_title }}</p>
+
+      <div class="stats stats-yes">
+        <table>
+          <tr>
+            <td class="outcome">{% trans %}YES{% endtrans %}</td>
+            <td class="price">{{ event.current_buy_for_price }} <span class="trend">(+0.0%)</span></td>
+            <td class="friends"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="stats stats-no">
+        <table>
+          <tr>
+            <td class="outcome">{% trans %}NO{% endtrans %}</td>
+            <td class="price">{{ event.current_buy_against_price }} <span class="trend">(+0.0%)</span></td>
+            <td class="friends"></td>
+          </tr>
+        </table>
+      </div>
+
     </div>
   </a>
 {% endmacro %}
 
 {% macro render_featured_event(event) %}
-  <a href="{% url 'events:event_detail' event_id=event.id %}">
+  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}">
     <div class="event">
       {% if event.small_image %}
         <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         
       {% endif %}
-      <h5>{{ event.title }}</h3>
-      <p>{{ event.short_title }}</p>
+      <h5 class="title">{{ event.title }}</h3>
+      <p class="short-title">{{ event.short_title }}</p>
     </div>
   </a>
 {% endmacro %}
 
 {% macro render_events(events) %}
-   <div class="events">
+   <div class="events-box">
     {% for event in events %}
       {{ render_event(event) }}
     {% endfor %}

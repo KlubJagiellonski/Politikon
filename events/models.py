@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 
 from math import exp
 
+from bladepolska.pubnub import PubNub
 from fandjango.models import User
 from .exceptions import *
 
@@ -73,6 +74,11 @@ class BetManager(models.Manager):
 
         # @TODO: PubNub, ActivityLog
 
+        PubNub().publish({
+            'channel': event.publish_channel,
+            'message': event.prices_dict
+        })
+
     def sell_a_bet(user, event_id, for_outcome, price):
         event, bet = self.get_event_and_bet_for_update(user, event_id, for_outcome)
 
@@ -99,6 +105,11 @@ class BetManager(models.Manager):
         event.save(force_update=True)
 
         # @TODO: PubNub, ActivityLog
+
+        PubNub().publish({
+            'channel': event.publish_channel,
+            'message': event.prices_dict
+        })
 
 
 class TransactionManager(models.Manager):
@@ -149,6 +160,20 @@ class Event(models.Model):
     @property
     def is_in_progress(self):
         return self.outcome == EVENT_OUTCOMES_DICT['IN_PROGRESS']
+
+    @property
+    def publish_channel(self):
+        return "event_%d" % self.id
+
+    @property
+    def prices_dict(self):
+        return {
+            'event_id': self.id,
+            'buy_for_price': self.current_buy_for_price,
+            'buy_against_price': self.current_buy_against_price,
+            'sell_for_price': self.current_buy_for_price,
+            'sell_against_price': self.current_buy_against_price,
+        }
 
     def price_for_outcome(self, outcome):
         if outcome not in BET_OUTCOMES_TO_PRICE_ATTR:

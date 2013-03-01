@@ -4,6 +4,8 @@ import os
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = ['politikon.herokuapp.com', 'politikon.pl']
+
 DATABASES = {'default': dj_database_url.config()}
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')

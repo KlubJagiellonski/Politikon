@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% import 'macros.html' as macros with context %}
 
 <html class="no-js" ng-app="politikon">
     <head>
@@ -7,23 +7,25 @@
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" charset="utf-8">
         <link rel="stylesheet" href="{% static 'css/politikon.scss' %}" type="text/x-scss" charset="utf-8">
         {% endcompress %}
+
+        {% block css_includes %}{% endblock %}
     </head>
 
     <body>
-        <header>
-            <h1>POLITIKON</h1>
+        <div id="wrapper">
+            <header>
+                <h1>POLITIKON</h1>
+            </header>
 
-            <div class="user-stats">
-                {{ macros.render_user_stats(user) }}
+            <div class="content">
+                {% block content %}
+                {% endblock %}
             </div>
-        </header>
 
-        <div class="content">
-            {% block content %}
-            {% endblock %}
+            <footer></footer>
         </div>
 
-        <footer></footer>
+        <div id="fb-root"></div>        
 
         {% compress js %}
         <script type="text/javascript" src="{% static 'js/libs/jquery-1.9.1.js' %}"></script>
@@ -32,11 +34,35 @@
         <script type="text/coffeescript" src="{% static 'js/app.coffee' %}"></script>
         {% endcompress %}
 
+        {% block js_includes %}{% endblock %}
+
         <script type="text/javascript">
             {% block script %}{% endblock %}
 
+            (function() {
+                var e = document.createElement('script'); e.async = true;
+                e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                document.getElementById('fb-root').appendChild(e);
+            }());
+
+            window.fbAsyncInit = function() {
+                FB.init({appId: '{{ settings.FACEBOOK_APPLICATION_ID }}', status: true, cookie: true, xfbml: true});
+
+                FB.Canvas.setSize({
+                    width: $('body').outerWidth(true),
+                    height: $('body').outerHeight(true)
+                });
+                FB.Canvas.setAutoGrow(true);
+
+                {% block script_facebook_on_load %}{% endblock %}
+            }
+
             $(document).ready(function() {
-                {% block document_ready %}{% endblock %}
+                userVM = new UserStatistics({{ request.user.statistics_dict|jsonify }});
+
+                {% block script_document_ready %}{% endblock %}
+
+                ko.applyBindings(userVM);
             });
         </script>
     </body>

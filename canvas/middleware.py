@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import authenticate, login
 from django.http import QueryDict
 from django.core.exceptions import ImproperlyConfigured
 
@@ -120,10 +121,9 @@ class FacebookMiddleware():
 
                     user.save()
 
-                try:
-                    request.user = user.django_user
-                except DjangoUser.DoesNotExist:
-                    django_user = DjangoUser.objects.get_for_facebook_user(user)
+                django_user = authenticate(fandjango_user=user)
+                if django_user is not None and django_user.is_active:
+                    login(request, django_user)
                     request.user = django_user
 
                 if not user.oauth_token.extended:

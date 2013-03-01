@@ -1,5 +1,6 @@
 from coffin.shortcuts import render_to_response
 from django.http import Http404
+from django.template import RequestContext
 
 from .models import *
 
@@ -14,4 +15,4 @@ def event_detail(request, event_id):
         'event': event
     }
 
-    return render_to_response('events/event_detail.html', ctx)
+    return render_to_response('events/event_detail.html', ctx, RequestContext(request))
