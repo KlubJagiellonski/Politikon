@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ event.title }}</h2>
+      {% if event.big_image %}
+        <img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />         
+      {% endif %}
+{% endblock %}

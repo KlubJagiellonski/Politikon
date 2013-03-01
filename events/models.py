@@ -1,8 +1,16 @@
 # coding: utf-8
 
 from django.db import models
+from django.utils.translation import ugettext as _
+
+from math import exp
 
 from fandjango.models import User
+from .exceptions import *
+
+
+def round_price(price):
+    return round(price, 2)
 
 
 class EventManager(models.Manager):
@@ -20,8 +28,82 @@ class EventManager(models.Manager):
 class BetManager(models.Manager):
     def get_users_bets(self, user):
         bets = self.select_related('event_set').filter(user=user)
-        
+
         return bets
+
+    def get_event_and_bet_for_update(user, event_id, for_outcome):
+        event = list(Event.objects.select_for_update().filter(id=event_id))
+        try:
+            event = event[0]
+        except IndexError:
+            raise NonexistantEvent(_("Requested event does not exist."))
+
+        if not event.is_in_progress:
+            raise EventNotInProgress(_("Event is no longer in progress."))
+
+        bet = self.get_or_create(user=user, event_id=event, outcome=for_outcome)
+        bet = self.select_for_update().filter(id=bet_id)[0]
+
+        return event, bet
+
+    def buy_a_bet(user, event_id, for_outcome, price):
+        event, bet = self.get_event_and_bet_for_update(user, event_id, for_outcome)
+
+        requested_price = round_price(price)
+        current_true_price = event.price_for_outcome(for_outcome)
+        if requested_price != current_true_price:
+            raise PriceMismatch(_("Price has changed."))
+
+        quantity = 1
+
+        Transaction.objects.create_transaction(user, event_id, for_outcome, current_true_price, direction="BUY", quantity=quantity)
+
+        event_total_bought_price = (bet.bought_avg_price * bet.bought)
+        bought_for_total = current_true_price * quantity
+        after_bought_quantity = bet.bought + quantity
+
+        bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
+        bet.has += quantity
+        bet.bought += quantity
+
+        bet.save(force_update=True)
+
+        event.increment_quantity(for_outcome, by_amount=quantity)
+        event.save(force_update=True)
+
+        # @TODO: PubNub, ActivityLog
+
+    def sell_a_bet(user, event_id, for_outcome, price):
+        event, bet = self.get_event_and_bet_for_update(user, event_id, for_outcome)
+
+        requested_price = round_price(price)
+        current_true_price = event.price_for_outcome(for_outcome)
+        if requested_price != current_true_price:
+            raise PriceMismatch(_("Price has changed."))
+
+        quantity = 1
+
+        Transaction.objects.create_transaction(user, event_id, for_outcome, current_true_price, direction="SELL", quantity=quantity)
+
+        event_total_sold_price = (bet.sold_avg_price * bet.sold)
+        sold_for_total = current_true_price * quantity
+        after_sold_quantity = bet.sold + quantity
+
+        bet.sold_avg_price = (event_total_sold_price + sold_for_total) / after_sold_quantity
+        bet.has -= quantity
+        bet.sold += quantity
+
+        bet.save(force_update=True)
+
+        event.increment_quantity(for_outcome, by_amount=quantity)
+        event.save(force_update=True)
+
+        # @TODO: PubNub, ActivityLog
+
+
+class TransactionManager(models.Manager):
+    pass
+
 
 EVENT_OUTCOMES_DICT = {
     'IN_PROGRESS': 1,
@@ -36,6 +118,7 @@ EVENT_OUTCOMES = [
     (3, 'rozstrzygnięte na TAK'),
     (4, 'rozstrzygnięte na NIE'),
 ]
+
 
 class Event(models.Model):
     objects = EventManager()
@@ -53,8 +136,8 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u"data rozstrzygnięcia")
 
-    current_buy_price = models.FloatField(u"cena akcji zdarzenia", default=50.0)
-    current_sell_price = models.FloatField(u"cena akcji zdarzenia przeciwnego", default=50.0)
+    current_buy_for_price = models.FloatField(u"cena akcji zdarzenia", default=50.0)
+    current_buy_against_price = models.FloatField(u"cena akcji zdarzenia przeciwnego", default=50.0)
 
     last_transaction_date = models.DateTimeField(u"data ostatniej transakcji", null=True)
 
@@ -63,13 +146,69 @@ class Event(models.Model):
 
     B = models.FloatField(u"stała B", default=5)
 
+    @property
+    def is_in_progress(self):
+        return self.outcome == EVENT_OUTCOMES_DICT['IN_PROGRESS']
+
+    def price_for_outcome(self, outcome):
+        if outcome not in BET_OUTCOMES_TO_PRICE_ATTR:
+            raise UnknownOutcome()
+
+        attr = BET_OUTCOMES_TO_PRICE_ATTR[outcome]
+        return getattr(self, attr)
+
+    def increment_quantity(self, outcome, by_amount):
+        if outcome not in BET_OUTCOMES_TO_QUANTITY_ATTR:
+            raise UnknownOutcome()
+
+        attr = BET_OUTCOMES_TO_QUANTITY_ATTR[outcome]
+        setattr(self, attr, getattr(self, attr) + 1)
+
+        self.recalculate_prices()
+
+    def recalculate_prices(self):
+        e_for = exp(self.Q_for / self.B)
+        e_against = exp(self.Q_against / self.B)
+        buy_for_price = e_for / (e_for + e_against)
+        buy_against_price = e_against / (e_for + e_against)
+
+        self.current_buy_for_price = round_price(buy_for_price)
+        self.current_buy_against_price = round_price(buy_against_price)
+
+    def save(self, **kwargs):
+        if not self.id:
+            self.recalculate_prices()
+
+        super(Event, self).save()
+
+
+BET_OUTCOMES_DICT = {
+    'YES': True,
+    'NO': False,
+}
+
+BET_OUTCOMES_TO_PRICE_ATTR = {
+    'YES': 'current_buy_for_price',
+    'NO': 'current_buy_against_price'
+}
+
+BET_OUTCOMES_TO_QUANTITY_ATTR = {
+    'YES': 'Q_for',
+    'NO': 'Q_against'
+}
+
+BET_OUTCOMES = [
+    (True, 'udziały na TAK'),
+    (False, 'udziały na NIE'),
+]
+
 
 class Bet(models.Model):
     objects = BetManager()
 
     user = models.ForeignKey(User, null=False)
     event = models.ForeignKey(Event, null=False)
-    outcome = models.BooleanField("zakład na TAK")
+    outcome = models.BooleanField("zakład na TAK", choices=BET_OUTCOMES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
     bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
     sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)
@@ -96,7 +235,10 @@ TRANSACTION_TYPES = [
     (6, 'wygrana po rozstrzygnięciu wydarzenia'),
 ]
 
+
 class Transaction(models.Model):
+    objects = TransactionManager()
+
     user = models.ForeignKey(User, null=False)
     event = models.ForeignKey(Event, null=False)
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)

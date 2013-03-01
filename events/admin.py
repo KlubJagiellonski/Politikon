@@ -6,8 +6,8 @@ from models import *
 class EventAdmin(admin.ModelAdmin):
     readonly_fields = [
         'outcome',
-        'current_buy_price',
-        'current_sell_price',
+        'current_buy_for_price',
+        'current_buy_against_price',
         'last_transaction_date',
         'Q_for',
         'Q_against',

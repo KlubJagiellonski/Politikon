@@ -34,6 +34,8 @@ CONSTANCE_CONFIG = {
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (365, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (255, 'small event image height'),
+    'BIG_EVENT_IMAGE_WIDTH': (745, 'big event image width'),
+    'BIG_EVENT_IMAGE_HEIGHT': (300, 'big event image height'),
 }
 
 # Absolute path to the directory static files should be collected to.

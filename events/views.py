@@ -14,4 +14,4 @@ def event_detail(request, event_id):
         'event': event
     }
 
-    return render_to_response('canvas/event_detail.html', ctx)
+    return render_to_response('events/event_detail.html', ctx)
