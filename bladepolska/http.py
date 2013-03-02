@@ -47,3 +47,7 @@ class JSONResponse(HttpResponse):
 
 class JSONResponseCreated(JSONResponse):
     status_code = 201
+
+
+class JSONResponseBadRequest(JSONResponse):
+    status_code = 400

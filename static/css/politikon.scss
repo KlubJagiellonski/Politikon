@@ -141,6 +141,14 @@ table.buy-sell {
 
         text-align: center;
         vertical-align: middle;
+        
+        .price-container, .bets-container {
+            height: 30px;
+        }
+
+        .bets-container {
+            margin-top: 20px;
+        }
     }
 }
 
@@ -148,7 +156,4 @@ table.buy-sell {
     font-size: 1.2em;
     font-weight: bold;
     color: #444;
-}
-
-.current-money p {
 }

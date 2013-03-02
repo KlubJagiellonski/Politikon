@@ -5,6 +5,13 @@
     <script src="http://cdn.pubnub.com/pubnub-3.4.min.js"></script>
 {% endblock %}
 
+{% block initial_data %}
+    {{ super() }}
+
+    initialData['bets'] = {{ bet_dicts | jsonify }};
+    initialData['events'] = [{{ event_dict | jsonify }}];
+{% endblock %}
+
 {% block script_document_ready %}
     {{ super() }}
 
@@ -17,12 +24,6 @@
             alert(message)
         },
     });
-
-    eventPriceVM = new EventPrice({{ event.prices_dict | jsonify }});
-    betsVM = new BetsVM();
-
-    ko.applyBindings(eventPriceVM);
-    ko.applyBindings(betsVM);
 {% endblock %}
 
 {% block content %}
@@ -33,42 +34,58 @@
     {% endif %}
 
     <p>TODO: chart</p>
-    
+
     <article class="description" id="description">
         <p>{{ event.descrition }}</p>
     </article>
     <aside class="current-money well" id="current-money">
         <h4 class="tac">{% trans %}Currently you have{% endtrans%}: <br/> <span class="money" data-bind="flashText:userVM.total_cash"></span></h4>
     </aside>
-    <table class="buy-sell" data-bind="with: eventPriceVM">
+    <table class="buy-sell" data-bind="with: eventsVM.firstEvent()">
         <tr>
-            <td class="buy-for">
+            <td class="buy-for" style="display:none;" data-bind="visible: has_bets_for_NO() == 0">
                 <p class="price-container">
                     {% trans %}Price{% endtrans %}:
                     <span id="buy_for_price" class="money" data-bind="flashText: buy_for_price"></span>
                 </p>
-                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}">{% trans %}Buy for YES{% endtrans %}</button>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_buy_YES, click: buy_YES">{% trans %}Buy for YES{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
+                </p>
             </td>
-            <td class="buy-against">
+            <td class="buy-against" style="display:none;" data-bind="visible: has_bets_for_YES() == 0">
                 <p class="price-container">
                     {% trans %}Price{% endtrans %}:
                     <span id="buy_against_price" class="money" data-bind="flashText: buy_against_price"></span>
                 </p>                
-                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}">{% trans %}Buy for NO{% endtrans %}</button>
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_buy_NO, click: buy_NO">{% trans %}Buy for NO{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
+                </p>
             </td>
-            <td class="sell-for" style="display:none;">
+            <td class="sell-for" style="display:none;" data-bind="visible: has_bets_for_YES() > 0">
                 <p class="price-container">
                     {% trans %}Price{% endtrans %}:
                     <span id="sell_for_price" class="money" data-bind="flashText: sell_for_price"></span>
                 </p>
-                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}">{% trans %}Sell for YES{% endtrans %}</button>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_sell_YES, click: sell_YES">{% trans %}Sell for YES{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
+                </p>                
             </td>
-            <td class="sell-against" style="display:none;">
+            <td class="sell-against" style="display:none;" data-bind="visible: has_bets_for_NO() > 0">
                 <p class="price-container">
                 {% trans %}Price{% endtrans %}: 
                     <span id="sell_against_price" class="money" data-bind="flashText: sell_against_price"></span>
                 </p>
-                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}">{% trans %}Sell for NO{% endtrans %}</button>
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_sell_NO, click: sell_NO">{% trans %}Sell for NO{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
+                </p>
             </td>                 
         </tr>
     </table>

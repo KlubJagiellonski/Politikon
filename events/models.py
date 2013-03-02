@@ -1,6 +1,8 @@
 # coding: utf-8
 
+from django.contrib import auth
 from django.db import models
+from django.db import transaction
 from django.utils.translation import ugettext as _
 
 from math import exp
@@ -27,12 +29,12 @@ class EventManager(models.Manager):
 
 
 class BetManager(models.Manager):
-    def get_users_bets(self, user):
-        bets = self.select_related('event_set').filter(user=user)
+    def get_users_bets_for_events(self, user, events):
+        bets = self.filter(user=user, event__in=events)
 
         return bets
 
-    def get_event_and_bet_for_update(user, event_id, for_outcome):
+    def get_user_event_and_bet_for_update(self, user, event_id, for_outcome):
         event = list(Event.objects.select_for_update().filter(id=event_id))
         try:
             event = event[0]
@@ -42,25 +44,37 @@ class BetManager(models.Manager):
         if not event.is_in_progress:
             raise EventNotInProgress(_("Event is no longer in progress."))
 
-        bet = self.get_or_create(user=user, event_id=event, outcome=for_outcome)
-        bet = self.select_for_update().filter(id=bet_id)[0]
+        bet, created = self.get_or_create(user_id=user.id, event_id=event.id, outcome=for_outcome)
+        bet = list(self.select_for_update().filter(id=bet.id))[0]
 
-        return event, bet
+        user = list(auth.get_user_model().objects.select_for_update().filter(id=user.id))[0]
 
-    def buy_a_bet(user, event_id, for_outcome, price):
-        event, bet = self.get_event_and_bet_for_update(user, event_id, for_outcome)
+        return user, event, bet
+
+    @transaction.commit_on_success()
+    def buy_a_bet(self, user, event_id, for_outcome, price):
+        user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         requested_price = round_price(price)
-        current_true_price = event.price_for_outcome(for_outcome)
-        if requested_price != current_true_price:
-            raise PriceMismatch(_("Price has changed."))
+        current_tx_price = event.price_for_outcome(for_outcome)
+        if requested_price != current_tx_price:
+            raise PriceMismatch(_("Price has changed."), event)
 
         quantity = 1
+        bought_for_total = current_tx_price * quantity
 
-        Transaction.objects.create_transaction(user, event_id, for_outcome, current_true_price, direction="BUY", quantity=quantity)
+        if (user.total_cash < bought_for_total):
+            raise InsufficientCash(_("You don't have enough cash."), user)
+
+        if for_outcome == 'YES':
+            transaction_type = TRANSACTION_TYPES_DICT['BUY_YES']
+        else:
+            transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
+        Transaction.objects.create(
+            user_id=user.id, event_id=event.id, type=transaction_type,
+            quantity=quantity, price=current_tx_price)
 
         event_total_bought_price = (bet.bought_avg_price * bet.bought)
-        bought_for_total = current_true_price * quantity
         after_bought_quantity = bet.bought + quantity
 
         bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
@@ -69,30 +83,45 @@ class BetManager(models.Manager):
 
         bet.save(force_update=True)
 
+        user.total_cash -= bought_for_total
+        user.save(force_update=True)
+
         event.increment_quantity(for_outcome, by_amount=quantity)
         event.save(force_update=True)
 
-        # @TODO: PubNub, ActivityLog
+        # @TODO: ActivityLog
 
         PubNub().publish({
             'channel': event.publish_channel,
-            'message': event.prices_dict
+            'message': event.event_dict
         })
 
-    def sell_a_bet(user, event_id, for_outcome, price):
-        event, bet = self.get_event_and_bet_for_update(user, event_id, for_outcome)
+        return user, event, bet
+
+    @transaction.commit_on_success()
+    def sell_a_bet(self, user, event_id, for_outcome, price):
+        user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         requested_price = round_price(price)
-        current_true_price = event.price_for_outcome(for_outcome)
-        if requested_price != current_true_price:
-            raise PriceMismatch(_("Price has changed."))
+        current_tx_price = event.price_for_outcome(for_outcome)
+        if requested_price != current_tx_price:
+            raise PriceMismatch(_("Price has changed."), event)
 
         quantity = 1
+        sold_for_total = current_tx_price * quantity
 
-        Transaction.objects.create_transaction(user, event_id, for_outcome, current_true_price, direction="SELL", quantity=quantity)
+        if (bet.has < quantity):
+            raise InsufficientBets(_("You don't have enough shares."), bet)
+
+        if for_outcome == 'YES':
+            transaction_type = TRANSACTION_TYPES_DICT['SELL_YES']
+        else:
+            transaction_type = TRANSACTION_TYPES_DICT['SELL_NO']
+        Transaction.objects.create(
+            user_id=user.id, event_id=event.id, type=transaction_type,
+            quantity=quantity, price=current_tx_price)
 
         event_total_sold_price = (bet.sold_avg_price * bet.sold)
-        sold_for_total = current_true_price * quantity
         after_sold_quantity = bet.sold + quantity
 
         bet.sold_avg_price = (event_total_sold_price + sold_for_total) / after_sold_quantity
@@ -101,20 +130,24 @@ class BetManager(models.Manager):
 
         bet.save(force_update=True)
 
+        user.total_cash += sold_for_total
+        user.save(force_update=True)
+
         event.increment_quantity(for_outcome, by_amount=quantity)
         event.save(force_update=True)
 
-        # @TODO: PubNub, ActivityLog
+        # @TODO: ActivityLog
 
         PubNub().publish({
             'channel': event.publish_channel,
-            'message': event.prices_dict
+            'message': event.event_dict
         })
+
+        return user, event, bet
 
 
 class TransactionManager(models.Manager):
     pass
-
 
 EVENT_OUTCOMES_DICT = {
     'IN_PROGRESS': 1,
@@ -166,7 +199,7 @@ class Event(models.Model):
         return "event_%d" % self.id
 
     @property
-    def prices_dict(self):
+    def event_dict(self):
         return {
             'event_id': self.id,
             'buy_for_price': self.current_buy_for_price,
@@ -212,6 +245,11 @@ BET_OUTCOMES_DICT = {
     'NO': False,
 }
 
+BET_OUTCOMES_INV_DICT = {
+    True: 'YES',
+    False: 'NO',
+}
+
 BET_OUTCOMES_TO_PRICE_ATTR = {
     'YES': 'current_buy_for_price',
     'NO': 'current_buy_against_price'
@@ -240,6 +278,21 @@ class Bet(models.Model):
     bought_avg_price = models.FloatField(u"kupione po średniej cenie", default=0, null=False)
     sold_avg_price = models.FloatField(u"sprzedane po średniej cenie", default=0, null=False)
     rewarded_total = models.FloatField(u"nagroda za wynik", default=0, null=False)
+
+    @property
+    def bet_dict(self):
+        return {
+            'bet_id': self.id,
+            'event_id': self.event.id,
+            'user_id': self.user.id,
+            'outcome': BET_OUTCOMES_INV_DICT[self.outcome],
+            'has': self.has,
+            'bought': self.bought,
+            'sold': self.sold,
+            'bought_avg_price': self.bought_avg_price,
+            'sold_avg_price': self.sold_avg_price,
+            'rewarded_total': self.rewarded_total,
+        }
 
 
 TRANSACTION_TYPES_DICT = {
