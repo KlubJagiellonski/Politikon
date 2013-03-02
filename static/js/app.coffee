@@ -54,14 +54,14 @@ ko.bindingHandlers.bootstrapButtonLoading =
             bet = @bet_for_YES()
 
             return 0 if (bet == null)
-            return bet.has
+            return bet.has()
 
     @has_bets_for_NO = ko.computed 
         read: =>
             bet = @bet_for_NO()
 
             return 0 if (bet == null)
-            return bet.has
+            return bet.has()
 
     @buy_YES = =>
         @loading_buy_YES(true)
@@ -164,11 +164,6 @@ ko.bindingHandlers.bootstrapButtonLoading =
     return
 
 @Bet = (data) -> 
-    @outcome = outcome
-    @bought_avg_price = ko.observable(0)
-    @sold_avg_price = ko.observable(0)
-    @has = ko.observable(0)
-
     @id = ko.observable(if data then data.bet_id else 0)
     @event_id = ko.observable(if data then data.event_id else 0)
     @user_id = ko.observable(if data then data.user_id else 0)
@@ -200,8 +195,8 @@ ko.bindingHandlers.bootstrapButtonLoading =
     @bets = ko.observableArray([])
 
     @bet_for_event_and_outcome = (event, outcome) =>
-        bets_for_event = ko.utils.arrayFilter @bets(), (item) -> item.event_id == event.id
-        bet = ko.utils.arrayFirst bets_for_event, (item) -> item.outcome == outcome
+        bets_for_event = ko.utils.arrayFilter @bets(), (item) -> item.event_id() == event.id()
+        bet = ko.utils.arrayFirst bets_for_event, (item) -> item.outcome() == outcome
 
         return bet
 

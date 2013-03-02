@@ -1,6 +1,6 @@
 from coffin.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
@@ -29,7 +29,7 @@ def event_detail(request, event_id):
         'event': event,
         'event_dict': event.event_dict,
         'bets': user_bets,
-        'bets_dict': [bet.bet_dict for bet in user_bets]
+        'bet_dicts': [bet.bet_dict for bet in user_bets]
     }
 
     return render_to_response('events/event_detail.html', ctx, RequestContext(request))
@@ -40,7 +40,7 @@ def event_detail(request, event_id):
 @csrf_exempt
 def create_transaction(request, event_id):
     try:
-        buy = bool(request.POST['buy'])
+        buy = (request.POST['buy'] == 'true')
         outcome = request.POST['outcome']
         for_price = float(request.POST['for_price'])
     except:

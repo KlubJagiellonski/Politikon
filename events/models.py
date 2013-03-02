@@ -44,7 +44,11 @@ class BetManager(models.Manager):
         if not event.is_in_progress:
             raise EventNotInProgress(_("Event is no longer in progress."))
 
-        bet, created = self.get_or_create(user_id=user.id, event_id=event.id, outcome=for_outcome)
+        if for_outcome not in BET_OUTCOMES_DICT:
+            raise UnknownOutcome()
+
+        bet_outcome = BET_OUTCOMES_DICT[for_outcome]
+        bet, created = self.get_or_create(user_id=user.id, event_id=event.id, outcome=bet_outcome)
         bet = list(self.select_for_update().filter(id=bet.id))[0]
 
         user = list(auth.get_user_model().objects.select_for_update().filter(id=user.id))[0]
@@ -54,6 +58,11 @@ class BetManager(models.Manager):
     @transaction.commit_on_success()
     def buy_a_bet(self, user, event_id, for_outcome, price):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
+
+        if for_outcome == 'YES':
+            transaction_type = TRANSACTION_TYPES_DICT['BUY_YES']
+        else:
+            transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
 
         requested_price = round_price(price)
         current_tx_price = event.price_for_outcome(for_outcome)
@@ -66,10 +75,6 @@ class BetManager(models.Manager):
         if (user.total_cash < bought_for_total):
             raise InsufficientCash(_("You don't have enough cash."), user)
 
-        if for_outcome == 'YES':
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_YES']
-        else:
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
         Transaction.objects.create(
             user_id=user.id, event_id=event.id, type=transaction_type,
             quantity=quantity, price=current_tx_price)
@@ -133,7 +138,7 @@ class BetManager(models.Manager):
         user.total_cash += sold_for_total
         user.save(force_update=True)
 
-        event.increment_quantity(for_outcome, by_amount=quantity)
+        event.increment_quantity(for_outcome, by_amount=-quantity)
         event.save(force_update=True)
 
         # @TODO: ActivityLog
@@ -220,7 +225,7 @@ class Event(models.Model):
             raise UnknownOutcome()
 
         attr = BET_OUTCOMES_TO_QUANTITY_ATTR[outcome]
-        setattr(self, attr, getattr(self, attr) + 1)
+        setattr(self, attr, getattr(self, attr) + by_amount)
 
         self.recalculate_prices()
 
