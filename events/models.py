@@ -65,7 +65,7 @@ class BetManager(models.Manager):
             transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
 
         requested_price = round_price(price)
-        current_tx_price = event.price_for_outcome(for_outcome)
+        current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
         if requested_price != current_tx_price:
             raise PriceMismatch(_("Price has changed."), event)
 
@@ -98,7 +98,11 @@ class BetManager(models.Manager):
 
         PubNub().publish({
             'channel': event.publish_channel,
-            'message': event.event_dict
+            'message': {
+                'updates': {
+                    'events': [event.event_dict]
+                }
+            }
         })
 
         return user, event, bet
@@ -108,7 +112,7 @@ class BetManager(models.Manager):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         requested_price = round_price(price)
-        current_tx_price = event.price_for_outcome(for_outcome)
+        current_tx_price = event.price_for_outcome(for_outcome, direction='SELL')
         if requested_price != current_tx_price:
             raise PriceMismatch(_("Price has changed."), event)
 
@@ -145,7 +149,11 @@ class BetManager(models.Manager):
 
         PubNub().publish({
             'channel': event.publish_channel,
-            'message': event.event_dict
+            'message': {
+                'updates': {
+                    'events': [event.event_dict]
+                }
+            }
         })
 
         return user, event, bet
@@ -185,8 +193,10 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u"data rozstrzygnięcia")
 
-    current_buy_for_price = models.FloatField(u"cena akcji zdarzenia", default=50.0)
-    current_buy_against_price = models.FloatField(u"cena akcji zdarzenia przeciwnego", default=50.0)
+    current_buy_for_price = models.FloatField(u"cena nabycia akcji zdarzenia", default=50.0)
+    current_buy_against_price = models.FloatField(u"cena nabycia akcji zdarzenia przeciwnego", default=50.0)
+    current_sell_for_price = models.FloatField(u"cena sprzedaży akcji zdarzenia", default=50.0)
+    current_sell_against_price = models.FloatField(u"cena sprzedaży akcji zdarzenia przeciwnego", default=50.0)
 
     last_transaction_date = models.DateTimeField(u"data ostatniej transakcji", null=True)
 
@@ -209,15 +219,15 @@ class Event(models.Model):
             'event_id': self.id,
             'buy_for_price': self.current_buy_for_price,
             'buy_against_price': self.current_buy_against_price,
-            'sell_for_price': self.current_buy_for_price,
-            'sell_against_price': self.current_buy_against_price,
+            'sell_for_price': self.current_sell_for_price,
+            'sell_against_price': self.current_sell_against_price,
         }
 
-    def price_for_outcome(self, outcome):
-        if outcome not in BET_OUTCOMES_TO_PRICE_ATTR:
+    def price_for_outcome(self, outcome, direction='BUY'):
+        if (direction, outcome) not in BET_OUTCOMES_TO_PRICE_ATTR:
             raise UnknownOutcome()
 
-        attr = BET_OUTCOMES_TO_PRICE_ATTR[outcome]
+        attr = BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
     def increment_quantity(self, outcome, by_amount):
@@ -230,13 +240,29 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def recalculate_prices(self):
-        e_for = exp(self.Q_for / self.B)
-        e_against = exp(self.Q_against / self.B)
-        buy_for_price = e_for / (e_for + e_against)
-        buy_against_price = e_against / (e_for + e_against)
+        factor = 100.
 
-        self.current_buy_for_price = round_price(buy_for_price)
-        self.current_buy_against_price = round_price(buy_against_price)
+        B = self.B
+
+        Q_for = self.Q_for
+        Q_against = self.Q_against
+        Q_for_sell = max(0, Q_for - 1)
+        Q_against_sell = max(0, Q_against - 1)
+
+        e_for_buy = exp(Q_for / B)
+        e_against_buy = exp(Q_against / B)
+        e_for_sell = exp(Q_for_sell / B)
+        e_against_sell = exp(Q_against_sell / B)
+
+        buy_for_price = e_for_buy / (e_for_buy + e_against_buy)
+        buy_against_price = e_against_buy / (e_for_buy + e_against_buy)
+        sell_for_price = e_for_sell / (e_for_sell + e_against_buy)
+        sell_against_price = e_against_sell / (e_for_buy + e_against_sell)
+
+        self.current_buy_for_price = round_price(factor * buy_for_price)
+        self.current_buy_against_price = round_price(factor * buy_against_price)
+        self.current_sell_for_price = round_price(factor * sell_for_price)
+        self.current_sell_against_price = round_price(factor * sell_against_price)
 
     def save(self, **kwargs):
         if not self.id:
@@ -256,8 +282,10 @@ BET_OUTCOMES_INV_DICT = {
 }
 
 BET_OUTCOMES_TO_PRICE_ATTR = {
-    'YES': 'current_buy_for_price',
-    'NO': 'current_buy_against_price'
+    ('BUY', 'YES'): 'current_buy_for_price',
+    ('BUY', 'NO'): 'current_buy_against_price',
+    ('SELL', 'YES'): 'current_sell_for_price',
+    ('SELL', 'NO'): 'current_sell_against_price'
 }
 
 BET_OUTCOMES_TO_QUANTITY_ATTR = {
@@ -327,4 +355,4 @@ class Transaction(models.Model):
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)
-    price = models.PositiveIntegerField(u"cena jednostkowa", default=0, null=False)
+    price = models.FloatField(u"cena jednostkowa", default=0, null=False)

@@ -48,6 +48,34 @@ footer {
 }
 
 //
+// Errors
+// --------------------------------------------------
+.animated-feedback-box {
+    position: relative;
+    
+    .alert {
+        position: relative;
+    }
+
+    .fade {
+      top: -20px;
+      opacity: 0;
+      -webkit-transition: all 0.5s linear;
+      -moz-transition: all 0.5s linear;
+      -o-transition: all 0.5s linear;
+      transition: all 0.5s linear;
+    }
+    .fade.in {
+      top: 0;
+      opacity: 1;
+    }
+    .fade.out {
+      top: -20px;
+      opacity: 0;
+    }
+}
+
+//
 // Main
 // --------------------------------------------------
 
@@ -133,6 +161,12 @@ footer {
 // Event detail
 // --------------------------------------------------
 
+.current-money {
+    .money {
+        height: 28px;
+    }
+}
+
 table.buy-sell {
     width: $home_width;
 
@@ -144,6 +178,10 @@ table.buy-sell {
         
         .price-container, .bets-container {
             height: 30px;
+
+            .money {
+                height: 21px;
+            }
         }
 
         .bets-container {
@@ -153,6 +191,8 @@ table.buy-sell {
 }
 
 .money {
+    display: inline-block;
+    
     font-size: 1.2em;
     font-weight: bold;
     color: #444;

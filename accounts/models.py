@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     username = models.CharField(u"email", max_length=1024, unique=True)
-    name = models.CharField(max_length=1024)
+    name = models.CharField(max_length=1024, blank=True)
     is_active = models.BooleanField(u"can log in", default=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
     is_deleted = models.BooleanField(u"is deleted", default=False)
@@ -83,7 +83,7 @@ class User(AbstractBaseUser):
     def statistics_dict(self):
         return {
             'user_id': self.id,
-            'total_cash': self.total_cash,
+            'total_cash': "%.2f" % self.total_cash,
         }
 
     def get_full_name(self):

@@ -21,7 +21,7 @@
         channel    : "{{ event.publish_channel }}",
         restore    : false,
         callback   : function(message) {
-            alert(message)
+            ajaxResponseParser(message);
         },
     });
 {% endblock %}
@@ -38,6 +38,7 @@
     <article class="description" id="description">
         <p>{{ event.descrition }}</p>
     </article>
+
     <aside class="current-money well" id="current-money">
         <h4 class="tac">{% trans %}Currently you have{% endtrans%}: <br/> <span class="money" data-bind="flashText:userVM.total_cash"></span></h4>
     </aside>
@@ -89,5 +90,8 @@
             </td>                 
         </tr>
     </table>
+
+    <div id="ajax-results" class="animated-feedback-box">
+    </div>
 
 {% endblock %}

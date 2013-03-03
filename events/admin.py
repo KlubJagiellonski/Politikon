@@ -8,6 +8,8 @@ class EventAdmin(admin.ModelAdmin):
         'outcome',
         'current_buy_for_price',
         'current_buy_against_price',
+        'current_sell_for_price',
+        'current_sell_against_price',
         'last_transaction_date',
         'Q_for',
         'Q_against',

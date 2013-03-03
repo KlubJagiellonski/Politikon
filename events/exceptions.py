@@ -19,13 +19,13 @@ class UnknownOutcome(Exception):
 
 class InsufficientCash(Exception):
     def __init__(self, message, updated_user):
-        super(PriceMismatch, self).__init__(message)
+        super(InsufficientCash, self).__init__(message)
 
         self.updated_user = updated_user
 
 
 class InsufficientBets(Exception):
     def __init__(self, message, updated_bet):
-        super(PriceMismatch, self).__init__(message)
+        super(InsufficientBets, self).__init__(message)
 
         self.updated_bet = updated_bet

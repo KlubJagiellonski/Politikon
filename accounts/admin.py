@@ -64,6 +64,7 @@ class UserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (None, {'fields': ('name',)}),
+        (None, {'fields': ('total_cash', 'total_given_cash')}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin')}),
         (_('Important dates'), {'fields': ('last_login', )}),
     )

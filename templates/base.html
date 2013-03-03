@@ -39,6 +39,12 @@
         <script type="text/javascript">
             {% block script %}{% endblock %}
 
+            {% block initial_data %}
+                var initialData = {
+                    user: {{ request.user.statistics_dict|jsonify }}
+                };
+            {% endblock %}
+
             (function() {
                 var e = document.createElement('script'); e.async = true;
                 e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
@@ -58,13 +64,7 @@
             }
 
             $(document).ready(function() {
-                {% block initial_data %}
-                    var initialData = {
-                        user: {{ request.user.statistics_dict|jsonify }}
-                    };
-                {% endblock %}
-                appDataStore = new AppDataStore(initialData);
-                ko.applyBindings(appDataStore);
+                initializePolitikon();
 
                 {% block script_document_ready %}{% endblock %}
             });

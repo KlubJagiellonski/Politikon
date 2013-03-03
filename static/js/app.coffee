@@ -25,6 +25,9 @@ ko.bindingHandlers.bootstrapButtonLoading =
         else
             $el.button('reset')
 
+# Globals
+@appDataStore = null
+
 # Models
 
 @Event = (data, betsVM) ->
@@ -71,51 +74,21 @@ ko.bindingHandlers.bootstrapButtonLoading =
         @createTransaction true, 'NO', @buy_against_price(), => @loading_buy_NO(false)
     @sell_YES = =>
         @loading_sell_YES(true)
-        @createTransaction false, 'YES', @buy_for_price(), => @loading_sell_YES(false)
+        @createTransaction false, 'YES', @sell_for_price(), => @loading_sell_YES(false)
     @sell_NO = =>
         @loading_sell_NO(true)
-        @createTransaction false, 'NO', @buy_against_price(), => @loading_sell_NO(false)
+        @createTransaction false, 'NO', @sell_against_price(), => @loading_sell_NO(false)
 
     @createTransactionUrl = =>
         "/events/event/#{@id()}/transaction/create/"
 
     @createTransaction = (buy=true, outcome='YES', for_price=0.0, callback= => return) =>
-        console.log buy, outcome, for_price
-
         payload = 
             buy: buy
             outcome: outcome
             for_price: for_price
 
-        $.ajax 
-            url: @createTransactionUrl(),
-            type: 'POST',
-            data:  payload,
-            dataType: 'json',
-            timeout: 20000,
-            tryCount: 0,
-            retryLimit: 3,
-            success: (json) ->
-                console.log(json)
-                callback()
-            error: (xhr, textStatus, errorThrown) ->
-                console.log xhr, textStatus, errorThrown
-
-                if (textStatus == 'timeout')
-                    @tryCount++
-                    if (@tryCount <= @retryLimit)
-                        $.ajax(@)
-                        return
-
-                    errorCallback()
-                    return
-                
-                if (xhr.status == 500)
-                    alert('Oops! There seems to be a server problem, ase try again later.');
-                else
-                    alert('Oops! There was a problem, sorry.');
-
-                callback()
+        APIPostAJAX @createTransactionUrl(), payload, callback
 
     @update = (data) =>
         @id(data.event_id)
@@ -139,7 +112,7 @@ ko.bindingHandlers.bootstrapButtonLoading =
 
     @update = (data) =>
         for dataItem in data
-            event = ko.utils.arrayFirst @events(), (item) -> dataItem.event_id == item.id
+            event = ko.utils.arrayFirst @events(), (item) -> dataItem.event_id == item.id()
             if event == null
                 event = new Event(dataItem, @betsVM)
                 @events.push event
@@ -157,8 +130,8 @@ ko.bindingHandlers.bootstrapButtonLoading =
     @total_cash = ko.observable(if data then data.total_cash else 0)
 
     @update = (data) =>
-        @id(data.user_id)
-        @total_cash(data.total_cash)
+        @id(data.user_id) if data.user_id
+        @total_cash(data.total_cash) if data.total_cash
         return
 
     return
@@ -202,11 +175,11 @@ ko.bindingHandlers.bootstrapButtonLoading =
 
     @update = (data) =>
         for dataItem in data
-            bet = ko.utils.arrayFirst @bets(), (item) -> dataItem.bet_id == item.id
+            bet = ko.utils.arrayFirst @bets(), (item) -> dataItem.bet_id == item.id()
             if bet == null
                 @bets.push new Bet(dataItem)
             else
-                bet.update(dadataItemta)
+                bet.update(dataItem)
 
         return
 
@@ -220,4 +193,60 @@ ko.bindingHandlers.bootstrapButtonLoading =
     @betsVM = new BetsVM(data['bets'] if data)
     @eventsVM = new EventsVM(data['events'] if data, @betsVM)
 
+    @update = (updates=null) =>
+        @userVM.update(updates.user ? []) if updates
+        @eventsVM.update(updates.events ? []) if updates
+        @betsVM.update(updates.bets ? []) if updates
+        return
     return
+
+@addResultFeedback = (feedback, ofClass) =>
+    return if !feedback
+
+    $message = $('<div class="fade alert alert-' + ofClass + '">' + feedback + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>')
+    $("#ajax-results").append $message
+
+    $message.delay(100).queue -> $(@).addClass('in').dequeue()
+    $message.delay(1500).queue -> $(@).addClass('out').dequeue()
+    $message.delay(500).queue -> $(@).remove()
+
+@ajaxResponseParser = (data, xhr=null) =>
+    if xhr
+        try
+            jsonData = JSON.parse xhr.responseText
+        catch error
+            jsonData = null
+
+    if data
+        jsonData = data
+
+    jsonData ?= 
+        error: "Spróbuj ponownie"
+
+    @appDataStore.update jsonData.updates ? {}
+    addResultFeedback(jsonData.error ? "", 'error')
+
+@APIPostAJAX = (endpoint, data, callback) =>
+    $.ajax 
+        url: endpoint,
+        type: 'POST',
+        data:  data,
+        timeout: 20000,
+        tryCount: 0,
+        retryLimit: 3,
+        success: (json) ->
+            ajaxResponseParser(json)
+            callback()
+        error: (xhr, textStatus, errorThrown) ->
+            if (textStatus == 'timeout')
+                @tryCount++
+                if (@tryCount <= @retryLimit)
+                    $.ajax(@)
+                    return
+            
+            ajaxResponseParser(null, xhr)
+            callback()
+
+@initializePolitikon = =>
+    @appDataStore = new AppDataStore(initialData);
+    ko.applyBindings(@appDataStore);

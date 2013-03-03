@@ -69,7 +69,7 @@ def create_transaction(request, event_id):
             'error': unicode(e),
             'updates': {
                 'user': [
-                    e.updated_user.user_dict
+                    e.updated_user.statistics_dict
                 ]
             }
         }
@@ -107,9 +107,7 @@ def create_transaction(request, event_id):
             'events': [
                 event.event_dict
             ],
-            'user': [
-                user.statistics_dict
-            ]
+            'user': user.statistics_dict
         }
     }
 
