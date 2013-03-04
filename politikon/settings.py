@@ -71,19 +71,9 @@ STATICFILES_DIRS = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
+    'django_assets.finders.AssetsFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'compressor.finders.CompressorFinder',
-)
-
-COMPRESS_PRECOMPILERS = (
-    ('text/coffeescript', 'coffee --compile --stdio'),
-    ('text/less', 'lessc {infile} {outfile}'),
-    ('text/x-sass', 'sass {infile} {outfile}'),
-    ('text/x-scss', 'sass --scss {infile} {outfile}'),
-    ('text/stylus', 'stylus < {infile} > {outfile}'),
-    ('text/foobar', 'path.to.MyPrecompilerFilter'),
 )
 
 # Make this unique, and don't share it with anybody.
@@ -96,7 +86,7 @@ JINJA2_GLOBALS = {
 }
 
 JINJA2_EXTENSIONS = [
-    'compressor.contrib.jinja2ext.CompressorExtension',
+    'webassets.ext.jinja2.AssetsExtension',
     'jinja2.ext.with_',
     'jinja2.ext.do',
     'jinja2.ext.i18n',
@@ -153,7 +143,7 @@ INSTALLED_APPS = (
     'events',
 
     'coffin',
-    'compressor',
+    'django_assets',
 
     'constance',
     'fandjango',
@@ -229,7 +219,6 @@ smartsettings.config(globals(), {
     'FLAVOURS': (
         'TESTING',
         'DEV',
-        'STAGING',
         'PRODUCTION',
     ),
     'DEFAULT': 'DEV'  # default flavour always loads localsettings.py!

@@ -3,10 +3,9 @@
 <html class="no-js" ng-app="politikon">
     <head>
         <meta charset="utf-8">
-        {% compress css %}
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" charset="utf-8">
-        <link rel="stylesheet" href="{% static 'css/politikon.scss' %}" type="text/x-scss" charset="utf-8">
-        {% endcompress %}
+        {% assets "css_all" %}
+            <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" charset="utf-8">
+        {% endassets %}
 
         {% block css_includes %}{% endblock %}
     </head>
@@ -26,13 +25,10 @@
         </div>
 
         <div id="fb-root"></div>        
+        {% assets "js_all" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
 
-        {% compress js %}
-        <script type="text/javascript" src="{% static 'js/libs/jquery-1.9.1.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/libs/knockout-2.2.1.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/libs/bootstrap.js' %}"></script>
-        <script type="text/coffeescript" src="{% static 'js/app.coffee' %}"></script>
-        {% endcompress %}
 
         {% block js_includes %}{% endblock %}
 
