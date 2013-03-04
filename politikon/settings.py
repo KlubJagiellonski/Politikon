@@ -147,6 +147,7 @@ INSTALLED_APPS = (
 
     'constance',
     'fandjango',
+    'gunicorn',
     'south',
 )
 
