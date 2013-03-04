@@ -39,8 +39,9 @@ AUTH_USER_MODEL = 'accounts.User'
 FACEBOOK_APPLICATION_CANVAS_URL = '/canvas/'
 FANDJANGO_ENABLED_PATHS = [
     '^canvas/(.*)',
-    '(.*)'
 ]
+
+ASSETS_MANIFEST = "file:"
 
 CONSTANCE_CONFIG = {
     'STARTING_CASH': (1000.0, 'cash for start'),
@@ -72,9 +73,9 @@ STATICFILES_DIRS = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    'django_assets.finders.AssetsFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_assets.finders.AssetsFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -109,8 +110,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'canvas.backends.FacebookCanvasFandjangoBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'canvas.backends.FacebookCanvasFandjangoBackend',
 )
 
 MIDDLEWARE_CLASSES = (

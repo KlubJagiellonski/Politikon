@@ -80,7 +80,7 @@ ko.bindingHandlers.bootstrapButtonLoading =
         @createTransaction false, 'NO', @sell_against_price(), => @loading_sell_NO(false)
 
     @createTransactionUrl = =>
-        "/events/event/#{@id()}/transaction/create/"
+        "/canvas/events/event/#{@id()}/transaction/create/"
 
     @createTransaction = (buy=true, outcome='YES', for_price=0.0, callback= => return) =>
         payload = 

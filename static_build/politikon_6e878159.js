@@ -12064,7 +12064,7 @@ this.Event = function(data, betsVM) {
     });
   };
   this.createTransactionUrl = function() {
-    return "/events/event/" + (_this.id()) + "/transaction/create/";
+    return "/canvas/events/event/" + (_this.id()) + "/transaction/create/";
   };
   this.createTransaction = function(buy, outcome, for_price, callback) {
     var payload;
