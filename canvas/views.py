@@ -3,7 +3,10 @@ from django.template import RequestContext
 
 from events.models import *
 
+from fandjango.decorators import facebook_authorization_required
 
+
+@facebook_authorization_required
 def home(request):
     ctx = {
         'featured_events': Event.objects.get_featured_events()[:4],
