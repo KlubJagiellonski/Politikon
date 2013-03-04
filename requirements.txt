@@ -20,6 +20,8 @@ python-openid
 -e git+git://github.com/comoga/django-constance#egg=django-constance
 django-celery-with-redis==3.0
 dj-database-url==0.2.1
+pylibmc==1.2.2
+django-pylibmc-sasl==0.2.4
 psycopg2==2.4.5
 South==0.7.6
 hiredis
