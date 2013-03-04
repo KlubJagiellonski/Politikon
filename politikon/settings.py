@@ -1,6 +1,7 @@
 import dj_database_url
 import os
 from path import path
+import urlparse
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
@@ -42,6 +43,17 @@ FANDJANGO_ENABLED_PATHS = [
 ]
 
 ASSETS_MANIFEST = "file:"
+
+
+redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
+
+CONSTANCE_REDIS_CONNECTION = {
+    'host': redis_url.hostname,
+    'port': redis_url.port,
+    'db': 0,
+}
+if redis_url.password:
+    CONSTANCE_REDIS_CONNECTION['password'] = redis_url.password
 
 CONSTANCE_CONFIG = {
     'STARTING_CASH': (1000.0, 'cash for start'),
