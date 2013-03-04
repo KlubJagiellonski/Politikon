@@ -39,6 +39,7 @@ AUTH_USER_MODEL = 'accounts.User'
 FACEBOOK_APPLICATION_CANVAS_URL = '/canvas/'
 FANDJANGO_ENABLED_PATHS = [
     '^canvas/(.*)',
+    '(.*)'
 ]
 
 CONSTANCE_CONFIG = {
@@ -108,8 +109,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = (
+    'canvas.backends.FacebookCanvasFandjangoBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'canvas.backends.FacebookCanvasFandjangoBackend'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -119,6 +120,7 @@ MIDDLEWARE_CLASSES = (
     'canvas.middleware.FacebookMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )

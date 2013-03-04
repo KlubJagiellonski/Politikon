@@ -122,6 +122,7 @@ class FacebookMiddleware():
                     user.save()
 
                 django_user = authenticate(fandjango_user=user)
+                request.user = None
                 if django_user is not None and django_user.is_active:
                     login(request, django_user)
                     request.user = django_user

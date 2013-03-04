@@ -12,12 +12,15 @@ import json
 from .exceptions import *
 from .models import *
 
+from fandjango.decorators import facebook_authorization_required
 
+
+@facebook_authorization_required
 def event_detail(request, event_id):
     try:
         event = Event.objects.get(id=event_id)
 
-        if request.user:
+        if request.user and request.user.is_authenticated():
             user_bets_qs = Bet.objects.get_users_bets_for_events(request.user, [event])
             user_bets = list(user_bets_qs)
         else:

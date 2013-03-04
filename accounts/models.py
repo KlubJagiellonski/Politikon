@@ -52,11 +52,18 @@ class UserManager(BaseUserManager):
 
     def get_for_facebook_user(self, facebook_user):
         user, created = self.get_or_create(username=facebook_user.facebook_id)
-        user.facebook_user = facebook_user
-        user.save()
+        user_has_changed = False
 
-        user.topup_cash(amount=config.STARTING_CASH)
-        user.save()
+        if user.facebook_user_id != facebook_user.id:
+            user.facebook_user = facebook_user
+            user_has_changed = True
+        if created:
+            user.total_cash = config.STARTING_CASH
+            user.total_given_cash = config.STARTING_CASH
+            user_has_changed = True
+
+        if user_has_changed:
+            user.save()
 
         return user
 

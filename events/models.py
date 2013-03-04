@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from django.conf import settings
 from django.contrib import auth
 from django.db import models
 from django.db import transaction
@@ -302,7 +303,7 @@ BET_OUTCOMES = [
 class Bet(models.Model):
     objects = BetManager()
 
-    user = models.ForeignKey(User, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=False)
     outcome = models.BooleanField("zakład na TAK", choices=BET_OUTCOMES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
@@ -350,7 +351,7 @@ TRANSACTION_TYPES = [
 class Transaction(models.Model):
     objects = TransactionManager()
 
-    user = models.ForeignKey(User, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=False)
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
     date = models.DateTimeField(auto_now_add=True)
