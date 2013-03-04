@@ -11,6 +11,10 @@ class FacebookCanvasFandjangoBackend:
 
         if not fandjango_user:
             return None
+
+        if not hasattr(fandjango_user, 'django_user_id'):
+            return None
+
         if fandjango_user.django_user_id:
             return fandjango_user.django_user
 
