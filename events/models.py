@@ -185,8 +185,8 @@ class Event(models.Model):
     short_title = models.TextField(u"tytuł promocyjny wydarzenia")
     descrition = models.TextField(u"pełny opis wydarzenia")
 
-    small_image = models.ImageField(u"mały obrazek", upload_to="events_small", null=True)
-    big_image = models.ImageField(u"duży obrazek", upload_to="events_big", null=True)
+    small_image = models.ImageField(u"mały obrazek 365x255", upload_to="events_small", null=True)
+    big_image = models.ImageField(u"duży obrazek 715x300", upload_to="events_big", null=True)
 
     is_featured = models.BooleanField(u"featured", default=False)
     outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOMES, default=1)

@@ -15,6 +15,9 @@ class EventAdmin(admin.ModelAdmin):
         'Q_against',
     ]
 
+    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date', 'estimated_end_date', 'current_buy_for_price', 'current_buy_against_price', 'Q_for', 'Q_against',
+]
+
 
 class BetAdmin(admin.ModelAdmin):
     pass
