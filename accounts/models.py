@@ -1,11 +1,13 @@
 # coding: utf-8
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
+from django.utils.translation import ugettext as _
 
 from constance import config
-from fandjango.models import User as FacebookUser
+from canvas.models import FacebookUser
 
+import datetime
 
 class UserManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
@@ -63,6 +65,7 @@ class UserManager(BaseUserManager):
             user_has_changed = True
 
         if user_has_changed:
+            user.rebuild_facebook_friends()
             user.save()
 
         return user
@@ -79,12 +82,28 @@ class User(AbstractBaseUser):
 
     created_date = models.DateTimeField(auto_now_add=True)
 
+#   Every new network relations also has to have 'related_name="django_user"'
     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user")
+
+    friends = models.ManyToManyField('self', related_name='friend_of')
 
     total_cash = models.FloatField(u"ilość gotówki", default=0.)
     total_given_cash = models.FloatField(u"ilość przyznanej gotówki w historii", default=0.)
 
     USERNAME_FIELD = 'username'
+
+    def rebuild_facebook_friends(self):
+        # Delete current relations.
+        relations_Q = Q(from_user=self) | Q(to_user=self)
+
+        friends_manager = self.friends.through.objects
+        friends_manager.filter(relations_Q).delete()
+
+        # Recreate friends
+        facebook_friends_ids = self.facebook_user.friends_using_our_app
+        fresh_friends = FacebookUser.objects.django_users_for_ids(facebook_friends_ids)
+
+        self.friends.add(fresh_friends)
 
     @property
     def statistics_dict(self):
@@ -116,3 +135,4 @@ class User(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_admin
+

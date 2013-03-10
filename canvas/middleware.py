@@ -1,11 +1,14 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.db import transaction
 from django.http import QueryDict
 from django.core.exceptions import ImproperlyConfigured
 
+from .models import FacebookUser
+
 from accounts.models import User as DjangoUser
 from fandjango.views import authorize_application, authorization_denied
-from fandjango.models import Facebook, User, OAuthToken
+from fandjango.models import Facebook, OAuthToken
 from fandjango.settings import (
     FACEBOOK_APPLICATION_SECRET_KEY, FACEBOOK_APPLICATION_ID,
     FANDJANGO_CACHE_SIGNED_REQUEST, DISABLED_PATHS, ENABLED_PATHS
@@ -25,9 +28,9 @@ except ImportError:
 
 from dateutil.tz import tzlocal
 
-class FacebookMiddleware():
-    """Middleware for Facebook applications."""
 
+class FacebookMiddleware():
+    @transaction.commit_on_success
     def process_request(self, request):
         """Process the signed request."""
 
@@ -87,15 +90,15 @@ class FacebookMiddleware():
 
                 # Initialize a User object and its corresponding OAuth token
                 try:
-                    user = User.objects.select_related('django_user', 'oauth_token').get(facebook_id=request.facebook.signed_request.user.id)
-                except User.DoesNotExist:
+                    user = FacebookUser.objects.select_related('django_user', 'oauth_token').get(facebook_id=request.facebook.signed_request.user.id)
+                except FacebookUser.DoesNotExist:
                     oauth_token = OAuthToken.objects.create(
                         token=request.facebook.signed_request.user.oauth_token.token,
                         issued_at=request.facebook.signed_request.user.oauth_token.issued_at.replace(tzinfo=pytz.utc),
                         expires_at=request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
                     )
 
-                    user = User.objects.create(
+                    user = FacebookUser.objects.create(
                         facebook_id=request.facebook.signed_request.user.id,
                         oauth_token=oauth_token
                     )

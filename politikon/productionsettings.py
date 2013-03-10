@@ -25,6 +25,8 @@ FACEBOOK_APPLICATION_ID = os.environ.get("FACEBOOK_APPLICATION_ID", "20809008599
 FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get("FACEBOOK_APPLICATION_SECRET_KEY", "dbc394b484ac6fa41d61ab4aa1f5e0bd")
 FACEBOOK_APPLICATION_NAMESPACE = os.environ.get("FACEBOOK_APPLICATION_NAMESPACE", "politikon")
 
+FACEBOOK_REALTIME_VERIFY_TOKEN = "jkwjknvkjfwelnvljknsknv"
+
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
 if 'MEMCACHIER_USERNAME' in os.environ and 'MEMCACHE_PASSWORD' in os.environ:
     os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '')
