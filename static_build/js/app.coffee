@@ -226,9 +226,10 @@ ko.bindingHandlers.bootstrapButtonLoading =
     @appDataStore.update jsonData.updates ? {}
     addResultFeedback(jsonData.error ? "", 'error')
 
+@canvas_query_string = ""
 @APIPostAJAX = (endpoint, data, callback) =>
     $.ajax 
-        url: endpoint,
+        url: endpoint + "?" + @canvas_query_string,
         type: 'POST',
         data:  data,
         timeout: 20000,
@@ -247,6 +248,7 @@ ko.bindingHandlers.bootstrapButtonLoading =
             ajaxResponseParser(null, xhr)
             callback()
 
-@initializePolitikon = =>
+@initializePolitikon = (canvas_query_string = "") =>
+    @canvas_query_string = canvas_query_string
     @appDataStore = new AppDataStore(initialData);
     ko.applyBindings(@appDataStore);

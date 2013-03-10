@@ -2,6 +2,7 @@ import dj_database_url
 import os
 from path import path
 import urlparse
+import sys
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
@@ -37,25 +38,28 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
-FACEBOOK_APPLICATION_CANVAS_URL = '/canvas/'
+FACEBOOK_APPLICATION_CANVAS_URL = '/canvas'
 FANDJANGO_ENABLED_PATHS = [
     '^canvas/(.*)',
 ]
+FANDJANGO_CACHE_SIGNED_REQUEST = True
 
 ASSETS_MANIFEST = "file:"
 
-
-redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
+REDIS_BASE_URL = os.environ.get('REDISTOGO_URL', 'redis://localhost:6379')
+REDIS_PARAMS = urlparse.urlparse(REDIS_BASE_URL)
+REDIS_DB = 0
 
 CONSTANCE_REDIS_CONNECTION = {
-    'host': redis_url.hostname,
-    'port': redis_url.port,
+    'host': REDIS_PARAMS.hostname,
+    'port': REDIS_PARAMS.port,
     'db': 0,
 }
-if redis_url.password:
-    CONSTANCE_REDIS_CONNECTION['password'] = redis_url.password
+if REDIS_PARAMS.password:
+    CONSTANCE_REDIS_CONNECTION['password'] = REDIS_PARAMS.password
 
 CONSTANCE_CONFIG = {
+    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (365, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (255, 'small event image height'),
@@ -127,6 +131,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    # 'bladepolska.middleware.InstrumentMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -178,6 +183,11 @@ LOGGING = {
         'level': 'WARNING',
         'handlers': ['console'],
     },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'formatters': {
         'verbose': {
             'format': '[%(asctime)-12s] [%(levelname)s] %(message)s',
@@ -195,20 +205,15 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
             'formatter': 'verbose'
         },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
             'include_html': True,
-        }, 
-        # 'log_file':{
-        #     'level': 'DEBUG',
-        #     'class': 'logging.handlers.RotatingFileHandler',
-        #     'filename': LOG_FILE,
-        #     'maxBytes': '16777216', # 16megabytes
-        #     'formatter': 'verbose'
-        # },
+        }
     },
     'loggers': {
         'django.request': {
@@ -222,7 +227,7 @@ LOGGING = {
             'propagate': False,
         },
         'politikon': {
-            'handlers': ['console'],#, 'log_file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },

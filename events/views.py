@@ -1,5 +1,6 @@
 from coffin.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -41,6 +42,7 @@ def event_detail(request, event_id):
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
+@transaction.commit_on_success()
 def create_transaction(request, event_id):
     try:
         buy = (request.POST['buy'] == 'true')

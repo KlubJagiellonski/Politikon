@@ -8,7 +8,7 @@
 {% endmacro %}
 
 {% macro render_event(event) %}
-  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}">
+  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
       {% if event.small_image %}
         <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         
@@ -44,7 +44,7 @@
 {% endmacro %}
 
 {% macro render_featured_event(event) %}
-  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}">
+  <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
       {% if event.small_image %}
         <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         

@@ -13,7 +13,7 @@
     <body>
         <div id="wrapper">
             <header>
-                <h1>POLITIKON</h1>
+                <a href="{% url canvas:home %}?{{ request.canvas_query }}"><h1>POLITIKON</h1></a>
             </header>
 
             <div class="content" data-bind="with: appDataStore">
@@ -60,7 +60,7 @@
             }
 
             $(document).ready(function() {
-                initializePolitikon();
+                initializePolitikon("{{ request.canvas_query }}");
 
                 {% block script_document_ready %}{% endblock %}
             });

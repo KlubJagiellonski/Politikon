@@ -3,13 +3,13 @@
 from django.conf import settings
 from django.contrib import auth
 from django.db import models
+from django.db.models import F
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
 from math import exp
 
 from bladepolska.pubnub import PubNub
-from fandjango.models import User
 from .exceptions import *
 
 
@@ -56,8 +56,8 @@ class BetManager(models.Manager):
 
         return user, event, bet
 
-    @transaction.commit_on_success()
     def buy_a_bet(self, user, event_id, for_outcome, price):
+        """ Always remember about wrapping this in a transaction! """
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
@@ -76,9 +76,9 @@ class BetManager(models.Manager):
         if (user.total_cash < bought_for_total):
             raise InsufficientCash(_("You don't have enough cash."), user)
 
-        Transaction.objects.create(
-            user_id=user.id, event_id=event.id, type=transaction_type,
-            quantity=quantity, price=current_tx_price)
+        transaction = Transaction.objects.create(
+                        user_id=user.id, event_id=event.id, type=transaction_type,
+                        quantity=quantity, price=current_tx_price)
 
         event_total_bought_price = (bet.bought_avg_price * bet.bought)
         after_bought_quantity = bet.bought + quantity
@@ -86,16 +86,16 @@ class BetManager(models.Manager):
         bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
         bet.has += quantity
         bet.bought += quantity
-
-        bet.save(force_update=True)
+        bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
 
         user.total_cash -= bought_for_total
-        user.save(force_update=True)
+        user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
         event.save(force_update=True)
 
-        # @TODO: ActivityLog
+        from canvas.models import ActivityLog
+        ActivityLog.objects.register_transaction_activity(user, transaction)
 
         PubNub().publish({
             'channel': event.publish_channel,
@@ -108,8 +108,8 @@ class BetManager(models.Manager):
 
         return user, event, bet
 
-    @transaction.commit_on_success()
     def sell_a_bet(self, user, event_id, for_outcome, price):
+        """ Always remember about wrapping this in a transaction! """
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         requested_price = round_price(price)
@@ -127,9 +127,10 @@ class BetManager(models.Manager):
             transaction_type = TRANSACTION_TYPES_DICT['SELL_YES']
         else:
             transaction_type = TRANSACTION_TYPES_DICT['SELL_NO']
-        Transaction.objects.create(
-            user_id=user.id, event_id=event.id, type=transaction_type,
-            quantity=quantity, price=current_tx_price)
+
+        transaction = Transaction.objects.create(
+                        user_id=user.id, event_id=event.id, type=transaction_type,
+                        quantity=quantity, price=current_tx_price)
 
         event_total_sold_price = (bet.sold_avg_price * bet.sold)
         after_sold_quantity = bet.sold + quantity
@@ -137,16 +138,16 @@ class BetManager(models.Manager):
         bet.sold_avg_price = (event_total_sold_price + sold_for_total) / after_sold_quantity
         bet.has -= quantity
         bet.sold += quantity
-
-        bet.save(force_update=True)
+        bet.save(update_fields=['sold_avg_price', 'has', 'sold'])
 
         user.total_cash += sold_for_total
-        user.save(force_update=True)
+        user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=-quantity)
         event.save(force_update=True)
 
-        # @TODO: ActivityLog
+        from canvas.models import ActivityLog
+        ActivityLog.objects.register_transaction_activity(user, transaction)
 
         PubNub().publish({
             'channel': event.publish_channel,
@@ -171,10 +172,10 @@ EVENT_OUTCOMES_DICT = {
 }
 
 EVENT_OUTCOMES = [
-    (1, 'w trakcie'),
-    (2, 'anulowane'),
-    (3, 'rozstrzygnięte na TAK'),
-    (4, 'rozstrzygnięte na NIE'),
+    (1, u'w trakcie'),
+    (2, u'anulowane'),
+    (3, u'rozstrzygnięte na TAK'),
+    (4, u'rozstrzygnięte na NIE'),
 ]
 
 
@@ -269,7 +270,7 @@ class Event(models.Model):
         if not self.id:
             self.recalculate_prices()
 
-        super(Event, self).save()
+        super(Event, self).save(**kwargs)
 
 
 BET_OUTCOMES_DICT = {
@@ -336,16 +337,20 @@ TRANSACTION_TYPES_DICT = {
     'SELL_NO': 4,
     'EVENT_CANCELLED_REFUND': 5,
     'EVENT_WON_PRIZE': 6,
+    'TOPPED_UP_BY_APP': 7,
 }
 
-TRANSACTION_TYPES = [
+TRANSACTION_TYPES = (
     (1, 'zakup udziałów na TAK'),
     (2, 'sprzedaż udziałów na TAK'),
     (3, 'zakup udziałów na NIE'),
     (4, 'sprzedaż udziałów na NIE'),
     (5, 'zwrot po anulowaniu wydarzenia'),
     (6, 'wygrana po rozstrzygnięciu wydarzenia'),
-]
+    (7, 'doładowanie konta przez aplikację'),
+)
+
+TRANSACTION_TYPES_INV_DICT = {v: k for k, v in TRANSACTION_TYPES_DICT.items()}
 
 
 class Transaction(models.Model):

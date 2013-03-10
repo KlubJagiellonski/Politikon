@@ -1,5 +1,8 @@
 from django.contrib import auth
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class FacebookCanvasFandjangoBackend:
     supports_object_permissions = False
@@ -12,7 +15,11 @@ class FacebookCanvasFandjangoBackend:
         if not fandjango_user:
             return None
 
-        django_user = user_model_class.objects.get_for_facebook_user(fandjango_user)
+        django_user = None
+        try:
+            django_user = user_model_class.objects.get_for_facebook_user(fandjango_user)
+        except:
+            logger.exception("'FacebookCanvasFandjangoBackend::authenticate' failed fatally.")
 
         return django_user
 

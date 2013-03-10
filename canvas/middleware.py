@@ -18,6 +18,7 @@ from fandjango.utils import (
     authorization_denied_view, get_post_authorization_redirect_url
 )
 
+import datetime
 from facepy import SignedRequest, GraphAPI
 import pytz
 
@@ -45,6 +46,8 @@ class FacebookMiddleware():
 
         if ENABLED_PATHS and not is_enabled_path(request.path):
             return
+
+        request.user = None
 
         # An error occured during authorization...
         if 'error' in request.GET:
@@ -80,7 +83,6 @@ class FacebookMiddleware():
 
             # Valid signed request and user has authorized the application
             if request.facebook and request.facebook.signed_request.user.has_authorized_application:
-
                 # Redirect to Facebook Authorization if the OAuth token has expired
                 if request.facebook.signed_request.user.oauth_token.has_expired:
                     return authorize_application(
@@ -108,27 +110,30 @@ class FacebookMiddleware():
                     # user.last_seen_at = now()
 
                     if 'signed_request' in request.REQUEST:
-                        user.authorized = True
+                        if not user.authorized:
+                            user.authorized = True
+                            user.save(force_update=True)
 
                         if request.facebook.signed_request.user.oauth_token:
-                            token_changed = any((
-                                user.oauth_token.token != request.facebook.signed_request.user.oauth_token.token,
-                                user.oauth_token.expires_at.replace(tzinfo=pytz.utc) != request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
-                            ))
+                            is_token_older = \
+                                user.oauth_token.expires_at.replace(tzinfo=pytz.utc) - request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc) < datetime.timedelta(0)
 
-                            if token_changed:
+                            if is_token_older:
                                 user.oauth_token.token = request.facebook.signed_request.user.oauth_token.token
                                 user.oauth_token.issued_at = request.facebook.signed_request.user.oauth_token.issued_at.replace(tzinfo=pytz.utc)
                                 user.oauth_token.expires_at = request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
                                 user.oauth_token.save(force_update=True)
 
-                    user.save()
-
                 django_user = authenticate(fandjango_user=user)
-                request.user = None
                 if django_user is not None and django_user.is_active:
-                    login(request, django_user)
                     request.user = django_user
+
+                from urllib import urlencode
+                canvas_query = {
+                    'signed_request': request.REQUEST.get('signed_request')
+                }
+                if canvas_query:
+                    request.canvas_query = urlencode(canvas_query)
 
                 if not user.oauth_token.extended:
                     # Attempt to extend the OAuth token, but ignore exceptions raised by
@@ -136,6 +141,9 @@ class FacebookMiddleware():
                     #
                     # http://developers.facebook.com/bugs/102727766518358/
                     try:
+                        import sys
+                        print >> sys.stderr, "OAUTH EXTEND"
+
                         user.oauth_token.extend()
                     except:
                         pass

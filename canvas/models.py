@@ -1,3 +1,7 @@
+# coding: utf-8
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -6,12 +10,16 @@ from fandjango.models import OAuthToken, User as OriginalFacebookUser
 
 import datetime
 
+from events.models import Event, TRANSACTION_TYPES_INV_DICT
+from . import tasks
+
+import logging
+logger = logging.getLogger(__name__)
+
 
 class FacebookUserManager(models.Manager):
     def django_users_for_ids(self, ids):
-        qs = self.select_related('django_user').filter(facebook_id__in=ids)
-
-        return [row.django_user for row in qs if row.django_user]
+        return get_user_model().objects.filter(facebook_user__in=ids)
 
 
 class FacebookUser(models.Model):
@@ -29,6 +37,9 @@ class FacebookUser(models.Model):
     last_seen_at = models.DateTimeField(_('last seen at'), auto_now_add=True)
 
     profile_photo = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u"%s" % self.facebook_id
 
     @property
     def full_name(self):
@@ -59,7 +70,9 @@ class FacebookUser(models.Model):
 
         return self.__class__.objects.filter(facebook_id__in=friends_ids)
 
-    def synchronize(self):
+    def synchronize(self, commit=True):
+        logger.debug("FacebookUser(%s).synchronize(%d)" % (self, commit))
+
         fetched_fields = [
             'id', 'name',
             'username', 'first_name', 'middle_name', 'last_name',
@@ -80,21 +93,97 @@ class FacebookUser(models.Model):
 
         self.profile_photo = profile.get('picture', {}).get('data', {}).get('url', None)
 
-        self.save()
+        if commit:
+            self.save()
 
-ACTIVITIES = {
-    1: 'NEW_USER',
-    2: 'NEW_USER',
-    3: 'NEW_USER',
-    4: 'NEW_USER',
-    5: 'NEW_USER',
+ACTIVITIES_DICT = {
+    'NEW_USER': 1,
+    'BOUGHT_YES': 2,
+    'BOUGHT_NO': 3,
+    'SOLD_YES': 4,
+    'SOLD_NO': 5,
+    'WON_BET': 6,
+    'LOST_BET': 7,
+    'GOT_CASH': 8
+}
+
+ACTIVITIES = (
+    (1, u'nowy użytkownik'),
+    (2, u'kupił zakład na TAK'),
+    (3, u'kupił zakład na NIE'),
+    (4, u'sprzedał zakład na TAK'),
+    (5, u'sprzedał zakład na NIE'),
+    (6, u'wygrał zakład'),
+    (7, u'przegrał zakład')
+)
+
+TRANSACTION_TYPE_TO_ACTIVITY_MAP = {
+    'BUY_YES': 'BOUGHT_YES',
+    'SELL_YES': 'SOLD_YES',
+    'BUY_NO': 'BOUGHT_NO',
+    'SELL_NO': 'SOLD_NO',
+    'EVENT_WON_PRIZE': 'WON_BET',
+    'TOPPED_UP_BY_APP': 'GOT_CASH',
 }
 
 
 class ActivityLogManager(models.Manager):
-    pass
+    def register_new_user_activity(self, user):
+        kwargs = {
+            'activity_type': ACTIVITIES_DICT['NEW_USER'],
+            'user_id': user.id
+        }
+
+        tasks.add_publish_activity_task(kwargs)
+
+    def register_transaction_activity(self, user, transaction):
+        transaction_type = TRANSACTION_TYPES_INV_DICT.get(transaction.type)
+        activity_type = TRANSACTION_TYPE_TO_ACTIVITY_MAP.get(transaction_type)
+
+        if not activity_type:
+            logger.warning("'ActivityLogManager::register_transaction_activity' No known activity type for transaction type %s." % unicode(transaction.type))
+            return
+
+        kwargs = {
+            'activity_type': ACTIVITIES_DICT[activity_type],
+            'user_id': user.id,
+            'event_id': transaction.event_id
+        }
+
+        tasks.add_publish_activity_task(kwargs)
 
 
 class ActivityLog(models.Model):
     objects = ActivityLogManager()
-    
+
+    activity_type = models.PositiveIntegerField(null=False, choices=ACTIVITIES, default=9999)
+    event = models.ForeignKey(Event, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+
+    published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
+
+    def publish(self):
+        if not self.user or not self.user.facebook_user:
+            return
+
+        facebook_user = self.user.facebook_user
+        if self.activity_type == ACTIVITIES_DICT['NEW_USER']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['BOUGHT_YES']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['BOUGHT_NO']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['SOLD_YES']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['SOLD_NO']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['WON_BET']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['LOST_BET']:
+            pass
+        if self.activity_type == ACTIVITIES_DICT['GOT_CASH']:
+            pass
+
+        self.published = True
+        self.save(force_update=True)

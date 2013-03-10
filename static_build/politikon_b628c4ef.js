@@ -12263,9 +12263,11 @@ this.ajaxResponseParser = function(data, xhr) {
   return addResultFeedback((_ref1 = jsonData.error) != null ? _ref1 : "", 'error');
 };
 
+this.canvas_query_string = "";
+
 this.APIPostAJAX = function(endpoint, data, callback) {
   return $.ajax({
-    url: endpoint,
+    url: endpoint + "?" + _this.canvas_query_string,
     type: 'POST',
     data: data,
     timeout: 20000,
@@ -12289,7 +12291,11 @@ this.APIPostAJAX = function(endpoint, data, callback) {
   });
 };
 
-this.initializePolitikon = function() {
+this.initializePolitikon = function(canvas_query_string) {
+  if (canvas_query_string == null) {
+    canvas_query_string = "";
+  }
+  _this.canvas_query_string = canvas_query_string;
   _this.appDataStore = new AppDataStore(initialData);
   return ko.applyBindings(_this.appDataStore);
 };

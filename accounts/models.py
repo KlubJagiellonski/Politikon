@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db import models
+from django.db import models, transaction
 from django.db.models import F, Q
 from django.utils.translation import ugettext as _
 
@@ -8,6 +8,10 @@ from constance import config
 from canvas.models import FacebookUser
 
 import datetime
+
+import logging
+logger = logging.getLogger(__name__)
+
 
 class UserManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
@@ -53,6 +57,11 @@ class UserManager(BaseUserManager):
         return user, password
 
     def get_for_facebook_user(self, facebook_user):
+        try:
+            return facebook_user.django_user
+        except self.model.DoesNotExist:
+            pass
+
         user, created = self.get_or_create(username=facebook_user.facebook_id)
         user_has_changed = False
 
@@ -65,8 +74,14 @@ class UserManager(BaseUserManager):
             user_has_changed = True
 
         if user_has_changed:
-            user.rebuild_facebook_friends()
+            user.synchronize_facebook_friends()
             user.save()
+
+        if created:
+            from canvas.models import ActivityLog
+            ActivityLog.objects.register_new_user_activity(user)
+
+        logger.debug("UserManager(user %s).get_for_facebook_user(%s), created: %d, has_chaged: %d" % (unicode(user), unicode(facebook_user), created, user_has_changed))
 
         return user
 
@@ -92,18 +107,40 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
 
-    def rebuild_facebook_friends(self):
-        # Delete current relations.
-        relations_Q = Q(from_user=self) | Q(to_user=self)
+    def __unicode__(self):
+        return "%s" % self.username
 
-        friends_manager = self.friends.through.objects
-        friends_manager.filter(relations_Q).delete()
-
-        # Recreate friends
+    @transaction.commit_on_success()
+    def synchronize_facebook_friends(self):
+        # Get friends
         facebook_friends_ids = self.facebook_user.friends_using_our_app
-        fresh_friends = FacebookUser.objects.django_users_for_ids(facebook_friends_ids)
+        django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
+        django_friends_ids_set = set(django_friends_ids)
 
-        self.friends.add(fresh_friends)
+        # Get current relations
+        friends_through_model = self.friends.through
+        friends_manager = friends_through_model.objects
+
+        current_friends_ids_set = set()
+        current_friends_ids_set |= set(friends_manager.filter(from_user=self).values_list('to_user_id', flat=True))
+        current_friends_ids_set |= set(friends_manager.filter(to_user=self).values_list('from_user_id', flat=True))
+
+        # Add new
+        new_friends_ids = list(django_friends_ids_set - current_friends_ids_set)
+        logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % len(new_friends_ids))
+
+        if new_friends_ids:
+            new_friends_through = [friends_through_model(from_user=self, to_user_id=friend_id) for friend_id in new_friends_ids]
+            friends_manager.bulk_create(new_friends_through)
+
+        # Remove stale
+        stale_friends_ids = list(current_friends_ids_set - django_friends_ids_set)
+        logger.debug("'User::synchronize_facebook_friends' removing %d stale friends." % len(stale_friends_ids))
+
+        if stale_friends_ids:
+            first_way_qs = Q(from_user=self, to_user__in=stale_friends_ids)
+            second_way_qs = Q(to_user=self, from_user__in=stale_friends_ids)
+            friends_manager.filter(first_way_qs | second_way_qs).delete()
 
     @property
     def statistics_dict(self):

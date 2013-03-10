@@ -81,12 +81,14 @@ class CsrfViewMiddlewareOmitApi(CsrfViewMiddleware):
 # Instrumentation
 class InstrumentMiddleware(object):
     def process_request(self, request):
-        if 'profile' in request.REQUEST:
+        if 'profile' in request.REQUEST or 1:
             request.profiler = cProfile.Profile()
             request.profiler.enable()
 
     def process_response(self, request, response):
         if hasattr(request, 'profiler'):
+            import sys
+
             request.profiler.disable()
             stamp = (request.META['REMOTE_ADDR'], datetime.now())
             request.profiler.dump_stats('/tmp/%s-%s.pro' % stamp)
@@ -100,11 +102,12 @@ class InstrumentMiddleware(object):
             stats.print_callees(12)
             os.remove('/tmp/%s-%s.pro' % stamp)
             #response._container[0] += "<pre>"+stream.getvalue()+"</pre>"
-            print stream.getvalue()
+            print >> sys.stderr, stream.getvalue()
             stream.close()
 
             from django.db import connection
+            from django.utils.encoding import smart_str
             for query in connection.queries:
-                print query['time'], query['sql']
-            print len(connection.queries), 'queries, overall time', "%.3f" % sum([float(query['time']) for query in connection.queries])
+                print >> sys.stderr, smart_str(query['time']), smart_str(query['sql'])
+            print >> sys.stderr, len(connection.queries), 'queries, overall time', "%.3f" % sum([float(query['time']) for query in connection.queries])
         return response

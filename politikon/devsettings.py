@@ -9,19 +9,12 @@ DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 MEDIA_ROOT = DJANGO_PROJECT_ROOT / 'static' / 'uploads'
 MEDIA_URL = '/static/uploads/'
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'http://85-222-100-189.home.aster.pl']
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
-}
-
-CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
-CONSTANCE_REDIS_CONNECTION = {
-    'host': 'localhost',
-    'port': 6379,
-    'db': 0,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
