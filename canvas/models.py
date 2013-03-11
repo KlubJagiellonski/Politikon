@@ -161,7 +161,7 @@ class ActivityLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
 
     published = models.BooleanField(default=False)
-    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
+    created_at = models.DateTimeField(_('created at'))
 
     def publish(self):
         if not self.user or not self.user.facebook_user:

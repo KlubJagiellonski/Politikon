@@ -1,3 +1,4 @@
+from datetime import timedelta
 import dj_database_url
 import os
 from path import path
@@ -22,7 +23,8 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Tomek Kopczuk', 'tomek@bladepolska.com'),
+    ('MArcin Mincer', 'marcin@bladepolska.com'),
 )
 
 MANAGERS = ADMINS
@@ -48,15 +50,48 @@ ASSETS_MANIFEST = "file:"
 
 REDIS_BASE_URL = os.environ.get('REDISTOGO_URL', 'redis://localhost:6379')
 REDIS_PARAMS = urlparse.urlparse(REDIS_BASE_URL)
+
+# Celery config
+
+REDIS_HOST = REDIS_PARAMS.hostname
+REDIS_PORT = REDIS_PARAMS.port
 REDIS_DB = 0
+REDIS_CONNECT_RETRY = True
+
+BROKER_URL = REDIS_BASE_URL + "/0"
+CELERY_RESULT_BACKEND = REDIS_BASE_URL + "/0"
+
+CELERY_CONCURRENCY = 2
+CELERY_SEND_EVENTS = True
+CELERY_TASK_RESULT_EXPIRES = 10
+CELERY_IGNORE_RESULT = True
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+CELERY_IMPORTS = ("canvas.tasks", )
+
+
+CELERYBEAT_SCHEDULE = {
+    'consume_facebook_user_sync_task': {
+        'task': 'canvas.tasks.consume_facebook_user_sync_task',
+        'schedule': timedelta(minutes=5)
+    },
+    'consume_facebook_user_friends_sync_task': {
+        'task': 'canvas.tasks.consume_facebook_user_friends_sync_task',
+        'schedule': timedelta(minutes=5)
+    },
+    'consume_publish_activities_tasks': {
+        'task': 'canvas.tasks.consume_publish_activities_tasks',
+        'schedule': timedelta(minutes=5)
+    },
+}
 
 CONSTANCE_REDIS_CONNECTION = {
-    'host': REDIS_PARAMS.hostname,
-    'port': REDIS_PARAMS.port,
+    'host': REDIS_HOST,
+    'port': REDIS_PORT,
     'db': 0,
 }
 if REDIS_PARAMS.password:
     CONSTANCE_REDIS_CONNECTION['password'] = REDIS_PARAMS.password
+    BROKER_PASSWORD = REDIS_PARAMS.password
 
 CONSTANCE_CONFIG = {
     'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
@@ -166,6 +201,7 @@ INSTALLED_APPS = (
     'django_assets',
 
     'constance',
+    'djcelery',
     'fandjango',
     'gunicorn',
     'south',
