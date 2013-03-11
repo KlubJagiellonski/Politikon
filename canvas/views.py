@@ -24,9 +24,11 @@ logger = logging.getLogger(__name__)
 @facebook_authorization_required
 def home(request):
     ctx = {
-        'featured_events': Event.objects.get_featured_events()[:4],
-        'latest_events': Event.objects.get_latest_events()
+        'featured_events': list(Event.objects.get_featured_events()[:4]),
+        'latest_events': list(Event.objects.get_latest_events())
     }
+
+    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
     return render_to_response('canvas/home.html', ctx, RequestContext(request))
 

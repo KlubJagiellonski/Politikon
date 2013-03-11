@@ -161,6 +161,11 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+    @property
+    def profile_photo(self):
+        if self.facebook_user:
+            return self.facebook_user.profile_photo
+
     def topup_cash(self, amount):
         self.total_cash = F('total_cash') + amount
         self.total_given_cash = F('total_given_cash') + amount

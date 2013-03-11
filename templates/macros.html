@@ -7,7 +7,7 @@
 {% macro render_user_stats(user) %}
 {% endmacro %}
 
-{% macro render_event(event) %}
+{% macro render_event(event, people) %}
   <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
       {% if event.small_image %}
@@ -25,7 +25,13 @@
           <tr>
             <td class="outcome">{% trans %}YES{% endtrans %}</td>
             <td class="price">{{ event.current_buy_for_price }} <span class="trend">(+0.0%)</span></td>
-            <td class="friends"></td>
+            <td class="friends">
+              {% for friend in people[event.id]['YES'] %}
+                {% if friend.profile_photo %}
+                  <img src="{{ friend.profile_photo }}" width=50 height=50 />
+                {% endif %}
+              {% endfor %}
+            </td>
           </tr>
         </table>
       </div>
@@ -34,7 +40,13 @@
           <tr>
             <td class="outcome">{% trans %}NO{% endtrans %}</td>
             <td class="price">{{ event.current_buy_against_price }} <span class="trend">(+0.0%)</span></td>
-            <td class="friends"></td>
+            <td class="friends">
+              {% for friend in people[event.id]['NO'] %}
+                {% if friend.profile_photo %}
+                  <img src="{{ friend.profile_photo }}" width=50 height=50 />
+                {% endif %}
+              {% endfor %}
+            </td>
           </tr>
         </table>
       </div>
@@ -43,7 +55,7 @@
   </a>
 {% endmacro %}
 
-{% macro render_featured_event(event) %}
+{% macro render_featured_event(event, people) %}
   <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
       {% if event.small_image %}
@@ -55,18 +67,18 @@
   </a>
 {% endmacro %}
 
-{% macro render_events(events) %}
+{% macro render_events(events, people) %}
    <div class="events-box">
     {% for event in events %}
-      {{ render_event(event) }}
+      {{ render_event(event, people) }}
     {% endfor %}
    </div>
 {% endmacro %}
 
-{% macro render_featured_events(events) %}
+{% macro render_featured_events(events, people) %}
     <div class="featured-events-box">
       {% for event in events %}
-          {{ render_featured_event(event) }}
+          {{ render_featured_event(event, people) }}
       {% endfor %}
    </div>
 {% endmacro %}

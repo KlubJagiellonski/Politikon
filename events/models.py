@@ -7,6 +7,7 @@ from django.db.models import F
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
+from collections import defaultdict
 from math import exp
 
 from bladepolska.pubnub import PubNub
@@ -27,6 +28,23 @@ class EventManager(models.Manager):
 
     def get_featured_events(self):
         return self.ongoing_only_queryset().filter(is_featured=True).order_by('-created_date')
+
+    def associate_people_with_events(self, user, events_list):
+        event_ids = set([e.id for e in events_list])
+        # friends = user.friends.all()
+        bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends.all(), event__in=event_ids, has__gt=0)
+
+        result = {
+                    event_id: defaultdict(list)
+                        # { outcome: defaultdict(list) for outcome in BET_OUTCOMES_DICT.keys() }
+                            for event_id in event_ids
+                 }
+
+        for bet in bets:
+            outcome = BET_OUTCOMES_INV_DICT[bet.outcome]
+            result[bet.event_id][outcome].append(bet.user)
+
+        return result
 
 
 class BetManager(models.Manager):

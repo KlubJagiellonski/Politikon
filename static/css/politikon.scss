@@ -5,7 +5,7 @@ $home_width: 715px;
 
 $event-stats-left-margin: 300px;
 $event-stats-internal-horiz-margin: 10px;
-$event-stats-height: 25px;
+$event-stats-height: 54px;
 
 a {
     &.no-decoration, &.no-decoration:hover {
@@ -102,7 +102,7 @@ footer {
     
         height: 2 * $event-stats-height;
 
-        img, .short-title {
+        > img, > .short-title {
             display: none;
         }
 

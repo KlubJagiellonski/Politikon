@@ -2,8 +2,8 @@
 
 {% block content %}
     <h2>{% trans %}Featured events{% endtrans %}</h2>
-    {{ macros.render_featured_events(featured_events) }}
+    {{ macros.render_featured_events(featured_events, people) }}
 
     <h2>{% trans %}Latest events{% endtrans %}</h2>
-    {{ macros.render_events(latest_events) }}
+    {{ macros.render_events(latest_events, people) }}
 {% endblock %}
