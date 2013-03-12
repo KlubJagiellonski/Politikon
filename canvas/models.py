@@ -54,11 +54,46 @@ class FacebookUser(models.Model):
     def graph(self):
         return GraphAPI(self.oauth_token.token)
 
+    def fb_get(self, url, noncritical=True, **kwargs):
+        try:
+            self.graph.get(url, **kwargs)
+        except OAuthError as e:
+            if not noncritical:
+                raise
+
+            if e.code == 190:
+                # Stale oauth_token.
+                self.oauth_token.delete()
+
+            logger.exception("FacebookUser(#%(id)d)::fb_get() failed with OAuthError, will not retry." % {
+                'id': self.id,
+            })
+        except:
+            raise
+
+    def fb_post(self, url, payload={}, noncritical=True):
+        try:
+            self.graph.post(path=url, retry=0, **payload)
+        except OAuthError as e:
+            if not noncritical:
+                raise
+
+            if e.code == 190:
+                # Stale oauth_token.
+                self.oauth_token.delete()
+
+            logger.exception("FacebookUser(#%(id)d)::fb_get() failed with OAuthError, will not retry." % {
+                'id': self.id,
+            })
+        except:
+            raise
+
+
     @property
     def all_friends_ids(self):
         friends_ids = []
 
-        friends_reply_generator = self.graph.get('me/friends', page=True)
+        friends_reply_generator = self.fb_get('me/friends', page=True)
         for friends_reply in friends_reply_generator:
             friends_ids += [friend.get('id') for friend in friends_reply.get('data', [])]
 
@@ -80,7 +115,7 @@ class FacebookUser(models.Model):
             'picture'
         ]
         path = 'me?fields=%s' % ','.join(fetched_fields)
-        profile = self.graph.get(path)
+        profile = self.fb_get(path)
 
         self.facebook_username = profile.get('username')
         self.first_name = profile.get('first_name')
@@ -215,14 +250,7 @@ class ActivityLog(models.Model):
                 'payload': payload
             })
 
-            try:
-                facebook_user.graph.post(path=url, retry=0, **payload)
-            except OAuthError:
-                logger.exception("ActivityLog(#%(id)d)::publish() failed with OAuthError, will not retry." % {
-                    'id': self.id,
-                })
-            except:
-                raise
+            facebook_user.fb_post(url, payload)
 
         self.published = True
         self.save(force_update=True)
