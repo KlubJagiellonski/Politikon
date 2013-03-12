@@ -2,7 +2,6 @@
 
 from django.conf import settings
 from django.contrib import auth
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import F
@@ -12,11 +11,9 @@ from django.utils.translation import ugettext as _
 from collections import defaultdict
 from math import exp
 
+from bladepolska.site import current_domain
 from bladepolska.pubnub import PubNub
 from .exceptions import *
-
-
-DOMAIN = Site.objects.get_current().domain
 
 
 def round_price(price):
@@ -239,13 +236,13 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return "http://%(domain)s%(url)s" % {
-            'domain': DOMAIN,
+            'domain': current_domain(),
             'url': reverse("events:event_detail", kwargs={'event_id': self.id})
         }
 
     def get_absolute_facebook_object_url(self):
         return "http://%(domain)s%(url)s" % {
-            'domain': DOMAIN,
+            'domain': current_domain(),
             'url': reverse("events:event_facebook_object_detail", kwargs={'event_id': self.id})
         }
 

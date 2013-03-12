@@ -1,4 +1,5 @@
 from coffin.shortcuts import render_to_response
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest

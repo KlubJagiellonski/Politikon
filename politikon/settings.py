@@ -46,7 +46,7 @@ FANDJANGO_ENABLED_PATHS = [
     '^canvas/(.*)',
 ]
 FANDJANGO_CACHE_SIGNED_REQUEST = True
-FACEBOOK_APPLICATION_INITIAL_PERMISSIONS = ['publish_actions', 'publish_stream']
+FACEBOOK_APPLICATION_INITIAL_PERMISSIONS = ['publish_actions', 'publish_stream', 'user_relationships']
 
 ASSETS_MANIFEST = "file:"
 
