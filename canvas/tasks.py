@@ -21,12 +21,14 @@ def add_facebook_user_sync_task(facebook_id):
     logger.debug("'fb:tasks:usersync' job added for user <%s>" % unicode(facebook_id))
     with RedisConnection as redis:
         redis.sadd(USER_SYNC_QUEUE_KEY, facebook_id)
+    RedisConnection.disconnect()
 
 
 def add_facebook_user_friends_sync_task(facebook_id):
     logger.debug("'fb:tasks:userfriendssync' job added for user <%s>" % unicode(facebook_id))
     with RedisConnection as redis:
         redis.sadd(USER_FRIENDS_SYNC_QUEUE_KEY, facebook_id)
+    RedisConnection.disconnect()
 
 
 def add_publish_activity_task(kwargs):
@@ -52,7 +54,7 @@ def consume_facebook_user_sync_task():
                 logger.debug("'fb:tasks:usersync' synchronizing user <%s>" % unicode(facebook_user))
                 facebook_user.synchronize()
                 logger.debug("'fb:tasks:usersync' synchronized user <%s>" % unicode(facebook_user))
-
+    RedisConnection.disconnect()
 
 @task
 def consume_facebook_user_friends_sync_task():
@@ -66,7 +68,7 @@ def consume_facebook_user_friends_sync_task():
                 logger.debug("'fb:tasks:userfriendssync' synchronizing friends of user <%s>" % unicode(django_user))
                 django_user.synchronize_facebook_friends()
                 logger.debug("'fb:tasks:userfriendssync' synchronized friends of user <%s>" % unicode(django_user))
-
+    RedisConnection.disconnect()
 
 @task
 @transaction.commit_on_success()
