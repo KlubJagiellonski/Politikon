@@ -33,7 +33,7 @@ class FacebookUser(models.Model):
     last_name = models.CharField(_('last name'), max_length=255, blank=True, null=True)
     birthday = models.DateField(_('birthday'), blank=True, null=True)
     authorized = models.BooleanField(_('authorized'), default=True)
-    oauth_token = models.OneToOneField(OAuthToken, verbose_name=_('OAuth token'))
+    oauth_token = models.OneToOneField(OAuthToken, verbose_name=_('OAuth token'), on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     last_seen_at = models.DateTimeField(_('last seen at'), auto_now_add=True)
 

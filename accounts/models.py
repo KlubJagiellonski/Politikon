@@ -98,7 +98,7 @@ class User(AbstractBaseUser):
     created_date = models.DateTimeField(auto_now_add=True)
 
 #   Every new network relations also has to have 'related_name="django_user"'
-    facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user")
+    facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 

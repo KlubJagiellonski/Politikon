@@ -1,2 +1,3 @@
 syntax: glob
 static_build/uploads
+static/.webassets-cache

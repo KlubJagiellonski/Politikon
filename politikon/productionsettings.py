@@ -18,7 +18,6 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'H0BlrxdtJtV7HKn
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'Politikon')
 AWS_QUERYSTRING_AUTH = False
 STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
-
 ASSETS_AUTO_BUILD = False
 
 import boto.s3.connection
