@@ -56,7 +56,7 @@ class FacebookUser(models.Model):
 
     def fb_get(self, url, noncritical=True, **kwargs):
         try:
-            self.graph.get(url, **kwargs)
+            return self.graph.get(url, **kwargs)
         except OAuthError as e:
             if not noncritical:
                 raise
@@ -75,7 +75,7 @@ class FacebookUser(models.Model):
 
     def fb_post(self, url, payload={}, noncritical=True):
         try:
-            self.graph.post(path=url, retry=0, **payload)
+            return self.graph.post(path=url, retry=0, **payload)
         except OAuthError as e:
             if not noncritical:
                 raise
