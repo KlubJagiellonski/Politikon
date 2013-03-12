@@ -124,7 +124,7 @@ class FacebookUser(models.Model):
         path = 'me?fields=%s' % ','.join(fetched_fields)
         profile = self.fb_get(path)
 
-        if self.profile:
+        if profile:
             self.facebook_username = profile.get('username')
             self.first_name = profile.get('first_name')
             self.middle_name = profile.get('middle_name')
