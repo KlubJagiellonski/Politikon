@@ -155,6 +155,8 @@ class ActivityLogManager(models.Manager):
 
 class ActivityLog(models.Model):
     objects = ActivityLogManager()
+    ACTIVITY_ASSUME_YES_ACTION = "assume_yes"
+    ACTIVITY_ASSUME_NO_ACTION = "assume_no"
 
     activity_type = models.PositiveIntegerField(null=False, choices=ACTIVITIES, default=9999)
     event = models.ForeignKey(Event, null=True)
@@ -168,12 +170,31 @@ class ActivityLog(models.Model):
             return
 
         facebook_user = self.user.facebook_user
+
+        url, payload = "", {}
+
         if self.activity_type == ACTIVITIES_DICT['NEW_USER']:
             pass
         if self.activity_type == ACTIVITIES_DICT['BOUGHT_YES']:
-            pass
+            url = "/me/%(namespace)s:%(action)s" % {
+                'namespace': settings.FACEBOOK_APPLICATION_NAMESPACE,
+                'action': ActivityLog.ACTIVITY_ASSUME_YES_ACTION
+            }
+
+            payload = {
+                'event': self.event.get_absolute_facebook_object_url()
+            }
+
         if self.activity_type == ACTIVITIES_DICT['BOUGHT_NO']:
-            pass
+            url = "/me/%(namespace)s:%(action)s" % {
+                'namespace': settings.FACEBOOK_APPLICATION_NAMESPACE,
+                'action': ActivityLog.ACTIVITY_ASSUME_NO_ACTION
+            }
+
+            payload = {
+                'event': self.event.get_absolute_facebook_object_url()
+            }
+
         if self.activity_type == ACTIVITIES_DICT['SOLD_YES']:
             pass
         if self.activity_type == ACTIVITIES_DICT['SOLD_NO']:
@@ -184,6 +205,15 @@ class ActivityLog(models.Model):
             pass
         if self.activity_type == ACTIVITIES_DICT['GOT_CASH']:
             pass
+
+        if url:
+            logger.debug('ActivityLog(#%(id)d)::publish() publishing %(url)s, with: %(payload)s for user <%(user)s>.' % {
+                'id': self.id,
+                'user': facebook_user,
+                'url': url,
+                'payload': payload
+            })
+            facebook_user.graph.post(path=url, retry=0, **payload)
 
         self.published = True
         self.save(force_update=True)

@@ -2,6 +2,8 @@
 
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import F
 from django.db import transaction
@@ -12,6 +14,9 @@ from math import exp
 
 from bladepolska.pubnub import PubNub
 from .exceptions import *
+
+
+DOMAIN = Site.objects.get_current().domain
 
 
 def round_price(price):
@@ -202,6 +207,10 @@ class Event(models.Model):
 
     title = models.TextField(u"tytuł wydarzenia")
     short_title = models.TextField(u"tytuł promocyjny wydarzenia")
+
+    title_fb_yes = models.TextField(u"tytuł na TAK obiektu FB")
+    title_fb_no = models.TextField(u"tytuł na NIE obiektu FB")
+
     descrition = models.TextField(u"pełny opis wydarzenia")
 
     small_image = models.ImageField(u"mały obrazek 365x255", upload_to="events_small", null=True)
@@ -224,6 +233,21 @@ class Event(models.Model):
     Q_against = models.IntegerField(u"zakładów na NIE", default=0)
 
     B = models.FloatField(u"stała B", default=5)
+
+    def get_relative_url(self):
+        return reverse("events:event_detail", kwargs={'event_id': self.id})
+
+    def get_absolute_url(self):
+        return "http://%(domain)s%(url)s" % {
+            'domain': DOMAIN,
+            'url': reverse("events:event_detail", kwargs={'event_id': self.id})
+        }
+
+    def get_absolute_facebook_object_url(self):
+        return "http://%(domain)s%(url)s" % {
+            'domain': DOMAIN,
+            'url': reverse("events:event_facebook_object_detail", kwargs={'event_id': self.id})
+        }
 
     @property
     def is_in_progress(self):
@@ -375,7 +399,7 @@ class Transaction(models.Model):
     objects = TransactionManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
-    event = models.ForeignKey(Event, null=False)
+    event = models.ForeignKey(Event, null=True)
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)

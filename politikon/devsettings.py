@@ -4,6 +4,8 @@ from path import path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+SITE_ID = 1
+
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
 MEDIA_ROOT = DJANGO_PROJECT_ROOT / 'static' / 'uploads'

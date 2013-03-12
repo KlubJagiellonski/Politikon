@@ -4,6 +4,8 @@ import os
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+SITE_ID = 2
+
 ALLOWED_HOSTS = ['politikon.herokuapp.com', 'politikon.pl']
 
 DATABASES = {'default': dj_database_url.config()}

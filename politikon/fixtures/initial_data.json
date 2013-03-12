@@ -1,0 +1,2 @@
+Running env. flavour: DEV
+[{"pk": 1, "model": "sites.site", "fields": {"domain": "89-67-219-22.dynamic.chello.pl:7000", "name": "89-67-219-22.dynamic.chello.pl:7000"}}, {"pk": 2, "model": "sites.site", "fields": {"domain": "politikon.herokuapp.com", "name": "politikon.herokuapp.com"}}]

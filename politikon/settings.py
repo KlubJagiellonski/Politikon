@@ -1,3 +1,4 @@
+from celery.schedules import crontab
 from datetime import timedelta
 import dj_database_url
 import os
@@ -66,7 +67,7 @@ CELERY_SEND_EVENTS = True
 CELERY_TASK_RESULT_EXPIRES = 10
 CELERY_IGNORE_RESULT = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERY_IMPORTS = ("canvas.tasks", )
+CELERY_IMPORTS = ("canvas.tasks", "accounts.tasks")
 
 
 CELERYBEAT_SCHEDULE = {
@@ -81,6 +82,10 @@ CELERYBEAT_SCHEDULE = {
     'consume_publish_activities_tasks': {
         'task': 'canvas.tasks.consume_publish_activities_tasks',
         'schedule': timedelta(minutes=5)
+    },
+    'topup_accounts_task': {
+        'task': 'accounts.tasks.topup_accounts_task',
+        'schedule': crontab(minute=0, hour=0)
     },
 }
 
@@ -100,6 +105,7 @@ CONSTANCE_CONFIG = {
     'SMALL_EVENT_IMAGE_HEIGHT': (255, 'small event image height'),
     'BIG_EVENT_IMAGE_WIDTH': (715, 'big event image width'),
     'BIG_EVENT_IMAGE_HEIGHT': (300, 'big event image height'),
+    'DAILY_TOPUP': (100, 'daily cash topup'),
 }
 
 # Absolute path to the directory static files should be collected to.

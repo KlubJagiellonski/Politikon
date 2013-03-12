@@ -170,6 +170,16 @@ class User(AbstractBaseUser):
         self.total_cash = F('total_cash') + amount
         self.total_given_cash = F('total_given_cash') + amount
 
+        from events.models import Transaction, TRANSACTION_TYPES_DICT
+        transaction = Transaction.objects.create(
+                        user=self, type=TRANSACTION_TYPES_DICT['TOPPED_UP_BY_APP'],
+                        quantity=1, price=amount)
+
+        from canvas.models import ActivityLog
+        ActivityLog.objects.register_transaction_activity(self, transaction)
+
+        self.save(update_fields=['total_cash', 'total_given_cash'])
+
     @property
     def is_staff(self):
         return self.is_admin
