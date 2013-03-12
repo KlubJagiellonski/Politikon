@@ -117,17 +117,18 @@ class FacebookUser(models.Model):
         path = 'me?fields=%s' % ','.join(fetched_fields)
         profile = self.fb_get(path)
 
-        self.facebook_username = profile.get('username')
-        self.first_name = profile.get('first_name')
-        self.middle_name = profile.get('middle_name')
-        self.last_name = profile.get('last_name')
+        if self.profile:
+            self.facebook_username = profile.get('username')
+            self.first_name = profile.get('first_name')
+            self.middle_name = profile.get('middle_name')
+            self.last_name = profile.get('last_name')
 
-        try:
-            self.birthday = datetime.strptime(profile['birthday'], '%m/%d/%Y') if profile.has_key('birthday') else None
-        except:
-            self.birthday = None
+            try:
+                self.birthday = datetime.strptime(profile['birthday'], '%m/%d/%Y') if profile.has_key('birthday') else None
+            except:
+                self.birthday = None
 
-        self.profile_photo = profile.get('picture', {}).get('data', {}).get('url', None)
+            self.profile_photo = profile.get('picture', {}).get('data', {}).get('url', None)
 
         if commit:
             self.save()
