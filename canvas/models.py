@@ -218,7 +218,7 @@ class ActivityLog(models.Model):
             try:
                 facebook_user.graph.post(path=url, retry=0, **payload)
             except OAuthError:
-                logger.log_exception("ActivityLog(#%(id)d)::publish() failed with OAuthError, will not retry." % {
+                logger.exception("ActivityLog(#%(id)d)::publish() failed with OAuthError, will not retry." % {
                     'id': self.id,
                 })
             except:
