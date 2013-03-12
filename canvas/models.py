@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from facepy import SignedRequest, GraphAPI
+from facepy.exceptions import OAuthError
 from fandjango.models import OAuthToken, User as OriginalFacebookUser
 
 import datetime
@@ -213,7 +214,15 @@ class ActivityLog(models.Model):
                 'url': url,
                 'payload': payload
             })
-            facebook_user.graph.post(path=url, retry=0, **payload)
+
+            try:
+                facebook_user.graph.post(path=url, retry=0, **payload)
+            except OAuthError:
+                logger.log_exception("ActivityLog(#%(id)d)::publish() failed with OAuthError, will not retry." % {
+                    'id': self.id,
+                })
+            except:
+                raise
 
         self.published = True
         self.save(force_update=True)
