@@ -70,7 +70,6 @@ CELERY_IGNORE_RESULT = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_IMPORTS = ("canvas.tasks", "accounts.tasks")
 
-
 CELERYBEAT_SCHEDULE = {
     'consume_facebook_user_sync_task': {
         'task': 'canvas.tasks.consume_facebook_user_sync_task',
@@ -90,14 +89,8 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
-CONSTANCE_REDIS_CONNECTION = {
-    'host': REDIS_HOST,
-    'port': REDIS_PORT,
-    'db': 0,
-}
-if REDIS_PARAMS.password:
-    CONSTANCE_REDIS_CONNECTION['password'] = REDIS_PARAMS.password
-    BROKER_PASSWORD = REDIS_PARAMS.password
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 CONSTANCE_CONFIG = {
     'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
@@ -140,20 +133,6 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '@2@yw=u4h152#iscro&(4pcka%m1eydvw=_sne)@10f9+t^g9='
-
-from constance import config
-
-JINJA2_GLOBALS = {
-    'config': config
-}
-
-JINJA2_EXTENSIONS = [
-    'webassets.ext.jinja2.AssetsExtension',
-    'jinja2.ext.with_',
-    'jinja2.ext.do',
-    'jinja2.ext.i18n',
-    'jinja2.ext.loopcontrols',
-]
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -201,19 +180,20 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
-    'accounts',
-    'bladepolska',
-    'canvas',
-    'events',
-
     'coffin',
     'django_assets',
 
     'constance',
+    'constance.backends.database',
     'djcelery',
     'fandjango',
     'gunicorn',
     'south',
+
+    'accounts',
+    'bladepolska',
+    'canvas',
+    'events',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -289,3 +269,17 @@ smartsettings.config(globals(), {
     ),
     'DEFAULT': 'DEV'  # default flavour always loads localsettings.py!
 })
+
+from constance import config
+
+JINJA2_GLOBALS = {
+    'config': config
+}
+
+JINJA2_EXTENSIONS = [
+    'webassets.ext.jinja2.AssetsExtension',
+    'jinja2.ext.with_',
+    'jinja2.ext.do',
+    'jinja2.ext.i18n',
+    'jinja2.ext.loopcontrols',
+]
