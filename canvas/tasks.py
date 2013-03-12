@@ -81,5 +81,8 @@ def consume_publish_activities_tasks():
 
     for activity in activities_to_publish:
         logger.debug("'fb:tasks:activities' publishing job <%s>" % unicode(activity))
-        activity.publish()
+        try:
+            activity.publish()
+        except:
+            logger.exception("Fatal error during consume_publish_activities_tasks of activity #%d" % (activity.id,))
         logger.debug("'fb:tasks:activities' published job <%s>" % unicode(activity))
