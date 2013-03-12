@@ -3,6 +3,7 @@ Django
 gunicorn==0.15.0
 path.py==2.4.1
 djangorestframework
+newrelic
 
 -e git+https://github.com/coffin/coffin.git#egg=coffin
 jinja2
