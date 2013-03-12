@@ -64,6 +64,8 @@ class FacebookUser(models.Model):
             if e.code == 190:
                 # Stale oauth_token.
                 self.oauth_token.delete()
+                self.oauth_token = None
+                self.save(update_fields=['oauth_token'])
 
             logger.exception("FacebookUser(#%(id)d)::fb_get() failed with OAuthError, will not retry." % {
                 'id': self.id,
@@ -81,6 +83,8 @@ class FacebookUser(models.Model):
             if e.code == 190:
                 # Stale oauth_token.
                 self.oauth_token.delete()
+                self.oauth_token = None
+                self.save(update_fields=['oauth_token'])
 
             logger.exception("FacebookUser(#%(id)d)::fb_get() failed with OAuthError, will not retry." % {
                 'id': self.id,
