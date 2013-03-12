@@ -94,6 +94,9 @@ class FacebookUser(models.Model):
         friends_ids = []
 
         friends_reply_generator = self.fb_get('me/friends', page=True)
+        if friends_reply_generator is None:
+            return None
+
         for friends_reply in friends_reply_generator:
             friends_ids += [friend.get('id') for friend in friends_reply.get('data', [])]
 
@@ -103,6 +106,10 @@ class FacebookUser(models.Model):
     @property
     def friends_using_our_app(self):
         friends_ids = self.all_friends_ids
+        if friends_ids is None:
+            return None
+        if friends_ids == []:
+            return []
 
         return self.__class__.objects.filter(facebook_id__in=friends_ids)
 

@@ -114,6 +114,9 @@ class User(AbstractBaseUser):
     def synchronize_facebook_friends(self):
         # Get friends
         facebook_friends_ids = self.facebook_user.friends_using_our_app
+        if facebook_friends_ids is None:
+            return
+
         django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
         django_friends_ids_set = set(django_friends_ids)
 
