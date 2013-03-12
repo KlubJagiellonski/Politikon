@@ -122,7 +122,7 @@ class User(AbstractBaseUser):
 
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects
-        
+
         # Get current relations
         current_friends_ids_set = self.friends_ids_set
 
@@ -155,7 +155,7 @@ class User(AbstractBaseUser):
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects
 
-        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values('from_user_id', 'to_user_id')
+        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id', 'to_user_id')
 
         current_friends_ids_set = set()
         for from_id, to_id in current_friends_ids:
