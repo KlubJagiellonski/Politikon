@@ -34,7 +34,7 @@ class EventManager(models.Manager):
     def associate_people_with_events(self, user, events_list):
         event_ids = set([e.id for e in events_list])
         # friends = user.friends.all()
-        bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends.all(), event__in=event_ids, has__gt=0)
+        bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
 
         result = {
                     event_id: defaultdict(list)

@@ -120,13 +120,11 @@ class User(AbstractBaseUser):
         django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
         django_friends_ids_set = set(django_friends_ids)
 
-        # Get current relations
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects
-
-        current_friends_ids_set = set()
-        current_friends_ids_set |= set(friends_manager.filter(from_user=self).values_list('to_user_id', flat=True))
-        current_friends_ids_set |= set(friends_manager.filter(to_user=self).values_list('from_user_id', flat=True))
+        
+        # Get current relations
+        current_friends_ids_set = self.friends_ids_set
 
         # Add new
         new_friends_ids = list(django_friends_ids_set - current_friends_ids_set)
@@ -151,6 +149,23 @@ class User(AbstractBaseUser):
             'user_id': self.id,
             'total_cash': "%.2f" % self.total_cash,
         }
+
+    @property
+    def friends_ids_set(self):
+        friends_through_model = self.friends.through
+        friends_manager = friends_through_model.objects
+
+        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values('from_user_id', 'to_user_id')
+
+        current_friends_ids_set = set()
+        for from_id, to_id in current_friends_ids:
+            if from_id != self.id:
+                current_friends_ids_set.add(from_id)
+            if to_id != self.id:
+                current_friends_ids_set.add(to_id)
+
+        return current_friends_ids_set
+
 
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
