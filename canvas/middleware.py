@@ -115,14 +115,23 @@ class FacebookMiddleware():
                             user.save(force_update=True)
 
                         if request.facebook.signed_request.user.oauth_token:
-                            is_token_older = \
-                                user.oauth_token.expires_at.replace(tzinfo=pytz.utc) - request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc) < datetime.timedelta(0)
+                            if not user.oauth_token:
+                                oauth_token = OAuthToken.objects.create(
+                                    token=request.facebook.signed_request.user.oauth_token.token,
+                                    issued_at=request.facebook.signed_request.user.oauth_token.issued_at.replace(tzinfo=pytz.utc),
+                                    expires_at=request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
+                                )
+                                user.oauth_token = oauth_token
+                                user.save()
+                            else:
+                                is_token_older = \
+                                    user.oauth_token.expires_at.replace(tzinfo=pytz.utc) - request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc) < datetime.timedelta(0)
 
-                            if is_token_older:
-                                user.oauth_token.token = request.facebook.signed_request.user.oauth_token.token
-                                user.oauth_token.issued_at = request.facebook.signed_request.user.oauth_token.issued_at.replace(tzinfo=pytz.utc)
-                                user.oauth_token.expires_at = request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
-                                user.oauth_token.save(force_update=True)
+                                if is_token_older:
+                                    user.oauth_token.token = request.facebook.signed_request.user.oauth_token.token
+                                    user.oauth_token.issued_at = request.facebook.signed_request.user.oauth_token.issued_at.replace(tzinfo=pytz.utc)
+                                    user.oauth_token.expires_at = request.facebook.signed_request.user.oauth_token.expires_at.replace(tzinfo=pytz.utc)
+                                    user.oauth_token.save(force_update=True)
 
                 django_user = authenticate(fandjango_user=user)
                 if django_user is not None and django_user.is_active:
