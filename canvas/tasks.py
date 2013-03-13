@@ -48,7 +48,7 @@ def consume_facebook_user_sync_task():
     with RedisConnection as redis:
         for facebook_id in iter(partial(redis.spop, USER_SYNC_QUEUE_KEY), None):
             logger.debug("'fb:tasks:usersync' consuming job <%s>" % unicode(facebook_id))
-            facebook_users = FacebookUser.objects.select_related('django_user').filter(facebook_id=facebook_id)
+            facebook_users = FacebookUser.objects.select_related('django_user').filter(facebook_id=facebook_id, facebook_user__oauth_token__isnull=False)
 
             for facebook_user in facebook_users:
                 logger.debug("'fb:tasks:usersync' synchronizing user <%s>" % unicode(facebook_user))
@@ -63,7 +63,7 @@ def consume_facebook_user_friends_sync_task():
     with RedisConnection as redis:
         for facebook_id in iter(partial(redis.spop, USER_FRIENDS_SYNC_QUEUE_KEY), None):
             logger.debug("'fb:tasks:userfriendssync' consuming job <%s>" % unicode(facebook_id))
-            django_users = get_user_model().objects.select_related('facebook_user').filter(facebook_user__facebook_id=facebook_id)
+            django_users = get_user_model().objects.select_related('facebook_user').filter(facebook_user__facebook_id=facebook_id, facebook_user__oauth_token__isnull=False)
             for django_user in django_users:
                 logger.debug("'fb:tasks:userfriendssync' synchronizing friends of user <%s>" % unicode(django_user))
                 django_user.synchronize_facebook_friends()

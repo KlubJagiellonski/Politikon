@@ -254,7 +254,7 @@ class ActivityLog(models.Model):
         if self.activity_type == ACTIVITIES_DICT['GOT_CASH']:
             pass
 
-        if url:
+        if url and facebook_user.oauth_token:
             logger.debug('ActivityLog(#%(id)d)::publish() publishing %(url)s, with: %(payload)s for user <%(user)s>.' % {
                 'id': self.id,
                 'user': facebook_user,
