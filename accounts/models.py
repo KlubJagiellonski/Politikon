@@ -4,6 +4,7 @@ from django.db import models, transaction
 from django.db.models import F, Q
 from django.utils.translation import ugettext as _
 
+from bladepolska.snapshots import SnapshotAddon
 from constance import config
 from canvas.models import FacebookUser
 
@@ -88,6 +89,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     objects = UserManager()
+    snapshots = SnapshotAddon(fields=[
+        'total_cash',
+        'total_given_cash',
+        'portfolio_value'
+    ])
 
     username = models.CharField(u"email", max_length=1024, unique=True)
     name = models.CharField(max_length=1024, blank=True)
@@ -104,6 +110,8 @@ class User(AbstractBaseUser):
 
     total_cash = models.FloatField(u"ilość gotówki", default=0.)
     total_given_cash = models.FloatField(u"ilość przyznanej gotówki w historii", default=0.)
+
+    portfolio_value = models.FloatField(u"wartość portfela", default=0.)
 
     USERNAME_FIELD = 'username'
 

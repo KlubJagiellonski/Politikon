@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from collections import defaultdict
 from math import exp
 
+from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from bladepolska.pubnub import PubNub
 from .exceptions import *
@@ -201,6 +202,15 @@ EVENT_OUTCOMES = [
 
 class Event(models.Model):
     objects = EventManager()
+    snapshots = SnapshotAddon(fields=[
+        'current_buy_for_price',
+        'current_buy_against_price',
+        'current_sell_for_price',
+        'current_sell_against_price',
+        'Q_for',
+        'Q_against',
+        'B'
+    ])
 
     title = models.TextField(u"tytuł wydarzenia")
     short_title = models.TextField(u"tytuł promocyjny wydarzenia")

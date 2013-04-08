@@ -68,9 +68,21 @@ CELERY_TASK_RESULT_EXPIRES = 10
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_IGNORE_RESULT = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERY_IMPORTS = ("canvas.tasks", "accounts.tasks")
+CELERY_IMPORTS = ("accounts.tasks", "canvas.tasks", "events.tasks")
 
 CELERYBEAT_SCHEDULE = {
+    'update_portfolio_values': {
+        'task': 'accounts.tasks.update_portfolio_value',
+        'schedule': timedelta(minutes=1)
+    },
+    'create_hourly_open_events_snapshot': {
+        'task': 'events.tasks.create_open_events_snapshot',
+        'schedule': crontab(minute=11)
+    },
+    'create_hourly_accounts_snapshot': {
+        'task': 'accounts.tasks.create_accounts_snapshot',
+        'schedule': crontab(minute=31)
+    },
     'consume_facebook_user_sync_task': {
         'task': 'canvas.tasks.consume_facebook_user_sync_task',
         'schedule': timedelta(minutes=5)
