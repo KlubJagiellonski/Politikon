@@ -215,6 +215,8 @@ class ActivityLog(models.Model):
 
     def publish(self):
         if not self.user or not self.user.facebook_user:
+            self.published = True
+            self.save(force_update=True)
             return
 
         facebook_user = self.user.facebook_user
