@@ -31,5 +31,6 @@ hiredis
 python-dateutil==1.5
 pytz
 
-pil
+Pillow
 requests
+jsonfield
