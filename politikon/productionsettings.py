@@ -6,15 +6,15 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['politikon.herokuapp.com', 'politikon.pl']
+ALLOWED_HOSTS = ['politikon.herokuapp.com', 'politikon.org.pl']
 
 DATABASES = {'default': dj_database_url.config()}
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIUEJP3FBHTEJYTSA')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIYVO7SIW5CILJWBQ')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'Politikon')
 AWS_QUERYSTRING_AUTH = False
 STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
@@ -24,7 +24,7 @@ import boto.s3.connection
 AWS_S3_CALLING_FORMAT = boto.s3.connection.OrdinaryCallingFormat()
 
 FACEBOOK_APPLICATION_ID = os.environ.get("FACEBOOK_APPLICATION_ID", "208090085996947")
-FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get("FACEBOOK_APPLICATION_SECRET_KEY", "dbc394b484ac6fa41d61ab4aa1f5e0bd")
+FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get("FACEBOOK_APPLICATION_SECRET_KEY", "15b8095d73be74cf072f0596325fbb67")
 FACEBOOK_APPLICATION_NAMESPACE = os.environ.get("FACEBOOK_APPLICATION_NAMESPACE", "politikon")
 
 FACEBOOK_REALTIME_VERIFY_TOKEN = "jkwjknvkjfwelnvljknsknv"
