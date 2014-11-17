@@ -20,7 +20,7 @@ PUBNUB_IS_SSL = False
 
 # Django settings for politikon project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -30,7 +30,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Warsaw'
 LANGUAGE_CODE = 'pl'
 
 SITE_ID = 1
