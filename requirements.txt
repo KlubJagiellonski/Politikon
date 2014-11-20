@@ -1,4 +1,4 @@
-Django
+Django==1.6
 -e git+https://github.com/tkopczuk/django-smartsettings.git@42cf028ebcad36d8815cd035acb276147696dd01#egg=smartsettings
 gunicorn==0.15.0
 path.py==2.4.1
