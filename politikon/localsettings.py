@@ -11,7 +11,7 @@ DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 MEDIA_ROOT = DJANGO_PROJECT_ROOT / 'static' / 'uploads'
 MEDIA_URL = '/static/uploads/'
 
-ALLOWED_HOSTS = ['localhost', 'http://politikon.dokku.me/']
+ALLOWED_HOSTS = ['localhost', 'http://politikon.dokku.me/', '192.168.59.103']
 
 CACHES = {
     'default': {
