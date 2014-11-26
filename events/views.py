@@ -10,6 +10,8 @@ from django.views.decorators.http import require_http_methods
 
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
 import json
+import logging
+logger = logging.getLogger(__name__)
 
 from .exceptions import *
 from .models import *
@@ -17,12 +19,14 @@ from .models import *
 from fandjango.decorators import facebook_authorization_required
 
 def home(request):
+    logger.info('home!')
+
     ctx = {
         'featured_events': list(Event.objects.get_featured_events()[:4]),
         'latest_events': list(Event.objects.get_latest_events())
     }
 
-    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
+#    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
     return render_to_response('home.html', ctx, RequestContext(request))
 
