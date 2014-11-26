@@ -16,6 +16,16 @@ from .models import *
 
 from fandjango.decorators import facebook_authorization_required
 
+def home(request):
+    ctx = {
+        'featured_events': list(Event.objects.get_featured_events()[:4]),
+        'latest_events': list(Event.objects.get_latest_events())
+    }
+
+    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
+
+    return render_to_response('home.html', ctx, RequestContext(request))
+
 
 def event_facebook_object_detail(request, event_id):
     try:
