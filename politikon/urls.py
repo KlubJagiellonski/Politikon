@@ -15,6 +15,8 @@ urlpatterns = patterns('',
 #   Application url patterns
     url(r'^canvas/', include('canvas.urls', namespace="canvas")),
     url(r'^canvas/events/', include('events.urls', namespace="events")),
+
+    url(r'^/$', 'events.home'),        
 )
 
 if settings.SERVE_STATIC_FILES:
