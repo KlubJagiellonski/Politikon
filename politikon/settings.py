@@ -102,7 +102,7 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
-CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
+# CONSTANCE_DATABASE_CACHE_BACKEND = 'default' # prior to changes in django-constances
 
 CONSTANCE_CONFIG = {
     'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),

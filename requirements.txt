@@ -3,7 +3,7 @@ Django==1.6
 gunicorn==0.15.0
 path.py==2.4.1
 djangorestframework
-newrelic
+newrelic==2.38.0.31
 
 -e git+https://github.com/coffin/coffin.git#egg=coffin
 jinja2
@@ -18,7 +18,7 @@ oauth2
 python-openid
 
 -e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
--e git+git://github.com/comoga/django-constance#egg=django-constance
+django-constance==0.6
 django-picklefield
 django-celery-with-redis==3.0
 dj-database-url==0.2.1
