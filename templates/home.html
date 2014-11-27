@@ -1,1 +1,602 @@
-kuku :)
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+<link href='http://fonts.googleapis.com/css?family=Exo+2:400,400italic,500,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+<title>POLITIKON - Stawiamy na politykę!</title>
+	<meta charset="utf-8" />
+	<meta name="author" content="Vivente.pl"/>
+	<meta name="description" content="opis witryny (55 znaków  Google)"/>
+	<meta name="keywords" content="słowa kluczowe, oddzielone przecinkiem"/>
+	
+	<link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
+	<meta name="viewport" content="width=device-width">
+
+	
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<link rel="stylesheet" href="css/rwd.css" type="text/css" />
+	
+	<!-- IntroJs styles -->
+	<link href="css/introjs.min.css" rel="stylesheet">
+	
+<!--[if IE]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="http://css3-mediaqueries-js.googlecode.com/files/css3-mediaqueries.js"></script>
+
+	<link rel="stylesheet" href="css/j24IE.css" type="text/css" />
+<![endif]-->
+
+<!--[if lt IE 9]>
+	<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<!-- ^^ wsparcie dla IE pod http://code.google.com/p/ie7-js/ -->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<!--<script src="js/skrypty.js"></script>-->
+
+<script type="text/javascript" language="javascript" src="js/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/actions.js"></script>
+<script type="text/javascript" language="javascript" src="js/charts/betfeed+featured.js"></script>
+
+<!--skrypty dla goscia-->
+<script type="text/javascript" language="javascript" src="js/guest.js"></script>
+
+<!--WALIDACJA FORMULARZA-->
+<script src="js/walidacja/parsley.min.js"></script>
+
+</head>
+
+
+<body id="POLITIKON">
+
+<div class="overlay blankoverlay"></div>
+<div class="overlay" style="z-index: 6000;">
+	<div id="login">
+		<div class="header">Graj w Politikon! <span class="prawa login-close"></span></div>
+
+		<aside class="rejestracja asblock opacity">
+			<a href=#"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
+			<a href=#"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
+			<p>Możesz także zarejestrować się przez <a href="#" class="show-rejestracjaemail">adres e-mail</a></p>
+			<div class="other"><p>Masz już konto? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
+		</aside>
+
+		<aside class="logowanie">
+			<a href=#"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
+			<a href=#"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
+			<p class="or"><span>lub zaloguj się przez e-mail</span></p>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+				
+				<input type="submit" class="przycisk" value="Zaloguj się">
+
+			</form>
+			<p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
+			<div class="other"><p>Nie masz jeszcze konta? <a href="#" class="show-rejestracja">Zarejestruj się!</a></p></div>
+		</aside>
+
+		<aside class="przypomnienie">
+			<h2>Zmiana zapomnianego hasła</h2>
+			<p class="spaceafter">Nie pamiętasz hasła? Nic nie szkodzi! Stworzymy Ci nowe! Wpisz poniżej swój adres e-mail, lub nazwę użytkownika użyte podczas rejestracji.</p>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="remind" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+				
+				<input type="submit" class="przycisk" value="Poproś o nowe hasło">
+
+			</form>
+			<p class="tip">&nbsp;</p>
+			<div class="other"><p>Przypomniałeś sobie? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
+		</aside>
+
+		<aside class="rejestracjaemail">
+			<h2 class="spaceafter">Zarejestruj się przy użyciu adresu e-mail</h2>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+				<input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
+				<input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
+				<p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> Zapoznałem się z <a href="#">Regulaminem</a> i <a href="#">Polityką Prywatności</a></p>
+				
+				<input type="submit" class="przycisk" value="Zarejestruj się">
+
+			</form>
+			<div class="other"><p>Masz TT lub FB? <a href="#" class="show-rejestracja">Zarejestruj się szybciej</a>.</p></div>
+		</aside>
+	</div>
+<div class="overlay-close"></div>
+</div>
+
+<div id="body-wrapper">
+	<section id="maintop" class="section-nopadding">
+		<div class="logo lewa">
+			<a href="#"><div></div></a>
+		</div>
+		
+		<nav class="astable lewa">
+			<div class="burger"></div>
+			<ul class="mainmenu">
+				<div class="arrowup"></div>
+				<a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
+				<a href="#"><li>Wydarzenia</li></a>
+				<a href="#"><li>Rankingi</li></a>
+			</ul>
+		</nav>
+		
+		<div class="graj prawa">
+			<a href="#"><div class="prawa show-login">GRAJ!</div></a>
+		</div>
+		
+		<div class="socialmedia prawa">
+			<a href="#"><div class="sm-bg tt"></div></a>
+			<a href="#"><div class="sm-bg fb"></div></a>
+			<a href="#"><div class="sm-bg gp"></div></a>
+		</div>
+		
+	</section>
+	
+	
+	
+	<section id="featured" class="section-nopadding">
+		<figure>
+			<img src="img/featured.jpg"/>
+			<figcaption>
+				<a href="#"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
+				<div class="opis">
+					<a href="#"><h1 class="skroc lewa">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h1></a>
+					<div id="makeabet" class="prawa">
+						<div class="change changeYES">+21</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">36</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">61</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+				</div>
+			</figcaption>
+		</figure>
+	</section>
+	
+	<section id="betfeed">
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id="makeabet" class="morebets">
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">+</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">-</span></div></a>
+						<div class="currentbet centrum">
+							<p class="changeYES">TAK</p>
+							<p>5 x <span></span> 48</p>
+						</div>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas03" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas04" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas05" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas06" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+	</section>
+	
+	
+	
+	<section id="betfeed" class="hotbets">
+		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
+		<div>
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas07" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas08" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		
+		<div class="bet">
+			<figure>
+				<img src="img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas09" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+					
+				</figcaption>
+			</figure>
+		</div>
+		</div>
+	</section>
+	
+	<section id="ranking-short">
+		<h3 class="orangetxt lewa">Najlepsi gracze</h3>
+		<ul class="tabs prawa">
+			<li><a href="#tydzien">Tydzień</a></li>
+			<li><a href="#miesiac">Miesiąc</a></li>
+			<li><a href="#calosc">Całość</a></li>
+		</ul>
+		<div class="clr"></div>
+		<div class="zakladki-content">
+			<article id="tydzien">
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+			</article>
+				
+			<article id="miesiac">
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+			</article>
+			
+			<article id="calosc">
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+				<div class="userrank uservip">
+					<a href="#">
+					<img src="img/blank-avatar.jpg"/>
+					<div class="wolnereputy"><span class="astable">1 235</span></div>
+					<div class="username">Andrzej Kowalski</div>
+					</a>
+				</div>
+			</article>
+		</div>
+	</section>
+	
+	
+	<section id="loadmore">
+		<a href="#"><div class="btn astable">Wyświetl więcej zakładów</div></a>
+				<div class="more lewa"></div>
+				<div class="more prawa"></div>
+				<div class="more centrum"></div>
+
+	</section>
+	
+	<footer>
+		<div class="lewa">
+			
+			<ul>
+				<h5>Politikon</h5>
+				<li><a href="#">Jak grać?</a></li>
+				<li><a href="#">Wydarzenia</a></li>
+				<li><a href="#">Rankingi</a></li>
+			</ul>
+			<ul>
+				<li><a href="#">Regulamin</a></li>
+				<li><a href="#">Reklama</a></li>
+				<li><a href="#">Kontakt</a></li>
+			</ul>
+			<ul>
+				<h5>Partnerzy</h5>
+				<li><a href="#">OSoM</a></li>
+				<li><a href="#">jagielloński24</a></li>
+				<li><a href="#">vivente!</a></li>
+			</ul>
+		</div>
+		<div class="prawa">
+			<div class="socialmedia prawa">
+				<a href=#"><div class="tt lewa"></div></a>
+				<a href="#"><div class="fb lewa"></div></a>
+				<a href="#"><div class="gp lewa"></div></a>
+			</div>
+			<a href=#"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
+		</div>
+		<div class="logo centrum"></div>
+	</footer>
+</div>
+
+<!--jak grac-->
+<script type="text/javascript" src="js/intro/intro.min.js"></script>
+<script type="text/javascript" src="js/intro/scenario-guest.js"></script>
+
+</body>
+</html>
