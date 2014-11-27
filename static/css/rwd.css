@@ -1,0 +1,235 @@
+@media only screen and (max-width: 1220px){
+    
+#bet-details .bet-social ul li:last-child, #userinfo .ranking-event .prawa .rank-reputation, #settings-profile .profile-avatar figcaption span {display: none !important;}
+
+#maintop nav {min-width: 110px; width: auto;}
+
+#maintop nav .burger {display: block !important;}
+#maintop nav ul {display: none; opacity: 0; height: auto; position: absolute; background: #efefef; margin-left: -48px; margin-top: 30px;
+        -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+        box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+}
+#maintop nav ul li {float: none !important; text-align: center; background: #fff; padding-left: 50px; padding-right: 50px; margin-top: 0px !important; margin-right: 0px !important;
+        transition:all .1s ease-in-out;
+        -moz-transition:all .1s ease-in-out; /* Firefox 4 */
+        -webkit-transition:all .1s ease-in-out; /* Safari and Chrome */
+        -o-transition:all .1s ease-in-out; /* Opera */
+}
+#maintop nav ul li:hover {background: #ea6a2a; color: #fff;}
+#maintop nav ul a {display: table; width: 100%; margin-bottom: 2px !important;}
+#maintop nav ul a:last-of-type {margin-bottom: 0px !important;}
+#maintop nav ul .arrowup {display: inherit;}
+.sticktotop nav ul {margin-top: 20px !important;}
+
+#maintop .userdata {width: 35%;}
+
+#wallet-not .inside .betresult .status {width: 52%;}
+
+#featured #makeabet {}
+#featured h1 {width: 60%;}
+
+#betfeed figure figcaption h2 {height: 50px; width: 90%; padding: 12px 5%;}
+#featured #makeabet {margin-right: 3.5%;}
+ 
+#userinfo .notinwallet .status {width: 30%;}
+
+#userinfo .ranking-event .prawa {width: 25%;}
+#userinfo .ranking-event .prawa p {width: 26%;}
+ 
+}
+
+/*********** 1070px ***********/
+@media only screen and (max-width: 1070px) {
+    
+#bet-details .bet-social ul li:nth-last-child(2), #userinfo .betresult .status .why {display: none !important;}
+    
+#body-wrapper {margin: 0 auto !important;}
+
+#featured #makeabet {width: 34% !important;}
+#maintop .userdata {width: 40%;}
+
+.change {width: 30px; height: 30px; line-height: 30px;}
+#makeabet .change {margin-bottom: -38px;}
+#makeabet .betYES, #makeabet .betNO {margin-top: -1px;}
+
+footer .kj {padding-left: 0px; background: none;}
+
+#userinfo .history-event .lewa, #userinfo .history-event .prawa {width: 45% !important;}
+
+.body-scrolled, .body-scrolled-subpage {padding-top: 100px;}
+    
+}
+
+/*********** 950px ***********/
+@media only screen and (max-width: 950px) {
+
+.arrowup, #maintop .userdata .stats p:first-of-type, #featured .details, #betfeed .details-chart, #makeabet .change, #ranking-short, footer .logo, footer .prawa,
+#bet-desc .rss-related .rss-news img, #bet-details .bet-social ul li:nth-last-child(3), #userinfo .notinwallet .status-explanation, #userinfo .history-event .event-date,
+#userinfo .ranking-event .prawa .rank-freereputy
+{display: none !important;}
+
+section, footer {width: 96%; padding: 0 2%;}
+
+#maintop .userdata {width: 30%;}
+#maintop .avatar {width: 10% !important;}
+#maintop .userdata .stats {margin-top: 13px; font-size: .75em; margin-left: 5%;}
+
+#wallet-not .container {width: 95%; margin: 92px 0 0 0;}
+
+#featured h1 {font-size: 1.875em; width: 50%;}
+#featured #makeabet {width: 40% !important; margin-right: 2%;}
+#featured #makeabet .change {display: block !important;}
+#featured figcaption {padding: 0 2%; width: 96%;}
+#featured .opis {height: 90px; width: 98%;}
+
+#betfeed .bet {width: 30%; margin-right: 4%;}
+#betfeed .bet {height: 375px;}
+#betfeed figure figcaption h2 {font-size: 1em;}
+#betfeed .bet:hover figcaption h2 {margin-top: 250px !important;}
+#betfeed .bet:hover .changepreview {opacity: 1;}
+
+footer .lewa {width: 100%; }
+
+#bet-desc .rss-related .rss-news .prawa {width: 100%;}
+#bet-desc .rss-related .header {font-size: .87em;}
+
+#userinfo .history-event .prawa {width: 25% !important;}
+#userinfo .history-event .prawa .history-action {width: 55%;}
+#userinfo .history-event .reputy-change {width: 45%;}
+#userinfo .history-event .lewa {width: 70% !important;}
+#userinfo .notinwallet .status {width: 50%;}
+#userinfo .notinwallet .status-change {width: 20%; margin-right: -1.5%;}
+#userinfo .betinwallet .detailed-status {opacity: 1;}
+
+#userinfo .ranking-event .prawa {width: 16%;}
+#userinfo .ranking-event .prawa p {width: 60%;}
+
+#settings-profile .current-settings div {margin-top: 0px;}
+#settings-profile .current-settings h2 {font-size: 1.125em;}
+#settings-profile .current-settings .what {width: 45%;}
+#settings-profile .current-settings .value {width: 50%;}
+}
+
+
+/*********** 700px ***********/
+@media only screen and (max-width: 700px) {
+    
+#loadmore .more,  #wallet-not .inside .betresult .status .why, #maintop .userdata a:nth-child(4),
+#bet-details .bet-social ul, #bet-details .bet-social .voted, #bet-details .bet-social .peopleYES, #bet-details .bet-social .peopleNO,
+.notinwallet .invested, .notinwallet .won, .notinwallet .maywin, .notinwallet .inwallet,
+#userinfo .ranking-event .prawa, #ranking
+{display: none !important;}
+
+#maintop, #maintop .graj {height: 70px !important;}
+#maintop .logo {width: 74px; min-width: 74px; height: 70px !important;}
+#maintop .logo div {height: 60px !important; margin-top: 5px !important;}
+#maintop .graj {width: 20%;}
+#maintop nav .burger {margin-top: 20px !important;}
+#maintop .socialmedia {margin-top: 15px !important;}
+#maintop .graj .prawa {margin-top: 10px !important;}
+#maintop .userdata {padding: 10px 0 !important;}
+#maintop .avatar img {width: 40px; height: 40px; margin-top: 15px !important;}
+
+#login {width: 90%;}
+#wallet-not .inside .betresult .status h3 {font-size: 1em;}
+#wallet-not .inside .betresult .status {width: 46%;}
+#wallet-not .inside .betresult .status-change div {margin: 10px 0;}
+
+#featured h1 {width: 100%;}
+#featured #makeabet {width: 100% !important; margin-right: 1% !important;}
+
+#betfeed .bet {width: 100%; height: 370px;}
+#betfeed figure img {height: auto; width: 100%;}
+#betfeed #makeabet {margin-top: 0px;}
+#makeabet .betYES, #makeabet .betNO {width: 50%;}
+
+#loadmore {background: transparent; border-top: 0px;}
+#loadmore .btn {margin-top: 0px !important;}
+#userinfo #loadmore .btn {margin-top: 40px !important;}
+
+ul.tabs {margin-top: 20px; width: 100%;}
+ul.tabs li {margin: 5px .2em 5px 0; width: 100%; text-align: center; padding: 12px 0;}
+ul.tabs li a {width: 100%; display: block;}
+
+#bet-details .bet-social .peopleYES, #bet-details .bet-social .peopleNO {width: 15%;}
+#bet-details .bet-social #makeabet {width: inherit !important;}
+#bet-desc .lewa {width: 100%; margin-bottom: 40px;}
+#bet-desc .rss-related {width: 100%;}
+#bet-details .chart-container {width: 100%; float: none; margin: 0 !important; margin-bottom: 20px !important;}
+#bet-details .chart-img {width: 100% !important; float: none; max-width: none; margin-bottom: 20px !important;}
+#bet-details .bet-social #makeabet {margin-top: 0px;}
+#header {margin-bottom: 30px;}
+
+#userinfo .betinwallet {width: 97%;}
+#userinfo .betinwallet:nth-child(even) {float: none;}
+#userinfo .history-event .prawa {width: 35% !important;}
+
+.user-social {width: 100%;}
+
+#userinfo .ranking-event .lewa {width: 100%;}
+
+.settings-form .lewa, .settings-form .prawa {width: 100%;}
+#settings-profile .current-settings div {width: 90%;}
+#settings-profile .profile-avatar figcaption {background-size: 50%;}
+
+.body-scrolled, .body-scrolled-subpage {padding-top: 70px;}
+
+}
+
+
+/*********** 500px ***********/
+@media only screen and (max-width: 500px) {
+    
+#maintop .userdata a, #maintop .socialmedia, #wallet-not .inside .betresult .status, #wallet-not .inside .header span, .hotbet-icon, footer ul:nth-child(3), #bet-details .chart-container,
+#userinfo .notinwallet .status, #userinfo .history-event .prawa .history-action
+{display: none !important;}
+
+#maintop nav {min-width: 80px;}
+#maintop .graj {width: 30%;}
+#maintop .userdata {width: 20%;}
+
+#wallet-not .inside .betresult .status-change {width: 55%;}
+#wallet-not .inside .betresult img {margin-right: 0px !important;}
+
+#login .twitter-login span, #login .facebook-login span {text-align: left; margin: 12px 0 0 95px;}
+#login .przycisk {font-size: .875em;}
+
+#loadmore .btn {text-align: center;}
+
+#bet-details .chart-img {margin-bottom: 0px !important;}
+
+#userinfo .notinwallet .status {width: 70%;}
+#userinfo .notinwallet .status-change {width: 50%;}
+#userinfo .history-event .prawa {width: 25% !important;}
+#userinfo .history-event .reputy-change {width: 100%;}
+#userinfo .history-event .lewa {font-size: .875em;}
+#userstats p {display: none;}
+#userstats p:first-of-type {display: block !important;}
+
+#userinfo .ranking-event .nickname {font-size: 1em;}
+#userinfo .ranking-event .lewa img {width: 60px; height: 60px; margin-top: 10px;}
+#userinfo .ranking-event .nickname {width: 65%;}
+
+#settings-profile .current-settings div {font-size: .9em;}
+.settings-form .connectme, .settings-form .social-connect {font-size: .7em;}
+
+}
+
+/*********** 300px ***********/
+@media only screen and (max-width: 300px) {
+#wallet-not .inside .betresult .status-change {width: 45%;}
+#userinfo .reputy-small, #userinfo .betinwallet img, .betinwallet .won, .betinwallet .inwallet, #settings-profile .profile-avatar img {display: none !important;}
+.betresult .status h3 {font-size: 1em; height: 25px;}
+#userinfo .history-event .lewa {width: 80% !important;}
+#userinfo .betinwallet .status {width: 95%; padding-left: 2.5%; padding-right: 2.5%;}
+
+#userinfo .ranking-event .nickname {width: 60%;}
+}
+
+/*************** height 768px *************/
+@media only screen and (max-height: 768px){
+#login {top: 40px;}
+}
+
+
