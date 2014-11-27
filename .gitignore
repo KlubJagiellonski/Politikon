@@ -2,3 +2,4 @@ static_build/uploads/*
 static/.webassets-cache/*
 .pycharm_helpers/*
 *.pyc
+.idea
