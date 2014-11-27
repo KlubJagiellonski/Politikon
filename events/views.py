@@ -18,13 +18,14 @@ from .models import *
 
 from fandjango.decorators import facebook_authorization_required
 
-def home(request):
+def index(request):
 
     ctx = {
-        'featured_events': list(Event.objects.get_featured_events()[:4]),
+#TODO: since we're going to have only one featured event, change the function to get_featured_event
+        'featured_event': list(Event.objects.get_featured_events())[0],
         'latest_events': list(Event.objects.get_latest_events())
     }
-# TODO
+# TODO: what's that?
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
     return render_to_response('index.html', ctx, RequestContext(request))
