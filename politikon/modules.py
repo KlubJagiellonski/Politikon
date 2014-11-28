@@ -50,9 +50,6 @@ class HostnameRedirectMiddleware(object):
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:
-            # cache all site domains in one query
-            if not hasattr(self, '_sites'):
-                self._sites = Site.objects.values_list('domain', flat=True)
-            if server_name not in self._sites:
+            if server_name != catchall:
                 return _get_redirect(catchall, request)
         return None
