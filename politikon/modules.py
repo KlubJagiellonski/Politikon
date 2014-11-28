@@ -41,12 +41,17 @@ def _get_redirect(new_hostname, request):
     )
     return HttpResponsePermanentRedirect(new_location)
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class HostnameRedirectMiddleware(object):
     def process_request(self, request):
         server_name = request.META['SERVER_NAME']
+        logger.info(server_name)
         catchall = getattr(settings,
             'CATCHALL_REDIRECT_HOSTNAME', None)
+        logger.info(catchall)
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:
