@@ -10,7 +10,7 @@ python manage.py migrate events
 
 #testujemy, pushujemy zmiany na produkcję (wcześniej powinniśmy wrzucić serwer w maintenance mode)
 #i odpalamy
-heroku run sh --app politikon
+heroku run bash --app politikon
 #odpalamy migrację
 python manage.py migrate events
 
