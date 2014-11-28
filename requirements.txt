@@ -34,3 +34,5 @@ pytz
 Pillow
 requests
 jsonfield
+
+django-sslify>=0.2

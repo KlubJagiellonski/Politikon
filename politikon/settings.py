@@ -166,6 +166,9 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    # forcing SSL using https://github.com/rdegges/django-sslify. This need to be the first middleware
+    'sslify.middleware.SSLifyMiddleware',
+
     # 'bladepolska.middleware.InstrumentMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -177,6 +180,9 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+# needed by SSLify
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ROOT_URLCONF = 'politikon.urls'
 
