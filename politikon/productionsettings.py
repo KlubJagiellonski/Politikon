@@ -61,9 +61,6 @@ EMAIL_USE_TLS = True
 
 SERVE_STATIC_FILES = True
 
+BASICAUTH = True
 BASICAUTH_USERNAME = 'stawiamy'
 BASICAUTH_PASSWORD = 'napolityke'
-
-MIDDLEWARE_CLASSES =  MIDDLEWARE_CLASSES +(
-    'politkon.modules.BasicAuthMiddleware',
-)
