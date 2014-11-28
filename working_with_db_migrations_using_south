@@ -1,0 +1,25 @@
+# zmieniasz model (dodajesz pole itp) np w Events
+# zapisujesz
+# tworzysz migracje odpalajac na docker'rze:
+
+python manage.py schemamigration events --auto
+
+# tworzy sie plik migracji w katalogu events/migrations
+# odpalamy migrację (migrowanie bazydanych) na DEV (przez Dockera)
+python manage.py migrate events
+
+#testujemy, pushujemy zmiany na produkcję (wcześniej powinniśmy wrzucić serwer w maintenance mode)
+#i odpalamy
+heroku run sh --app politikon
+#odpalamy migrację
+python manage.py migrate events
+
+# gotowe!
+
+#####
+tworzą nam sie duże table, pokasowałem rekordy:
+
+ddb991srv8sc5o=> delete from events_event_snapshot;
+DELETE 14589
+ddb991srv8sc5o=> delete from accounts_user_snapshot;
+DELETE 17820
