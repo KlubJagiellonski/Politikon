@@ -21,8 +21,8 @@ from fandjango.decorators import facebook_authorization_required
 def index(request):
 
     ctx = {
-#TODO: since we're going to have only one featured event, change the function to get_featured_event
-        'featured_event': list(Event.objects.get_featured_events())[0],
+        'front_event' : Event.objects.get_front_event(),
+        'featured_events': list(Event.objects.get_featured_events()),
         'latest_events': list(Event.objects.get_latest_events())
     }
 # TODO: what's that?

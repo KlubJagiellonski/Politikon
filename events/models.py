@@ -30,7 +30,14 @@ class EventManager(models.Manager):
         return self.ongoing_only_queryset().order_by('-created_date')
 
     def get_featured_events(self):
-        return self.ongoing_only_queryset().filter(is_featured=True).order_by('-created_date')
+        return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
+
+    def get_front_event(self):
+        front_events = self.ongoing_only_queryset().filter(is_front=True).order_by('estimated_end_date')
+        if front_events.count()>0:
+            return front_events[0]
+        else:
+            return None
 
     def associate_people_with_events(self, user, events_list):
         event_ids = set([e.id for e in events_list])
@@ -224,6 +231,7 @@ class Event(models.Model):
     big_image = models.ImageField(u"duży obrazek 715x300", upload_to="events_big", null=True)
 
     is_featured = models.BooleanField(u"featured", default=False)
+    is_front = models.BooleanField(u"front", default=False)
     outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOMES, default=1)
 
     created_date = models.DateTimeField(auto_now_add=True)
