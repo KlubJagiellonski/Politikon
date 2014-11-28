@@ -1,3 +1,32 @@
+{% macro render_events(events, people) %}
+    {% for event in events %}
+      {{ render_event(event, people) }}
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro render_event(event, people) %}
+      <div class="bet">
+			<figure>
+				<img src="static/img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">{{ event.title }}</h2></a>
+					<div id="makeabet" class="morebets">
+						<a href="#TAK"><div class="betYES"><span class="value lewa">{{event.current_buy_for_price}}</span><span class="txt prawa">+</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">{{event.current_buy_against_price}}</span><span class="txt lewa">-</span></div></a>
+						<div class="currentbet centrum">
+							<p class="changeYES">TAK</p>
+							<p>5 x <span></span> 48</p>
+						</div>
+					</div>
+
+				</figcaption>
+			</figure>
+      </div>
+{% endmacro %}
+
 {% macro pubnub_init() %}
       var pubnub = PUBNUB.init({
         subscribe_key: "{{ settings.PUBNUB_SUBSCRIBE_KEY }}"
@@ -7,7 +36,9 @@
 {% macro render_user_stats(user) %}
 {% endmacro %}
 
-{% macro render_event(event, people) %}
+
+
+{% macro TODO_remove_it_render_event(event, people) %}
   <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
       {% if event.small_image %}
@@ -65,14 +96,6 @@
       <p class="short-title">{{ event.short_title }}</p>
     </div>
   </a>
-{% endmacro %}
-
-{% macro render_events(events, people) %}
-   <div class="events-box">
-    {% for event in events %}
-      {{ render_event(event, people) }}
-    {% endfor %}
-   </div>
 {% endmacro %}
 
 {% macro render_featured_events(events, people) %}
