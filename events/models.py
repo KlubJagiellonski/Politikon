@@ -218,7 +218,7 @@ class Event(models.Model):
     title_fb_yes = models.TextField(u"tytuł na TAK obiektu FB")
     title_fb_no = models.TextField(u"tytuł na NIE obiektu FB")
 
-    descrition = models.TextField(u"pełny opis wydarzenia")
+    description = models.TextField(u"pełny opis wydarzenia", default='')
 
     small_image = models.ImageField(u"mały obrazek 365x255", upload_to="events_small", null=True)
     big_image = models.ImageField(u"duży obrazek 715x300", upload_to="events_big", null=True)
