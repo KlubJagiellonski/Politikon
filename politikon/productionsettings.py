@@ -6,7 +6,8 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['www.politikon.org.pl']
+ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl']
+CATCHALL_REDIRECT_HOSTNAME = 'www.politikon.org.pl'
 
 DATABASES = {'default': dj_database_url.config()}
 
