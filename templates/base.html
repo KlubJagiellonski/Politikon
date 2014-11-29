@@ -1,78 +1,182 @@
 {% import 'macros.html' as macros with context %}
 
-<html class="no-js" ng-app="politikon">
-    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {{ settings.FACEBOOK_APPLICATION_NAMESPACE }}: http://ogp.me/ns/fb/{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}#">
-        <meta property="fb:app_id" content="{{ settings.FACEBOOK_APPLICATION_ID }}" /> 
-        {% if FACEBOOK_OBJECT %}
-            <meta property="og:type"   content="{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}:{{ FACEBOOK_OBJECT }}" /> 
-        {% endif %}
+<!DOCTYPE html>
+<html lang="pl">
 
-        {% block facebook_properties %}
-        {% endblock %}
+<head>
+<link href='https://fonts.googleapis.com/css?family=Exo+2:400,400italic,500,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-        {% assets "css_all" %}
-            <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" charset="utf-8">
-        {% endassets %}
+<title>POLITIKON - Stawiamy na politykę!</title>
+	<meta charset="utf-8" />
+	<meta name="author" content="Vivente.pl"/>
+	<meta name="description" content="opis witryny (55 znaków  Google)"/>
+	<meta name="keywords" content="słowa kluczowe, oddzielone przecinkiem"/>
 
-        {% block css_includes %}{% endblock %}
-    </head>
-
-    <body>
-        <div id="wrapper">
-            <header>
-                <a href="{% url canvas:home %}?{{ request.canvas_query }}"><h1>POLITIKON</h1></a>
-            </header>
-
-            <div class="content" data-bind="with: appDataStore">
-                {% block content %}
-                {% endblock %}
-            </div>
-
-            <footer></footer>
-        </div>
-
-        <div id="fb-root"></div>        
-        {% assets "js_all" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
+	<link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
+	<meta name="viewport" content="width=device-width">
 
 
-        {% block js_includes %}{% endblock %}
+	<link rel="stylesheet" href="static/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="static/css/rwd.css" type="text/css" />
 
-        <script type="text/javascript">
-            {% block base_script %}
-                {% block script %}{% endblock %}
+	<!-- IntroJs styles -->
+	<link href="static/css/introjs.min.css" rel="stylesheet">
 
-                {% block initial_data %}
-                    var initialData = {
-                        user: {{ request.user.statistics_dict|jsonify }}
-                    };
-                {% endblock %}
+<!--[if IE]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="http://css3-mediaqueries-js.googlecode.com/files/css3-mediaqueries.js"></script>
 
-                (function() {
-                    var e = document.createElement('script'); e.async = true;
-                    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-                    document.getElementById('fb-root').appendChild(e);
-                }());
+	<link rel="stylesheet" href="static/css/j24IE.css" type="text/css" />
+<![endif]-->
 
-                window.fbAsyncInit = function() {
-                    FB.init({appId: '{{ settings.FACEBOOK_APPLICATION_ID }}', status: true, cookie: true, xfbml: true});
+<!--[if lt IE 9]>
+	<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+<![endif]-->
+<!-- ^^ wsparcie dla IE pod http://code.google.com/p/ie7-static/js/ -->
 
-                    FB.Canvas.setSize({
-                        width: $('body').outerWidth(true),
-                        height: $('body').outerHeight(true)
-                    });
-                    FB.Canvas.setAutoGrow(true);
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<!--<script src="static/js/skrypty.js"></script>-->
 
-                    {% block script_facebook_on_load %}{% endblock %}
-                }
+<script type="text/javascript" language="javascript" src="static/js/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" language="javascript" src="static/js/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="static/js/actions.js"></script>
+<script type="text/javascript" language="javascript" src="static/js/charts/betfeed+featured.js"></script>
 
-                $(document).ready(function() {
-                    initializePolitikon("{{ request.canvas_query }}");
+<!--skrypty dla goscia-->
+<script type="text/javascript" language="javascript" src="static/js/guest.js"></script>
 
-                    {% block script_document_ready %}{% endblock %}
-                });
-            {% endblock %}                
-        </script>
-    </body>
+<!--WALIDACJA FORMULARZA-->
+<script src="static/js/walidacja/parsley.min.js"></script>
+
+</head>
+
+
+<body id="POLITIKON">
+
+<div class="overlay blankoverlay"></div>
+<div class="overlay" style="z-index: 6000;">
+	<div id="login">
+		<div class="header">Graj w Politikon! <span class="prawa login-close"></span></div>
+
+		<aside class="rejestracja asblock opacity">
+			<a href=#"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
+			<a href=#"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
+			<p>Możesz także zarejestrować się przez <a href="#" class="show-rejestracjaemail">adres e-mail</a></p>
+			<div class="other"><p>Masz już konto? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
+		</aside>
+
+		<aside class="logowanie">
+			<a href=#"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
+			<a href=#"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
+			<p class="or"><span>lub zaloguj się przez e-mail</span></p>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+
+				<input type="submit" class="przycisk" value="Zaloguj się">
+
+			</form>
+			<p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
+			<div class="other"><p>Nie masz jeszcze konta? <a href="#" class="show-rejestracja">Zarejestruj się!</a></p></div>
+		</aside>
+
+		<aside class="przypomnienie">
+			<h2>Zmiana zapomnianego hasła</h2>
+			<p class="spaceafter">Nie pamiętasz hasła? Nic nie szkodzi! Stworzymy Ci nowe! Wpisz poniżej swój adres e-mail, lub nazwę użytkownika użyte podczas rejestracji.</p>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="remind" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+
+				<input type="submit" class="przycisk" value="Poproś o nowe hasło">
+
+			</form>
+			<p class="tip">&nbsp;</p>
+			<div class="other"><p>Przypomniałeś sobie? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
+		</aside>
+
+		<aside class="rejestracjaemail">
+			<h2 class="spaceafter">Zarejestruj się przy użyciu adresu e-mail</h2>
+			<form data-parsley-validate>
+				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+				<input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
+				<input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
+				<p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> Zapoznałem się z <a href="#">Regulaminem</a> i <a href="#">Polityką Prywatności</a></p>
+
+				<input type="submit" class="przycisk" value="Zarejestruj się">
+
+			</form>
+			<div class="other"><p>Masz TT lub FB? <a href="#" class="show-rejestracja">Zarejestruj się szybciej</a>.</p></div>
+		</aside>
+	</div>
+<div class="overlay-close"></div>
+</div>
+
+<div id="body-wrapper">
+	<section id="maintop" class="section-nopadding">
+		<div class="logo lewa">
+			<a href="#"><div></div></a>
+		</div>
+
+		<nav class="astable lewa">
+			<div class="burger"></div>
+			<ul class="mainmenu">
+				<div class="arrowup"></div>
+				<a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
+				<a href="#"><li>Wydarzenia</li></a>
+				<a href="#"><li>Rankingi</li></a>
+			</ul>
+		</nav>
+
+		<div class="graj prawa">
+			<a href="#"><div class="prawa show-login">GRAJ!</div></a>
+		</div>
+
+		<div class="socialmedia prawa">
+			<a href="#"><div class="sm-bg tt"></div></a>
+			<a href="#"><div class="sm-bg fb"></div></a>
+			<a href="#"><div class="sm-bg gp"></div></a>
+		</div>
+
+	</section>
+
+    {% block content %}{% endblock %}
+
+	<footer>
+		<div class="lewa">
+
+			<ul>
+				<h5>Politikon</h5>
+				<li><a href="#">Jak grać?</a></li>
+				<li><a href="#">Wydarzenia</a></li>
+				<li><a href="#">Rankingi</a></li>
+			</ul>
+			<ul>
+				<li><a href="#">Regulamin</a></li>
+				<li><a href="#">Reklama</a></li>
+				<li><a href="#">Kontakt</a></li>
+			</ul>
+			<ul>
+				<h5>Partnerzy</h5>
+				<li><a href="#">OSoM</a></li>
+				<li><a href="#">jagielloński24</a></li>
+				<li><a href="#">vivente!</a></li>
+			</ul>
+		</div>
+		<div class="prawa">
+			<div class="socialmedia prawa">
+				<a href=#"><div class="tt lewa"></div></a>
+				<a href="#"><div class="fb lewa"></div></a>
+				<a href="#"><div class="gp lewa"></div></a>
+			</div>
+			<a href=#"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
+		</div>
+		<div class="logo centrum"></div>
+	</footer>
+</div>
+
+<!--jak grac-->
+<script type="text/javascript" src="static/js/intro/intro.min.js"></script>
+<script type="text/javascript" src="static/js/intro/scenario-guest.js"></script>
+
+</body>
 </html>

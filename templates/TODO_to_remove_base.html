@@ -1,0 +1,78 @@
+{% import 'macros.html' as macros with context %}
+
+<html class="no-js" ng-app="politikon">
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {{ settings.FACEBOOK_APPLICATION_NAMESPACE }}: http://ogp.me/ns/fb/{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}#">
+        <meta property="fb:app_id" content="{{ settings.FACEBOOK_APPLICATION_ID }}" /> 
+        {% if FACEBOOK_OBJECT %}
+            <meta property="og:type"   content="{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}:{{ FACEBOOK_OBJECT }}" /> 
+        {% endif %}
+
+        {% block facebook_properties %}
+        {% endblock %}
+
+        {% assets "css_all" %}
+            <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" charset="utf-8">
+        {% endassets %}
+
+        {% block css_includes %}{% endblock %}
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <header>
+                <a href="{% url canvas:home %}?{{ request.canvas_query }}"><h1>POLITIKON</h1></a>
+            </header>
+
+            <div class="content" data-bind="with: appDataStore">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            <footer></footer>
+        </div>
+
+        <div id="fb-root"></div>        
+        {% assets "js_all" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
+
+        {% block js_includes %}{% endblock %}
+
+        <script type="text/javascript">
+            {% block base_script %}
+                {% block script %}{% endblock %}
+
+                {% block initial_data %}
+                    var initialData = {
+                        user: {{ request.user.statistics_dict|jsonify }}
+                    };
+                {% endblock %}
+
+                (function() {
+                    var e = document.createElement('script'); e.async = true;
+                    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                    document.getElementById('fb-root').appendChild(e);
+                }());
+
+                window.fbAsyncInit = function() {
+                    FB.init({appId: '{{ settings.FACEBOOK_APPLICATION_ID }}', status: true, cookie: true, xfbml: true});
+
+                    FB.Canvas.setSize({
+                        width: $('body').outerWidth(true),
+                        height: $('body').outerHeight(true)
+                    });
+                    FB.Canvas.setAutoGrow(true);
+
+                    {% block script_facebook_on_load %}{% endblock %}
+                }
+
+                $(document).ready(function() {
+                    initializePolitikon("{{ request.canvas_query }}");
+
+                    {% block script_document_ready %}{% endblock %}
+                });
+            {% endblock %}                
+        </script>
+    </body>
+</html>
