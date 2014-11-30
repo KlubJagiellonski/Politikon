@@ -58,3 +58,7 @@ select count(*) from events_transaction   ;
 select count(*) from fandjango_oauthtoken ;
 select count(*) from fandjango_user       ;
 select count(*) from south_migrationhistory;
+
+
+#btw: syncing time on docker machine
+boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
