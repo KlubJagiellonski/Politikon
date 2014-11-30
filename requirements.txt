@@ -1,3 +1,7 @@
+# as learnt from: https://github.com/heroku/heroku-buildpack-python/issues/59
+# this magic comment installs mercurial :: hg+
+# hg is need to install specific version of boto, can be removed when no needed anymore
+
 Django==1.6
 -e git+https://github.com/tkopczuk/django-smartsettings.git@42cf028ebcad36d8815cd035acb276147696dd01#egg=smartsettings
 gunicorn==0.15.0
@@ -9,9 +13,11 @@ newrelic==2.38.0.31
 jinja2
 
 django-assets
-django-storages
+# TODO: switch to the latest version after the branch below is merged and released: django-storages
+-e hg+https://bitbucket.org/david/django-storages/@custom_host#egg=django-storages
 jsmin
-boto
+# remove after the commit is released
+-e git+https://github.com/boto/boto.git@e043e4b4a9e9eaf7bd200c254fdcc1eada30144b#egg=boto
 
 oauth2
 -e git+https://github.com/jgorset/fandjango.git#egg=fandjango
