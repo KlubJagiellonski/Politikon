@@ -5,7 +5,11 @@
 
 	<section id="featured" class="section-nopadding">
 		<figure>
+	{% if front_event.big_image %}
+			<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+	{% else %}
 			<img src="static/img/featured.jpg"/>
+	{% endif %}
 			<figcaption>
 				<a href="#"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
 				<div class="opis">

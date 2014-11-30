@@ -227,8 +227,8 @@ class Event(models.Model):
 
     description = models.TextField(u"pełny opis wydarzenia", default='')
 
-    small_image = models.ImageField(u"mały obrazek 365x255", upload_to="events_small", null=True)
-    big_image = models.ImageField(u"duży obrazek 715x300", upload_to="events_big", null=True)
+    small_image = models.ImageField(u"mały obrazek 340x250", upload_to="events_small", null=True)
+    big_image = models.ImageField(u"duży obrazek 1250x210", upload_to="events_big", null=True)
 
     is_featured = models.BooleanField(u"featured", default=False)
     is_front = models.BooleanField(u"front", default=False)

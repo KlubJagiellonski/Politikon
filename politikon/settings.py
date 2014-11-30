@@ -107,10 +107,10 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
     'STARTING_CASH': (1000.0, 'cash for start'),
-    'SMALL_EVENT_IMAGE_WIDTH': (365, 'small event image width'),
-    'SMALL_EVENT_IMAGE_HEIGHT': (255, 'small event image height'),
-    'BIG_EVENT_IMAGE_WIDTH': (715, 'big event image width'),
-    'BIG_EVENT_IMAGE_HEIGHT': (300, 'big event image height'),
+    'SMALL_EVENT_IMAGE_WIDTH': (340, 'small event image width'),
+    'SMALL_EVENT_IMAGE_HEIGHT': (250, 'small event image height'),
+    'BIG_EVENT_IMAGE_WIDTH': (1250, 'big event image width'),
+    'BIG_EVENT_IMAGE_HEIGHT': (210, 'big event image height'),
     'DAILY_TOPUP': (100, 'daily cash topup'),
 }
 
