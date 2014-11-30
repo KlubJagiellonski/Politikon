@@ -1,6 +1,6 @@
 FROM ubuntu:trusty
 RUN apt-get update -y -qq --fix-missing
-RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib libpq-dev git libmemcached-dev curl openssh-server
+RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib libpq-dev git libmemcached-dev curl openssh-server Mercurial
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:dupa3' | chpasswd
