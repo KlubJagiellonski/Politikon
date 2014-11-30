@@ -21,7 +21,7 @@ CACHES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-SERVE_STATIC_FILES = True
+SERVE_STATIC_FILES = False
 CELERY_ALWAYS_EAGER = True
 
 FACEBOOK_APPLICATION_ID = "134939156680151"
