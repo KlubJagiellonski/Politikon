@@ -148,8 +148,9 @@ STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIYVO7SIW5CILJWBQ')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'pltn')
-AWS_S3_HOST = os.environ.get('AWS_S3_HOST', 'pltn.s3-website.eu-central-1.amazonaws.com')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'Politikon')
+AWS_S3_HOST = os.environ.get('AWS_S3_HOST', 's3.amazonaws.com')
+AWS_S3_URL_PROTOCOL = 'https:'
 AWS_QUERYSTRING_AUTH = False
 
 STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
