@@ -43,8 +43,6 @@ def event_facebook_object_detail(request, event_id):
 
     return render_to_response('fb_objects/events/event_detail.html', ctx, RequestContext(request))
 
-
-@facebook_authorization_required
 def event_detail(request, event_id):
     try:
         event = Event.objects.get(id=event_id)

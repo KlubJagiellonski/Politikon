@@ -1,6 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<section id="header"  class="body-margin">
+		<h1>{{ event.title }}</h1>
+	</section>
+
+	<section id="bet-details">
+		<div class="astable">
+            {% if event.small_image %}
+              <img class="chart-img" src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+              {% else %}
+              <img src="{% static 'img/bet-plain.jpg' %}"/>
+              {% endif %}
+			<div class="chart-container"><canvas id="chart-details" height="70"></canvas></div>
+		</div>
+		<div class="bet-social">
+			<div class="peopleYES lewa">
+				<ul>
+					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+				</ul>
+				<div class="voted">1 256</div>
+			</div>
+			<div class="peopleNO prawa">
+				<ul>
+					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+				</ul>
+				<div class="voted">1 256</div>
+			</div>
+			<div id ="makeabet">
+				<div class="change changeNO">-19</div>
+				<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+				<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+			</div>
+		</div>
+	</section>
+
+	<section id="bet-desc" class="astable">
+		<div class="lewa">
+			<div class="astable share-zone">TODO -- tutaj widżety social media --</div>
+			<p>{{ event.description}}</p>
+			<p><b>Warunki rozstrzygnięcia:</b> Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis. Nunc egestas egestas elementum. </p>
+		</div>
+		<div class="prawa rss-related">
+			<div class="header">Na ten temat w mediach <span class="rss-reload prawa"></span></div>
+			<div class="rss-news">
+				<a href="#">
+				<img src="{% static 'img/rss-plain.jpg' %}"/>
+				<div class="prawa">
+					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
+					<h5>przykladowyadres.pl</h5>
+					<p class="skroc">Tutaj krótki opis wydarzenia. Nunc sed dui semper, volutpat diam interdum, cursus ligula. Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis.</p>
+				</div>
+				</a>
+			</div>
+
+			<div class="rss-news">
+				<a href="#">
+				<img src="{% static 'img/rss-plain.jpg' %}"/>
+				<div class="prawa">
+					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
+					<h5>przykladowyadres.pl</h5>
+					<p class="skroc">Tutaj krótki opis wydarzenia. Nunc sed dui semper, volutpat diam interdum, cursus ligula. Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis.</p>
+				</div>
+				</a>
+			</div>
+
+		</div>
+	</section>
+
+	<section id="betfeed" class="hotbets">
+		<h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
+		<div>
+		<div class="bet">
+			<figure>
+				<img src="{% static 'img/bet-plain.jpg' %}"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="bet">
+			<figure>
+				<img src="{% static 'img/bet-plain.jpg' %}"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="bet">
+			<figure>
+				<img src="{% static 'img/bet-plain.jpg' %}"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas03" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+		</div>
+	</section>
+
+
+	<section id="comments" class="prefooter-margin">--tutaj aplet komentarzy z fb--</section>
+
+{% endblock %}
+
+{#
+----- commented out TODO use or/and remove
 {% set FACEBOOK_OBJECT = "event" %}
 
-{% extends "base.html" %}
+
 
 {% block facebook_properties %}
     <meta property="og:url"    content="{{ event.get_absolute_url() }}" /> 
@@ -9,6 +153,9 @@
     <meta property="og:title_no"  content="{{ event.title_fb_no }}" /> 
     <meta property="og:image"  content="{{ event.small_image.url }}" /> 
 {% endblock %}
+
+
+
 
 {% block js_includes %}
     {{ super() }}
@@ -109,3 +256,5 @@
     </div>
 
 {% endblock %}
+
+#}

@@ -8,12 +8,12 @@
 			{% if front_event.big_image %}
 			<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 			{% else %}
-			<img src="static/img/featured.jpg"/>
+			<img src="{% static 'img/featured.jpg' %}"/>
 			{% endif %}
 			<figcaption>
-				<a href="#"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
+				<a href="{{ front_event.get_relative_url() }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
 				<div class="opis">
-					<a href="#"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
+					<a href="{{ front_event.get_relative_url() }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
 						<a href="#TAK"><div class="betYES"><span class="value lewa">36</span><span class="txt prawa">TAK</span></div></a>
@@ -29,7 +29,7 @@
 
 		<div class="bet">
 			<figure>
-				<img src="static/img/bet-plain.jpg"/>
+				<img src="{% static 'img/bet-plain.jpg'%}"/>
 				<figcaption>
 					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
 					<div class="change changepreview changeNO">-19</div>
@@ -49,7 +49,7 @@
 		
 		<div class="bet">
 			<figure>
-				<img src="static/img/bet-plain.jpg"/>
+				<img src="{% static 'img/bet-plain.jpg' %}"/>
 				<figcaption>
 					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
 					<div class="change changepreview changeNO">-19</div>

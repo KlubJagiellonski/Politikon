@@ -8,6 +8,9 @@ from django.db.models import F
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
+from django.template.defaultfilters import slugify
+from unidecode import unidecode
+
 from collections import defaultdict
 from math import exp
 
@@ -206,7 +209,6 @@ EVENT_OUTCOMES = [
     (4, u'rozstrzygnięte na NIE'),
 ]
 
-
 class Event(models.Model):
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -250,7 +252,7 @@ class Event(models.Model):
     B = models.FloatField(u"stała B", default=5)
 
     def get_relative_url(self):
-        return reverse("events:event_detail", kwargs={'event_id': self.id})
+        return "/event/%(id)d-%(title)s" % { 'id' : self.id, 'title': slugify(unidecode(self.title))}
 
     def get_absolute_url(self):
         return "http://%(domain)s%(url)s" % {
