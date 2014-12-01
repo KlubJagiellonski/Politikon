@@ -5,6 +5,7 @@ import os
 from path import path
 import urlparse
 import sys
+import social_auth
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
@@ -177,6 +178,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'canvas.backends.FacebookCanvasFandjangoBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -219,6 +223,7 @@ INSTALLED_APPS = (
 
     'coffin',
     'django_assets',
+    'social_auth',
 
     'constance',
     'constance.backends.database',

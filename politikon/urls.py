@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
 #   User authentication url patterns
     url(r'^facebook/', include('fandjango.urls')),
+    url(r'', include('social_auth.urls')),
 
 #   Application url patterns
     url(r'^canvas/', include('canvas.urls', namespace="canvas")),
