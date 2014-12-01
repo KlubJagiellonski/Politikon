@@ -36,3 +36,4 @@ requests
 jsonfield
 
 django-sslify>=0.2
+django-social-auth
