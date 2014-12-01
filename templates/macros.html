@@ -8,21 +8,24 @@
 {% macro render_event(event, people) %}
       <div class="bet">
 			<figure>
-				<img src="static/img/bet-plain.jpg"/>
-				<figcaption>
-					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
-					<div class="change changepreview changeNO">-19</div>
-					<a href="#"><h2 class="skroc">{{ event.title }}</h2></a>
-					<div id="makeabet" class="morebets">
-						<a href="#TAK"><div class="betYES"><span class="value lewa">{{event.current_buy_for_price}}</span><span class="txt prawa">+</span></div></a>
-						<a href="#NIE"><div class="betNO"><span class="value prawa">{{event.current_buy_against_price}}</span><span class="txt lewa">-</span></div></a>
-						<div class="currentbet centrum">
-							<p class="changeYES">TAK</p>
-							<p>5 x <span></span> 48</p>
-						</div>
-					</div>
-
-				</figcaption>
+              {% if event.small_image %}
+              <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+              {% else %}
+              <img src="static/img/bet-plain.jpg"/>
+              {% endif %}
+              <figcaption>
+                  <a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
+                  <div class="change changepreview changeNO">-19</div>
+                  <a href="#"><h2 class="skroc">{{ event.title }}</h2></a>
+                  <div id="makeabet" class="morebets">
+                      <a href="#TAK"><div class="betYES"><span class="value lewa">{{event.current_buy_for_price}}</span><span class="txt prawa">+</span></div></a>
+                      <a href="#NIE"><div class="betNO"><span class="value prawa">{{event.current_buy_against_price}}</span><span class="txt lewa">-</span></div></a>
+                      <div class="currentbet centrum">
+                          <p class="changeYES">TAK</p>
+                          <p>5 x <span></span> 48</p>
+                      </div>
+                  </div>
+              </figcaption>
 			</figure>
       </div>
 {% endmacro %}

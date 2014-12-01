@@ -111,7 +111,7 @@ CONSTANCE_CONFIG = {
     'SMALL_EVENT_IMAGE_WIDTH': (340, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (250, 'small event image height'),
     'BIG_EVENT_IMAGE_WIDTH': (1250, 'big event image width'),
-    'BIG_EVENT_IMAGE_HEIGHT': (210, 'big event image height'),
+    'BIG_EVENT_IMAGE_HEIGHT': (510, 'big event image height'),
     'DAILY_TOPUP': (100, 'daily cash topup'),
 }
 
