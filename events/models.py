@@ -123,6 +123,8 @@ class BetManager(models.Manager):
         user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
+        """ Increment turnover only for buying bets """
+        event.increment_turnover(quantity)
         event.save(force_update=True)
 
         from canvas.models import ActivityLog
@@ -248,6 +250,7 @@ class Event(models.Model):
 
     Q_for = models.IntegerField(u"zakładów na TAK", default=0)
     Q_against = models.IntegerField(u"zakładów na NIE", default=0)
+    turnover = models.IntegerField(u"obrót", default=0, db_index=True)
 
     B = models.FloatField(u"stała B", default=5)
 
@@ -299,6 +302,9 @@ class Event(models.Model):
         setattr(self, attr, getattr(self, attr) + by_amount)
 
         self.recalculate_prices()
+
+    def increment_turnover(self, by_amount):
+        turnover += by_amount;
 
     def recalculate_prices(self):
         factor = 100.
