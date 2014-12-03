@@ -239,7 +239,8 @@ class Event(models.Model):
     outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOMES, default=1)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.DateTimeField(u"data rozstrzygnięcia")
+    estimated_end_date = models.DateTimeField(u"przewidywana data rozstrzygnięcia")
+    end_date = models.DateTimeField(u"data rozstrzygnięcia", null=True)
 
     current_buy_for_price = models.FloatField(u"cena nabycia akcji zdarzenia", default=50.0)
     current_buy_against_price = models.FloatField(u"cena nabycia akcji zdarzenia przeciwnego", default=50.0)
