@@ -22,7 +22,7 @@ def index(request):
     ctx = {
         'front_event' : Event.objects.get_front_event(),
         'featured_events': list(Event.objects.get_featured_events()),
-        'latest_events': list(Event.objects.get_latest_events())
+        'latest_events': list(Event.objects.get_events('latest'))
     }
 # TODO: what's that?
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
