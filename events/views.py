@@ -19,7 +19,6 @@ from .models import *
 from fandjango.decorators import facebook_authorization_required
 
 def index(request):
-
     ctx = {
         'front_event' : Event.objects.get_front_event(),
         'featured_events': list(Event.objects.get_featured_events()),
@@ -30,6 +29,12 @@ def index(request):
 
     return render_to_response('index.html', ctx, RequestContext(request))
 
+def events(request):
+    ctx = {
+        'events': list(Event.objects.get_events()),
+    }
+
+    return render_to_response('events/events.html', ctx, RequestContext(request))
 
 def event_facebook_object_detail(request, event_id):
     try:

@@ -29,7 +29,7 @@ class EventManager(models.Manager):
         allowed_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
         return self.filter(outcome=allowed_outcome)
 
-    def get_latest_events(self):
+    def get_events(self):
         return self.ongoing_only_queryset().order_by('-created_date')
 
     def get_featured_events(self):
