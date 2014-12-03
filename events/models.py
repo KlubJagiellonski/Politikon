@@ -252,6 +252,9 @@ class Event(models.Model):
     Q_against = models.IntegerField(u"zakładów na NIE", default=0)
     turnover = models.IntegerField(u"obrót", default=0, db_index=True)
 
+    absolute_price_change = models.FloatField(u"zmiana ceny (wartość absolutna)", db_index=True, default=0)
+    price_change = models.FloatField(u"zmiana ceny", default=0)
+
     B = models.FloatField(u"stała B", default=5)
 
     def get_relative_url(self):
