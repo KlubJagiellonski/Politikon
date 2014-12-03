@@ -29,8 +29,16 @@ class EventManager(models.Manager):
         allowed_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
         return self.filter(outcome=allowed_outcome)
 
-    def get_events(self):
-        return self.ongoing_only_queryset().order_by('-created_date')
+    def get_events(self, mode):
+        if mode == 'popular':
+            return self.ongoing_only_queryset().order_by('turnover')
+        elif mode == 'latest':
+            return self.ongoing_only_queryset().order_by('-created_date')
+        elif mode == 'changed':
+            return self.ongoing_only_queryset().order_by('-absolute_price_change')
+        elif mode == 'finished':
+            excluded_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
+            return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
         return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')

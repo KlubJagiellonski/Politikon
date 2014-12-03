@@ -29,9 +29,9 @@ def index(request):
 
     return render_to_response('index.html', ctx, RequestContext(request))
 
-def events(request):
+def events(request, mode):
     ctx = {
-        'events': list(Event.objects.get_events()),
+        'events': list(Event.objects.get_events(mode)),
     }
 
     return render_to_response('events/events.html', ctx, RequestContext(request))

@@ -2,26 +2,19 @@
 
 {% block content %}
 
-
 	<section id="header"  class="body-margin">
 		<h2>Wydarzenia</h2>
 		<ul class="tabs prawa">
-			<li><a href="#">Najpopularniejsze</a></li>
-			<li><a href="#">Największe zmiany</a></li>
-			<li><a href="#">Najnowsze</a></li>
+			<li><a href="/events/">Najpopularniejsze</a></li>
+			<li><a href="/events/changed">Największe zmiany</a></li>
+			<li><a href="/events/latest">Najnowsze</a></li>
+			<li><a href="/events/finished">Zakończone</a></li>
 		</ul>
 	</section>
 
 
 	<section id="betfeed">
 		{{macros.render_events(events, people)}}
-	</section>
-
-	<section id="loadmore">
-		<a href="#"><div class="btn astable">Wyświetl więcej zakładów</div></a>
-				<div class="more lewa"></div>
-				<div class="more prawa"></div>
-				<div class="more centrum"></div>
 	</section>
 
 {% endblock %}
