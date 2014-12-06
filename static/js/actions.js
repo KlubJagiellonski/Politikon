@@ -45,7 +45,8 @@ $(document).ready(function() {
  
 //zakładki    
 $(function(){
-  $('ul.tabs li:first').addClass('active');
+    //TODO: remove if unused
+/*  $('ul.tabs li:first').addClass('active');
   $('.zakladki-content article').hide();
   $('.zakladki-content article:first').show();
   $('ul.tabs li').on('click',function(){
@@ -56,5 +57,6 @@ $(function(){
     $(activeTab).show();
     return false;
   });
+  */
 })
     

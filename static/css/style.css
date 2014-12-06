@@ -130,6 +130,7 @@ footer ul a, footer .socialmedia div,
 #maintop nav ul  {height: 100px; margin-left: 5%;}
 #maintop nav ul li {float: left; padding: 20px 10px; margin-top: 20px; margin-right: 1px; text-transform: uppercase; color: #111;}
 #maintop nav ul li:hover {color: #ea6a2a;}
+#maintop nav ul li.active {color: #ea6a2a;}
 #maintop nav ul li a {color: inherit;}
 
 #maintop nav .burger {width: 29px; height: 27px; background: url(../img/00burger.png) center no-repeat; margin-top: 35px; cursor: pointer; opacity: 1; display: none; margin-left: 35%;}

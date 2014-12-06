@@ -1,5 +1,4 @@
 {% import 'macros.html' as macros with context %}
-{% load staticfiles %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -123,7 +122,7 @@
 			<ul class="mainmenu">
 				<div class="arrowup"></div>
 				<a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
-				<a href="/events/"><li>Wydarzenia</li></a>
+				<a href="/events/"><li {% if request.path.startswith("/events/") %} class="active"{% endif %}>Wydarzenia</li></a>
 				<a href="#"><li>Rankingi</li></a>
 			</ul>
 		</nav>
