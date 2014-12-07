@@ -185,6 +185,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'twitter', 'facebook')
+
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
     'politikon.modules.HostnameRedirectMiddleware',
