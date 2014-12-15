@@ -59,15 +59,15 @@
 		<div class="header">Graj w Politikon! <span class="prawa login-close"></span></div>
 
 		<aside class="rejestracja asblock opacity">
-			<a href="{% url 'socialauth_associate_begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
-			<a href="{% url 'socialauth_associate_begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
+			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
+			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
 			<p>Możesz także zarejestrować się przez <a href="#" class="show-rejestracjaemail">adres e-mail</a></p>
 			<div class="other"><p>Masz już konto? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
 		</aside>
 
 		<aside class="logowanie">
-			<a href="{% url 'socialauth_begin' 'twitter' %}"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
-			<a href="{% url 'socialauth_begin' 'facebook' %}"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
+			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
+			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
 			<p class="or"><span>lub zaloguj się przez e-mail</span></p>
 			<form data-parsley-validate>
 				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>

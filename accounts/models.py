@@ -13,6 +13,17 @@ import datetime
 import logging
 logger = logging.getLogger(__name__)
 
+from social.pipeline.partial import partial
+
+@partial
+def save_profile(backend, user, response, *args, **kwargs):
+    print user
+    print response
+
+    if backend.name == 'facebook':
+        print backend
+    if backend.name == 'twitter':
+        print backend
 
 class UserManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):

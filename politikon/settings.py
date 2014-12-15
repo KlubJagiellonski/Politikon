@@ -5,7 +5,7 @@ import os
 from path import path
 import urlparse
 import sys
-import social_auth
+import social
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
@@ -175,17 +175,18 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'bladepolska.context_processors.settings',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.twitter.TwitterBackend',
-    'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleOAuth2Backend',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
     'canvas.backends.FacebookCanvasFandjangoBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'twitter', 'facebook')
+SOCIAL_AUTH_ENABLED_BACKENDS = ('twitter', 'facebook')
 
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
@@ -225,7 +226,7 @@ INSTALLED_APPS = (
 
     'coffin',
     'django_assets',
-    'social_auth',
+    'social.apps.django_app.default',
 
     'constance',
     'constance.backends.database',
@@ -327,3 +328,16 @@ JINJA2_EXTENSIONS = [
     'jinja2.ext.i18n',
     'jinja2.ext.loopcontrols',
 ]
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'accounts.models.save_profile',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)

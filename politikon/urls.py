@@ -13,7 +13,7 @@ urlpatterns = patterns('',
 
 #   User authentication url patterns
 #    url(r'^facebook/', include('fandjango.urls')),
-    url(r'', include('social_auth.urls')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
 
 #   Application url patterns
