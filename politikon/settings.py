@@ -6,6 +6,7 @@ from path import path
 import urlparse
 import sys
 import social
+import accounts
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 

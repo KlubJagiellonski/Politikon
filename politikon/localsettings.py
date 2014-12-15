@@ -47,3 +47,7 @@ DATABASE_URL = 'postgres://hfuvokpsuhmdpc:5BwFtAGbIBpF4QyQ_shslJ3lge@ec2-107-21-
 
 #disabling SSL on local
 SSLIFY_DISABLE = True
+
+SOUTH_MIGRATION_MODULES = {
+    'default': 'social.apps.django_app.default.south_migrations',
+}
