@@ -180,9 +180,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = (
+#TODO: remove next line when proper auth works
+    'accounts.backends.DummyCookieAuth',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
-    'canvas.backends.FacebookCanvasFandjangoBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -203,6 +204,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+#TODO: remove next line when proper auth works
+    'accounts.backends.DummyCookieMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
