@@ -16,7 +16,8 @@ class DummyCookieMiddleware( object ):
         user = authenticate(user_id=id)
 
         request.user = user
-        login(request, user)
+        if(user != None):
+            login(request, user)
 
 class DummyCookieAuth:
     supports_object_permissions = False
