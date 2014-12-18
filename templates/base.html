@@ -42,81 +42,35 @@
 <script type="text/javascript" language="javascript" src="{% static 'js/actions.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
+{% if request.user == None %}
 <!--skrypty dla goscia-->
 <script type="text/javascript" language="javascript" src="{% static 'js/guest.js' %}"></script>
-
 <!--WALIDACJA FORMULARZA-->
 <script src="{% static 'js/walidacja/parsley.min.js' %}"></script>
+{% else %}
+<!--skrypty dla zalogowanego-->
+<script type="text/javascript" language="javascript" src="js/loggedin.js"></script>
+<!-- the mousewheel plugin -->
+<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+<!-- the jScrollPane script -->
+<script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+<script type="text/javascript" src="js/scroll-startstop.events.jquery.js"></script>
+{% endif %}
 
 </head>
 
 
 <body id="POLITIKON">
 
-<div class="overlay blankoverlay"></div>
-<div class="overlay" style="z-index: 6000;">
-	<div id="login">
-		<div class="header">Graj w Politikon! <span class="prawa login-close"></span></div>
-
-		<aside class="rejestracja asblock opacity">
-			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
-			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
-			<p>Możesz także zarejestrować się przez <a href="#" class="show-rejestracjaemail">adres e-mail</a></p>
-			<div class="other"><p>Masz już konto? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
-		</aside>
-
-		<aside class="logowanie">
-			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
-			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
-			<p class="or"><span>lub zaloguj się przez e-mail</span></p>
-			<form data-parsley-validate>
-				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
-
-				<input type="submit" class="przycisk" value="Zaloguj się">
-
-			</form>
-			<p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
-			<div class="other"><p>Nie masz jeszcze konta? <a href="#" class="show-rejestracja">Zarejestruj się!</a></p></div>
-		</aside>
-
-		<aside class="przypomnienie">
-			<h2>Zmiana zapomnianego hasła</h2>
-			<p class="spaceafter">Nie pamiętasz hasła? Nic nie szkodzi! Stworzymy Ci nowe! Wpisz poniżej swój adres e-mail, lub nazwę użytkownika użyte podczas rejestracji.</p>
-			<form data-parsley-validate>
-				<input type="text" class="jednalinia" id="remind" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-
-				<input type="submit" class="przycisk" value="Poproś o nowe hasło">
-
-			</form>
-			<p class="tip">&nbsp;</p>
-			<div class="other"><p>Przypomniałeś sobie? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
-		</aside>
-
-		<aside class="rejestracjaemail">
-			<h2 class="spaceafter">Zarejestruj się przy użyciu adresu e-mail</h2>
-			<form data-parsley-validate>
-				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
-				<input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
-				<input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
-				<p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> Zapoznałem się z <a href="#">Regulaminem</a> i <a href="#">Polityką Prywatności</a></p>
-
-				<input type="submit" class="przycisk" value="Zarejestruj się">
-
-			</form>
-			<div class="other"><p>Masz TT lub FB? <a href="#" class="show-rejestracja">Zarejestruj się szybciej</a>.</p></div>
-		</aside>
-	</div>
-<div class="overlay-close"></div>
-</div>
+{% if request.user == None %}
+{% include 'not_logged_in.html' %}
+{% endif %}
 
 <div id="body-wrapper">
 	<section id="maintop" class="section-nopadding">
 		<div class="logo lewa">
 			<a href="/"><div></div></a>
 		</div>
-
 		<nav class="astable lewa">
 			<div class="burger"></div>
 			<ul class="mainmenu">
@@ -127,6 +81,7 @@
 			</ul>
 		</nav>
 
+{% if request.user == None %}
 		<div class="graj prawa">
 			<a href="#"><div class="prawa show-login">GRAJ!</div></a>
 		</div>
@@ -136,6 +91,9 @@
 			<a href="#"><div class="sm-bg fb"></div></a>
 			<a href="#"><div class="sm-bg gp"></div></a>
 		</div>
+{% else %}
+{% include 'logged_in.html' %}
+{% endif %}
 
 	</section>
 
