@@ -62,3 +62,5 @@ select count(*) from south_migrationhistory;
 
 #btw: syncing time on docker machine
 boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
+
+docker run -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance politikon
