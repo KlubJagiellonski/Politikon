@@ -13,9 +13,9 @@ def topup_accounts_task():
     logger.debug("'politikon:tasks:topup_accounts_task' worker up")
     topup_amount = config.DAILY_TOPUP
 
-    from accounts.models import User
+    from accounts.models import UserProfile
     with transaction.commit_on_success():
-        for user in User.objects.all().iterator():
+        for user in UserProfile.objects.all().iterator():
             try:
                 user.topup_cash(topup_amount)
             except:
@@ -25,7 +25,7 @@ def topup_accounts_task():
 @task
 def update_portfolio_value():
     logger.debug("'events:tasks:update_portfolio_value' worker up")
-    from accounts.models import User
+    from accounts.models import UserProfile
     from events.models import Bet, EVENT_OUTCOMES_DICT
 
     users_value = defaultdict(float)
@@ -41,13 +41,13 @@ def update_portfolio_value():
         users_value[bet.user_id] += bet.has * getattr(bet.event, price_field)
 
     logger.debug("'events:tasks:update_portfolio_value' setting 0 value portfolios.")
-    User.objects.all() \
+    UserProfile.objects.all() \
             .exclude(portfolio_value=0., id__in=users_value.keys()) \
             .update(portfolio_value=0.)
 
     logger.debug("'events:tasks:update_portfolio_value' updating portfolios value for %d users." % (len(users_value), ))
     for user_id, user_value in users_value.iteritems():
-        User.objects.filter(id=user_id) \
+        UserProfile.objects.filter(id=user_id) \
                     .exclude(portfolio_value=user_value) \
                     .update(portfolio_value=user_value)
 
@@ -57,9 +57,9 @@ def update_portfolio_value():
 @task
 def create_accounts_snapshot():
     logger.debug("'events:tasks:create_accounts_snapshot' worker up")
-    from accounts.models import User
+    from accounts.models import UserProfile
 
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
 
     for user in queryset.iterator():
         try:

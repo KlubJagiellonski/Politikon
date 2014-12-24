@@ -1,8 +1,7 @@
 # coding: utf-8
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, UserManager, User
 from django.db import models, transaction
 from django.db.models import F, Q
-from django.utils.translation import ugettext as _
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
@@ -21,13 +20,13 @@ def format_int(x):
         s=s[:len(s)-i*3]+' '+s[len(s)-i*3:];
     return s;
 
-class UserManager(BaseUserManager):
+class UserProfileManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
         if not username:
             raise ValueError('Users must have an username address')
 
         user = self.model(
-            username=UserManager.normalize_email(username),
+            username=UserProfileManager.normalize_email(username),
         )
 
         user.set_password(password)
@@ -94,8 +93,8 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
-    objects = UserManager()
+class UserProfile(AbstractBaseUser):
+    objects = UserProfileManager()
     snapshots = SnapshotAddon(fields=[
         'total_cash',
         'total_given_cash',

@@ -6,7 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .models import FacebookUser
 
-from accounts.models import User as DjangoUser
+from accounts.models import UserProfile as DjangoUser
 from fandjango.views import authorize_application, authorization_denied
 from fandjango.models import Facebook, OAuthToken
 from fandjango.settings import (
