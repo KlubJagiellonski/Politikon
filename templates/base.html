@@ -49,12 +49,12 @@
 <script src="{% static 'js/walidacja/parsley.min.js' %}"></script>
 {% else %}
 <!--skrypty dla zalogowanego-->
-<script type="text/javascript" language="javascript" src="js/loggedin.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js' %}"></script>
 <!-- the mousewheel plugin -->
-<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.js' %}"></script>
 <!-- the jScrollPane script -->
-<script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
-<script type="text/javascript" src="js/scroll-startstop.events.jquery.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.jscrollpane.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/scroll-startstop.events.jquery.js' %}"></script>
 {% endif %}
 
 </head>
