@@ -25,6 +25,22 @@ def save_profile(backend, user, response, *args, **kwargs):
     if backend.name == 'twitter':
         print backend
 
+def format_int(x):
+    s = str(int(x));
+    l = int((len(s)-1)/3);
+    for i in range(l,0,-1):
+        s=s[:len(s)-i*3]+' '+s[len(s)-i*3:];
+    return s;
+
+def format_fraction(x):
+    x = int((x - int(x))*100)
+    if x == 0:
+        return '00'
+    elif x < 10:
+        return '0'+str(x)
+    else:
+        return str(x)
+
 class UserManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
         if not username:
@@ -197,6 +213,23 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def reputation(self):
+        return self.portfolio_value / self.total_given_cash;
+
+    @property
+    def reputation_formatted(self):
+        return { 'integer': format_int(self.reputation*100), 'fraction':format_fraction(self.reputation*100)}
+
+
+    @property
+    def portfolio_value_formatted(self):
+        return { 'integer': format_int(self.portfolio_value), 'fraction':format_fraction(self.portfolio_value)}
+
+    @property
+    def total_cash_formatted(self):
+        return { 'integer': format_int(self.total_cash), 'fraction':format_fraction(self.total_cash)}
 
     @property
     def profile_photo(self):

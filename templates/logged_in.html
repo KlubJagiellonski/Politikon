@@ -18,22 +18,22 @@
 
 			<a href="#">
 			<div class="lewa stats">
-				<p>warto≈õƒá portfela</p>
-				<p class="walletvalue">2 110</p>
+				<p>wartość portfela</p>
+				<p class="walletvalue">{{ request.user.portfolio_value_formatted.integer }}.<span class="fraction">{{request.user.portfolio_value_formatted.fraction}}</span></p>
 			</div>
 			</a>
 
 			<a href="#">
 			<div class="lewa stats">
 				<p>wolne reputy</p>
-				<p class="freevalue">1 345</p>
+				<p class="freevalue">{{ request.user.total_cash_formatted.integer }}.<span class="fraction">{{ request.user.total_cash_formatted.fraction }}</span></p>
 			</div>
 			</a>
 
 			<a href="#">
 			<div class="lewa stats">
 				<p>reputacja</p>
-				<p class="reputationvalue">10.6</p>
+				<p class="reputationvalue">{{ request.user.reputation_formatted.integer }}.<span class="fraction">{{ request.user.reputation_formatted.fraction }}</span>%</p>
 			</div>
 			</a>
 		</div>
