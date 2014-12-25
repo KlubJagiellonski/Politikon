@@ -174,10 +174,6 @@ footer ul a, footer .socialmedia div,
 #maintop .userdata .stats .walletvalue {color: #c84d28;}
 #maintop .userdata .stats .freevalue {color: #809413;}
 #maintop .userdata .stats .reputationvalue {color: #58585a;}
-#maintop .userdata .stats .walletvalue .fraction {font-size: .6em;}
-#maintop .userdata .stats .freevalue .fraction {font-size: .6em;}
-#maintop .userdata .stats .reputationvalue .fraction {font-size: .6em;}
-
 
 #maintop .socialmedia {margin-top: 30px; margin-right: 20px;}
 .sm-bg {width: 40px; height: 40px; background-image: url(../img/00socialmedia.png); background-color: #e7e7e7; float: left; margin-right: 10px;}

@@ -344,3 +344,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details'
 )
+
+SOUTH_MIGRATION_MODULES = {
+    'default': 'social.apps.django_app.default.south_migrations',
+}

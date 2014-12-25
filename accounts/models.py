@@ -32,15 +32,6 @@ def format_int(x):
         s=s[:len(s)-i*3]+' '+s[len(s)-i*3:];
     return s;
 
-def format_fraction(x):
-    x = int((x - int(x))*100)
-    if x == 0:
-        return '00'
-    elif x < 10:
-        return '0'+str(x)
-    else:
-        return str(x)
-
 class UserManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
         if not username:
@@ -135,10 +126,10 @@ class User(AbstractBaseUser):
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 
-    total_cash = models.FloatField(u"ilość gotówki", default=0.)
-    total_given_cash = models.FloatField(u"ilość przyznanej gotówki w historii", default=0.)
+    total_cash = models.IntegerField(u"ilość gotówki", default=0.)
+    total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
 
-    portfolio_value = models.FloatField(u"wartość portfela", default=0.)
+    portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
     USERNAME_FIELD = 'username'
 
@@ -182,7 +173,7 @@ class User(AbstractBaseUser):
     def statistics_dict(self):
         return {
             'user_id': self.id,
-            'total_cash': "%.2f" % self.total_cash,
+            'total_cash': self.total_cash,
         }
 
     @property
@@ -215,21 +206,16 @@ class User(AbstractBaseUser):
         return True
 
     @property
-    def reputation(self):
-        return self.portfolio_value / self.total_given_cash;
-
-    @property
-    def reputation_formatted(self):
-        return { 'integer': format_int(self.reputation*100), 'fraction':format_fraction(self.reputation*100)}
-
-
-    @property
     def portfolio_value_formatted(self):
-        return { 'integer': format_int(self.portfolio_value), 'fraction':format_fraction(self.portfolio_value)}
+        return format_int(self.portfolio_value)
 
     @property
     def total_cash_formatted(self):
-        return { 'integer': format_int(self.total_cash), 'fraction':format_fraction(self.total_cash)}
+        return format_int(self.total_cash)
+
+    @property
+    def reputation(self):
+        return round(self.portfolio_value / float(self.total_given_cash),2)
 
     @property
     def profile_photo(self):

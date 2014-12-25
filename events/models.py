@@ -20,10 +20,6 @@ from bladepolska.pubnub import PubNub
 from .exceptions import *
 
 
-def round_price(price):
-    return round(price, 2)
-
-
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
         allowed_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
@@ -104,7 +100,7 @@ class BetManager(models.Manager):
         else:
             transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
 
-        requested_price = round_price(price)
+        requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
         if requested_price != current_tx_price:
             raise PriceMismatch(_("Price has changed."), event)
@@ -153,7 +149,7 @@ class BetManager(models.Manager):
         """ Always remember about wrapping this in a transaction! """
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
-        requested_price = round_price(price)
+        requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='SELL')
         if requested_price != current_tx_price:
             raise PriceMismatch(_("Price has changed."), event)
@@ -250,10 +246,10 @@ class Event(models.Model):
     estimated_end_date = models.DateTimeField(u"przewidywana data rozstrzygnięcia")
     end_date = models.DateTimeField(u"data rozstrzygnięcia", null=True)
 
-    current_buy_for_price = models.FloatField(u"cena nabycia akcji zdarzenia", default=50.0)
-    current_buy_against_price = models.FloatField(u"cena nabycia akcji zdarzenia przeciwnego", default=50.0)
-    current_sell_for_price = models.FloatField(u"cena sprzedaży akcji zdarzenia", default=50.0)
-    current_sell_against_price = models.FloatField(u"cena sprzedaży akcji zdarzenia przeciwnego", default=50.0)
+    current_buy_for_price = models.IntegerField(u"cena nabycia akcji zdarzenia", default=50.0)
+    current_buy_against_price = models.IntegerField(u"cena nabycia akcji zdarzenia przeciwnego", default=50.0)
+    current_sell_for_price = models.IntegerField(u"cena sprzedaży akcji zdarzenia", default=50.0)
+    current_sell_against_price = models.IntegerField(u"cena sprzedaży akcji zdarzenia przeciwnego", default=50.0)
 
     last_transaction_date = models.DateTimeField(u"data ostatniej transakcji", null=True)
 
@@ -261,8 +257,8 @@ class Event(models.Model):
     Q_against = models.IntegerField(u"zakładów na NIE", default=0)
     turnover = models.IntegerField(u"obrót", default=0, db_index=True)
 
-    absolute_price_change = models.FloatField(u"zmiana ceny (wartość absolutna)", db_index=True, default=0)
-    price_change = models.FloatField(u"zmiana ceny", default=0)
+    absolute_price_change = models.IntegerField(u"zmiana ceny (wartość absolutna)", db_index=True, default=0)
+    price_change = models.IntegerField(u"zmiana ceny", default=0)
 
     B = models.FloatField(u"stała B", default=5)
 
@@ -316,7 +312,7 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def increment_turnover(self, by_amount):
-        turnover += by_amount;
+        self.turnover += by_amount;
 
     def recalculate_prices(self):
         factor = 100.
@@ -333,15 +329,15 @@ class Event(models.Model):
         e_for_sell = exp(Q_for_sell / B)
         e_against_sell = exp(Q_against_sell / B)
 
-        buy_for_price = e_for_buy / (e_for_buy + e_against_buy)
-        buy_against_price = e_against_buy / (e_for_buy + e_against_buy)
-        sell_for_price = e_for_sell / (e_for_sell + e_against_buy)
-        sell_against_price = e_against_sell / (e_for_buy + e_against_sell)
+        buy_for_price = e_for_buy / float(e_for_buy + e_against_buy)
+        buy_against_price = e_against_buy / float(e_for_buy + e_against_buy)
+        sell_for_price = e_for_sell / float(e_for_sell + e_against_buy)
+        sell_against_price = e_against_sell / float(e_for_buy + e_against_sell)
 
-        self.current_buy_for_price = round_price(factor * buy_for_price)
-        self.current_buy_against_price = round_price(factor * buy_against_price)
-        self.current_sell_for_price = round_price(factor * sell_for_price)
-        self.current_sell_against_price = round_price(factor * sell_against_price)
+        self.current_buy_for_price = round(factor * buy_for_price,0)
+        self.current_buy_against_price = round(factor * buy_against_price,0)
+        self.current_sell_for_price = round(factor * sell_for_price,0)
+        self.current_sell_against_price = round(factor * sell_against_price,0)
 
     def save(self, **kwargs):
         if not self.id:
@@ -389,7 +385,7 @@ class Bet(models.Model):
     sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)
     bought_avg_price = models.FloatField(u"kupione po średniej cenie", default=0, null=False)
     sold_avg_price = models.FloatField(u"sprzedane po średniej cenie", default=0, null=False)
-    rewarded_total = models.FloatField(u"nagroda za wynik", default=0, null=False)
+    rewarded_total = models.IntegerField(u"nagroda za wynik", default=0, null=False)
 
     @property
     def bet_dict(self):
@@ -438,4 +434,4 @@ class Transaction(models.Model):
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)
-    price = models.FloatField(u"cena jednostkowa", default=0, null=False)
+    price = models.IntegerField(u"cena jednostkowa", default=0, null=False)

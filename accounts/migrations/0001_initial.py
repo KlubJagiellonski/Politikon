@@ -7,7 +7,7 @@ from django.db import models
 
 class Migration(SchemaMigration):
     depends_on = (
-        ("fandjango", "0009_auto__chg_field_oauthtoken_token"),
+#        ("fandjango", "0009_auto__chg_field_oauthtoken_token"),
     )
 
     def forwards(self, orm):
