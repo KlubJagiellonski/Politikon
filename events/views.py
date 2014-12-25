@@ -24,6 +24,7 @@ def index(request):
         'featured_events': list(Event.objects.get_featured_events()),
         'latest_events': list(Event.objects.get_events('latest'))
     }
+    ctx['bets'] = Bet.objects.get_users_bets_for_events(request.user, [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
 # TODO: what's that?
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 

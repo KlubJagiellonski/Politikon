@@ -57,6 +57,14 @@
 <script type="text/javascript" src="{% static 'js/scroll-startstop.events.jquery.js' %}"></script>
 {% endif %}
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".a_bet").on('click', function () {
+			alert($(this).data('event_id'));
+		})
+	})
+</script>
+
 </head>
 
 

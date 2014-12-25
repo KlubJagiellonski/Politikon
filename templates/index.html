@@ -16,8 +16,8 @@
 					<a href="{{ front_event.get_relative_url() }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
-						<a href="#TAK"><div class="betYES"><span class="value lewa">36</span><span class="txt prawa">TAK</span></div></a>
-						<a href="#NIE"><div class="betNO"><span class="value prawa">61</span><span class="txt lewa">NIE</span></div></a>
+						<a href="#" class="a_bet" data-event_id="{{front_event.id}}" data-outcome="YES"><div class="betYES"><span class="value lewa">{{front_event.current_buy_for_price}}</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#" class="a_bet" data-event_id="{{front_event.id}}" data-outcome="NO"><div class="betNO"><span class="value prawa">{{front_event.current_sell_for_price}}</span><span class="txt lewa">NIE</span></div></a>
 					</div>
 				</div>
 			</figcaption>
