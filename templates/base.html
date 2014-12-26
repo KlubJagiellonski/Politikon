@@ -59,8 +59,26 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$(".a_bet").on('click', function () {
-			alert($(this).data('event_id'));
+		$(".a_bet").on('click', function(e) {
+			e.preventDefault();
+			event_id = $(this).data('event_id');
+			data = { buy: $(this).data('buy'), outcome: $(this).data('outcome'), for_price : $(this).data('price') };
+			console.log(JSON.stringify(data));
+			$.ajax({
+				type: 'POST',
+				data: JSON.stringify(data),
+				contentType: 'application/json',
+				url: '/event/'+event_id+'/transaction/create/',
+				success: function(data) {
+					console.log(JSON.stringify(data))
+					if(data.updates && data.updates.user){
+						console.log(JSON.stringify(data.updates.user))
+						$(".walletvalue").fadeOut(200,function(){$(this).text(data.updates.user.portfolio_value).fadeIn(200);});
+						$(".freevalue").fadeOut(200,function(){$(this).text(data.updates.user.total_cash).fadeIn(200);});
+						$(".reputationvalue").fadeOut(200,function(){$(this).text(data.updates.user.reputation+"%").fadeIn(200);});
+					}
+				}
+			});
 		})
 	})
 </script>

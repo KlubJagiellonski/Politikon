@@ -18,13 +18,52 @@ from .models import *
 
 from fandjango.decorators import facebook_authorization_required
 
+def create_bets_dict(user, events):
+    bets = Bet.objects.get_users_bets_for_events(user, events)
+    bets = dict((bet.event_id, bet) for bet in bets)
+
+    all_bets = dict()
+    for event in events:
+        if event.id in bets and bets[event.id].has>0:
+            bet = bets[event.id]
+            all_bets[event.id]={
+                'has_any' : True,
+                'buyYES': bet.outcome,
+                'buyNO' : not bet.outcome,
+                'outcomeYES' : "YES" if bet.outcome else "NO",
+                'outcomeNO' : "YES" if bet.outcome else "NO",
+                'priceYES' : event.current_buy_for_price if bet.outcome else event.current_sell_for_price,
+                'priceNO' : event.current_sell_against_price if bet.outcome else event.current_buy_against_price,
+                'textYES' : "+" if bet.outcome else "-",
+                'textNO' : "-" if bet.outcome else "+",
+                'has' : bet.has,
+                'classOutcome' : "YES" if bet.outcome else "NO",
+                'textOutcome' : "TAK" if bet.outcome else "NIE",
+                'avgPrice' : round(bet.bought_avg_price,2),
+            }
+        else:
+            all_bets[event.id]={
+                'has_any' : False,
+                'buyYES': True,
+                'buyNO' : True,
+                'outcomeYES' : "YES",
+                'outcomeNO' : "NO",
+                'priceYES' : event.current_buy_for_price,
+                'priceNO' : event.current_buy_against_price,
+                'textYES' : "TAK",
+                'textNO' : "NIE"
+            }
+
+    return all_bets
+
 def index(request):
     ctx = {
         'front_event' : Event.objects.get_front_event(),
         'featured_events': list(Event.objects.get_featured_events()),
         'latest_events': list(Event.objects.get_events('latest'))
     }
-    ctx['bets'] = Bet.objects.get_users_bets_for_events(request.user, [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
+
+    ctx['bets'] = create_bets_dict(request.user, [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
 # TODO: what's that?
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
@@ -34,6 +73,7 @@ def events(request, mode):
     ctx = {
         'events': list(Event.objects.get_events(mode)),
     }
+    ctx['bets'] = create_bets_dict(request.user, ctx['events'])
 
     return render_to_response('events/events.html', ctx, RequestContext(request))
 
@@ -63,9 +103,11 @@ def event_detail(request, event_id):
 
     ctx = {
         'event': event,
-        'event_dict': event.event_dict,
-        'bets': user_bets,
-        'bet_dicts': [bet.bet_dict for bet in user_bets]
+        'bet' : create_bets_dict(request.user, [event])[event.id]
+#TODO: ???
+#        'event_dict': event.event_dict,
+#        'bets': user_bets,
+#        'bet_dicts': [bet.bet_dict for bet in user_bets]
     }
 
     return render_to_response('events/event_detail.html', ctx, RequestContext(request))
@@ -76,13 +118,13 @@ def event_detail(request, event_id):
 @csrf_exempt
 @transaction.commit_on_success()
 def create_transaction(request, event_id):
+    data = json.loads(request.body)
     try:
-        buy = (request.POST['buy'] == 'true')
-        outcome = request.POST['outcome']
-        for_price = float(request.POST['for_price'])
+        buy = (data['buy'] == 'True')
+        outcome = data['outcome']
+        for_price = data['for_price']
     except:
         return HttpResponseBadRequest(_("Something went wrong, try again in a few seconds."))
-
     try:
         if buy:
             user, event, bet = Bet.objects.buy_a_bet(request.user, event_id, outcome, for_price)
@@ -99,7 +141,6 @@ def create_transaction(request, event_id):
                 ]
             }
         }
-
         return JSONResponseBadRequest(json.dumps(result))
     except InsufficientCash as e:
         result = {

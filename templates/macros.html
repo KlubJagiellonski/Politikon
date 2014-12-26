@@ -1,32 +1,38 @@
-{% macro render_events(events, people) %}
+{% macro render_events(events, bets, people) %}
     {% for event in events %}
-      {{ render_event(event, people) }}
+      {{ render_event(event, bets[event.id], people) }}
     {% endfor %}
 {% endmacro %}
 
 
-{% macro render_event(event, people) %}
+{% macro render_event(event, bet, people) %}
       <div class="bet">
 			<figure>
               {% if event.small_image %}
               <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
               {% else %}
-              <img src="static/img/bet-plain.jpg"/>
+              <img src="{% static 'img/bet-plain.jpg' %}"/>
               {% endif %}
               <figcaption>
                   <a href="{{ event.get_relative_url() }}"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
                   <div class="change changepreview changeNO">-19</div>
                   <a href="{{ event.get_relative_url() }}"><h2 class="skroc">{{ event.title }}</h2></a>
-                  <div id="makeabet" class="morebets">
-                      <a href="#TAK"><div class="betYES"><span class="value lewa">{{event.current_buy_for_price}}</span><span class="txt prawa">+</span></div></a>
-                      <a href="#NIE"><div class="betNO"><span class="value prawa">{{event.current_buy_against_price}}</span><span class="txt lewa">-</span></div></a>
-                      <div class="currentbet centrum">
-                          <p class="changeYES">TAK</p>
-                          <p>5 x <span></span> 48</p>
-                      </div>
+                  <div id="makeabet" {% if bet.has_any %} class="morebets" {% endif %} >
+						{{ render_bet(event, bet, True)}}
                   </div>
               </figcaption>
 			</figure>
+      </div>
+{% endmacro %}
+
+{% macro render_bet(event, bet, render_current) %}
+      <a href="#" class="a_bet" data-event_id="{{event.id}}" data-buy="{{ bet.buyYES }}" data-outcome="{{ bet.outcomeYES }}" data-price="{{ bet.priceYES }}">
+          <div class="betYES"><span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{{ bet.textYES }}</span></div></a>
+      <a href="#" class="a_bet" data-event_id="{{event.id}}" data-buy="{{ bet.buyNO }}" data-outcome="{{ bet.outcomeNO}}" data-price="{{ bet.priceNO }}">
+          <div class="betNO"><span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{{ bet.textNO }}</span></div></a>
+      <div class="currentbet centrum" {% if not bet.has_any or not render_current %}hidden{% endif %}>
+          <p class="change{{ bet.classOutcome}}">{{bet.textOutcome}}</p>
+          <p>{{bet.has}} x <span></span> {{bet.avgPrice}}</p>
       </div>
 {% endmacro %}
 

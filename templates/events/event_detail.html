@@ -40,8 +40,7 @@
 			</div>
 			<div id ="makeabet">
 				<div class="change changeNO">-19</div>
-				<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
-				<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+				{{ macros.render_bet(event, bet, False) }}
 			</div>
 		</div>
 	</section>
