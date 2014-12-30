@@ -66,7 +66,7 @@ class EventManager(models.Manager):
 
 class BetManager(models.Manager):
     def get_users_bets_for_events(self, user, events):
-        bets = self.filter(user=user, event__in=events)
+        bets = self.filter(user__id=user.id, event__in=events)
 
         return bets
 
