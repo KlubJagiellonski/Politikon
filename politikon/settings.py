@@ -43,13 +43,6 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
 
-FACEBOOK_APPLICATION_CANVAS_URL = '/canvas'
-FANDJANGO_ENABLED_PATHS = [
-    '^canvas/(.*)',
-]
-FANDJANGO_CACHE_SIGNED_REQUEST = True
-FACEBOOK_APPLICATION_INITIAL_PERMISSIONS = ['publish_actions', 'publish_stream', 'user_relationships']
-
 ASSETS_MANIFEST = "file:"
 
 REDIS_BASE_URL = os.environ.get('REDISTOGO_URL', 'redis://localhost:6379')
@@ -201,7 +194,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'canvas.middleware.FacebookMiddleware',
+    # 'canvas.middleware.FacebookMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
@@ -235,13 +228,11 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
     'djcelery',
-    'fandjango',
     'gunicorn',
     'south',
 
     'accounts',
     'bladepolska',
-    'canvas',
     'events',
 )
 

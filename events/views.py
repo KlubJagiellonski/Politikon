@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 from .exceptions import *
 from .models import *
 
-from fandjango.decorators import facebook_authorization_required
+from django.contrib.auth.decorators import login_required
 
 def create_bets_dict(user, events):
     bets = dict()

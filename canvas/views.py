@@ -11,7 +11,7 @@ from events.models import *
 from . import tasks
 
 
-from fandjango.decorators import facebook_authorization_required
+from django.contrib.auth.decorators import login_required
 
 import hashlib
 import hmac
@@ -21,7 +21,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@facebook_authorization_required
+@login_required
 def home(request):
     ctx = {
         'featured_events': list(Event.objects.get_featured_events()[:4]),

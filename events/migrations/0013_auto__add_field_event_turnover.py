@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'middle_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL'}),
+            # 'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL'}),
             'profile_photo': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         u'events.bet': {
@@ -113,13 +113,13 @@ class Migration(SchemaMigration):
             'type': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"})
         },
-        u'fandjango.oauthtoken': {
-            'Meta': {'object_name': 'OAuthToken'},
-            'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'issued_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'token': ('django.db.models.fields.TextField', [], {})
-        }
+        # u'fandjango.oauthtoken': {
+        #     'Meta': {'object_name': 'OAuthToken'},
+        #     'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+        #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        #     'issued_at': ('django.db.models.fields.DateTimeField', [], {}),
+        #     'token': ('django.db.models.fields.TextField', [], {})
+        # }
     }
 
     complete_apps = ['events']

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import FacebookUser
-from fandjango.models import User
+from accounts.models import FacebookUser
+from accounts.models import UserProfile
 
 
-admin.site.unregister(User)
+admin.site.unregister(UserProfile)
 
 
 class UserAdmin(admin.ModelAdmin):

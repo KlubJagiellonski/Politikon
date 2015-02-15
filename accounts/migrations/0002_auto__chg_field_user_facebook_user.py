@@ -15,10 +15,10 @@ class Migration(SchemaMigration):
         # Changing field 'User.facebook_user'
         db.alter_column(u'accounts_user', 'facebook_user_id', self.gf('django.db.models.fields.related.OneToOneField')(unique=True, null=True, to=orm['canvas.FacebookUser']))
 
-    def backwards(self, orm):
+    # def backwards(self, orm):
 
         # Changing field 'User.facebook_user'
-        db.alter_column(u'accounts_user', 'facebook_user_id', self.gf('django.db.models.fields.related.OneToOneField')(unique=True, null=True, to=orm['fandjango.User']))
+        # db.alter_column(u'accounts_user', 'facebook_user_id', self.gf('django.db.models.fields.related.OneToOneField')(unique=True, null=True, to=orm['fandjango.User']))
 
     models = {
         u'accounts.user': {
@@ -49,16 +49,16 @@ class Migration(SchemaMigration):
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'middle_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True'}),
+            # 'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True'}),
             'profile_photo': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
-        },
-        u'fandjango.oauthtoken': {
-            'Meta': {'object_name': 'OAuthToken'},
-            'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'issued_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'token': ('django.db.models.fields.TextField', [], {})
         }
+        # u'fandjango.oauthtoken': {
+        #     'Meta': {'object_name': 'OAuthToken'},
+        #     'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+        #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        #     'issued_at': ('django.db.models.fields.DateTimeField', [], {}),
+        #     'token': ('django.db.models.fields.TextField', [], {})
+        # }
     }
 
     complete_apps = ['accounts']
