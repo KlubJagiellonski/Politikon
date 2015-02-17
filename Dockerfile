@@ -3,7 +3,7 @@ RUN apt-get update -y -qq --fix-missing
 RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib libpq-dev git libmemcached-dev curl openssh-server mercurial
 
 RUN mkdir /var/run/sshd
-RUN echo 'root:dupa3' | chpasswd
+RUN echo 'root:pass' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
