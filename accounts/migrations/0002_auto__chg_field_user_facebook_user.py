@@ -7,7 +7,7 @@ from django.db import models
 
 class Migration(SchemaMigration):
     depends_on = (
-        ("canvas", "0003_move_facebook_accounts"),
+        # ("canvas", "0003_move_facebook_accounts"),
     )
 
     def forwards(self, orm):
