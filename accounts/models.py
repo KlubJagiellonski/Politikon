@@ -5,7 +5,6 @@ from django.db.models import F, Q
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
-from canvas.models import FacebookUser
 
 import datetime
 
@@ -84,9 +83,9 @@ class UserProfileManager(BaseUserManager):
             user.synchronize_facebook_friends()
             user.save()
 
-        if created:
-            from canvas.models import ActivityLog
-            ActivityLog.objects.register_new_user_activity(user)
+        # if created:
+        #     from canvas.models import ActivityLog
+        #     ActivityLog.objects.register_new_user_activity(user)
 
         logger.debug("UserManager(user %s).get_for_facebook_user(%s), created: %d, has_chaged: %d" % (unicode(user), unicode(facebook_user), created, user_has_changed))
 
@@ -110,7 +109,7 @@ class UserProfile(AbstractBaseUser):
     created_date = models.DateTimeField(auto_now_add=True)
 
 #   Every new network relations also has to have 'related_name="django_user"'
-    facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
+#     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 
@@ -131,7 +130,7 @@ class UserProfile(AbstractBaseUser):
         if facebook_friends_ids is None:
             return
 
-        django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
+        # django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
         django_friends_ids_set = set(django_friends_ids)
 
         friends_through_model = self.friends.through
@@ -221,8 +220,8 @@ class UserProfile(AbstractBaseUser):
                         user=self, type=TRANSACTION_TYPES_DICT['TOPPED_UP_BY_APP'],
                         quantity=1, price=amount)
 
-        from canvas.models import ActivityLog
-        ActivityLog.objects.register_transaction_activity(self, transaction)
+        # from canvas.models import ActivityLog
+        # ActivityLog.objects.register_transaction_activity(self, transaction)
 
         self.save(update_fields=['total_cash', 'total_given_cash'])
 
