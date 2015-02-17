@@ -131,7 +131,7 @@ class UserProfile(AbstractBaseUser):
             return
 
         # django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
-        django_friends_ids_set = set(django_friends_ids)
+        # django_friends_ids_set = set(django_friends_ids)
 
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects

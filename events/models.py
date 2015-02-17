@@ -19,6 +19,8 @@ from bladepolska.site import current_domain
 from bladepolska.pubnub import PubNub
 from .exceptions import *
 
+from accounts.models import UserProfile
+
 
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
@@ -131,8 +133,8 @@ class BetManager(models.Manager):
         event.increment_turnover(quantity)
         event.save(force_update=True)
 
-        from canvas.models import ActivityLog
-        ActivityLog.objects.register_transaction_activity(user, transaction)
+        # from canvas.models import ActivityLog
+        # ActivityLog.objects.register_transaction_activity(user, transaction)
 
         PubNub().publish({
             'channel': event.publish_channel,
@@ -183,8 +185,8 @@ class BetManager(models.Manager):
         event.increment_quantity(for_outcome, by_amount=-quantity)
         event.save(force_update=True)
 
-        from canvas.models import ActivityLog
-        ActivityLog.objects.register_transaction_activity(user, transaction)
+        # from canvas.models import ActivityLog
+        # ActivityLog.objects.register_transaction_activity(user, transaction)
 
         PubNub().publish({
             'channel': event.publish_channel,
