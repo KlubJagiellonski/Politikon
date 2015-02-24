@@ -19,8 +19,10 @@ from .models import *
 from fandjango.decorators import facebook_authorization_required
 
 def create_bets_dict(user, events):
-    bets = Bet.objects.get_users_bets_for_events(user, events)
-    bets = dict((bet.event_id, bet) for bet in bets)
+    bets = dict()
+    if user is not None:
+        bets = Bet.objects.get_users_bets_for_events(user, events)
+        bets = dict((bet.event_id, bet) for bet in bets)
 
     all_bets = dict()
     for event in events:
