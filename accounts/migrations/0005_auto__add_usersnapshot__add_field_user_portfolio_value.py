@@ -60,21 +60,21 @@ class Migration(SchemaMigration):
             'total_cash': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
             'total_given_cash': ('django.db.models.fields.FloatField', [], {'default': '0.0'})
         },
-        u'canvas.facebookuser': {
-            'Meta': {'object_name': 'FacebookUser'},
-            'authorized': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'facebook_id': ('django.db.models.fields.BigIntegerField', [], {'unique': 'True'}),
-            'facebook_username': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'middle_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            # 'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL'}),
-            'profile_photo': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
-        }
+        # u'canvas.facebookuser': {
+        #     'Meta': {'object_name': 'FacebookUser'},
+        #     'authorized': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+        #     'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+        #     'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        #     'facebook_id': ('django.db.models.fields.BigIntegerField', [], {'unique': 'True'}),
+        #     'facebook_username': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        #     'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+        #     'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        #     'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        #     'middle_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+        #     # 'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL'}),
+        #     'profile_photo': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+        # }
         # u'fandjango.oauthtoken': {
         #     'Meta': {'object_name': 'OAuthToken'},
         #     'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),

@@ -175,13 +175,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 AUTHENTICATION_BACKENDS = (
 #TODO: remove next line when proper auth works
-    'accounts.backends.DummyCookieAuth',
+#     'accounts.backends.DummyCookieAuth',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('twitter', 'facebook')
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
@@ -198,8 +199,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-#TODO: remove next line when proper auth works
-    'accounts.backends.DummyCookieMiddleware',
+# #TODO: remove next line when proper auth works
+#     'accounts.backends.DummyCookieMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -331,7 +332,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
     'social.pipeline.user.create_user',
-    'accounts.models.save_profile',
+    # 'accounts.models.save_profile',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details'

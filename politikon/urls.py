@@ -12,12 +12,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
 #   User authentication url patterns
-#    url(r'^facebook/', include('fandjango.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
 
 #   Application url patterns
-#    url(r'^canvas/', include('canvas.urls', namespace="canvas")),
     url(r'^', include('events.urls', namespace="events")),
 
     url(r'^$', views.index),

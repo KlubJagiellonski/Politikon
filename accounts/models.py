@@ -11,13 +11,12 @@ import datetime
 import logging
 logger = logging.getLogger(__name__)
 
-
 def format_int(x):
-    s = str(int(x));
-    l = int((len(s)-1)/3);
+    s = str(int(x))
+    l = int((len(s)-1)/3)
     for i in range(l,0,-1):
-        s=s[:len(s)-i*3]+' '+s[len(s)-i*3:];
-    return s;
+        s=s[:len(s)-i*3]+' '+s[len(s)-i*3:]
+    return s
 
 class UserProfileManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
@@ -32,7 +31,7 @@ class UserProfileManager(BaseUserManager):
 
         return user
 
-    def create_user(self, username, password=None):
+    def create_user(self, username, email, password=None):
         user = self.return_new_user_object(username)
         user.is_active = True
 
@@ -100,11 +99,15 @@ class UserProfile(AbstractBaseUser):
         'portfolio_value'
     ])
 
-    username = models.CharField(u"email", max_length=1024, unique=True)
+    username = models.CharField(u"username", max_length=1024, unique=True)
+    email = models.CharField(u"email", max_length=1024, unique=True)
     name = models.CharField(max_length=1024, blank=True)
-    is_active = models.BooleanField(u"can log in", default=True)
+    # is_active = models.BooleanField(u"can log in", default=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
     is_deleted = models.BooleanField(u"is deleted", default=False)
+
+    is_authenticated = models.BooleanField(u"is authenticated", default=False)
+    is_active = models.BooleanField(u"is active", default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
 
@@ -233,3 +236,12 @@ class UserProfile(AbstractBaseUser):
     def is_superuser(self):
         return self.is_admin
 
+
+def save_profile(backend, user, response, *args, **kwargs):
+    print user
+    print response
+
+    if backend.name == 'facebook':
+        print backend
+    if backend.name == 'twitter':
+        print backend
