@@ -8,20 +8,20 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-#   Admin url patterns
-    url(r'^admin/', include(admin.site.urls)),
+                       #   Admin url patterns
+                       url(r'^admin/', include(admin.site.urls)),
 
-#   User authentication url patterns
-    url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^accounts/', include('accounts.urls', namespace="accounts")),
+                       #   User authentication url patterns
+                       url('', include('social.apps.django_app.urls', namespace='social')),
+                       url(r'^accounts/', include('accounts.urls', namespace="accounts")),
 
-#   Application url patterns
-    url(r'^', include('events.urls', namespace="events")),
+                       #   Application url patterns
+                       url(r'^', include('events.urls', namespace="events")),
 
-    url(r'^$', views.index),
-)
+                       url(r'^$', views.index),
+                       )
 
 if settings.SERVE_STATIC_FILES:
     urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    )
+                            (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+                            )

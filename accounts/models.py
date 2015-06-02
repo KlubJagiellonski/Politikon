@@ -29,6 +29,9 @@ def save_profile(backend, user, response, *args, **kwargs):
     print backend.name
 
     if backend.name == 'facebook':
+        user.full_name = response['name']
+        user.facebook_id = response['id']
+        user.save(using=UserProfileManager.db)
         print backend
     if backend.name == 'twitter':
         user.avatarURL = response['profile_image_url']
@@ -49,21 +52,24 @@ class UserProfileManager(BaseUserManager):
         user.set_password(password)
 
         return user
-    #
-    # def create_user(self, username, email, password=None):
-    #     user = self.return_new_user_object(username)
-    #     user.is_active = True
-    #
-    #     user.save(using=self._db)
-    #     return user
 
-    def create_superuser(self, username, password):
-        user = self.return_new_user_object(username,
-                                           password=password,
-                                           )
+    def create_user(self, username, email, password=None):
+        user = self.model(
+            username = username,
+            email=self.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password=None):
+        user = self.create_user(
+            username,
+            email,
+            password=password,
+        )
         user.is_admin = True
-        user.is_active = True
-
         user.save(using=self._db)
         return user
 
