@@ -65,7 +65,7 @@ def index(request):
         'latest_events': list(Event.objects.get_events('latest'))
     }
 
-    ctx['bets'] = create_bets_dict(auth.get_user(request), [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
+    # ctx['bets'] = create_bets_dict(auth.get_user(request), [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
 # TODO: what's that?
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
