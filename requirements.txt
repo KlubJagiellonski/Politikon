@@ -5,7 +5,7 @@ path.py==2.4.1
 djangorestframework
 newrelic==2.38.0.31
 
--e git+https://github.com/coffin/coffin.git#egg=coffin
+-e git+https://github.com/coffin/coffin.git@v0.3.8#egg=coffin
 jinja2
 
 django-assets
