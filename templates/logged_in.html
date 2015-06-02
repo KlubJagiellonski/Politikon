@@ -1,9 +1,13 @@
 		<div class="graj avatar prawa">
-			<img src="img/blank-avatar.jpg"/>
+            {% if request.user.avatarURL %}
+			<img src="{{ request.user.avatarURL }}" />
+            {% else %}
+            <img src="img/blank-avatar.jpg"/>
+            {% endif %}
 			<nav class="avatarmenu">
 			<ul>
 				<div class="arrowup"></div>
-				<a href="#"><li>Grzegorz Piechu≈Ça</li></a>
+				<a href="#"><li>{{ request.user.name }}</li></a>
 				<a href="#"><li>Ustawienia</li></a>
 				<a href="#"><li>Wyloguj</li></a>
 			</ul>

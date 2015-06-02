@@ -1,5 +1,7 @@
 # coding: utf-8
+import urllib2
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, UserManager, User
+from django.core.files.base import ContentFile
 from django.db import models, transaction
 from django.db.models import F, Q
 
@@ -9,14 +11,31 @@ from constance import config
 import datetime
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def format_int(x):
     s = str(int(x))
-    l = int((len(s)-1)/3)
-    for i in range(l,0,-1):
-        s=s[:len(s)-i*3]+' '+s[len(s)-i*3:]
+    l = int((len(s) - 1) / 3)
+    for i in range(l, 0, -1):
+        s = s[:len(s) - i * 3] + ' ' + s[len(s) - i * 3:]
     return s
+
+
+def save_profile(backend, user, response, *args, **kwargs):
+    print user
+    print response
+    print backend.name
+
+    if backend.name == 'facebook':
+        print backend
+    if backend.name == 'twitter':
+        user.avatarURL = response['profile_image_url']
+        user.full_name = response['name']
+        user.save(using=UserProfileManager.db)
+        print backend
+
 
 class UserProfileManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
@@ -30,18 +49,18 @@ class UserProfileManager(BaseUserManager):
         user.set_password(password)
 
         return user
-
-    def create_user(self, username, email, password=None):
-        user = self.return_new_user_object(username)
-        user.is_active = True
-
-        user.save(using=self._db)
-        return user
+    #
+    # def create_user(self, username, email, password=None):
+    #     user = self.return_new_user_object(username)
+    #     user.is_active = True
+    #
+    #     user.save(using=self._db)
+    #     return user
 
     def create_superuser(self, username, password):
         user = self.return_new_user_object(username,
-            password=password,
-        )
+                                           password=password,
+                                           )
         user.is_admin = True
         user.is_active = True
 
@@ -50,8 +69,8 @@ class UserProfileManager(BaseUserManager):
 
     def create_user_with_random_password(self, username, **kwargs):
         user = self.return_new_user_object(username,
-            password=None
-        )
+                                           password=None
+                                           )
         password = self.make_random_password()
         user.set_password(password)
 
@@ -83,10 +102,11 @@ class UserProfileManager(BaseUserManager):
             user.save()
 
         # if created:
-        #     from canvas.models import ActivityLog
+        # from canvas.models import ActivityLog
         #     ActivityLog.objects.register_new_user_activity(user)
 
-        logger.debug("UserManager(user %s).get_for_facebook_user(%s), created: %d, has_chaged: %d" % (unicode(user), unicode(facebook_user), created, user_has_changed))
+        logger.debug("UserManager(user %s).get_for_facebook_user(%s), created: %d, has_chaged: %d" % (
+            unicode(user), unicode(facebook_user), created, user_has_changed))
 
         return user
 
@@ -101,6 +121,8 @@ class UserProfile(AbstractBaseUser):
 
     username = models.CharField(u"username", max_length=1024, unique=True)
     email = models.CharField(u"email", max_length=1024, unique=True)
+    avatarURL = models.CharField(u"avatar_url", max_length=1024, default='')
+
     name = models.CharField(max_length=1024, blank=True)
     # is_active = models.BooleanField(u"can log in", default=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
@@ -111,8 +133,8 @@ class UserProfile(AbstractBaseUser):
 
     created_date = models.DateTimeField(auto_now_add=True)
 
-#   Every new network relations also has to have 'related_name="django_user"'
-#     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
+    # Every new network relations also has to have 'related_name="django_user"'
+    #     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 
@@ -147,7 +169,8 @@ class UserProfile(AbstractBaseUser):
         logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % len(new_friends_ids))
 
         if new_friends_ids:
-            new_friends_through = [friends_through_model(from_user=self, to_user_id=friend_id) for friend_id in new_friends_ids]
+            new_friends_through = [friends_through_model(from_user=self, to_user_id=friend_id) for friend_id in
+                                   new_friends_ids]
             friends_manager.bulk_create(new_friends_through)
 
         # Remove stale
@@ -164,8 +187,8 @@ class UserProfile(AbstractBaseUser):
         return {
             'user_id': self.id,
             'total_cash': self.total_cash_formatted,
-            'portfolio_value' : self.portfolio_value_formatted,
-            'reputation' : self.reputation
+            'portfolio_value': self.portfolio_value_formatted,
+            'reputation': self.reputation
         }
 
     @property
@@ -173,7 +196,8 @@ class UserProfile(AbstractBaseUser):
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects
 
-        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id', 'to_user_id')
+        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id',
+                                                                                                      'to_user_id')
 
         current_friends_ids_set = set()
         for from_id, to_id in current_friends_ids:
@@ -192,7 +216,7 @@ class UserProfile(AbstractBaseUser):
         return self.name
 
     def has_perm(self, perm, obj=None):
-            return True
+        return True
 
     def has_module_perms(self, app_label):
         return True
@@ -207,7 +231,10 @@ class UserProfile(AbstractBaseUser):
 
     @property
     def reputation(self):
-        return round(self.portfolio_value / float(self.total_given_cash),2)
+        if float(self.total_given_cash) == 0:
+            return 0
+        else:
+            return round(self.portfolio_value / float(self.total_given_cash), 2)
 
     @property
     def profile_photo(self):
@@ -219,9 +246,10 @@ class UserProfile(AbstractBaseUser):
         self.total_given_cash = F('total_given_cash') + amount
 
         from events.models import Transaction, TRANSACTION_TYPES_DICT
+
         transaction = Transaction.objects.create(
-                        user=self, type=TRANSACTION_TYPES_DICT['TOPPED_UP_BY_APP'],
-                        quantity=1, price=amount)
+            user=self, type=TRANSACTION_TYPES_DICT['TOPPED_UP_BY_APP'],
+            quantity=1, price=amount)
 
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(self, transaction)
@@ -235,13 +263,3 @@ class UserProfile(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_admin
-
-
-def save_profile(backend, user, response, *args, **kwargs):
-    print user
-    print response
-
-    if backend.name == 'facebook':
-        print backend
-    if backend.name == 'twitter':
-        print backend
