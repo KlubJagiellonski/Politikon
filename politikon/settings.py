@@ -63,7 +63,7 @@ CELERY_TASK_RESULT_EXPIRES = 10
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_IGNORE_RESULT = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERY_IMPORTS = ("accounts.tasks", "canvas.tasks", "events.tasks")
+CELERY_IMPORTS = ("accounts.tasks", "events.tasks")
 
 CELERYBEAT_SCHEDULE = {
     'update_portfolio_values': {
@@ -78,18 +78,18 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.create_accounts_snapshot',
         'schedule': crontab(minute=31)
     },
-    'consume_facebook_user_sync_task': {
-        'task': 'canvas.tasks.consume_facebook_user_sync_task',
-        'schedule': timedelta(minutes=5)
-    },
-    'consume_facebook_user_friends_sync_task': {
-        'task': 'canvas.tasks.consume_facebook_user_friends_sync_task',
-        'schedule': timedelta(minutes=5)
-    },
-    'consume_publish_activities_tasks': {
-        'task': 'canvas.tasks.consume_publish_activities_tasks',
-        'schedule': timedelta(minutes=5)
-    },
+    # 'consume_facebook_user_sync_task': {
+    #     'task': 'canvas.tasks.consume_facebook_user_sync_task',
+    #     'schedule': timedelta(minutes=5)
+    # },
+    # 'consume_facebook_user_friends_sync_task': {
+    #     'task': 'canvas.tasks.consume_facebook_user_friends_sync_task',
+    #     'schedule': timedelta(minutes=5)
+    # },
+    # 'consume_publish_activities_tasks': {
+    #     'task': 'canvas.tasks.consume_publish_activities_tasks',
+    #     'schedule': timedelta(minutes=5)
+    # },
     'topup_accounts_task': {
         'task': 'accounts.tasks.topup_accounts_task',
         'schedule': crontab(minute=0, hour=0)
