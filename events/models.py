@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import F
+import django.db.models
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
@@ -381,7 +381,7 @@ class Bet(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=False)
-    outcome = models.BooleanField("zakład na TAK", choices=BET_OUTCOMES)
+    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOMES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
     bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
     sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)

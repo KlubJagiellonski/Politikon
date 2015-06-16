@@ -18,4 +18,21 @@ ENV PORT 8000
 EXPOSE 8000
 EXPOSE 22
 
-CMD ["/usr/sbin/sshd", "-D"]
+#ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+# fix for pycharm debug ssh connection
+RUN echo "KexAlgorithms=diffie-hellman-group1-sha1" >> /etc/ssh/sshd_config
+
+# Allows sshd to read /root/.ssh/environment
+RUN echo "PermitUserEnvironment=yes" >> /etc/ssh/sshd_config
+
+EXPOSE 22
+
+RUN touch /root/.bash_profile
+RUN echo "cd /app" >> /root/.bash_profile
+
+RUN mkdir /root/.ssh/
+RUN touch /root/.ssh/environment
+
+CMD env >> /root/.ssh/environment; export -p | grep _ >> /etc/profile; /usr/sbin/sshd -D;
