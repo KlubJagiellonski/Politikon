@@ -1,3 +1,5 @@
+This is a draft
+
 Install docker
 
 Run docker
@@ -16,3 +18,11 @@ Run docker_run.sh
 Enter docker:
 ssh root@$(boot2docker ip) -p 2233
 Password: pass
+
+Run python
+python manage.py runserver 0.0.0.0:8000`
+
+Run your browser
+boot2docker ip
+YOUR_IP:8000
+

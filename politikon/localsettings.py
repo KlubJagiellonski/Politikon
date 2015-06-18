@@ -43,7 +43,7 @@ PUBNUB_PUBLISH_KEY = 'pub-c-99d402d4-9ece-4f63-a7ba-6c3ec61d36b4'
 PUBNUB_SUBSCRIBE_KEY = 'sub-c-ba289054-825e-11e2-9881-12313f022c90'
 PUBNUB_SECRET_KEY = 'sec-c-M2NiZjBjMWYtMWIyNC00MjIyLWJhYjAtNGZhY2IxNDQxZmEx'
 
-DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + os.environ['POSTGRES_PORT_5432_TCP_PORT']  + '/' + 'postgres'
+DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + os.environ['POSTGRES_PORT_5432_TCP_PORT']  + '/' + 'politikon'
 
 #disabling SSL on local
 SSLIFY_DISABLE = True
