@@ -24,19 +24,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SERVE_STATIC_FILES = False
 CELERY_ALWAYS_EAGER = True
 
-# Since belowe these are test app settings, it should be safe to open-source it
+# Since below these are test app settings, it should be safe to open-source it
 FACEBOOK_APPLICATION_ID = "134939156680151"
 FACEBOOK_APPLICATION_SECRET_KEY = "ce45e3ce267cd64a5cfee9743fc28d59"
 FACEBOOK_APPLICATION_NAMESPACE = "politikon_staging"
 
+# Since below these are test app settings, it should be safe to open-source it
+TWITTER_CONSUMER_KEY = "7k5NfWvH6FFKloAa3BkZx6XpG"
+TWITTER_CONSUMER_SECRET = "1ZbxNN6B3I1A8JRnSW1F7uKWWX96kGNPYkuOGwE8lTh4fdi6m5"
+
 # social_auth configuration
-SOCIAL_AUTH_TWITTER_KEY = '07cM50zfHeEZg2uuN0lkyyC4w'
-SOCIAL_AUTH_TWITTER_SECRET = 'NQE2HRp135fn4rQSxvdMdcZ4Ug3HzG8wwhoKGGUjtxbFVk8Id4'
+SOCIAL_AUTH_TWITTER_KEY = TWITTER_CONSUMER_KEY
+SOCIAL_AUTH_TWITTER_SECRET = TWITTER_CONSUMER_SECRET
 SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APPLICATION_ID
 SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APPLICATION_SECRET_KEY
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-GOOGLE_OAUTH2_CLIENT_ID = '579638841369-9c8cliqj8o73nbufdbvfc144pqt81uc9.apps.googleusercontent.com'
-GOOGLE_OAUTH2_CLIENT_SECRET = 'vUbknd9cRgqEIu4yZlgk4Yo9'
 
 # sandbox keys
 PUBNUB_PUBLISH_KEY = 'pub-c-c852ffa1-72fc-41ed-9720-2f88b0e54880'
