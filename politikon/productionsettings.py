@@ -25,6 +25,11 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 GOOGLE_OAUTH2_CLIENT_ID = os.environ.get("GOOGLE_OAUTH2_CLIENT_ID", "579638841369-9c8cliqj8o73nbufdbvfc144pqt81uc9.apps.googleusercontent.com")
 GOOGLE_OAUTH2_CLIENT_SECRET = os.environ.get("GOOGLE_OAUTH2_CLIENT_SECRET", "vUbknd9cRgqEIu4yZlgk4Yo9")
 
+PUBNUB_PUBLISH_KEY = os.environ.get("PUBNUB_PUBLISH_KEY")
+PUBNUB_SUBSCRIBE_KEY = os.environ.get("PUBNUB_SUBSCRIBE_KEY")
+PUBNUB_SECRET_KEY = os.environ.get("PUBNUB_SECRET_KEY")
+
+
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
 if 'MEMCACHIER_USERNAME' in os.environ and 'MEMCACHIER_PASSWORD' in os.environ:
     os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '')
