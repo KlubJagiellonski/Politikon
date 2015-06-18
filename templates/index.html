@@ -8,15 +8,14 @@
 			{% if front_event.big_image %}
 			<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 			{% else %}
-			<img src="{% static 'img/featured.jpg' %}"/>
+            <img src="{{ STATIC_URL }}img/featured.jpg"/>
 			{% endif %}
 			<figcaption>
-				<a href="{{ front_event.get_relative_url() }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
+				<a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
 				<div class="opis">
-					<a href="{{ front_event.get_relative_url() }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
+					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
-						{{ macros.render_bet(front_event, bets[front_event.id], False)}}
 					</div>
 				</div>
 			</figcaption>
@@ -24,13 +23,11 @@
 	</section>
 	
 	<section id="betfeed">
-		{{ macros.render_events(featured_events, bets, people) }}
 	</section>
 	
 	<section id="betfeed" class="hotbets">
 		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
 		<div>
-		{{ macros.render_events(featured_events, bets, people) }}
 		</div>
 	</section>
 	
@@ -46,70 +43,70 @@
 			<article id="tydzien">
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
@@ -119,70 +116,70 @@
 			<article id="miesiac">
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
@@ -192,70 +189,70 @@
 			<article id="calosc">
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>
 				</div>
 				<div class="userrank uservip">
 					<a href="#">
-					<img src="static/img/blank-avatar.jpg"/>
+					<img src="{{ STATIC_URL }}img/blank-avatar.jpg"/>
 					<div class="wolnereputy"><span class="astable">1 235</span></div>
 					<div class="username">Andrzej Kowalski</div>
 					</a>

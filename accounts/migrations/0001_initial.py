@@ -1,76 +1,56 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import django.db.models.deletion
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
-    depends_on = (
-#        ("fandjango", "0009_auto__chg_field_oauthtoken_token"),
-    )
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'User'
-        db.create_table(u'accounts_user', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=1024)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=1024)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('is_admin', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            # ('facebook_user', self.gf('django.db.models.fields.related.OneToOneField')(related_name='django_user', unique=True, null=True, to=orm['fandjango.User'])),
-            ('total_cash', self.gf('django.db.models.fields.FloatField')(default=0.0)),
-            ('total_given_cash', self.gf('django.db.models.fields.FloatField')(default=0.0)),
-        ))
-        db.send_create_signal(u'accounts', ['User'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'User'
-        db.delete_table(u'accounts_user')
-
-
-    models = {
-        u'accounts.user': {
-            'Meta': {'object_name': 'User'},
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            # 'facebook_user': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'django_user'", 'unique': 'True', 'null': 'True', 'to': u"orm['fandjango.User']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'total_cash': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'total_given_cash': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '1024'})
-        }
-        # u'fandjango.oauthtoken': {
-        #     'Meta': {'object_name': 'OAuthToken'},
-        #     'expires_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-        #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-        #     'issued_at': ('django.db.models.fields.DateTimeField', [], {}),
-        #     'token': ('django.db.models.fields.TextField', [], {})
-        # },
-        # u'fandjango.user': {
-        #     'Meta': {'object_name': 'User'},
-        #     'authorized': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-        #     'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-        #     'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-        #     'facebook_id': ('django.db.models.fields.BigIntegerField', [], {'unique': 'True'}),
-        #     'facebook_username': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-        #     'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-        #     u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-        #     'last_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-        #     'last_seen_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-        #     'middle_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-        #     'oauth_token': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['fandjango.OAuthToken']", 'unique': 'True'})
-        # }
-    }
-
-    complete_apps = ['accounts']
+    operations = [
+        migrations.CreateModel(
+            name='UserProfile',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
+                ('username', models.CharField(unique=True, max_length=1024, verbose_name='username')),
+                ('email', models.CharField(unique=True, max_length=1024, verbose_name='email')),
+                ('avatarURL', models.CharField(default=b'', max_length=1024, verbose_name='avatar_url')),
+                ('name', models.CharField(max_length=1024, blank=True)),
+                ('is_admin', models.BooleanField(default=False, verbose_name='is an administrator')),
+                ('is_deleted', models.BooleanField(default=False, verbose_name='is deleted')),
+                ('is_authenticated', models.BooleanField(default=False, verbose_name='is authenticated')),
+                ('is_active', models.BooleanField(default=False, verbose_name='is active')),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('total_cash', models.IntegerField(default=0.0, verbose_name='ilo\u015b\u0107 got\xf3wki')),
+                ('total_given_cash', models.IntegerField(default=0.0, verbose_name='ilo\u015b\u0107 przyznanej got\xf3wki w historii')),
+                ('portfolio_value', models.IntegerField(default=0.0, verbose_name='warto\u015b\u0107 portfela')),
+                ('friends', models.ManyToManyField(related_name='friends_rel_+', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='UserProfileSnapshot',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='stworzony dnia')),
+                ('total_cash', models.IntegerField(default=0.0, verbose_name='ilo\u015b\u0107 got\xf3wki')),
+                ('total_given_cash', models.IntegerField(default=0.0, verbose_name='ilo\u015b\u0107 przyznanej got\xf3wki w historii')),
+                ('portfolio_value', models.IntegerField(default=0.0, verbose_name='warto\u015b\u0107 portfela')),
+                ('snapshot_of', models.ForeignKey(related_name='snapshots', on_delete=django.db.models.deletion.PROTECT, verbose_name='dotyczy', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+                'db_table': 'accounts_userprofile_snapshot',
+                'verbose_name': 'user profile - snapshot',
+                'verbose_name_plural': 'user profile - snapshoty',
+            },
+        ),
+    ]

@@ -154,7 +154,7 @@ class UserProfile(AbstractBaseUser):
     def __unicode__(self):
         return "%s" % self.username
 
-    @transaction.commit_on_success()
+    @transaction.atomic
     def synchronize_facebook_friends(self):
         # Get friends
         facebook_friends_ids = self.facebook_user.friends_using_our_app

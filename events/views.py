@@ -1,4 +1,4 @@
-from coffin.shortcuts import render_to_response
+from django.shortcuts import render_to_response
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -18,6 +18,7 @@ from .models import *
 
 from django.contrib.auth.decorators import login_required
 
+
 def create_bets_dict(user, events):
     bets = dict()
     if user is not None:
@@ -25,36 +26,37 @@ def create_bets_dict(user, events):
         bets = dict((bet.event_id, bet) for bet in bets)
 
     all_bets = dict()
-    for event in events:
-        if event.id in bets and bets[event.id].has>0:
-            bet = bets[event.id]
-            all_bets[event.id]={
-                'has_any' : True,
-                'buyYES': bet.outcome,
-                'buyNO' : not bet.outcome,
-                'outcomeYES' : "YES" if bet.outcome else "NO",
-                'outcomeNO' : "YES" if bet.outcome else "NO",
-                'priceYES' : event.current_buy_for_price if bet.outcome else event.current_sell_against_price,
-                'priceNO' : event.current_sell_for_price if bet.outcome else event.current_buy_against_price,
-                'textYES' : "+" if bet.outcome else "-",
-                'textNO' : "-" if bet.outcome else "+",
-                'has' : bet.has,
-                'classOutcome' : "YES" if bet.outcome else "NO",
-                'textOutcome' : "TAK" if bet.outcome else "NIE",
-                'avgPrice' : round(bet.bought_avg_price,2),
-            }
-        else:
-            all_bets[event.id]={
-                'has_any' : False,
-                'buyYES': True,
-                'buyNO' : True,
-                'outcomeYES' : "YES",
-                'outcomeNO' : "NO",
-                'priceYES' : event.current_buy_for_price,
-                'priceNO' : event.current_buy_against_price,
-                'textYES' : "TAK",
-                'textNO' : "NIE"
-            }
+    if len(events) > 1:
+        for event in events:
+            if event.id in bets and bets[event.id].has>0:
+                bet = bets[event.id]
+                all_bets[event.id]={
+                    'has_any' : True,
+                    'buyYES': bet.outcome,
+                    'buyNO' : not bet.outcome,
+                    'outcomeYES' : "YES" if bet.outcome else "NO",
+                    'outcomeNO' : "YES" if bet.outcome else "NO",
+                    'priceYES' : event.current_buy_for_price if bet.outcome else event.current_sell_against_price,
+                    'priceNO' : event.current_sell_for_price if bet.outcome else event.current_buy_against_price,
+                    'textYES' : "+" if bet.outcome else "-",
+                    'textNO' : "-" if bet.outcome else "+",
+                    'has' : bet.has,
+                    'classOutcome' : "YES" if bet.outcome else "NO",
+                    'textOutcome' : "TAK" if bet.outcome else "NIE",
+                    'avgPrice' : round(bet.bought_avg_price,2),
+                }
+            else:
+                all_bets[event.id]={
+                    'has_any' : False,
+                    'buyYES': True,
+                    'buyNO' : True,
+                    'outcomeYES' : "YES",
+                    'outcomeNO' : "NO",
+                    'priceYES' : event.current_buy_for_price,
+                    'priceNO' : event.current_buy_against_price,
+                    'textYES' : "TAK",
+                    'textNO' : "NIE"
+                }
 
     return all_bets
 
@@ -67,9 +69,10 @@ def index(request):
 
     ctx['bets'] = create_bets_dict(auth.get_user(request), [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
 # TODO: what's that?
+# ANSWER: this is context referencing to events manager method
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
-    return render_to_response('index.html', ctx, RequestContext(request))
+    return render_to_response('index.html', RequestContext(request))
 
 def events(request, mode):
     ctx = {
@@ -118,7 +121,7 @@ def event_detail(request, event_id):
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
-@transaction.commit_on_success()
+@transaction.atomic
 def create_transaction(request, event_id):
     data = json.loads(request.body)
     try:
