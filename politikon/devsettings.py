@@ -44,6 +44,8 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 PUBNUB_PUBLISH_KEY = 'pub-c-c852ffa1-72fc-41ed-9720-2f88b0e54880'
 PUBNUB_SUBSCRIBE_KEY = 'sub-c-e8bd5ce2-8506-11e2-ac19-12313f022c90'
 PUBNUB_SECRET_KEY = 'sec-c-ZmE0OTc5MDYtYWUxNi00YTJjLWFjOGMtODVhNGQ5Y2JmNTdj'
+PUBNUB_IS_SSL = False
+
 
 DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + os.environ['POSTGRES_PORT_5432_TCP_PORT']  + '/' + 'politikon'
 

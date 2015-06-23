@@ -27,7 +27,7 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 PUBNUB_PUBLISH_KEY = os.environ.get("PUBNUB_PUBLISH_KEY")
 PUBNUB_SUBSCRIBE_KEY = os.environ.get("PUBNUB_SUBSCRIBE_KEY")
 PUBNUB_SECRET_KEY = os.environ.get("PUBNUB_SECRET_KEY")
-
+PUBNUB_IS_SSL = False
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
 if 'MEMCACHIER_USERNAME' in os.environ and 'MEMCACHIER_PASSWORD' in os.environ:
