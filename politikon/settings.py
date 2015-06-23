@@ -10,11 +10,6 @@ import accounts
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
-# ENV-defined settings
-FACEBOOK_APPLICATION_ID = os.environ.get('FACEBOOK_APPLICATION_ID')
-FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get('FACEBOOK_APPLICATION_SECRET_KEY')
-FACEBOOK_APPLICATION_NAMESPACE = os.environ.get('FACEBOOK_APPLICATION_NAMESPACE')
-
 # Django settings for politikon project.
 
 DEBUG = True
