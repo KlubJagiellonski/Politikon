@@ -1,6 +1,14 @@
 FROM ubuntu:trusty
+
 RUN apt-get update -y -qq --fix-missing
-RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib libpq-dev git libmemcached-dev curl openssh-server mercurial
+RUN apt-get install -y wget
+
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+RUN apt-get update -y -qq --fix-missing
+RUN apt-get upgrade -y -qq
+RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.4 libpq-dev git libmemcached-dev curl openssh-server mercurial
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:pass' | chpasswd
