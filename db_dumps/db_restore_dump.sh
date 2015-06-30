@@ -2,13 +2,15 @@
 
 DUMP=$1
 
-DB_HOST=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/politikon")
+
+OPS_DB_HOST=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT")
+POLITIKON_DB_HOST=$(echo "postgres://postgres:postgres@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/politikon")
 
 echo "Dropping db..."
-psql $DB_HOST -c "DROP DATABASE politikon;"
+psql $OPS_DB_HOST -c "DROP DATABASE politikon;"
 
 echo "Creating empty db..."
-psql $DB_HOST -c "CREATE DATABASE politikon;"
+psql $OPS_DB_HOST -c "CREATE DATABASE politikon;"
 
 echo "Restoring db dump..."
 pg_restore --verbose --clean --no-acl --no-owner -d $DB_HOST $DUMP
