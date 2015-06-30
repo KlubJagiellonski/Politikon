@@ -27,6 +27,21 @@ docker_rebuild.sh
 Run docker_run.sh
 ```
 
+* Check Docker IP
+```
+boot2docker ip
+```
+
+* Add local.politikon.org.pl to your OS hosts files
+Add `192.168.59.103` or whatever IP your docker instance has to the host file.
+```
+...
+192.168.59.103 local.politikon.org.pl
+..
+```
+
+* Ad local.politikon.org.pl as a host for your FB and Twitter app
+
 * Enter docker:
 ```
 ssh root@$(boot2docker ip) -p 2233
