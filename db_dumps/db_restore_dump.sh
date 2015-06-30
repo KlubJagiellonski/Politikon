@@ -13,7 +13,7 @@ echo "Creating empty db..."
 psql $OPS_DB_HOST -c "CREATE DATABASE politikon;"
 
 echo "Restoring db dump..."
-pg_restore --verbose --clean --no-acl --no-owner -d $DB_HOST $DUMP
+pg_restore --verbose --clean --no-acl --no-owner -d $POLITIKON_DB_HOST $DUMP
 
 echo "Dump $DUMP restoration completed"
 
