@@ -9,7 +9,7 @@ Projekt jest rozwijany. Planowany start to jesień 2015.
 
 ## Politikon lokalnie (po angielsku)
 
-* Install [https://docs.docker.com/](Docker)
+* Install [Docker](https://docs.docker.com/)
 
 * Run Docker:
 ```
