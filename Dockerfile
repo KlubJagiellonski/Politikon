@@ -22,9 +22,11 @@ ADD /requirements.txt /app/
 WORKDIR /app
 RUN pip install -r requirements.txt
 
-ENV PORT 8000
-EXPOSE 8000
-EXPOSE 22
+RUN echo "export LANGUAGE=en_US.UTF-8" >> /etc/profile
+RUN echo "export LANG=en_US.UTF-8" >> /etc/profile
+RUN echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
+RUN echo "locale-gen en_US.UTF-8" >> /etc/profile
+RUN echo "dpkg-reconfigure locales" >> /etc/profile
 
 #ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
@@ -35,6 +37,8 @@ RUN echo "KexAlgorithms=diffie-hellman-group1-sha1" >> /etc/ssh/sshd_config
 # Allows sshd to read /root/.ssh/environment
 RUN echo "PermitUserEnvironment=yes" >> /etc/ssh/sshd_config
 
+ENV PORT 8000
+EXPOSE 8000
 EXPOSE 22
 
 RUN touch /root/.bash_profile
