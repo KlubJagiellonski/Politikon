@@ -10,24 +10,14 @@ import accounts
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
-# ENV-defined settings
-FACEBOOK_APPLICATION_ID = os.environ.get('FACEBOOK_APPLICATION_ID')
-FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get('FACEBOOK_APPLICATION_SECRET_KEY')
-FACEBOOK_APPLICATION_NAMESPACE = os.environ.get('FACEBOOK_APPLICATION_NAMESPACE')
-
-PUBNUB_PUBLISH_KEY = os.environ.get('PUBNUB_PUBLISH_KEY')
-PUBNUB_SUBSCRIBE_KEY = os.environ.get('PUBNUB_SUBSCRIBE_KEY')
-PUBNUB_SECRET_KEY = os.environ.get('PUBNUB_SECRET_KEY')
-PUBNUB_IS_SSL = False
-
 # Django settings for politikon project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Jakub Lipinski', 'jakub.lipinski@gmail.com'),
-    ('Tomasz Grynfelder', 't.grynfelder@gmail.com')
+    ('Jakub Lipinski', ''),
+    ('Tomasz Grynfelder', '')
 )
 
 MANAGERS = ADMINS
@@ -141,8 +131,8 @@ STATICFILES_FINDERS = (
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIYVO7SIW5CILJWBQ')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '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')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'Politikon')
 AWS_S3_HOST = os.environ.get('AWS_S3_HOST', 's3.amazonaws.com')
 AWS_S3_URL_PROTOCOL = 'https:'
