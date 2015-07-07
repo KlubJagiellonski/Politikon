@@ -16,6 +16,9 @@
 					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
+                        {% comment %}
+                        {{ macros.render_bet(front_event, bets[front_event.id], False)}}
+                        {% endcomment %}
 					</div>
 				</div>
 			</figcaption>
@@ -23,11 +26,17 @@
 	</section>
 	
 	<section id="betfeed">
+        {% comment %}
+        {{ macros.render_events(featured_events, bets, people) }}
+        {% endcomment %}
 	</section>
 	
 	<section id="betfeed" class="hotbets">
 		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
 		<div>
+            {% comment %}
+            {{ macros.render_events(featured_events, bets, people) }}
+            {% endcomment %}
 		</div>
 	</section>
 	
