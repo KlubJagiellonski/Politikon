@@ -232,7 +232,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
-    'coffin',
     'django_assets',
     'social.apps.django_app.default',
 

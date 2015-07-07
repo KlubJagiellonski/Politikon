@@ -51,7 +51,3 @@ DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_
 
 #disabling SSL on local
 SSLIFY_DISABLE = True
-
-SOUTH_MIGRATION_MODULES = {
-    'default': 'social.apps.django_app.default.south_migrations',
-}
