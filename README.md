@@ -67,7 +67,7 @@ boot2docker ip
 YOUR_IP:8000
 ```
 
-* WARNING: destructive code ahead - if you need to rebuild docker containers
+* WARNING: destructive code ahead - if you need to rebuild docker containers:
 ```
 #list running images:
 docker ps
@@ -79,6 +79,13 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -a | awk '{print $3}' | tail -n +2)
 # rebuild the whole docker
 ./docker_rebuild.sh
+```
+* If you need to upgrade boot2docker:
+```
+boot2docker upgrade
+boot2docker delete
+boot2docker init
+boot2docker up
 ```
 
 ## Autorzy
