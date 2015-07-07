@@ -55,6 +55,10 @@ ls *.dumps
 ./db_restore_dump.sh THE_LATEST_DB_DUMP
 cd ..
 ```
+* Migrate the database
+```
+python manage.py migrate
+```
 
 * Run the web server:
 ```
