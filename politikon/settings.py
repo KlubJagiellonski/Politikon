@@ -129,7 +129,6 @@ STATICFILES_FINDERS = (
     # 'django_assets.finders.AssetsFinder',
 )
 
-STATIC_URL = '/static/'
 ASSETS_AUTO_BUILD = False
 
 # Make this unique, and don't share it with anybody.
