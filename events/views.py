@@ -72,7 +72,7 @@ def index(request):
 # ANSWER: this is context referencing to events manager method
 #    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
 
-    return render_to_response('index.html', RequestContext(request))
+    return render_to_response('index.html', ctx, RequestContext(request))
 
 def events(request, mode):
     ctx = {
@@ -103,12 +103,15 @@ def event_detail(request, event_id):
             user_bets = list(user_bets_qs)
         else:
             user_bets = []
+
+        #if request.path.endswith
     except Event.DoesNotExist:
         raise Http404
 
     ctx = {
         'event': event,
-        'bet' : create_bets_dict(request.user, [event])[event.id]
+        'bet' : create_bets_dict(request.user, [event])[event.id],
+        'active': 1,
 #TODO: ???
 #        'event_dict': event.event_dict,
 #        'bets': user_bets,
