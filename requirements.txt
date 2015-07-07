@@ -13,6 +13,7 @@ django-compressor==1.5
 
 django-assets
 jsmin
+boto
 
 #For distant static files
 django-storages==1.1.8
