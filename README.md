@@ -67,6 +67,20 @@ boot2docker ip
 YOUR_IP:8000
 ```
 
+* WARNING: destructive code ahead - if you need to rebuild docker containers
+```
+#list running images:
+docker ps
+# kill running images by providing ids listed from docker ps
+docker kill id1 id2
+# delete all stopped containers (because running containers will harmlessly error out)
+docker rm $(docker ps -a -q)
+# delete all images
+docker rmi $(docker images -a | awk '{print $3}' | tail -n +2)
+# rebuild the whole docker
+./docker_rebuild.sh
+```
+
 ## Autorzy
 
 W projekt są zaangażowani:
