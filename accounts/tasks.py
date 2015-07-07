@@ -14,7 +14,7 @@ def topup_accounts_task():
     topup_amount = config.DAILY_TOPUP
 
     from accounts.models import UserProfile
-    with transaction.commit_on_success():
+    with transaction.atomic():
         for user in UserProfile.objects.all().iterator():
             try:
                 user.topup_cash(topup_amount)

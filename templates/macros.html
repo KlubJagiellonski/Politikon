@@ -11,7 +11,7 @@
               {% if event.small_image %}
               <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
               {% else %}
-              <img src="{% static 'img/bet-plain.jpg' %}"/>
+              <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
               {% endif %}
               <figcaption>
                   <a href="{{ event.get_relative_url() }}"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>

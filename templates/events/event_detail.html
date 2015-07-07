@@ -11,30 +11,30 @@
             {% if event.small_image %}
               <img class="chart-img" src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
               {% else %}
-              <img src="{% static 'img/bet-plain.jpg' %}"/>
+              <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
               {% endif %}
 			<div class="chart-container"><canvas id="chart-details" height="70"></canvas></div>
 		</div>
 		<div class="bet-social">
 			<div class="peopleYES lewa">
 				<ul>
-					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
 				</ul>
 				<div class="voted">1 256</div>
 			</div>
 			<div class="peopleNO prawa">
 				<ul>
-					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img class="uservip" src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
-					<li><a href="#"><img src="{% static 'img/blank-avatar.jpg' %}"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
 				</ul>
 				<div class="voted">1 256</div>
 			</div>
@@ -54,7 +54,7 @@
 			<div class="header">Na ten temat w mediach <span class="rss-reload prawa"></span></div>
 			<div class="rss-news">
 				<a href="#">
-				<img src="{% static 'img/rss-plain.jpg' %}"/>
+                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
 				<div class="prawa">
 					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
 					<h5>przykladowyadres.pl</h5>
@@ -65,7 +65,7 @@
 
 			<div class="rss-news">
 				<a href="#">
-				<img src="{% static 'img/rss-plain.jpg' %}"/>
+                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
 				<div class="prawa">
 					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
 					<h5>przykladowyadres.pl</h5>
@@ -82,7 +82,7 @@
 		<div>
 		<div class="bet">
 			<figure>
-				<img src="{% static 'img/bet-plain.jpg' %}"/>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
 				<figcaption>
 					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
 					<div class="change changepreview changeNO">-19</div>
@@ -99,7 +99,7 @@
 
 		<div class="bet">
 			<figure>
-				<img src="{% static 'img/bet-plain.jpg' %}"/>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
 				<figcaption>
 					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
 					<div class="change changepreview changeNO">-19</div>
@@ -116,7 +116,7 @@
 
 		<div class="bet">
 			<figure>
-				<img src="{% static 'img/bet-plain.jpg' %}"/>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
 				<figcaption>
 					<a href="#"><div class="details-chart"><canvas id="bet-canvas03" height="70"></canvas></div></a>
 					<div class="change changepreview changeNO">-19</div>

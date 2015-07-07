@@ -1,11 +1,12 @@
-Django==1.6
--e git+https://github.com/tkopczuk/django-smartsettings.git@42cf028ebcad36d8815cd035acb276147696dd01#egg=smartsettings
-gunicorn==0.15.0
+Django==1.8.2
+-e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings
+gunicorn==19.3.0
 path.py==2.4.1
 djangorestframework
 newrelic==2.38.0.31
 
--e git+https://github.com/coffin/coffin.git@v0.3.8#egg=coffin
+#-e git+https://github.com/coffin/coffin.git@v0.3.8#egg=coffin
+django-jinja
 jinja2
 
 django-assets
@@ -14,18 +15,19 @@ boto
 django-storages
 
 oauth2
--e git+https://github.com/jgorset/fandjango.git#egg=fandjango
+#-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
+fandjango
 python-openid
 
--e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
-django-constance==0.6
+#-e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
+django-redis-sessions
+django-constance==1.0.1
 django-picklefield
 django-celery-with-redis==3.0
 dj-database-url==0.2.1
 pylibmc
 django-pylibmc-sasl==0.2.4
-psycopg2==2.4.5
-South==0.7.6
+psycopg2
 hiredis
 
 python-dateutil==1.5
