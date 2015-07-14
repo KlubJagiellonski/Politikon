@@ -6,13 +6,16 @@ djangorestframework
 newrelic==2.38.0.31
 
 #coffin
-django-jinja
+django-jinja==1.4.1
 jinja2
+
+django-compressor==1.5
 
 django-assets
 jsmin
-boto
-django-storages
+
+#For distant static files
+django-storages==1.1.8
 
 oauth2
 #-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
