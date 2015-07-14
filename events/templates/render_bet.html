@@ -1,0 +1,7 @@
+<a href="#" class="a_bet" data-event_id="{{event.id}}" data-buy="{{ bet.buyYES }}" data-outcome="{{ bet.outcomeYES }}" data-price="{{ bet.priceYES }}">
+    <div class="betYES"><span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{{ bet.textYES }}</span></div></a>
+<a href="#" class="a_bet" data-event_id="{{event.id}}" data-buy="{{ bet.buyNO }}" data-outcome="{{ bet.outcomeNO}}" data-price="{{ bet.priceNO }}">
+    <div class="betNO"><span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{{ bet.textNO }}</span></div></a>
+<div class="currentbet centrum" {% if not bet.has_any or not render_current %}hidden{% endif %}>
+    <p class="change{{ bet.classOutcome}}">{{bet.textOutcome}}</p>
+    <p>{{bet.has}} x <span></span> {{bet.avgPrice}}</p>

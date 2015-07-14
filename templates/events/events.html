@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load display %}
+
 {% block content %}
 
 	<section id="header"  class="body-margin">
@@ -14,7 +16,7 @@
 
 
 	<section id="betfeed">
-		{{macros.render_events(events, bets, people)}}
+		{% render_events events bets people %}
 	</section>
 
 {% endblock %}

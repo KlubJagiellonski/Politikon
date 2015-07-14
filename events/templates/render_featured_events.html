@@ -1,0 +1,5 @@
+<div class="featured-events-box">
+    {% for event in events %}
+    {{ render_featured_event(event, people) }}
+    {% endfor %}
+</div>

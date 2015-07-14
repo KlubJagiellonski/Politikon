@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% load display %}
+
 {% block content %}
     <h2>{% trans %}Featured events{% endtrans %}</h2>
-    {{ macros.render_featured_events(featured_events, people) }}
+    {% render_featured_events featured_events people %}
 
     <h2>{% trans %}Latest events{% endtrans %}</h2>
-    {{ macros.render_events(latest_events, people) }}
+    {% render_events latest_events people %}
 {% endblock %}

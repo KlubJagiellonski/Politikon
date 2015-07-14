@@ -1,0 +1,4 @@
+{% load display %}
+{% for event in events %}
+{% render_event event bets.event.id people %}
+{% endfor %}
