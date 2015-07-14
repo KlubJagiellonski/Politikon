@@ -74,6 +74,11 @@ YOUR_IP:8000
 ```
 python manage.py changepassword *username*
 ```
+* If you need to sync your docker local time
+```
+boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
+docker run -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance politikon
+```
 
 * WARNING: destructive code ahead - if you need to rebuild docker containers:
 ```
