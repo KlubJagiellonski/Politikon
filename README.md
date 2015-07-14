@@ -70,6 +70,10 @@ python manage.py runserver 0.0.0.0:8000
 boot2docker ip
 YOUR_IP:8000
 ```
+* If you need to access Django Admin on Dev machine:
+```
+python manage.py changepassword *username*
+```
 
 * WARNING: destructive code ahead - if you need to rebuild docker containers:
 ```
