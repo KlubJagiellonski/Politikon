@@ -3,7 +3,7 @@ Django==1.8.2
 gunicorn==19.3.0
 path.py==2.4.1
 djangorestframework
-newrelic==2.38.0.31
+newrelic
 
 #coffin
 django-jinja==1.4.1
