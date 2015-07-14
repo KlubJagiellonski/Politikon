@@ -10,4 +10,4 @@ psql -d $DB_HOST -f db_anonymize.sql
 
 OUTPUT_DUMP=$2
 
-/usr/lib/postgresql/9.4/bin/pg_dump -d $DB_HOST > $OUTPUT_DUMP
+/usr/lib/postgresql/9.4/bin/pg_dump -Fc -d $DB_HOST > $OUTPUT_DUMP
