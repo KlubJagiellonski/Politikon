@@ -26,6 +26,7 @@ python-openid
 django-redis-sessions
 django-constance==1.0.1
 django-picklefield
+django-celery
 django-celery-with-redis==3.0
 dj-database-url==0.2.1
 pylibmc
