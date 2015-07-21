@@ -23,21 +23,21 @@ from accounts.models import UserProfile
 from .managers import EventManager, BetManager, TransactionManager
 
 
-EVENT_OUTCOMES_DICT = {
-    'IN_PROGRESS': 1,
-    'CANCELLED': 2,
-    'FINISHED_YES': 3,
-    'FINISHED_NO': 4,
-}
-
-EVENT_OUTCOMES = [
-    (1, u'w trakcie'),
-    (2, u'anulowane'),
-    (3, u'rozstrzygnięte na TAK'),
-    (4, u'rozstrzygnięte na NIE'),
-]
-
 class Event(models.Model):
+    EVENT_OUTCOMES_DICT = {
+        'IN_PROGRESS': 1,
+        'CANCELLED': 2,
+        'FINISHED_YES': 3,
+        'FINISHED_NO': 4,
+    }
+
+    EVENT_OUTCOMES = [
+        (1, u'w trakcie'),
+        (2, u'anulowane'),
+        (3, u'rozstrzygnięte na TAK'),
+        (4, u'rozstrzygnięte na NIE'),
+    ]
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -168,35 +168,35 @@ class Event(models.Model):
         super(Event, self).save(**kwargs)
 
 
-BET_OUTCOMES_DICT = {
-    'YES': True,
-    'NO': False,
-}
-
-BET_OUTCOMES_INV_DICT = {
-    True: 'YES',
-    False: 'NO',
-}
-
-BET_OUTCOMES_TO_PRICE_ATTR = {
-    ('BUY', 'YES'): 'current_buy_for_price',
-    ('BUY', 'NO'): 'current_buy_against_price',
-    ('SELL', 'YES'): 'current_sell_for_price',
-    ('SELL', 'NO'): 'current_sell_against_price'
-}
-
-BET_OUTCOMES_TO_QUANTITY_ATTR = {
-    'YES': 'Q_for',
-    'NO': 'Q_against'
-}
-
-BET_OUTCOMES = [
-    (True, 'udziały na TAK'),
-    (False, 'udziały na NIE'),
-]
-
-
 class Bet(models.Model):
+    BET_OUTCOMES_DICT = {
+        'YES': True,
+        'NO': False,
+    }
+
+    BET_OUTCOMES_INV_DICT = {
+        True: 'YES',
+        False: 'NO',
+    }
+
+    BET_OUTCOMES_TO_PRICE_ATTR = {
+        ('BUY', 'YES'): 'current_buy_for_price',
+        ('BUY', 'NO'): 'current_buy_against_price',
+        ('SELL', 'YES'): 'current_sell_for_price',
+        ('SELL', 'NO'): 'current_sell_against_price'
+    }
+
+    BET_OUTCOMES_TO_QUANTITY_ATTR = {
+        'YES': 'Q_for',
+        'NO': 'Q_against'
+    }
+
+    BET_OUTCOMES = [
+        (True, 'udziały na TAK'),
+        (False, 'udziały na NIE'),
+    ]
+
+
     objects = BetManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)

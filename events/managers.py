@@ -1,16 +1,9 @@
 from django.db import models
 
 
-EVENT_OUTCOMES_DICT = {
-    'IN_PROGRESS': 1,
-    'CANCELLED': 2,
-    'FINISHED_YES': 3,
-    'FINISHED_NO': 4,
-}
-
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
-        allowed_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
+        allowed_outcome = self.model.EVENT_OUTCOMES_DICT['IN_PROGRESS']
         return self.filter(outcome=allowed_outcome)
 
     def get_events(self, mode):
@@ -21,7 +14,7 @@ class EventManager(models.Manager):
         elif mode == 'changed':
             return self.ongoing_only_queryset().order_by('-absolute_price_change')
         elif mode == 'finished':
-            excluded_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
+            excluded_outcome = self.model.EVENT_OUTCOMES_DICT['IN_PROGRESS']
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
@@ -84,9 +77,9 @@ class BetManager(models.Manager):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_YES']
+            transaction_type = self.model.TRANSACTION_TYPES_DICT['BUY_YES']
         else:
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
+            transaction_type = self.model.TRANSACTION_TYPES_DICT['BUY_NO']
 
         requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
@@ -149,9 +142,9 @@ class BetManager(models.Manager):
             raise InsufficientBets(_("You don't have enough shares."), bet)
 
         if for_outcome == 'YES':
-            transaction_type = TRANSACTION_TYPES_DICT['SELL_YES']
+            transaction_type = self.model.TRANSACTION_TYPES_DICT['SELL_YES']
         else:
-            transaction_type = TRANSACTION_TYPES_DICT['SELL_NO']
+            transaction_type = self.model.TRANSACTION_TYPES_DICT['SELL_NO']
 
         transaction = Transaction.objects.create(
                         user_id=user.id, event_id=event.id, type=transaction_type,
