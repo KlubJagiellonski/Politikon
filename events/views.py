@@ -60,20 +60,6 @@ def create_bets_dict(user, events):
 
     return all_bets
 
-def index(request):
-    ctx = {
-        'front_event' : Event.objects.get_front_event(),
-        'featured_events': list(Event.objects.get_featured_events()),
-        'latest_events': list(Event.objects.get_events('latest'))
-    }
-
-    ctx['bets'] = create_bets_dict(auth.get_user(request), [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
-# TODO: what's that?
-# ANSWER: this is context referencing to events manager method
-#    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
-
-    return render_to_response('index.html', ctx, RequestContext(request))
-
 def events(request, mode):
     ctx = {
         'events': list(Event.objects.get_events(mode)),
