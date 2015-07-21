@@ -3,18 +3,21 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.generic import DetailView, ListView
 
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
 import json
 import logging
 logger = logging.getLogger(__name__)
 
-from .exceptions import *
-from .models import *
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientBets, InsufficientCash
+from .models import Event, Bet, Transaction
 
 from django.contrib.auth.decorators import login_required
 
@@ -60,51 +63,73 @@ def create_bets_dict(user, events):
 
     return all_bets
 
-def events(request, mode):
-    ctx = {
-        'events': list(Event.objects.get_events(mode)),
-    }
-    ctx['bets'] = create_bets_dict(request.user, ctx['events'])
 
-    return render_to_response('events/events.html', ctx, RequestContext(request))
+class EventsListView(ListView):
+    template_name = 'events.html'
 
-def event_facebook_object_detail(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
-    except Event.DoesNotExist:
-        raise Http404
+    def get_queryset(self):
+        return Event.objects.get_events('popular')
 
-    ctx = {
-        'event': event,
-    }
+    def get_context_data(self, *args, **kwargs):
+        context = super(EventsListView, self).get_context_data(*args, **kwargs)
+        events = list(Event.objects.get_events('popular'))
+        context.update({
+            'events': events,
+            'bets': create_bets_dict(self.request.user, events)
+        })
+        return context
 
-    return render_to_response('fb_objects/events/event_detail.html', ctx, RequestContext(request))
 
-def event_detail(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
+class EventFacebookObjectDetailView(DetailView):
+    template_name = 'facebook_event_detail.html'
+    context_object_name = 'event'
+    model = Event
 
-        if request.user and request.user.is_authenticated():
-            user_bets_qs = Bet.objects.get_users_bets_for_events(request.user, [event])
-            user_bets = list(user_bets_qs)
+    def get_object(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
+
+
+class EventDetailView(DetailView):
+    template_name = 'event_detail.html'
+    context_object_name = 'event'
+    model = Event
+
+    def get_event(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
+
+    # def dispatch(self, request, *args, **kwargs):
+        # if request.user and request.user.is_authenticated():
+            # user_bets_qs = Bet.objects.get_users_bets_for_events(request.user, [event])
+            # user_bets = list(user_bets_qs)
+        # else:
+            # user_bets = []
+        # return super(EventDetailView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(EventDetailView, self).get_context_data(*args, **kwargs)
+        event = self.get_event()
+        bets = create_bets_dict(self.request.user, [event])
+        if event.id in bets:
+            bet = bets[event.id]
         else:
-            user_bets = []
+            bet = None
+        context.update({
+            'event': event,
+            'bet': bet,
+            'active': 1
+        })
+        return context
 
-        #if request.path.endswith
-    except Event.DoesNotExist:
-        raise Http404
 
-    ctx = {
-        'event': event,
-        'bet' : create_bets_dict(request.user, [event])[event.id],
-        'active': 1,
+    # ctx = {
+        # 'event': event,
+        # 'bet' : create_bets_dict(request.user, [event])[event.id],
+        # 'active': 1,
 #TODO: ???
 #        'event_dict': event.event_dict,
 #        'bets': user_bets,
 #        'bet_dicts': [bet.bet_dict for bet in user_bets]
-    }
-
-    return render_to_response('events/event_detail.html', ctx, RequestContext(request))
+    # }
 
 
 @login_required

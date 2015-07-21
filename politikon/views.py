@@ -10,8 +10,8 @@ class HomeView(TemplateView):
     def get_object(self):
         return self.request.user
 
-    def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(HomeView, self).get_context_data(*args, **kwargs)
         front_event = Event.objects.get_front_event()
         featured_events = list(Event.objects.get_featured_events())
         latest_events = list(Event.objects.get_events('latest'))

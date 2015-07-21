@@ -24,6 +24,7 @@ from .managers import EventManager, BetManager, TransactionManager
 
 
 class Event(models.Model):
+
     EVENT_OUTCOMES_DICT = {
         'IN_PROGRESS': 1,
         'CANCELLED': 2,
@@ -169,6 +170,7 @@ class Event(models.Model):
 
 
 class Bet(models.Model):
+
     BET_OUTCOMES_DICT = {
         'YES': True,
         'NO': False,
@@ -225,30 +227,29 @@ class Bet(models.Model):
         }
 
 
-TRANSACTION_TYPES_DICT = {
-    'BUY_YES': 1,
-    'SELL_YES': 2,
-    'BUY_NO': 3,
-    'SELL_NO': 4,
-    'EVENT_CANCELLED_REFUND': 5,
-    'EVENT_WON_PRIZE': 6,
-    'TOPPED_UP_BY_APP': 7,
-}
-
-TRANSACTION_TYPES = (
-    (1, 'zakup udziałów na TAK'),
-    (2, 'sprzedaż udziałów na TAK'),
-    (3, 'zakup udziałów na NIE'),
-    (4, 'sprzedaż udziałów na NIE'),
-    (5, 'zwrot po anulowaniu wydarzenia'),
-    (6, 'wygrana po rozstrzygnięciu wydarzenia'),
-    (7, 'doładowanie konta przez aplikację'),
-)
-
-TRANSACTION_TYPES_INV_DICT = {v: k for k, v in TRANSACTION_TYPES_DICT.items()}
-
-
 class Transaction(models.Model):
+
+    TRANSACTION_TYPES_DICT = {
+        'BUY_YES': 1,
+        'SELL_YES': 2,
+        'BUY_NO': 3,
+        'SELL_NO': 4,
+        'EVENT_CANCELLED_REFUND': 5,
+        'EVENT_WON_PRIZE': 6,
+        'TOPPED_UP_BY_APP': 7,
+    }
+
+    TRANSACTION_TYPES = (
+        (1, 'zakup udziałów na TAK'),
+        (2, 'sprzedaż udziałów na TAK'),
+        (3, 'zakup udziałów na NIE'),
+        (4, 'sprzedaż udziałów na NIE'),
+        (5, 'zwrot po anulowaniu wydarzenia'),
+        (6, 'wygrana po rozstrzygnięciu wydarzenia'),
+        (7, 'doładowanie konta przez aplikację'),
+    )
+
+    TRANSACTION_TYPES_INV_DICT = {v: k for k, v in TRANSACTION_TYPES_DICT.items()}
     objects = TransactionManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)

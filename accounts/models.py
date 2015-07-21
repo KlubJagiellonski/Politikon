@@ -43,6 +43,7 @@ def save_profile(backend, user, response, *args, **kwargs):
 
 
 class UserProfile(AbstractBaseUser):
+
     objects = UserProfileManager()
     snapshots = SnapshotAddon(fields=[
         'total_cash',

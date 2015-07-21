@@ -6,8 +6,8 @@ djangorestframework
 newrelic
 
 #coffin
-django-jinja==1.4.1
-jinja2
+#django-jinja==1.4.1
+#jinja2
 
 django-compressor==1.5
 

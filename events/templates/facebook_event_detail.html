@@ -1,9 +1,14 @@
-{% set FACEBOOK_OBJECT = "event" %}
-
 {% extends "base.html" %}
 
+{% comment %}
+{% set FACEBOOK_OBJECT = "event" %}
+{% endcomment %}
+
+{% load absolute_url_to_file %}
+{% load canvas_relative_url %}
+
 {% block facebook_properties %}
-    <meta property="og:url"    content="{{ event.get_absolute_url() }}" /> 
+    <meta property="og:url"    content="{{ event.get_absolute_url }}" /> 
     <meta property="og:title"  content="{{ event.title }}" /> 
     <meta property="og:title_yes"  content="{{ event.title_fb_yes }}" /> 
     <meta property="og:title_no"  content="{{ event.title_fb_no }}" /> 
@@ -11,7 +16,9 @@
 {% endblock %}
 
 {% block base_script %}
+{% comment %}
     window.location.href = "http://apps.facebook.com/{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}{{ event.get_relative_url() | canvas_relative_url }}";
+{% endcomment %}
 {% endblock %}
 
 {% block content %}
