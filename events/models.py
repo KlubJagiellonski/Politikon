@@ -19,6 +19,7 @@ from accounts.models import UserProfile
 from politikon.choices import Choices
 from .managers import EventManager, BetManager, TransactionManager
 
+from .managers import EventManager, BetManager, TransactionManager
 
 class Event(models.Model):
 
