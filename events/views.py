@@ -26,11 +26,11 @@ class EventsListView(ListView):
     template_name = 'events.html'
 
     def get_queryset(self):
-        return Event.objects.get_events('popular')
+        return Event.objects.get_events(self.kwargs['mode'])
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
-        events = list(Event.objects.get_events('popular'))
+        events = list(self.get_queryset())
         context.update({
             'events': events,
             'bets': create_bets_dict(self.request.user, events)

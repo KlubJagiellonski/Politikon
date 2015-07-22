@@ -1,22 +1,19 @@
 # coding: utf-8
 
 from django.conf import settings
-from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db import transaction
 from django.utils.translation import ugettext as _
 
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 
-from collections import defaultdict
 from math import exp
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
-from bladepolska.pubnub import PubNub
-from .exceptions import *
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientCash, InsufficientBets
 
 from accounts.models import UserProfile
 

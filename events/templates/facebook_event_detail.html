@@ -16,9 +16,7 @@
 {% endblock %}
 
 {% block base_script %}
-{% comment %}
-    window.location.href = "http://apps.facebook.com/{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}{{ event.get_relative_url() | canvas_relative_url }}";
-{% endcomment %}
+    window.location.href = "http://apps.facebook.com/{{ settings.FACEBOOK_APPLICATION_NAMESPACE }}{{ event.get_relative_url | canvas_relative_url }}";
 {% endblock %}
 
 {% block content %}
