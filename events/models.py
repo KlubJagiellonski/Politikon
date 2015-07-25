@@ -16,25 +16,18 @@ from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientCash, InsufficientBets
 
 from accounts.models import UserProfile
-
+from politikon.choices import Choices
 from .managers import EventManager, BetManager, TransactionManager
 
 
 class Event(models.Model):
 
-    EVENT_OUTCOMES_DICT = {
-        'IN_PROGRESS': 1,
-        'CANCELLED': 2,
-        'FINISHED_YES': 3,
-        'FINISHED_NO': 4,
-    }
-
-    EVENT_OUTCOMES = [
-        (1, u'w trakcie'),
-        (2, u'anulowane'),
-        (3, u'rozstrzygnięte na TAK'),
-        (4, u'rozstrzygnięte na NIE'),
-    ]
+    EVENT_OUTCOME_CHOICES = Choices(
+        ('IN_PROGRESS', 1, u'w trakcie'),
+        ('CANCELLED', 2, u'anulowane'),
+        ('FINISHED_YES', 3, u'rozstrzygnięte na TAK'),
+        ('FINISHED_NO', 4, u'rozstrzygnięte na NIE'),
+    )
 
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -60,7 +53,7 @@ class Event(models.Model):
 
     is_featured = models.BooleanField(u"featured", default=False)
     is_front = models.BooleanField(u"front", default=False)
-    outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOMES, default=1)
+    outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOME_CHOICES, default=1)
 
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u"przewidywana data rozstrzygnięcia")
@@ -99,7 +92,7 @@ class Event(models.Model):
 
     @property
     def is_in_progress(self):
-        return self.outcome == EVENT_OUTCOMES_DICT['IN_PROGRESS']
+        return self.outcome == EVENT_OUTCOME_CHOICES.IN_PROGRESS
 
     @property
     def publish_channel(self):
@@ -168,15 +161,10 @@ class Event(models.Model):
 
 class Bet(models.Model):
 
-    BET_OUTCOMES_DICT = {
-        'YES': True,
-        'NO': False,
-    }
-
-    BET_OUTCOMES_INV_DICT = {
-        True: 'YES',
-        False: 'NO',
-    }
+    BET_OUTCOME_CHOICES = Choices(
+        ('YES', True, 'udziały na TAK'),
+        ('NO', False, 'udziały na NIE'),
+    )
 
     BET_OUTCOMES_TO_PRICE_ATTR = {
         ('BUY', 'YES'): 'current_buy_for_price',
@@ -190,17 +178,12 @@ class Bet(models.Model):
         'NO': 'Q_against'
     }
 
-    BET_OUTCOMES = [
-        (True, 'udziały na TAK'),
-        (False, 'udziały na NIE'),
-    ]
-
 
     objects = BetManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=False)
-    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOMES)
+    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
     bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
     sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)
@@ -214,7 +197,7 @@ class Bet(models.Model):
             'bet_id': self.id,
             'event_id': self.event.id,
             'user_id': self.user.id,
-            'outcome': BET_OUTCOMES_INV_DICT[self.outcome],
+            'outcome': self.outcome,
             'has': self.has,
             'bought': self.bought,
             'sold': self.sold,
@@ -226,32 +209,21 @@ class Bet(models.Model):
 
 class Transaction(models.Model):
 
-    TRANSACTION_TYPES_DICT = {
-        'BUY_YES': 1,
-        'SELL_YES': 2,
-        'BUY_NO': 3,
-        'SELL_NO': 4,
-        'EVENT_CANCELLED_REFUND': 5,
-        'EVENT_WON_PRIZE': 6,
-        'TOPPED_UP_BY_APP': 7,
-    }
-
-    TRANSACTION_TYPES = (
-        (1, 'zakup udziałów na TAK'),
-        (2, 'sprzedaż udziałów na TAK'),
-        (3, 'zakup udziałów na NIE'),
-        (4, 'sprzedaż udziałów na NIE'),
-        (5, 'zwrot po anulowaniu wydarzenia'),
-        (6, 'wygrana po rozstrzygnięciu wydarzenia'),
-        (7, 'doładowanie konta przez aplikację'),
+    TRANSACTION_TYPE_CHOICES = Choices(
+        ('BUY_YES', 1, 'zakup udziałów na TAK'),
+        ('SELL_YES', 2, 'sprzedaż udziałów na TAK'),
+        ('BUY_NO', 3, 'zakup udziałów na NIE'),
+        ('SELL_NO', 4, 'sprzedaż udziałów na NIE'),
+        ('EVENT_CANCELLED_REFUND', 5, 'zwrot po anulowaniu wydarzenia'),
+        ('EVENT_WON_PRIZE', 6, 'wygrana po rozstrzygnięciu wydarzenia'),
+        ('TOPPED_UP_BY_APP', 7, 'doładowanie konta przez aplikację'),
     )
 
-    TRANSACTION_TYPES_INV_DICT = {v: k for k, v in TRANSACTION_TYPES_DICT.items()}
     objects = TransactionManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=True)
-    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
+    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)
     price = models.IntegerField(u"cena jednostkowa", default=0, null=False)

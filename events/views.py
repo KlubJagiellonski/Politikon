@@ -55,14 +55,6 @@ class EventDetailView(DetailView):
     def get_event(self):
         return get_object_or_404(Event, id=self.kwargs['pk'])
 
-    # def dispatch(self, request, *args, **kwargs):
-        # if request.user and request.user.is_authenticated():
-            # user_bets_qs = Bet.objects.get_users_bets_for_events(request.user, [event])
-            # user_bets = list(user_bets_qs)
-        # else:
-            # user_bets = []
-        # return super(EventDetailView, self).dispatch(request, *args, **kwargs)
-
     def get_context_data(self, *args, **kwargs):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
         event = self.get_event()
@@ -71,23 +63,20 @@ class EventDetailView(DetailView):
             bet = bets[event.id]
         else:
             bet = None
+        user = self.request.user
+        if user and user.is_authenticated():
+            user_bets = Bet.objects.get_users_bets_for_events(user, [event])
+        else:
+            user_bets = []
         context.update({
             'event': event,
             'bet': bet,
-            'active': 1
+            'active': 1,
+            'event_dict': event.event_dict,
+            'bets': user_bets,
+            'bet_dicts': [bet.bet_dict for bet in user_bets]
         })
         return context
-
-
-    # ctx = {
-        # 'event': event,
-        # 'bet' : create_bets_dict(request.user, [event])[event.id],
-        # 'active': 1,
-#TODO: ???
-#        'event_dict': event.event_dict,
-#        'bets': user_bets,
-#        'bet_dicts': [bet.bet_dict for bet in user_bets]
-    # }
 
 
 @login_required

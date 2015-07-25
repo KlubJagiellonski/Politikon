@@ -3,7 +3,7 @@ from django.db import models
 
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
-        allowed_outcome = self.model.EVENT_OUTCOMES_DICT['IN_PROGRESS']
+        allowed_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
         return self.filter(outcome=allowed_outcome)
 
     def get_events(self, mode):
@@ -14,7 +14,7 @@ class EventManager(models.Manager):
         elif mode == 'changed':
             return self.ongoing_only_queryset().order_by('-absolute_price_change')
         elif mode == 'finished':
-            excluded_outcome = self.model.EVENT_OUTCOMES_DICT['IN_PROGRESS']
+            excluded_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
@@ -47,9 +47,7 @@ class EventManager(models.Manager):
 
 class BetManager(models.Manager):
     def get_users_bets_for_events(self, user, events):
-        bets = self.filter(user__id=user.id, event__in=events)
-
-        return bets
+        return self.filter(user__id=user.id, event__in=events)
 
     def get_user_event_and_bet_for_update(self, user, event_id, for_outcome):
         event = list(Event.objects.select_for_update().filter(id=event_id))
@@ -77,9 +75,9 @@ class BetManager(models.Manager):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
-            transaction_type = self.model.TRANSACTION_TYPES_DICT['BUY_YES']
+            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.BUY_YES
         else:
-            transaction_type = self.model.TRANSACTION_TYPES_DICT['BUY_NO']
+            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.BUY_NO
 
         requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
@@ -142,9 +140,9 @@ class BetManager(models.Manager):
             raise InsufficientBets(_("You don't have enough shares."), bet)
 
         if for_outcome == 'YES':
-            transaction_type = self.model.TRANSACTION_TYPES_DICT['SELL_YES']
+            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.SELL_YES
         else:
-            transaction_type = self.model.TRANSACTION_TYPES_DICT['SELL_NO']
+            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.SELL_NO
 
         transaction = Transaction.objects.create(
                         user_id=user.id, event_id=event.id, type=transaction_type,
