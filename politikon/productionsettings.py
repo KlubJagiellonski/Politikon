@@ -6,8 +6,8 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl']
-CATCHALL_REDIRECT_HOSTNAME = 'www.politikon.org.pl'
+ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl', 'politikon-staging.herokuapp.com']
+CATCHALL_REDIRECT_HOSTNAME = os.environ.get("CATCHALL_REDIRECT_HOSTNAME")
 
 DATABASES = {'default': dj_database_url.config()}
 
