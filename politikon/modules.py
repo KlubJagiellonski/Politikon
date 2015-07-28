@@ -44,8 +44,10 @@ def _get_redirect(new_hostname, request):
 class HostnameRedirectMiddleware(object):
     def process_request(self, request):
         server_name = request.META['HTTP_HOST']
+        print server_name
         catchall = getattr(settings,
             'CATCHALL_REDIRECT_HOSTNAME', None)
+        print catchall
         # if catchall hostname is set, verify that the current
         # hostname is valid, and redirect if not
         if catchall:
