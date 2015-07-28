@@ -76,5 +76,5 @@ AWS_S3_HOST = os.environ.get('AWS_S3_HOST', 's3.amazonaws.com')
 AWS_S3_URL_PROTOCOL = 'https:'
 AWS_QUERYSTRING_AUTH = False
 
-STATIC_URL = 'http://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
+STATIC_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
 ASSETS_AUTO_BUILD = False
