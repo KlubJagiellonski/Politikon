@@ -129,8 +129,6 @@ STATICFILES_FINDERS = (
     # 'django_assets.finders.AssetsFinder',
 )
 
-ASSETS_AUTO_BUILD = False
-
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '@2@yw=u4h152#iscro&(4pcka%m1eydvw=_sne)@10f9+t^g9='
 
