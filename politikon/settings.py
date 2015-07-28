@@ -181,7 +181,7 @@ MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
     'politikon.modules.HostnameRedirectMiddleware',
     # forcing SSL using https://github.com/rdegges/django-sslify. This need to be the first middleware
-    # 'sslify.middleware.SSLifyMiddleware',
+    'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
     'politikon.modules.BasicAuthMiddleware',
     # 'bladepolska.middleware.InstrumentMiddleware',
