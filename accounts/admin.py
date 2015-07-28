@@ -76,4 +76,4 @@ class UserAdmin(UserAdmin):
         (_('Permissions'), {'fields': ('is_active', 'is_admin')})
     )
 
-admin.site.register(User, UserAdmin)
+#admin.site.register(User, UserAdmin)
