@@ -51,3 +51,5 @@ DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_
 
 #disabling SSL on local
 SSLIFY_DISABLE = True
+
+STATIC_URL = '/static/'
