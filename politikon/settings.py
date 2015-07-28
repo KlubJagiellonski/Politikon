@@ -129,7 +129,19 @@ STATICFILES_FINDERS = (
     # 'django_assets.finders.AssetsFinder',
 )
 
-STATIC_URL = '/static/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'Politikon')
+
+AWS_S3_HOST = os.environ.get('AWS_S3_HOST', 's3.amazonaws.com')
+AWS_S3_URL_PROTOCOL = 'https:'
+AWS_QUERYSTRING_AUTH = False
+
+STATIC_URL = 'http://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
+# STATIC_URL = '/static/'
 ASSETS_AUTO_BUILD = False
 
 # Make this unique, and don't share it with anybody.
