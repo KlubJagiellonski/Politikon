@@ -199,7 +199,7 @@
         <p>{{ event.descrition }}</p>
     </article>
 
-    {% if request.user.is_authenticated() %}
+    {% if user.is_authenticated %}
 
     <aside class="current-money well" id="current-money">
         <h4 class="tac">{% trans %}Currently you have{% endtrans%}: <br/> <span class="money" data-bind="flashText:userVM.total_cash"></span></h4>

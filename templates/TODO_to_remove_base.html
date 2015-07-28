@@ -45,7 +45,7 @@
 
                 {% block initial_data %}
                     var initialData = {
-                        user: {{ request.user.statistics_dict|jsonify }}
+                        user: {{ user.statistics_dict|jsonify }}
                     };
                 {% endblock %}
 
