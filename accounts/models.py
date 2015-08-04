@@ -36,7 +36,7 @@ class UserProfile(AbstractBaseUser):
     is_admin = models.BooleanField(u"is an administrator", default=False)
     is_deleted = models.BooleanField(u"is deleted", default=False)
 
-    is_authenticated = models.BooleanField(u"is authenticated", default=False)
+    is_staff = models.BooleanField(u"is staff", default=False)
     is_active = models.BooleanField(u"is active", default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
@@ -163,10 +163,6 @@ class UserProfile(AbstractBaseUser):
         # ActivityLog.objects.register_transaction_activity(self, transaction)
 
         self.save(update_fields=['total_cash', 'total_given_cash'])
-
-    @property
-    def is_staff(self):
-        return self.is_admin
 
     @property
     def is_superuser(self):
