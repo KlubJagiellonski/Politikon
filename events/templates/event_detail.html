@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% load display %}
+
+{% block content %}
+
+	<section id="header"  class="body-margin">
+		<h1>{{ event.title }}</h1>
+	</section>
+
+	<section id="bet-details">
+		<div class="astable">
+            {% if event.small_image %}
+              <img class="chart-img" src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+              {% else %}
+              <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+              {% endif %}
+			<div class="chart-container"><canvas id="chart-details" height="70"></canvas></div>
+		</div>
+		<div class="bet-social">
+			<div class="peopleYES lewa">
+				<ul>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+				</ul>
+				<div class="voted">1 256</div>
+			</div>
+			<div class="peopleNO prawa">
+				<ul>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+				</ul>
+				<div class="voted">1 256</div>
+			</div>
+			<div id ="makeabet">
+				<div class="change changeNO">-19</div>
+                {% if bet %}
+				{% render_bet event bet False %}
+                {% endif %}
+			</div>
+		</div>
+	</section>
+
+	<section id="bet-desc" class="astable">
+		<div class="lewa">
+			<div class="astable share-zone">TODO -- tutaj widżety social media --</div>
+			<p>{{ event.description}}</p>
+		</div>
+		<div class="prawa rss-related">
+			<div class="header">Na ten temat w mediach <span class="rss-reload prawa"></span></div>
+			<div class="rss-news">
+				<a href="#">
+                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
+				<div class="prawa">
+					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
+					<h5>przykladowyadres.pl</h5>
+					<p class="skroc">Tutaj krótki opis wydarzenia. Nunc sed dui semper, volutpat diam interdum, cursus ligula. Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis.</p>
+				</div>
+				</a>
+			</div>
+
+			<div class="rss-news">
+				<a href="#">
+                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
+				<div class="prawa">
+					<h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
+					<h5>przykladowyadres.pl</h5>
+					<p class="skroc">Tutaj krótki opis wydarzenia. Nunc sed dui semper, volutpat diam interdum, cursus ligula. Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis.</p>
+				</div>
+				</a>
+			</div>
+
+		</div>
+	</section>
+
+	<section id="betfeed" class="hotbets">
+		<h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
+		<div>
+		<div class="bet">
+			<figure>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="bet">
+			<figure>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="bet">
+			<figure>
+                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+				<figcaption>
+					<a href="#"><div class="details-chart"><canvas id="bet-canvas03" height="70"></canvas></div></a>
+					<div class="change changepreview changeNO">-19</div>
+					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
+					<div id ="makeabet">
+						<div class="change changeNO">-19</div>
+						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
+						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
+					</div>
+
+				</figcaption>
+			</figure>
+		</div>
+		</div>
+	</section>
+
+
+	<section id="comments" class="prefooter-margin">--tutaj aplet komentarzy z fb--</section>
+
+{% endblock %}
+
+{% comment %}
+{#
+----- commented out TODO use or/and remove
+{% set FACEBOOK_OBJECT = "event" %}
+
+
+
+{% block facebook_properties %}
+    <meta property="og:url"    content="{{ event.get_absolute_url() }}" /> 
+    <meta property="og:title"  content="{{ event.title }}" /> 
+    <meta property="og:title_yes"  content="{{ event.title_fb_yes }}" /> 
+    <meta property="og:title_no"  content="{{ event.title_fb_no }}" /> 
+    <meta property="og:image"  content="{{ event.small_image.url }}" /> 
+{% endblock %}
+
+
+
+
+{% block js_includes %}
+    {{ super() }}
+    <script src="http://cdn.pubnub.com/pubnub-3.4.min.js"></script>
+{% endblock %}
+
+{% block initial_data %}
+    {{ super() }}
+
+    initialData['bets'] = {{ bet_dicts | jsonify }};
+    initialData['events'] = [{{ event_dict | jsonify }}];
+{% endblock %}
+
+{% block script_document_ready %}
+    {{ super() }}
+
+    {{ macros.pubnub_init() }}
+
+    pubnub.subscribe({
+        channel    : "{{ event.publish_channel }}",
+        restore    : false,
+        callback   : function(message) {
+            ajaxResponseParser(message);
+        },
+    });
+{% endblock %}
+
+{% block content %}
+    <h2 class="single-event-header">{{ event.title }}</h2>
+
+    {% if event.big_image %}
+        <img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />         
+    {% endif %}
+
+    <p>TODO: chart</p>
+
+    <article class="description" id="description">
+        <p>{{ event.descrition }}</p>
+    </article>
+
+    {% if user.is_authenticated %}
+
+    <aside class="current-money well" id="current-money">
+        <h4 class="tac">{% trans %}Currently you have{% endtrans%}: <br/> <span class="money" data-bind="flashText:userVM.total_cash"></span></h4>
+    </aside>
+    <table class="buy-sell" data-bind="with: eventsVM.firstEvent()">
+        <tr>
+            <td class="buy-for" style="display:none;" data-bind="visible: has_bets_for_NO() == 0">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="buy_for_price" class="money" data-bind="flashText: buy_for_price"></span>
+                </p>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_buy_YES, click: buy_YES">{% trans %}Buy for YES{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
+                </p>
+            </td>
+            <td class="buy-against" style="display:none;" data-bind="visible: has_bets_for_YES() == 0">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="buy_against_price" class="money" data-bind="flashText: buy_against_price"></span>
+                </p>                
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_buy_NO, click: buy_NO">{% trans %}Buy for NO{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
+                </p>
+            </td>
+            <td class="sell-for" style="display:none;" data-bind="visible: has_bets_for_YES() > 0">
+                <p class="price-container">
+                    {% trans %}Price{% endtrans %}:
+                    <span id="sell_for_price" class="money" data-bind="flashText: sell_for_price"></span>
+                </p>
+                <button type="button" class="btn-success btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_sell_YES, click: sell_YES">{% trans %}Sell for YES{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
+                </p>                
+            </td>
+            <td class="sell-against" style="display:none;" data-bind="visible: has_bets_for_NO() > 0">
+                <p class="price-container">
+                {% trans %}Price{% endtrans %}: 
+                    <span id="sell_against_price" class="money" data-bind="flashText: sell_against_price"></span>
+                </p>
+                <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_sell_NO, click: sell_NO">{% trans %}Sell for NO{% endtrans %}</button>
+                <p class="bets-container">
+                    {% trans %}You have{% endtrans %}:
+                    <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
+                </p>
+            </td>                 
+        </tr>
+    </table>
+
+    {% endif %}
+
+    <div id="ajax-results" class="animated-feedback-box">
+    </div>
+
+{% endblock %}
+
+#}
+{% endcomment %}

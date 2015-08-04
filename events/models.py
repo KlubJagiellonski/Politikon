@@ -1,223 +1,35 @@
 # coding: utf-8
 
 from django.conf import settings
-from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.db import models
-import django.db.models
-from django.db import transaction
 from django.utils.translation import ugettext as _
 
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 
-from collections import defaultdict
 from math import exp
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
-from bladepolska.pubnub import PubNub
-from .exceptions import *
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientCash, InsufficientBets
 
 from accounts.models import UserProfile
+from politikon.choices import Choices
+from .managers import EventManager, BetManager, TransactionManager
 
-
-class EventManager(models.Manager):
-    def ongoing_only_queryset(self):
-        allowed_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
-        return self.filter(outcome=allowed_outcome)
-
-    def get_events(self, mode):
-        if mode == 'popular':
-            return self.ongoing_only_queryset().order_by('turnover')
-        elif mode == 'latest':
-            return self.ongoing_only_queryset().order_by('-created_date')
-        elif mode == 'changed':
-            return self.ongoing_only_queryset().order_by('-absolute_price_change')
-        elif mode == 'finished':
-            excluded_outcome = EVENT_OUTCOMES_DICT['IN_PROGRESS']
-            return self.exclude(outcome=excluded_outcome).order_by('-end_date')
-
-    def get_featured_events(self):
-        return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
-
-    def get_front_event(self):
-        front_events = self.ongoing_only_queryset().filter(is_front=True).order_by('estimated_end_date')
-        if front_events.count()>0:
-            return front_events[0]
-        else:
-            return None
-
-    def associate_people_with_events(self, user, events_list):
-        event_ids = set([e.id for e in events_list])
-        # friends = user.friends.all()
-        bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
-
-        result = {
-                    event_id: defaultdict(list)
-                        # { outcome: defaultdict(list) for outcome in BET_OUTCOMES_DICT.keys() }
-                            for event_id in event_ids
-                 }
-
-        for bet in bets:
-            outcome = BET_OUTCOMES_INV_DICT[bet.outcome]
-            result[bet.event_id][outcome].append(bet.user)
-
-        return result
-
-
-class BetManager(models.Manager):
-    def get_users_bets_for_events(self, user, events):
-        bets = self.filter(user__id=user.id, event__in=events)
-
-        return bets
-
-    def get_user_event_and_bet_for_update(self, user, event_id, for_outcome):
-        event = list(Event.objects.select_for_update().filter(id=event_id))
-        try:
-            event = event[0]
-        except IndexError:
-            raise NonexistantEvent(_("Requested event does not exist."))
-
-        if not event.is_in_progress:
-            raise EventNotInProgress(_("Event is no longer in progress."))
-
-        if for_outcome not in BET_OUTCOMES_DICT:
-            raise UnknownOutcome()
-
-        bet_outcome = BET_OUTCOMES_DICT[for_outcome]
-        bet, created = self.get_or_create(user_id=user.id, event_id=event.id, outcome=bet_outcome)
-        bet = list(self.select_for_update().filter(id=bet.id))[0]
-
-        user = list(auth.get_user_model().objects.select_for_update().filter(id=user.id))[0]
-
-        return user, event, bet
-
-    def buy_a_bet(self, user, event_id, for_outcome, price):
-        """ Always remember about wrapping this in a transaction! """
-        user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
-
-        if for_outcome == 'YES':
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_YES']
-        else:
-            transaction_type = TRANSACTION_TYPES_DICT['BUY_NO']
-
-        requested_price = price
-        current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
-        if requested_price != current_tx_price:
-            raise PriceMismatch(_("Price has changed."), event)
-
-        quantity = 1
-        bought_for_total = current_tx_price * quantity
-
-        if (user.total_cash < bought_for_total):
-            raise InsufficientCash(_("You don't have enough cash."), user)
-
-        transaction = Transaction.objects.create(
-                        user_id=user.id, event_id=event.id, type=transaction_type,
-                        quantity=quantity, price=current_tx_price)
-
-        event_total_bought_price = (bet.bought_avg_price * bet.bought)
-        after_bought_quantity = bet.bought + quantity
-
-        bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
-        bet.has += quantity
-        bet.bought += quantity
-        bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
-
-        user.total_cash -= bought_for_total
-        user.save(update_fields=['total_cash'])
-
-        event.increment_quantity(for_outcome, by_amount=quantity)
-        """ Increment turnover only for buying bets """
-        event.increment_turnover(quantity)
-        event.save(force_update=True)
-
-        # from canvas.models import ActivityLog
-        # ActivityLog.objects.register_transaction_activity(user, transaction)
-
-        PubNub().publish({
-            'channel': event.publish_channel,
-            'message': {
-                'updates': {
-                    'events': [event.event_dict]
-                }
-            }
-        })
-
-        return user, event, bet
-
-    def sell_a_bet(self, user, event_id, for_outcome, price):
-        """ Always remember about wrapping this in a transaction! """
-        user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
-
-        requested_price = price
-        current_tx_price = event.price_for_outcome(for_outcome, direction='SELL')
-        if requested_price != current_tx_price:
-            raise PriceMismatch(_("Price has changed."), event)
-
-        quantity = 1
-        sold_for_total = current_tx_price * quantity
-
-        if (bet.has < quantity):
-            raise InsufficientBets(_("You don't have enough shares."), bet)
-
-        if for_outcome == 'YES':
-            transaction_type = TRANSACTION_TYPES_DICT['SELL_YES']
-        else:
-            transaction_type = TRANSACTION_TYPES_DICT['SELL_NO']
-
-        transaction = Transaction.objects.create(
-                        user_id=user.id, event_id=event.id, type=transaction_type,
-                        quantity=quantity, price=current_tx_price)
-
-        event_total_sold_price = (bet.sold_avg_price * bet.sold)
-        after_sold_quantity = bet.sold + quantity
-
-        bet.sold_avg_price = (event_total_sold_price + sold_for_total) / after_sold_quantity
-        bet.has -= quantity
-        bet.sold += quantity
-        bet.save(update_fields=['sold_avg_price', 'has', 'sold'])
-
-        user.total_cash += sold_for_total
-        user.save(update_fields=['total_cash'])
-
-        event.increment_quantity(for_outcome, by_amount=-quantity)
-        event.save(force_update=True)
-
-        # from canvas.models import ActivityLog
-        # ActivityLog.objects.register_transaction_activity(user, transaction)
-
-        PubNub().publish({
-            'channel': event.publish_channel,
-            'message': {
-                'updates': {
-                    'events': [event.event_dict]
-                }
-            }
-        })
-
-        return user, event, bet
-
-
-class TransactionManager(models.Manager):
-    pass
-
-EVENT_OUTCOMES_DICT = {
-    'IN_PROGRESS': 1,
-    'CANCELLED': 2,
-    'FINISHED_YES': 3,
-    'FINISHED_NO': 4,
-}
-
-EVENT_OUTCOMES = [
-    (1, u'w trakcie'),
-    (2, u'anulowane'),
-    (3, u'rozstrzygnięte na TAK'),
-    (4, u'rozstrzygnięte na NIE'),
-]
+from .managers import EventManager, BetManager, TransactionManager
 
 class Event(models.Model):
+
+    EVENT_OUTCOME_CHOICES = Choices(
+        ('IN_PROGRESS', 1, u'w trakcie'),
+        ('CANCELLED', 2, u'anulowane'),
+        ('FINISHED_YES', 3, u'rozstrzygnięte na TAK'),
+        ('FINISHED_NO', 4, u'rozstrzygnięte na NIE'),
+    )
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -242,7 +54,7 @@ class Event(models.Model):
 
     is_featured = models.BooleanField(u"featured", default=False)
     is_front = models.BooleanField(u"front", default=False)
-    outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOMES, default=1)
+    outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOME_CHOICES, default=1)
 
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u"przewidywana data rozstrzygnięcia")
@@ -281,7 +93,7 @@ class Event(models.Model):
 
     @property
     def is_in_progress(self):
-        return self.outcome == EVENT_OUTCOMES_DICT['IN_PROGRESS']
+        return self.outcome == EVENT_OUTCOME_CHOICES.IN_PROGRESS
 
     @property
     def publish_channel(self):
@@ -348,40 +160,31 @@ class Event(models.Model):
         super(Event, self).save(**kwargs)
 
 
-BET_OUTCOMES_DICT = {
-    'YES': True,
-    'NO': False,
-}
-
-BET_OUTCOMES_INV_DICT = {
-    True: 'YES',
-    False: 'NO',
-}
-
-BET_OUTCOMES_TO_PRICE_ATTR = {
-    ('BUY', 'YES'): 'current_buy_for_price',
-    ('BUY', 'NO'): 'current_buy_against_price',
-    ('SELL', 'YES'): 'current_sell_for_price',
-    ('SELL', 'NO'): 'current_sell_against_price'
-}
-
-BET_OUTCOMES_TO_QUANTITY_ATTR = {
-    'YES': 'Q_for',
-    'NO': 'Q_against'
-}
-
-BET_OUTCOMES = [
-    (True, 'udziały na TAK'),
-    (False, 'udziały na NIE'),
-]
-
-
 class Bet(models.Model):
+
+    BET_OUTCOME_CHOICES = Choices(
+        ('YES', True, 'udziały na TAK'),
+        ('NO', False, 'udziały na NIE'),
+    )
+
+    BET_OUTCOMES_TO_PRICE_ATTR = {
+        ('BUY', 'YES'): 'current_buy_for_price',
+        ('BUY', 'NO'): 'current_buy_against_price',
+        ('SELL', 'YES'): 'current_sell_for_price',
+        ('SELL', 'NO'): 'current_sell_against_price'
+    }
+
+    BET_OUTCOMES_TO_QUANTITY_ATTR = {
+        'YES': 'Q_for',
+        'NO': 'Q_against'
+    }
+
+
     objects = BetManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=False)
-    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOMES)
+    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
     bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
     sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)
@@ -395,7 +198,7 @@ class Bet(models.Model):
             'bet_id': self.id,
             'event_id': self.event.id,
             'user_id': self.user.id,
-            'outcome': BET_OUTCOMES_INV_DICT[self.outcome],
+            'outcome': self.outcome,
             'has': self.has,
             'bought': self.bought,
             'sold': self.sold,
@@ -405,35 +208,23 @@ class Bet(models.Model):
         }
 
 
-TRANSACTION_TYPES_DICT = {
-    'BUY_YES': 1,
-    'SELL_YES': 2,
-    'BUY_NO': 3,
-    'SELL_NO': 4,
-    'EVENT_CANCELLED_REFUND': 5,
-    'EVENT_WON_PRIZE': 6,
-    'TOPPED_UP_BY_APP': 7,
-}
-
-TRANSACTION_TYPES = (
-    (1, 'zakup udziałów na TAK'),
-    (2, 'sprzedaż udziałów na TAK'),
-    (3, 'zakup udziałów na NIE'),
-    (4, 'sprzedaż udziałów na NIE'),
-    (5, 'zwrot po anulowaniu wydarzenia'),
-    (6, 'wygrana po rozstrzygnięciu wydarzenia'),
-    (7, 'doładowanie konta przez aplikację'),
-)
-
-TRANSACTION_TYPES_INV_DICT = {v: k for k, v in TRANSACTION_TYPES_DICT.items()}
-
-
 class Transaction(models.Model):
+
+    TRANSACTION_TYPE_CHOICES = Choices(
+        ('BUY_YES', 1, 'zakup udziałów na TAK'),
+        ('SELL_YES', 2, 'sprzedaż udziałów na TAK'),
+        ('BUY_NO', 3, 'zakup udziałów na NIE'),
+        ('SELL_NO', 4, 'sprzedaż udziałów na NIE'),
+        ('EVENT_CANCELLED_REFUND', 5, 'zwrot po anulowaniu wydarzenia'),
+        ('EVENT_WON_PRIZE', 6, 'wygrana po rozstrzygnięciu wydarzenia'),
+        ('TOPPED_UP_BY_APP', 7, 'doładowanie konta przez aplikację'),
+    )
+
     objects = TransactionManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=True)
-    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPES, default=1)
+    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)
     price = models.IntegerField(u"cena jednostkowa", default=0, null=False)

@@ -1,13 +1,13 @@
 		<div class="graj avatar prawa">
-            {% if request.user.avatarURL %}
-			<img src="{{ request.user.avatarURL }}" />
+            {% if user.avatarURL %}
+			<img src="{{ user.avatarURL }}" />
             {% else %}
             <img src="img/blank-avatar.jpg"/>
             {% endif %}
 			<nav class="avatarmenu">
 			<ul>
 				<div class="arrowup"></div>
-				<a href="#"><li>{{ request.user.full_name }}</li></a>
+				<a href="#"><li>{{ user.full_name }}</li></a>
 				<a href="#"><li>Ustawienia</li></a>
 				<a href="#"><li>Wyloguj</li></a>
 			</ul>
@@ -23,21 +23,21 @@
 			<a href="#">
 			<div class="lewa stats">
 				<p>wartość portfela</p>
-				<p class="walletvalue">{{ request.user.portfolio_value_formatted }}</p>
+				<p class="walletvalue">{{ user.portfolio_value_formatted }}</p>
 			</div>
 			</a>
 
 			<a href="#">
 			<div class="lewa stats">
 				<p>wolne reputy</p>
-				<p class="freevalue">{{ request.user.total_cash_formatted }}</p>
+				<p class="freevalue">{{ user.total_cash_formatted }}</p>
 			</div>
 			</a>
 
 			<a href="#">
 			<div class="lewa stats">
 				<p>reputacja</p>
-				<p class="reputationvalue">{{ request.user.reputation }}%</p>
+				<p class="reputationvalue">{{ user.reputation }}%</p>
 			</div>
 			</a>
 		</div>

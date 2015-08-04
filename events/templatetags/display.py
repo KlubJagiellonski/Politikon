@@ -1,7 +1,6 @@
 from django import template
-
-
 register = template.Library()
+
 
 @register.inclusion_tag('render_bet.html')
 def render_bet(event, bet, render_current):

@@ -1,124 +1,82 @@
+import json
+import logging
+logger = logging.getLogger(__name__)
+
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.generic import DetailView, ListView
+
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientBets, InsufficientCash
+from .models import Event, Bet, Transaction
+from .utils import create_bets_dict
 
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
-import json
-import logging
-logger = logging.getLogger(__name__)
-
-from .exceptions import *
-from .models import *
-
-from django.contrib.auth.decorators import login_required
 
 
-def create_bets_dict(user, events):
-    bets = dict()
-    if user is not None:
-        bets = Bet.objects.get_users_bets_for_events(user, events)
-        bets = dict((bet.event_id, bet) for bet in bets)
+class EventsListView(ListView):
+    template_name = 'events.html'
 
-    all_bets = dict()
-    if len(events) > 1:
-        for event in events:
-            if event.id in bets and bets[event.id].has>0:
-                bet = bets[event.id]
-                all_bets[event.id]={
-                    'has_any' : True,
-                    'buyYES': bet.outcome,
-                    'buyNO' : not bet.outcome,
-                    'outcomeYES' : "YES" if bet.outcome else "NO",
-                    'outcomeNO' : "YES" if bet.outcome else "NO",
-                    'priceYES' : event.current_buy_for_price if bet.outcome else event.current_sell_against_price,
-                    'priceNO' : event.current_sell_for_price if bet.outcome else event.current_buy_against_price,
-                    'textYES' : "+" if bet.outcome else "-",
-                    'textNO' : "-" if bet.outcome else "+",
-                    'has' : bet.has,
-                    'classOutcome' : "YES" if bet.outcome else "NO",
-                    'textOutcome' : "TAK" if bet.outcome else "NIE",
-                    'avgPrice' : round(bet.bought_avg_price,2),
-                }
-            else:
-                all_bets[event.id]={
-                    'has_any' : False,
-                    'buyYES': True,
-                    'buyNO' : True,
-                    'outcomeYES' : "YES",
-                    'outcomeNO' : "NO",
-                    'priceYES' : event.current_buy_for_price,
-                    'priceNO' : event.current_buy_against_price,
-                    'textYES' : "TAK",
-                    'textNO' : "NIE"
-                }
+    def get_queryset(self):
+        return Event.objects.get_events(self.kwargs['mode'])
 
-    return all_bets
+    def get_context_data(self, *args, **kwargs):
+        context = super(EventsListView, self).get_context_data(*args, **kwargs)
+        events = list(self.get_queryset())
+        context.update({
+            'events': events,
+            'bets': create_bets_dict(self.request.user, events)
+        })
+        return context
 
-def index(request):
-    ctx = {
-        'front_event' : Event.objects.get_front_event(),
-        'featured_events': list(Event.objects.get_featured_events()),
-        'latest_events': list(Event.objects.get_events('latest'))
-    }
 
-    ctx['bets'] = create_bets_dict(auth.get_user(request), [ctx['front_event']]+ctx['featured_events']+ctx['latest_events'])
-# TODO: what's that?
-# ANSWER: this is context referencing to events manager method
-#    ctx['people'] = Event.objects.associate_people_with_events(request.user, ctx['featured_events'] + ctx['latest_events'])
+class EventFacebookObjectDetailView(DetailView):
+    template_name = 'facebook_event_detail.html'
+    context_object_name = 'event'
+    model = Event
 
-    return render_to_response('index.html', ctx, RequestContext(request))
+    def get_object(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
 
-def events(request, mode):
-    ctx = {
-        'events': list(Event.objects.get_events(mode)),
-    }
-    ctx['bets'] = create_bets_dict(request.user, ctx['events'])
 
-    return render_to_response('events/events.html', ctx, RequestContext(request))
+class EventDetailView(DetailView):
+    template_name = 'event_detail.html'
+    context_object_name = 'event'
+    model = Event
 
-def event_facebook_object_detail(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
-    except Event.DoesNotExist:
-        raise Http404
+    def get_event(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
 
-    ctx = {
-        'event': event,
-    }
-
-    return render_to_response('fb_objects/events/event_detail.html', ctx, RequestContext(request))
-
-def event_detail(request, event_id):
-    try:
-        event = Event.objects.get(id=event_id)
-
-        if request.user and request.user.is_authenticated():
-            user_bets_qs = Bet.objects.get_users_bets_for_events(request.user, [event])
-            user_bets = list(user_bets_qs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(EventDetailView, self).get_context_data(*args, **kwargs)
+        event = self.get_event()
+        bets = create_bets_dict(self.request.user, [event])
+        if event.id in bets:
+            bet = bets[event.id]
+        else:
+            bet = None
+        user = self.request.user
+        if user and user.is_authenticated():
+            user_bets = Bet.objects.get_users_bets_for_events(user, [event])
         else:
             user_bets = []
-
-        #if request.path.endswith
-    except Event.DoesNotExist:
-        raise Http404
-
-    ctx = {
-        'event': event,
-        'bet' : create_bets_dict(request.user, [event])[event.id],
-        'active': 1,
-#TODO: ???
-#        'event_dict': event.event_dict,
-#        'bets': user_bets,
-#        'bet_dicts': [bet.bet_dict for bet in user_bets]
-    }
-
-    return render_to_response('events/event_detail.html', ctx, RequestContext(request))
+        context.update({
+            'event': event,
+            'bet': bet,
+            'active': 1,
+            'event_dict': event.event_dict,
+            'bets': user_bets,
+            'bet_dicts': [bet.bet_dict for bet in user_bets]
+        })
+        return context
 
 
 @login_required

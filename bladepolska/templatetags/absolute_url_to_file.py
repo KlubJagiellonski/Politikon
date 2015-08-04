@@ -1,4 +1,5 @@
-from coffin import template
+# from coffin import template
+from django import template
 register = template.Library()
 
 from jinja2 import Markup
