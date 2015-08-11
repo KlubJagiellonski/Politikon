@@ -4,7 +4,7 @@ gunicorn==19.3.0
 path.py==2.4.1
 djangorestframework
 newrelic
-grappelli
+django-grappelli
 
 #coffin and django-jinja --- can't find, probably deprecated
 #coffin
