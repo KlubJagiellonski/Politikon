@@ -4,19 +4,22 @@ gunicorn==19.3.0
 path.py==2.4.1
 djangorestframework
 newrelic
+grappelli
 
+#coffin and django-jinja --- can't find, probably deprecated
 #coffin
 #django-jinja==1.4.1
 #jinja2
 
+#Compresses linked and inline JavaScript or CSS into a single cached file.
 django-compressor==1.5
 
-django-assets
-jsmin
-boto
-
 #For distant static files
+django-assets
+boto
 django-storages==1.1.8
+
+jsmin
 
 oauth2
 #-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
