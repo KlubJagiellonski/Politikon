@@ -10,9 +10,11 @@ Projekt jest rozwijany. Planowany start to jesień 2015.
 ## Politikon lokalnie (po angielsku)
 
 Developing on Mac OS X requires boot2docker. For Ubuntu like systems Docker is enough. In order to not confuse you, each step has mark for what system is it: 
-(m) -- OS X
-(u) -- Ubuntu
-none -- both
+```
+(m) - OS X
+(u) - Ubuntu
+none - both
+```
 
 * Install [Docker](https://docs.docker.com/)
 
