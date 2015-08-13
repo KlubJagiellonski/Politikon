@@ -9,9 +9,14 @@ Projekt jest rozwijany. Planowany start to jesień 2015.
 
 ## Politikon lokalnie (po angielsku)
 
+Developing on Mac OS X requires boot2docker. For Ubuntu like systems Docker is enough. In order to not confuse you, each step has mark for what system is it: 
+(m) -- OS X
+(u) -- Ubuntu
+none -- both
+
 * Install [Docker](https://docs.docker.com/)
 
-* Run Docker:
+* Run Docker (m)
 ```
 boot2docker start
 ```
@@ -19,21 +24,21 @@ boot2docker start
 
 * Clone the Politikon source-code repository from [https://github.com/KlubJagiellonski/Politikon](GitHub)
 
-* Go to the source-code folder 
+* Go to the source-code folder
 
-* Run:
+* Build and run your docker
 ```
 docker_rebuild.sh
 Run docker_run.sh
 ```
 
-* Check Docker IP
+* Check Docker IP (m)
 ```
 boot2docker ip
 ```
 
 * Add local.politikon.org.pl to your OS hosts files
-Add `192.168.59.103` or whatever IP your docker instance has to the host file.
+Add `192.168.59.103` or whatever IP your docker instance has to the host file. (m)
 ```
 ...
 192.168.59.103 local.politikon.org.pl
@@ -42,13 +47,19 @@ Add `192.168.59.103` or whatever IP your docker instance has to the host file.
 
 * Ad local.politikon.org.pl as a host for your FB and Twitter app
 
-* Enter docker:
+* Connect with your docker (m)
 ```
 ssh root@$(boot2docker ip) -p 2233
 Password: pass
 ```
 
-* Restore the db snapshot:
+* Connect with your docker (u)
+```
+ssh root@localhost -p 2233
+Password: pass
+```
+
+* Restore the db snapshot
 ```
 cd db-dumps
 ls *.dumps
@@ -60,20 +71,27 @@ cd ..
 python manage.py migrate
 ```
 
-* Run the web server:
+* Run the web server
 ```
 python manage.py runserver 0.0.0.0:8000
 ```
 
-* Point your web browser to the 
+* Point your web browser to the (m)
 ```
 boot2docker ip
 YOUR_IP:8000
 ```
+
+* Point your web browser to the (u)
+```
+127.0.0.1:8000
+```
+
 * If you need to access Django Admin on Dev machine:
 ```
 python manage.py changepassword *username*
 ```
+
 * If you need to sync your docker local time
 ```
 boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
@@ -93,6 +111,7 @@ docker rmi $(docker images -a | awk '{print $3}' | tail -n +2)
 # rebuild the whole docker
 ./docker_rebuild.sh
 ```
+
 * If you need to upgrade boot2docker:
 ```
 boot2docker upgrade
