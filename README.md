@@ -70,7 +70,7 @@ cd ..
 ```
 * Migrate the database
 ```
-python manage.py migrate
+python manage.py migrate --fake-initial
 ```
 
 * Run the web server
