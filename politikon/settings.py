@@ -216,9 +216,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'grappelli',
-    'django.contrib.admin',
-
     'django_assets',
     'social.apps.django_app.default',
 
@@ -226,6 +223,9 @@ INSTALLED_APPS = (
     'constance.backends.database',
     'djcelery',
     'gunicorn',
+
+    # 'grappelli',
+    'django.contrib.admin',
 
     'accounts',
     'bladepolska',
