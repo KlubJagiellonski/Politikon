@@ -5,13 +5,12 @@ logger = logging.getLogger(__name__)
 
 
 @partial
-def save_profile(backend, user, response, *args, **kwargs):
-    print 'test2'
-    logger(backend)
+def save_profile(strategy, details, user=None, is_new=False, *args, **kwargs):
+    logger(strategy)
+    logger(details)
     logger(user)
-    logger(response)
 
-    if backend.name == 'facebook':
-        print backend
-    if backend.name == 'twitter':
-        print backend
+    if strategy.name == 'facebook':
+        print strategy
+    if strategy.name == 'twitter':
+        print strategy

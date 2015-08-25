@@ -31,8 +31,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-AUTH_USER_MODEL = 'accounts.UserProfile'
-
 ASSETS_MANIFEST = "file:"
 
 REDIS_BASE_URL = os.environ.get('REDISTOGO_URL', 'redis://localhost:6379')
@@ -173,8 +171,30 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_ENABLED_BACKENDS = ('twitter', 'facebook')
+AUTH_USER_MODEL = 'accounts.UserProfile'
+
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+URL_PATH = ''
+SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
+SOCIAL_AUTH_USERNAME_FORM_HTML = 'missing.html'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'accounts.pipeline.save_profile',
+    'social.pipeline.mail.mail_validation',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.debug.debug',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'social.pipeline.debug.debug'
+)
 
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
@@ -320,19 +340,6 @@ JINJA2_EXTENSIONS = [
     'jinja2.ext.i18n',
     'jinja2.ext.loopcontrols',
 ]
-
-SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.user.get_username',
-    'social.pipeline.user.create_user',
-    'accounts.models.save_profile',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details'
-)
 
 GRAPPELLI_ADMIN_TITLE = 'Politikon'
 GRAPPELLI_AUTOCOMPLETE_LIMIT = 10

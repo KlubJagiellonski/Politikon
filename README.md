@@ -133,4 +133,3 @@ W projekt są zaangażowani:
 * Kuba Lipiński
 * Marcin Mincer
 * Piotrek Pęczek
-
