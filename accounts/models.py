@@ -52,6 +52,7 @@ class UserProfile(AbstractBaseUser):
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def __unicode__(self):
         return "%s" % self.username
