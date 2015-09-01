@@ -173,7 +173,6 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
 
-LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 URL_PATH = ''
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
@@ -203,13 +202,10 @@ MIDDLEWARE_CLASSES = (
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
     'politikon.modules.BasicAuthMiddleware',
-    # 'bladepolska.middleware.InstrumentMiddleware',
-    # 'canvas.middleware.FacebookMiddleware',
-    #'django.middleware.transaction.TransactionMiddleware',
+
 # #TODO: remove next line when proper auth works
 #     'accounts.backends.DummyCookieMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
