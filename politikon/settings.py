@@ -240,7 +240,7 @@ INSTALLED_APPS = (
     'djcelery',
     'gunicorn',
 
-    'grappelli',
+    # 'grappelli',
     'django.contrib.admin',
 
     'accounts',
