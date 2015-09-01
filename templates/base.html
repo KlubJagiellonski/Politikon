@@ -107,7 +107,7 @@
 			</ul>
 		</nav>
 
-{% if user.is_authenticated %}
+{% if not user.is_authenticated %}
 		<div class="graj prawa">
 			<a href="#"><div class="prawa show-login">GRAJ!</div></a>
 		</div>
