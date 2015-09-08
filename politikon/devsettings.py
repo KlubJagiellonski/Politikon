@@ -9,7 +9,7 @@ SITE_ID = 1
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
 MEDIA_ROOT = DJANGO_PROJECT_ROOT / 'static' / 'uploads'
-MEDIA_URL = '/static/uploads/'
+MEDIA_URL = 'https://politik.s3.amazonaws.com/'
 
 ALLOWED_HOSTS = ['localhost', '192.168.59.103']
 
