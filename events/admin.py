@@ -23,7 +23,6 @@ class EventAdmin(admin.ModelAdmin):
                     'estimated_end_date', 'current_buy_for_price',
                     'current_buy_against_price', 'Q_for', 'Q_against']
 
-
     def save_model(self, request, obj, form, change):
         if request.method == 'POST':
             if request.POST['solve_event']:
