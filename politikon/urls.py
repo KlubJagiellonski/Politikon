@@ -11,6 +11,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     #   Admin url patterns
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^grappelli/', include('grappelli.urls')),
 
     #   User authentication url patterns
     url('', include('social.apps.django_app.urls', namespace='social')),
