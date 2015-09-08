@@ -68,6 +68,11 @@ ls *.dumps
 ./db_restore_dump.sh THE_LATEST_DB_DUMP
 cd ..
 ```
+* Install dependencies with pip
+```
+pip install -r requirements.txt
+```
+
 * Migrate the database
 ```
 python manage.py migrate --fake-initial
