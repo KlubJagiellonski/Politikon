@@ -63,7 +63,7 @@ Password: pass
 
 * Restore the db snapshot
 ```
-cd db-dumps
+cd db_dumps
 ls *.dumps
 ./db_restore_dump.sh THE_LATEST_DB_DUMP
 cd ..
