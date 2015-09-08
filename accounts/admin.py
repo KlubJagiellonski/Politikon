@@ -66,7 +66,7 @@ class MyUserAdmin(UserAdmin):
     filter_horizontal = ()
 
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password', 'email')}),
         (None, {'fields': ('name',)}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin')}),
@@ -74,7 +74,7 @@ class MyUserAdmin(UserAdmin):
     )
 
     add_fieldsets = (
-        (None, {'fields': ('username', 'password1', 'password2'), 'classes': ('wide',)}),
+        (None, {'fields': ('username', 'password1', 'password2', 'email'), 'classes': ('wide',)}),
         (None, {'fields': ('name',)}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin')})
     )
