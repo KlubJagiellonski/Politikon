@@ -7,7 +7,7 @@
 			<nav class="avatarmenu">
 			<ul>
 				<div class="arrowup"></div>
-				<a href="#"><li>{{ user.full_name }}</li></a>
+				<a href="#"><li>{{ user.get_full_name }}</li></a>
                 <a href="#"><li>Ustawienia</li></a>
                 <a href="{% url 'accounts:logout' %}"><li>Wyloguj</li></a>
 			</ul>

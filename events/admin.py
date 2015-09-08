@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 
 from models import *
@@ -15,8 +16,26 @@ class EventAdmin(admin.ModelAdmin):
         'Q_against',
     ]
 
-    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date', 'estimated_end_date', 'current_buy_for_price', 'current_buy_against_price', 'Q_for', 'Q_against',
-]
+    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
+                    'estimated_end_date', 'current_buy_for_price',
+                    'current_buy_against_price', 'Q_for', 'Q_against']
+
+    def finish_yes(self, request, queryset):
+        for event in queryset:
+            event.finish_yes()
+    finish_yes.short_description = 'Rozstrzygnij na TAK'
+
+    def finish_no(self, request, queryset):
+        for event in queryset:
+            event.finish_no()
+    finish_no.short_description = 'Rozstrzygnij na NIE'
+
+    def cancel(self, request, queryset):
+        for event in queryset:
+            event.cancel()
+    cancel.short_description = 'Anuluj wydarzenie'
+
+    actions = [finish_yes, finish_no, cancel]
 
 
 class BetAdmin(admin.ModelAdmin):
