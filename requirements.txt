@@ -1,13 +1,20 @@
-Django==1.8.3
+Django==1.8.4
+
+# For distinction dev settings from production settings
 -e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings
+
+# Deployment
 gunicorn==19.3.0
 path.py==2.4.1
 djangorestframework
 newrelic
+
+# Admin
 django-grappelli
 
 #coffin and django-jinja --- can't find, probably deprecated
 #coffin
+# Was used for macros
 #django-jinja==1.4.1
 #jinja2
 
