@@ -7,7 +7,7 @@ else
     docker start politikon_db ;
 fi
 
-if docker run -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance --link politikon_db:postgres politikon ; then
+if docker run --dns 8.8.8.8 --dns 8.8.4.4 -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance --link politikon_db:postgres politikon ; then
     echo "politikon_instance created" ;
 else
     echo "Starting existing politikon instance" ;
