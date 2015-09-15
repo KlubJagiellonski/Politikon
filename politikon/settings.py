@@ -195,6 +195,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.debug.debug'
 )
 
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  'fields': 'id, name, email'
+}
+
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
     'politikon.modules.HostnameRedirectMiddleware',

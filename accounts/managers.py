@@ -15,13 +15,8 @@ class UserProfileManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, password=None):
-        user = self.model(
-            username = username,
-            email=self.normalize_email(email),
-        )
+        user = self.get_or_create(username=username, email=email)
 
-        user.set_password(password)
-        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, email, password=None):
