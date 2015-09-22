@@ -32,7 +32,6 @@ class UserProfile(AbstractBaseUser):
     avatarURL = models.CharField(u"avatar_url", max_length=1024, default='')
 
     name = models.CharField(max_length=1024, blank=True)
-    # is_active = models.BooleanField(u"can log in", default=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
     is_deleted = models.BooleanField(u"is deleted", default=False)
 
