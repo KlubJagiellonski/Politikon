@@ -59,9 +59,9 @@ class MyUserAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active')
+    list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active', 'is_staff', 'is_deleted')
     search_fields = ['username', 'name']
-    list_filter = ('is_admin', 'is_active')
+    list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )
     filter_horizontal = ()
 
@@ -69,14 +69,14 @@ class MyUserAdmin(UserAdmin):
         (None, {'fields': ('username', 'password', 'email')}),
         (None, {'fields': ('name',)}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}),
         (_('Important dates'), {'fields': ('last_login', )}),
     )
 
     add_fieldsets = (
         (None, {'fields': ('username', 'password1', 'password2', 'email'), 'classes': ('wide',)}),
         (None, {'fields': ('name',)}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin')})
+        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')})
     )
 
 admin.site.register(UserProfile, MyUserAdmin)
