@@ -170,11 +170,11 @@ class Event(models.Model):
         self.save()
 
     @transaction.atomic
-    def finish_yes(self):
-        if not self.finish(self.EVENT_OUTCOME_CHOICES.FINISHED_YES):
+    def finish_with_solution(self, outcome, decision):
+        if not self.finish(outcome):
             return False
         for b in Bet.objects.filter(event=self):
-            if bet.outcome == True:
+            if bet.outcome == decision:
                 bet.rewarded_total += 100 * bet.has
                 bet.user.total_cash += bet.rewarded_total
                 bet.save()
@@ -189,51 +189,45 @@ class Event(models.Model):
         return True
 
     @transaction.atomic
+    def finish_yes(self):
+        return self.finish_with_solution(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_YES, True)
+
+    @transaction.atomic
     def finish_no(self):
-        if not self.finish(self.EVENT_OUTCOME_CHOICES.FINISHED_NO):
-            return False
-        for bet in Bet.objects.filter(event=self):
-            if bet.outcome == False:
-                bet.rewarded_total += 100 * bet.has
-                bet.user.total_cash += bet.rewarded_total
-                bet.save()
-                bet.user.save()
-                Transaction.objects.create(
-                    user=bet.user,
-                    event=self,
-                    type=Transaction.TRANSACTION_TYPE_CHOICES.EVENT_WON_PRIZE,
-                    quantity=bet.has,
-                    price=bet.bought_avg_price
-                )
-        return True
+        return self.finish_with_solution(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_NO, False)
 
     @transaction.atomic
     def cancel(self):
         if not self.finish(self.EVENT_OUTCOME_CHOICES.CANCELLED):
             return False
-        for t in Transaction.objects.filter(event=self):
-            refund = 0
+        users = {}
+        for t in Transaction.objects.filter(event=self).order_by('user'):
+            if not t['user'] in users:
+                users[t['user']] = 0
             if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
                     t.TRANSACTION_TYPE_CHOICES.BUY_NO:
-                refund += t.quantity * t.price
+                users[t['user']] += t.quantity * t.price
             elif t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
                 t.TRANSACTION_TYPE_CHOICES.SELL_NO:
-                refund -= t.quantity * t.price
+                users[t['user']] -= t.quantity * t.price
+        for user, refund in users:
             if refund == 0:
-                return False
+                continue
+            user.total_cash += refund
+            user.save()
             if refund > 0:
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
             else:
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_DEBIT
+                refund = -1*refund
             Transaction.objects.create(
-                user=t.user,
-                event=t.event,
+                user=user,
+                event=self,
                 type=transaction_type,
-                quantity=t.quantity,
-                price=t.price
+                price=refund
             )
-            t.user.total_cash += refund
-            t.user.save()
         return True
 
 
