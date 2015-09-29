@@ -35,7 +35,8 @@ class EventAdmin(admin.ModelAdmin):
             event.cancel()
     cancel.short_description = 'Anuluj wydarzenie'
 
-    actions = [finish_yes, finish_no, cancel]
+    # Uncomment to enable solving multiple events @ once
+    # actions = [finish_yes, finish_no, cancel]
 
 
 class BetAdmin(admin.ModelAdmin):
