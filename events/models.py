@@ -267,8 +267,8 @@ class Event(models.Model):
             if bet.outcome == decision:
                 bet.rewarded_total += 100 * bet.has
                 bet.user.total_cash += bet.rewarded_total
-                bet.save()
                 bet.user.save()
+                bet.save()
                 Transaction.objects.create(
                     user=bet.user,
                     event=self,
