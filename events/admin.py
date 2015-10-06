@@ -2,37 +2,12 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
-from models import *
+from .models import Bet, Event, Transaction
+from .forms import EventForm
 
 
-class SolvingEventsChangeFormMixin(object):
-    def response_action(self, request, queryset):
-        """
-        Prefer http referer for redirect
-        """
-        response = super(SolvingEventsChangeFormMixin, self).response_action(request,
-                queryset)
-        if isinstance(response, HttpResponseRedirect):
-            response['Location'] = request.META.get('HTTP_REFERER', response.url)
-        return response
-
-    def save_model(self, request, obj, form, change):
-        print form
-        super(SolvingEventsChangeFormMixin, self).save_model(request, obj, form, change)
-
-    def change_view(self, request, object_id, extra_context=None):
-        actions = self.get_actions(request)
-        if actions:
-            action_form = self.action_form(auto_id=None)
-            action_form.fields['action'].choices = self.get_action_choices(request)
-        else:
-            action_form = None
-        extra_context=extra_context or {}
-        extra_context['action_form'] = action_form
-        return super(SolvingEventsChangeFormMixin, self).change_view(request, object_id, extra_context=extra_context)
-
-
-class EventAdmin(SolvingEventsChangeFormMixin, admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
+    form = EventForm
     readonly_fields = [
         'outcome',
         'current_buy_for_price',
@@ -48,6 +23,18 @@ class EventAdmin(SolvingEventsChangeFormMixin, admin.ModelAdmin):
                     'estimated_end_date', 'current_buy_for_price',
                     'current_buy_against_price', 'Q_for', 'Q_against']
 
+
+    def save_model(self, request, obj, form, change):
+        if request.method == 'POST':
+            if request.POST['solve_event']:
+                if request.POST['solve_event'] == 'TAK':
+                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.FINISHED_YES
+                elif request.POST['solve_event'] == 'NIE':
+                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.FINISHED_NO
+                elif request.POST['solve_event'] == 'ANULUJ':
+                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.CANCELLED
+        obj.save()
+
     def finish_yes(self, request, queryset):
         for event in queryset:
             event.finish_yes()
@@ -62,9 +49,6 @@ class EventAdmin(SolvingEventsChangeFormMixin, admin.ModelAdmin):
         for event in queryset:
             event.cancel()
     cancel.short_description = 'Anuluj wydarzenie'
-
-    # Uncomment to enable solving multiple events @ once
-    actions = [finish_yes, finish_no, cancel]
 
 
 class BetAdmin(admin.ModelAdmin):
