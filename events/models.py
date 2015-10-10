@@ -15,7 +15,6 @@ from bladepolska.site import current_domain
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientCash, InsufficientBets
 
-from accounts.models import UserProfile
 from politikon.choices import Choices
 from .managers import EventManager, BetManager, TransactionManager
 

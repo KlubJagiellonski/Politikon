@@ -21,6 +21,7 @@ class Choices(object):
         self._choices_dict = {}
         self._choices = []
         self._choices_twotuples = []
+        self._choices_label_dict = {}
         for choice in self._choices_source:
             name, value, label = choice[:3]
             setattr(self, name, value)
@@ -29,6 +30,7 @@ class Choices(object):
             setattr(self, '%s_CHOICE' % name, _choice)
             self._choices.append(_choice)
             self._choices_dict[value] = _choice
+            self._choices_label_dict[label] = value
             self._choices_twotuples.append((value, label))
 
     def __getitem__(self, key):

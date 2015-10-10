@@ -14,6 +14,8 @@ from constance import config
 from .managers import UserProfileManager
 from .utils import format_int, save_profile
 
+from events.models import Bet, Event
+
 
 logger = logging.getLogger(__name__)
 
@@ -130,8 +132,25 @@ class UserProfile(AbstractBaseUser):
         return True
 
     @property
+    def current_portfolio_value(self):
+        portfolio_value = 0
+        user_bets = Bet.objects \
+            .select_related('event') \
+            .filter(user=self,
+                    event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS_CHOICE.value)
+
+        for bet in user_bets.iterator():
+            price_field = "current_sell_for_price"
+            if bet.outcome is False:
+                price_field = "current_sell_against_price"
+
+            portfolio_value += bet.has * getattr(bet.event, price_field)
+
+        return portfolio_value
+
+    @property
     def portfolio_value_formatted(self):
-        return format_int(self.portfolio_value)
+         return format_int(self.portfolio_value)
 
     @property
     def total_cash_formatted(self):
