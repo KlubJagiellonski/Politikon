@@ -150,7 +150,7 @@ class UserProfile(AbstractBaseUser):
 
     @property
     def portfolio_value_formatted(self):
-         return format_int(self.portfolio_value)
+        return format_int(self.portfolio_value)
 
     @property
     def total_cash_formatted(self):
