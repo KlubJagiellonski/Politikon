@@ -10,37 +10,37 @@ function startIntro(){
               {
                 element: '#header h1',
                 intro: '<b>Tytuł wydarzenia</b><br/><br/>Zawsze w formie pytania zamkniętego. Możesz odpowiedzieć na nie, wykupując zakłady na TAK lub NIE.',
-		position: 'BOTTOM',
+        position: 'BOTTOM',
               },
               {
                 element: '#bet-details',
                 intro: '<b>Szczegóły wydarzenia.</b><br/><br/>Sprawdź, jak głosowali inni, jaki jest aktualny kurs, oraz ile kosztują poszczególne zakłady.',
-		position: 'top'
+        position: 'top'
               },
               {
                 element: '#makeabet',
                 intro: 'Zakłady kupujesz za pomocą przycisków TAK / NIE, bądź - jeśli kupiłeś już zakład - zmieniasz ich liczbę przyciskami [+] / [-]. ',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '#bet-desc .lewa',
                 intro: '<b>Opis wydarzenia</b><br/><br/>Tutaj znajdziesz szczegółowy opis wydarzenia i warunki rozstrzygnięcia zakładów.<br/><br/>Po zakończeniu wydarzenia, pojawi się tutaj także pełne uzasadnienie podjętego rozstrzygnięcia.',
-		position: 'right',
+        position: 'right',
               },
               {
                 element: '#bet-desc .rss-related',
                 intro: '<b>Informacje w mediach</b><br/><br/>Przed obstawieniem wydarzenia, warto zasięgnąć informacji z nim związanych. W tym miejscu dowiesz się, co na jego temat piszą w mediach.',
-		position: 'left',
+        position: 'left',
               },
               {
                 element: '#comments',
                 intro: 'Możesz również poznać opinie innych graczy o wydarzeniu, a nawet zapytać ich, dlaczego kupili zakłady na TAK bądź na NIE.',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '#betfeed',
                 intro: '<b>Obstawiaj podobne wydarzenia!</b><br/><br/>Jeśli zainteresowało Cię to wydarzenie, sprawdź związane z nim zakłady. Jeśli jesteś pewny swojej decyzji, warto obstawić podobne wydarzenia i wygrać więcej za jednym razem!',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 intro: "<b>Stawiaj na politykę!</b><br/><br/>Wiesz już, jaką opcję obstawisz? Nie zwlekaj i kup zakłady teraz, zanim podrożeją!"

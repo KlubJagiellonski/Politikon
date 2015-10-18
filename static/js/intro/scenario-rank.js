@@ -10,22 +10,22 @@ function startIntro(){
               {
                 element: '#userinfo .zakladki-content',
                 intro: '<b>Pełne zestawienie.</b><br/><br/>Miejsca poszczególnych graczy możesz sprawdzić tutaj. Jeśli chcesz dowiedzieć się o nich więcej - po prostu kliknij w wybranego gracza, by wyświetlić jego profil.',
-		position: 'left',
+        position: 'left',
               },
               {
                 element: '#userinfo .tabs',
                 intro: 'Możesz zmieniać wyświetlane rankingi za pomocą tych przycisków.<br/><br/><b>Przełącz widok na ranking 7-dniowy</b> zanim przejdziemy dalej!',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 element: '.ranking-event',
                 intro: '<b>Ten gracz radzi sobie wyśmienicie!</b> Jest na pierwszej pozycji!<br/><br/><b>Chcesz go pokonać?</b> Nie ma sprawy! Ale zanim zdradzimy Ci, jak to zrobić...',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 element: '.graj',
                 intro: '<b>Dołącz do gry!</b><br/><br/>Zaloguj się, lub utwórz nowe konto w POLITIKONIE. Zajmie Ci to zaledwie parę sekund!.',
-		position: 'bottom',
+        position: 'bottom',
               }
             ]
           });
