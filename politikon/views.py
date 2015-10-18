@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 
 from events.models import Event
 from events.views import create_bets_dict
+from constance import config
 import json
 
 
@@ -28,7 +29,8 @@ class HomeView(TemplateView):
             'featured_events': featured_events,
             'latest_events': latest_events,
             'bets': create_bets_dict(user, [front_event]+featured_events+latest_events),
-            'json_data' : json_data
+            'json_data' : json_data,
+            'config' : config
         })
         return context
 
