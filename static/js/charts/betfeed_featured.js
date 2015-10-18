@@ -8,15 +8,11 @@ function copyObj(obj){
     return JSON.parse(JSON.stringify(obj));
 }
 
-var CHART_DATA = [
-{
-    id: 5,
+var chartDataEx = {
     labels : ["22 września","23 września","24 września","25 września","26 września","27 września","28 września"],
     points : [randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2() ]
-}
-];
+};
 
-var FEATURED_CHART_DATA = CHART_DATA;
 
 var SET_STYLE = {
     fillColor : "rgba(0,0,0,0)",
@@ -61,12 +57,22 @@ function makeChart(data,opts){
     new Chart(betCanvas).Line(chartData,chartStyle);
 }
 
-$(document).ready(function(){
-    for (var i = 0, len = CHART_DATA.length; i < len; i++) {
-        var data = CHART_DATA[i];
+function renderCharts(chartData){
+    console.log(chartData);
+    chartData = (function() {
+        for (var i = 0, len = chartData.length; i < len; i++) {
+            $.extend(chartData[i],chartDataEx);
+        }
+        return chartData;
+
+    }());
+
+    var FEATURED_chartData = chartData;
+    for (var i = 0, len = chartData.length; i < len; i++) {
+        var data = chartData[i];
         makeChart(data);
     }
 
     // var ctx = document.getElementById("featured-canvas").getContext("2d");
-    // makeChart(FEATURED_CHART_DATA, {chartStyle:FEATURED_CHART_STYLE});
-});
+    // makeChart(FEATURED_chartData, {chartStyle:FEATURED_CHART_STYLE});
+}

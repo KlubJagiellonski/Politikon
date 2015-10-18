@@ -4,10 +4,22 @@
 
 {% block content %}
 
+    <script type="text/javascript">
+        $(function(){
+                var CHART_DATA = {{json_data.featured_events|safe}};
+                if(renderCharts){
+                    renderCharts(CHART_DATA);
+                }
+        });
+
+
+    </script>
+
 	<section id="featured" class="section-nopadding">
 		<figure>
 			{% if front_event.big_image %}
-			<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+            <img src="{{ front_event.big_image.url }}"/>
+            <!-- config variable not set !! width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} /> -->
 			{% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
 			{% endif %}
