@@ -15,7 +15,6 @@ from bladepolska.site import current_domain
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientCash, InsufficientBets
 
-from accounts.models import UserProfile
 from politikon.choices import Choices
 from .managers import EventManager, BetManager, TransactionManager
 
@@ -75,6 +74,9 @@ class Event(models.Model):
     price_change = models.IntegerField(u"zmiana ceny", default=0)
 
     B = models.FloatField(u"stała B", default=5)
+
+    def __unicode__(self):
+        return self.title
 
     def get_relative_url(self):
         return "/event/%(id)d-%(title)s" % { 'id' : self.id, 'title': slugify(unidecode(self.title))}
@@ -207,6 +209,9 @@ class Bet(models.Model):
             'rewarded_total': self.rewarded_total,
         }
 
+    def __unicode__(self):
+        return u"zakłady %s na %s" % (self.user, self.event)
+
 
 class Transaction(models.Model):
 
@@ -228,3 +233,6 @@ class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)
     price = models.IntegerField(u"cena jednostkowa", default=0, null=False)
+
+    def __unicode__(self):
+        return "%s przez %s" % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)

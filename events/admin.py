@@ -20,11 +20,11 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class BetAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold', 'bought_avg_price', 'sold_avg_price', 'rewarded_total']
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'user', 'event', 'type', 'date', 'quantity', 'price']
 
 
 admin.site.register(Event, EventAdmin)

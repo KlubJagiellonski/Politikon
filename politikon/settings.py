@@ -158,14 +158,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
 ]
 
 AUTHENTICATION_BACKENDS = (
-#TODO: remove next line when proper auth works
-#     'accounts.backends.DummyCookieAuth',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
