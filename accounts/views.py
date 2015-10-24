@@ -10,6 +10,7 @@ def login(request):
 
 class LogoutView(RedirectView):
     url = reverse_lazy('home')
+    permanent = False
 
     def get(self, request, *args, **kwargs):
         logout(request)
