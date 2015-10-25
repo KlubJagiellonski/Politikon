@@ -16,7 +16,6 @@ class HomeView(TemplateView):
         featured_events = list(Event.objects.get_featured_events())
         latest_events = list(Event.objects.get_events('latest'))
         user = self.get_object()
-        print user
         context.update({
             'front_event' : front_event,
             'featured_events': featured_events,

@@ -122,6 +122,10 @@ class UserProfile(AbstractBaseUser):
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
 
+    @property
+    def full_name(self):
+        return self.get_full_name()
+
     def get_short_name(self):
         return self.name
 

@@ -43,12 +43,14 @@ class UserProfileManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.save(using=self._db)
+
         return user
 
     def create_user_with_random_password(self, username, **kwargs):
-        user = self.return_new_user_object(username,
-                                           password=None
-                                           )
+        user = self.return_new_user_object(
+            username,
+            password=None
+        )
         password = self.make_random_password()
         user.set_password(password)
 

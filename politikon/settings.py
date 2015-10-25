@@ -207,9 +207,6 @@ MIDDLEWARE_CLASSES = (
     # adding basic auth
     'politikon.modules.BasicAuthMiddleware',
 
-# #TODO: remove next line when proper auth works
-#     'accounts.backends.DummyCookieMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
