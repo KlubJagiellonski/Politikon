@@ -158,14 +158,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
 ]
 
 AUTHENTICATION_BACKENDS = (
-#TODO: remove next line when proper auth works
-#     'accounts.backends.DummyCookieAuth',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -195,6 +195,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.debug.debug'
 )
 
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  'fields': 'id, name, email'
+}
+
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
     'politikon.modules.HostnameRedirectMiddleware',
@@ -202,9 +206,6 @@ MIDDLEWARE_CLASSES = (
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
     'politikon.modules.BasicAuthMiddleware',
-
-# #TODO: remove next line when proper auth works
-#     'accounts.backends.DummyCookieMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

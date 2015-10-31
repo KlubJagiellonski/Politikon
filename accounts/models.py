@@ -30,7 +30,7 @@ class UserProfile(AbstractBaseUser):
     ])
 
     username = models.CharField(u"username", max_length=1024, unique=True)
-    email = models.CharField(u"email", max_length=1024, unique=True)
+    email = models.CharField(u"email", max_length=1024)
     avatarURL = models.CharField(u"avatar_url", max_length=1024, default='')
 
     name = models.CharField(max_length=1024, blank=True)
@@ -121,6 +121,10 @@ class UserProfile(AbstractBaseUser):
 
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
+
+    @property
+    def full_name(self):
+        return self.get_full_name()
 
     def get_short_name(self):
         return self.name
