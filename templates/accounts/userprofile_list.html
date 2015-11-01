@@ -1,12 +1,13 @@
-{% extends "base.html" %}
-
-{% load display %}
-
 {% block content %}
 
-<h1>UserProfileList</h1>
 {% for object in object_list %}
-<p> - <a href="{{ object.get_absolute_url }}">{{ object.username }}</a></p>
+    <div class="userrank uservip">
+        <a href="{{ object.get_absolute_url }}">
+            <img src="{{ STATIC_URL }}/{{ object.get_avatar_url }}"/>
+            <div class="wolnereputy"><span class="astable">{{ object.reputation }}</span></div>
+            <div class="username">{{ object.username }}</div>
+        </a>
+    </div>
 {% endfor %}
 
 {% endblock %}

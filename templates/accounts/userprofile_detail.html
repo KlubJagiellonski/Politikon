@@ -4,7 +4,13 @@
 
 {% block content %}
 
-<h1>UserDetail</h1>
-<p>username: {{ object.username }}</p>
+    <div class="userrank uservip">
+        <img src="{{ STATIC_URL }}/{{ object.get_avatar_url }}"/>
+        <div class="wolnereputy">reputation: <span>{{ object.reputation }}</span></div>
+        <div class="wolnereputy">portfolio value: <span>{{ object.portfolio_value }}</span></div>
+        <div class="username">{{ object.username }}</div>
+        <div class="name">{{ object.name }}</div>
+        <div class="email">{{ object.email }}</div>
+    </div>
 
 {% endblock %}
