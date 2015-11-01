@@ -193,4 +193,20 @@ class UserProfile(AbstractBaseUser):
         return self.is_admin
 
     def get_absolute_url(self):
-        return reverse('accounts:user', kwargs={'pk':str(self.pk)})
+        """
+        Get this user url
+
+        :return: user url
+        :rtype: str
+        """
+        return reverse('accounts:user', kwargs={'pk': str(self.pk)})
+
+    def get_avatar_url(self):
+        """
+        Get this user avatar url
+
+        :return: avatar url
+        :rtype: str
+        """
+        # TODO: Where is directory with users avatar (maybe use: pip install django-avatar)
+        return "img/blank-avatar.jpg"

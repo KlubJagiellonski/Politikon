@@ -41,6 +41,20 @@ $(document).ready(function() {
             pagestatus.removeClass("body-scrolled");
         }
     });
+
+    if ($('#userrank_content')) {
+        // Get list of users
+        var days_range = 30;
+        $.ajax({
+            method: "GET",
+            url: "/accounts/users/",
+            data: {days: days_range}
+        }).done(
+            function (response) {
+                $('#userrank_content').append(response);
+            }
+        )
+    }
 });
  
 //zakładki    
