@@ -168,12 +168,13 @@ class Event(models.Model):
         self.outcome = outcome
         self.end_date = datetime.now()
         self.save()
+        return True
 
     @transaction.atomic
     def finish_with_solution(self, outcome, decision):
         if not self.finish(outcome):
             return False
-        for b in Bet.objects.filter(event=self):
+        for bet in Bet.objects.filter(event=self):
             if bet.outcome == decision:
                 bet.rewarded_total += 100 * bet.has
                 bet.user.total_cash += bet.rewarded_total
