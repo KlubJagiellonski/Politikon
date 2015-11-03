@@ -44,6 +44,11 @@ class Event(models.Model):
         ('FINISHED_NO', 4, u'rozstrzygnięte na NIE'),
     )
 
+    BOOLEAN_OUTCOME_DICT = {
+        EVENT_OUTCOME_CHOICES.FINISHED_YES: True,
+        EVENT_OUTCOME_CHOICES.FINISHED_NO: False
+    }
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -261,11 +266,11 @@ class Event(models.Model):
         return True
 
     @transaction.atomic
-    def finish_with_solution(self, outcome, decision):
+    def finish_with_outcome(self, outcome):
         if not self.finish(outcome):
             return False
         for bet in Bet.objects.filter(event=self):
-            if bet.outcome == decision:
+            if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total += 100 * bet.has
                 bet.user.total_cash += bet.rewarded_total
                 bet.user.save()
@@ -281,13 +286,13 @@ class Event(models.Model):
 
     @transaction.atomic
     def finish_yes(self):
-        return self.finish_with_solution(self.EVENT_OUTCOME_CHOICES.\
-                                         FINISHED_YES, True)
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_YES)
 
     @transaction.atomic
     def finish_no(self):
-        return self.finish_with_solution(self.EVENT_OUTCOME_CHOICES.\
-                                         FINISHED_NO, False)
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_NO)
 
     @transaction.atomic
     def cancel(self):
@@ -295,15 +300,17 @@ class Event(models.Model):
             return False
         users = {}
         for t in Transaction.objects.filter(event=self).order_by('user'):
-            if not t['user'] in users:
-                users[t['user']] = 0
+            if not t.user in users:
+                users.update({
+                    t.user: 0
+                })
             if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.TRANSACTION_TYPE_CHOICES.BUY_NO:
-                users[t['user']] += t.quantity * t.price
+                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO:
+                users[t.user] += t.quantity * t.price
             elif t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
-                t.TRANSACTION_TYPE_CHOICES.SELL_NO:
-                users[t['user']] -= t.quantity * t.price
-        for user, refund in users:
+                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
+                users[t.user] -= t.quantity * t.price
+        for user, refund in users.iteritems():
             if refund == 0:
                 continue
             user.total_cash += refund
@@ -312,12 +319,11 @@ class Event(models.Model):
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
             else:
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_DEBIT
-                refund = -1*refund
             Transaction.objects.create(
                 user=user,
                 event=self,
                 type=transaction_type,
-                price=refund
+                price=abs(refund)
             )
         return True
 
