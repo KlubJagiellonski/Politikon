@@ -208,5 +208,7 @@ class UserProfile(AbstractBaseUser):
         :return: avatar url
         :rtype: str
         """
-        # TODO: Where is directory with users avatar (maybe use: pip install django-avatar)
-        return "img/blank-avatar.jpg"
+        if self.avatarURL:
+            return self.avatarURL
+        else:
+            return "img/blank-avatar.jpg"
