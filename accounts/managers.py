@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+import uuid
+
 from django.contrib.auth.models import BaseUserManager, UserManager
+from django.http import HttpResponseForbidden
 
 
 class UserProfileManager(BaseUserManager):
@@ -15,31 +19,38 @@ class UserProfileManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, password=None):
+        if len(self.model.objects.filter(email=email)) > 0 and len(email) > 0:
+            return HttpResponseForbidden()
+        username = username.encode('ascii', 'ignore')
+        while len(self.model.objects.filter(username=username)) > 0:
+            username = uuid.uuid4().hex[:30]
         user = self.model(
-            username = username,
-            email=self.normalize_email(email),
+            username=username,
+            email=email,
         )
-
         user.set_password(password)
+        user.is_active = True
         user.save(using=self._db)
+
         return user
 
     def create_superuser(self, username, email, password=None):
         user = self.create_user(
             username,
             email,
-            password=password,
+            password,
         )
         user.is_admin = True
-        user.is_active = True
         user.is_staff = True
         user.save(using=self._db)
+
         return user
 
     def create_user_with_random_password(self, username, **kwargs):
-        user = self.return_new_user_object(username,
-                                           password=None
-                                           )
+        user = self.return_new_user_object(
+            username,
+            password=None
+        )
         password = self.make_random_password()
         user.set_password(password)
 

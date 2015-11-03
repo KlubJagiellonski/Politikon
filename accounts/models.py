@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, User
 from django.core.files.base import ContentFile
 from django.db import models, transaction
 from django.db.models import F, Q
+from django.core.urlresolvers import reverse
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
@@ -30,7 +31,7 @@ class UserProfile(AbstractBaseUser):
     ])
 
     username = models.CharField(u"username", max_length=1024, unique=True)
-    email = models.CharField(u"email", max_length=1024, unique=True)
+    email = models.CharField(u"email", max_length=1024)
     avatarURL = models.CharField(u"avatar_url", max_length=1024, default='')
 
     name = models.CharField(max_length=1024, blank=True)
@@ -122,6 +123,10 @@ class UserProfile(AbstractBaseUser):
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
 
+    @property
+    def full_name(self):
+        return self.get_full_name()
+
     def get_short_name(self):
         return self.name
 
@@ -186,3 +191,24 @@ class UserProfile(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_admin
+
+    def get_absolute_url(self):
+        """
+        Get this user url
+
+        :return: user url
+        :rtype: str
+        """
+        return reverse('accounts:user', kwargs={'pk': str(self.pk)})
+
+    def get_avatar_url(self):
+        """
+        Get this user avatar url
+
+        :return: avatar url
+        :rtype: str
+        """
+        if self.avatarURL:
+            return self.avatarURL
+        else:
+            return "img/blank-avatar.jpg"
