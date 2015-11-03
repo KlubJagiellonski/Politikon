@@ -8,7 +8,7 @@ def create_bets_dict(user, events):
         bets = dict((bet.event_id, bet) for bet in bets)
 
     all_bets = dict()
-    if len(events) > 1:
+    if len(events) > 1 and len(bets) > 0:
         for event in events:
             if event.id in bets and bets[event.id].has>0:
                 bet = bets[event.id]

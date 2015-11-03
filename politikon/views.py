@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 
+from accounts.models import UserProfile
 from events.models import Event
 from events.views import create_bets_dict
 from constance import config
@@ -31,6 +32,7 @@ class HomeView(TemplateView):
             'bets': create_bets_dict(user, [front_event]+featured_events+latest_events),
             'json_data' : json_data,
             'config' : config
+            'users': UserProfile.objects.filter(is_active=True, is_deleted=False)[:30],
         })
         return context
 

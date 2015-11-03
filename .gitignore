@@ -4,4 +4,4 @@ static/.webassets-cache/*
 src/*
 *.pyc
 src/smartsettings
-.idea
+.idea/
