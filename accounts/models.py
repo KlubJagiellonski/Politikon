@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, User
 from django.core.files.base import ContentFile
 from django.db import models, transaction
 from django.db.models import F, Q
+from django.core.urlresolvers import reverse
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
@@ -190,3 +191,24 @@ class UserProfile(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_admin
+
+    def get_absolute_url(self):
+        """
+        Get this user url
+
+        :return: user url
+        :rtype: str
+        """
+        return reverse('accounts:user', kwargs={'pk': str(self.pk)})
+
+    def get_avatar_url(self):
+        """
+        Get this user avatar url
+
+        :return: avatar url
+        :rtype: str
+        """
+        if self.avatarURL:
+            return self.avatarURL
+        else:
+            return "img/blank-avatar.jpg"
