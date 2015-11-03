@@ -300,7 +300,7 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
     event = models.ForeignKey(Event, null=True)
     type = models.PositiveIntegerField('rodzaj transakcji', choices=TRANSACTION_TYPE_CHOICES, default=1)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField('data', auto_now_add=True)
     quantity = models.PositiveIntegerField(u'ilość', default=1)
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
 

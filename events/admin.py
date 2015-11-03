@@ -28,27 +28,12 @@ class EventAdmin(admin.ModelAdmin):
         if request.method == 'POST':
             if request.POST['solve_event']:
                 if request.POST['solve_event'] == 'TAK':
-                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.FINISHED_YES
+                    obj.finish_yes()
                 elif request.POST['solve_event'] == 'NIE':
-                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.FINISHED_NO
+                    obj.finish_no()
                 elif request.POST['solve_event'] == 'ANULUJ':
-                    obj.outcome = obj.EVENT_OUTCOME_CHOICES.CANCELLED
+                    obj.cancel()
         obj.save()
-
-    def finish_yes(self, request, queryset):
-        for event in queryset:
-            event.finish_yes()
-    finish_yes.short_description = 'Rozstrzygnij na TAK'
-
-    def finish_no(self, request, queryset):
-        for event in queryset:
-            event.finish_no()
-    finish_no.short_description = 'Rozstrzygnij na NIE'
-
-    def cancel(self, request, queryset):
-        for event in queryset:
-            event.cancel()
-    cancel.short_description = 'Anuluj wydarzenie'
 
 
 class BetAdmin(admin.ModelAdmin):
