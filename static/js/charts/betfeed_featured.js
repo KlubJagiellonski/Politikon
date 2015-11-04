@@ -1,18 +1,9 @@
 //wykres na wyróżnione wydarzenie
 //
 
-var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-var randomScalingFactor2 = function(){ return Math.round(Math.random()*75)};
-
 function copyObj(obj){
     return JSON.parse(JSON.stringify(obj));
 }
-
-var chartDataEx = {
-    labels : ["22 września","23 września","24 września","25 września","26 września","27 września","28 września"],
-    points : [randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2(),randomScalingFactor2() ]
-};
-
 
 var SET_STYLE = {
     fillColor : "rgba(0,0,0,0)",
@@ -59,19 +50,10 @@ function makeChart(data,opts){
 
 function renderCharts(chartData){
     console.log(chartData);
-    chartData = (function() {
-        for (var i = 0, len = chartData.length; i < len; i++) {
-            $.extend(chartData[i],chartDataEx);
-        }
-        return chartData;
-
-    }());
-
-    var FEATURED_chartData = chartData;
     for (var i = 0, len = chartData.length; i < len; i++) {
-        var data = chartData[i];
-        makeChart(data);
+        makeChart(chartData[i]);
     }
+    // var frontchartData = chartData;
 
     // var ctx = document.getElementById("featured-canvas").getContext("2d");
     // makeChart(FEATURED_chartData, {chartStyle:FEATURED_CHART_STYLE});

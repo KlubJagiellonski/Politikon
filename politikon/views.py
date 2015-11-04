@@ -31,7 +31,7 @@ class HomeView(TemplateView):
             'latest_events': latest_events,
             'bets': create_bets_dict(user, [front_event]+featured_events+latest_events),
             'json_data' : json_data,
-            'config' : config
+            'config' : config,
             'users': UserProfile.objects.filter(is_active=True, is_deleted=False)[:30],
         })
         return context
@@ -39,8 +39,6 @@ class HomeView(TemplateView):
     def makeFeaturedEventsBetfeedData(self,featured_events):
         data = []
         for ev in featured_events:
-            data.append({
-                'id' : ev.id
-                })
+            data.append(ev.get_chart_points())
         return json.dumps(data)
 

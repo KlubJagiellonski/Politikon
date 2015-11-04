@@ -118,6 +118,14 @@ class Event(models.Model):
         attr = BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
+    def get_chart_points(self):
+        return {
+                'id' : self.id,
+                'labels' : ['1 listopada','2 listopada'],
+                'points' : [self.current_buy_for_price,self.current_buy_for_price]
+                }
+
+
     def increment_quantity(self, outcome, by_amount):
         if outcome not in BET_OUTCOMES_TO_QUANTITY_ATTR:
             raise UnknownOutcome()
