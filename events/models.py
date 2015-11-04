@@ -165,8 +165,8 @@ class Event(models.Model):
 class Bet(models.Model):
 
     BET_OUTCOME_CHOICES = Choices(
-        ('YES', True, 'udziały na TAK'),
-        ('NO', False, 'udziały na NIE'),
+        ('YES', True, u'udziały na TAK'),
+        ('NO', False, u'udziały na NIE'),
     )
 
     BET_OUTCOMES_TO_PRICE_ATTR = {
@@ -216,13 +216,13 @@ class Bet(models.Model):
 class Transaction(models.Model):
 
     TRANSACTION_TYPE_CHOICES = Choices(
-        (u"BUY_YES", 1, u"zakup udziałów na TAK"),
-        (u"SELL_YES", 2, u"sprzedaż udziałów na TAK"),
-        (u"BUY_NO", 3, u"zakup udziałów na NIE"),
-        (u"SELL_NO", 4, u"sprzedaż udziałów na NIE"),
-        (u"EVENT_CANCELLED_REFUND", 5, u"zwrot po anulowaniu wydarzenia"),
-        (u"EVENT_WON_PRIZE", 6, u"wygrana po rozstrzygnięciu wydarzenia"),
-        (u"TOPPED_UP_BY_APP", 7, u"doładowanie konta przez aplikację"),
+        ('BUY_YES', 1, u'zakup udziałów na TAK'),
+        ('SELL_YES', 2, u'sprzedaż udziałów na TAK'),
+        ('BUY_NO', 3, u'zakup udziałów na NIE'),
+        ('SELL_NO', 4, u'sprzedaż udziałów na NIE'),
+        ('EVENT_CANCELLED_REFUND', 5, u'zwrot po anulowaniu wydarzenia'),
+        ('EVENT_WON_PRIZE', 6, u'wygrana po rozstrzygnięciu wydarzenia'),
+        ('TOPPED_UP_BY_APP', 7, u'doładowanie konta przez aplikację'),
     )
 
     objects = TransactionManager()
