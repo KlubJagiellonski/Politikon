@@ -43,6 +43,8 @@ class UserProfile(AbstractBaseUser):
     is_staff = models.BooleanField(u"is staff", default=False)
     is_active = models.BooleanField(u"is active", default=False)
 
+    is_vip = models.BooleanField(u"VIP", default=False)
+
     created_date = models.DateTimeField(auto_now_add=True)
 
     # Every new network relations also has to have 'related_name="django_user"'
@@ -50,11 +52,11 @@ class UserProfile(AbstractBaseUser):
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 
-    # wolne reputy
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
 
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
     reputation = models.DecimalField(u"reputation", default=0, max_digits=12, decimal_places=2,)
+    unused_reput = models.IntegerField(u"wolne reputy", default=0)
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 

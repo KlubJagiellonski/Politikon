@@ -47,7 +47,7 @@
 
 			<article id="tydzien">
 			{% for user in users %}
-				<div class="userrank uservip">
+				<div class="userrank{% if user.is_vip %} uservip{% endif %}">
 					<a href="{{ user.get_absolute_url }}">
 						<img src="{{ user.get_avatar_url }}"/>
 						<div class="wolnereputy"><span class="astable">{{ user.reputation }}</span></div>
