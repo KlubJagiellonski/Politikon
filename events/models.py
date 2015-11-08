@@ -184,8 +184,8 @@ class Bet(models.Model):
 
     objects = BetManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
-    event = models.ForeignKey(Event, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet')
+    event = models.ForeignKey(Event, null=False, related_name='bets', related_query_name='bet')
     outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
     bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
@@ -227,8 +227,8 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
-    event = models.ForeignKey(Event, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions', related_query_name='transaction')
+    event = models.ForeignKey(Event, null=True, related_name='transactions', related_query_name='transaction')
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
     date = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(u"ilość", default=1)

@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 from django.db import models, transaction
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
+from politikon.settings import STATIC_URL
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
@@ -24,22 +25,25 @@ logger = logging.getLogger(__name__)
 class UserProfile(AbstractBaseUser):
 
     objects = UserProfileManager()
+    # przeliczane rankingi: ranking, miesiąc, tydzień
     snapshots = SnapshotAddon(fields=[
         'total_cash',
         'total_given_cash',
         'portfolio_value'
     ])
 
-    username = models.CharField(u"username", max_length=1024, unique=True)
-    email = models.CharField(u"email", max_length=1024)
-    avatarURL = models.CharField(u"avatar_url", max_length=1024, default='')
+    username = models.CharField(u"username", max_length=100, unique=True)
+    email = models.CharField(u"email", max_length=255)
+    avatarURL = models.CharField(u"avatar_url", max_length=255, default='')
 
-    name = models.CharField(max_length=1024, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
     is_deleted = models.BooleanField(u"is deleted", default=False)
 
     is_staff = models.BooleanField(u"is staff", default=False)
     is_active = models.BooleanField(u"is active", default=False)
+
+    is_vip = models.BooleanField(u"VIP", default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
 
@@ -49,9 +53,18 @@ class UserProfile(AbstractBaseUser):
     friends = models.ManyToManyField('self', related_name='friend_of')
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
+
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
+    reputation = models.DecimalField(u"reputation", default=0, max_digits=12, decimal_places=2,)
+    unused_reput = models.IntegerField(u"wolne reputy", default=0)
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
+
+    description = models.CharField(u"krótki opis", max_length=255, default='')
+    facebook_user_id = models.IntegerField(u"facebook ID", default=None, blank=True, null=True)
+    facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
+    twitter_user_id = models.IntegerField(u"twitter ID", default=None, blank=True, null=True)
+    twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -161,12 +174,11 @@ class UserProfile(AbstractBaseUser):
     def total_cash_formatted(self):
         return format_int(self.total_cash)
 
-    @property
-    def reputation(self):
+    def calc_reputation(self):
         if float(self.total_given_cash) == 0:
-            return 0
+            self.reputation = 0
         else:
-            return round(self.portfolio_value / float(self.total_given_cash), 2)
+            self.reputation = round(self.portfolio_value / float(self.total_given_cash), 2)
 
     @property
     def profile_photo(self):
@@ -211,4 +223,4 @@ class UserProfile(AbstractBaseUser):
         if self.avatarURL:
             return self.avatarURL
         else:
-            return "img/blank-avatar.jpg"
+            return STATIC_URL + "img/blank-avatar.jpg"

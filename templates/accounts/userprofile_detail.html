@@ -4,13 +4,100 @@
 
 {% block content %}
 
-    <div class="userrank uservip">
-        <img src="{{ STATIC_URL }}/{{ object.get_avatar_url }}"/>
-        <div class="wolnereputy">reputation: <span>{{ object.reputation }}</span></div>
-        <div class="wolnereputy">portfolio value: <span>{{ object.portfolio_value }}</span></div>
-        <div class="username">{{ object.username }}</div>
-        <div class="name">{{ object.name }}</div>
-        <div class="email">{{ object.email }}</div>
-    </div>
+	<section id="profile">
+		<div class="profilechart">
+			<canvas id="profile-canvas" height="70"></canvas>
+		</div>
+	</section>
+	<section id="profileuser">
+		<div class="profile-avatar{% if user.is_vip %} uservip{% endif %}"><img src="{{ object.get_avatar_url }}"/></div>
+		<div class="nickname"><h1>{{ object.name }}{% if object.is_vip %}<span class="nickvip">VIP</span>{% endif %}</h1></div>
+	</section>
+
+	<section id="userstats">
+		<div class="container profile-stats">
+			<div class="wallet">
+				<div class="icon"></div>
+				<p class="lewa"><span>wartość portfela</span><br/><span class="darkorange">{{ object.portfolio_value }}</span></p>
+			</div>
+			<div class="freereput">
+				<div class="icon"></div>
+				<p class="lewa"><span>wolne reputy</span><br/><span class="changeYES">{{ object.unused_reput }}</span></p>
+			</div>
+			<div class="reputation">
+				<div class="icon"></div>
+				<p class="lewa"><span>reputacja</span><br/><span>{{ object.reputation }}</span></p>
+			</div>
+			<div class="position">
+				<div class="icon"></div>
+				<p class="lewa"><span>ranking</span><br/><span class="grey">986</span></p>
+				<p class="lewa"><span>miesiąc</span><br/><span class="grey">568</span></p>
+				<p class="lewa"><span>tydzień</span><br/><span class="grey">12</span></p>
+			</div>
+		</div>
+	</section>
+
+	<section id="bet-desc" class="astable">
+		<div class="lewa">
+			<p>{{ object.description }}</p>
+		</div>
+		<div class="prawa user-social">
+            {% if object.twitter_user_id %}
+                <div class="sm-tt">
+                    <a href="#">
+                    <div class="sm-bg tt"></div>
+                    <span>{{ object.twitter_user }}</span>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if object.facebook_user_id %}
+                <div class="sm-fb">
+                    <a href="#">
+                    <div class="sm-bg fb"></div>
+                    <span>{{ object.facebook_user }}</span>
+                    </a>
+                </div>
+            {% endif %}
+		</div>
+	</section>
+
+	<section id="userinfo" class="hotbets prefooter-margin">
+		<ul class="tabs lewa">
+			<li><a href="#zawartoscportfela">Zawartość portfela</a></li>
+			<li><a href="#historiatransakcji">Historia transakcji</a></li>
+		</ul>
+		<div class="clr"></div>
+		<div class="zakladki-content">
+			<article id="zawartoscportfela">
+
+                {% for bet in object.bets.all %}
+                    <div class="betinwallet betresult new"><a href="#">
+                        <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
+                        <div class="status">
+                            <h3 class="skroc">{{ bet.event }}</h3>
+                            <p><span class="betdetails">Zakład:</span> <span class="changeYES">{{ bet.outcome }}</span> {{ bet.bought }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
+                            <p class="detailed-status"><span class="invested">{{ bet.bought }}</span> <span class="maywin">{{ bet.rewarded_total }}</span> <span class="inwallet">{{ bet.has }}</span></p>
+                        </div>
+                    </a></div>
+                {% endfor %}
+			</article>
+
+			<article id="historiatransakcji">
+                {% for transaction in object.transactions.all %}
+                    <div class="history-event">
+                        <span class="skroc lewa">{{ transaction.event.title }}</span>
+                        <div class="prawa">
+                            <span class="history-action">{{ transaction.type }}</span>
+                            <span class="reputy-change"><span class="reputy-small"></span>{{ transaction.price }}</span>
+                            <span class="event-date">{{ transaction.end_date }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+				<a href="#" id="loadmore"><div class="btn astable">Pokaż starsze transakcje</div></a>
+			</article>
+		</div>
+	</section>
 
 {% endblock %}
