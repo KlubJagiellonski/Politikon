@@ -4,7 +4,7 @@
 			<ul>
 				<div class="arrowup"></div>
 				<a href="#"><li>{{ user.full_name }}</li></a>
-                <a href="#"><li>Ustawienia</li></a>
+                <a href="{% url 'accounts:user_settings' %}"><li>Ustawienia</li></a>
                 <a href="{% url 'accounts:logout' %}"><li>Wyloguj</li></a>
 			</ul>
 		</nav>

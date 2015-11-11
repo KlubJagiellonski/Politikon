@@ -1,9 +1,19 @@
 from django.http import HttpResponsePermanentRedirect
 from django.contrib.auth import logout as auth_logout
 from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import render
 from django.views.generic import RedirectView, ListView, DetailView
 
 from models import UserProfile
+
+
+def user_settings_view(request):
+
+    user = UserProfile.objects.get(pk=request.session['_auth_user_id'])      # TODO: continue this work
+    context = {
+        'user': user,
+    }
+    return render(request, 'accounts/user_settings.html', context)
 
 
 class UsersView(ListView):
