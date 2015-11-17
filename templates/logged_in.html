@@ -1,9 +1,5 @@
 		<div class="graj avatar prawa">
-            {% if user.avatarURL %}
-			<img src="{{ user.avatarURL }}" />
-            {% else %}
-            <img src="img/blank-avatar.jpg"/>
-            {% endif %}
+			<img src="{{ user.get_avatar_url }}" />
 			<nav class="avatarmenu">
 			<ul>
 				<div class="arrowup"></div>

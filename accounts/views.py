@@ -21,3 +21,13 @@ class UsersView(ListView):
 
 class UserDetailView(DetailView):
     model = UserProfile
+
+    def get_object(self, **kwargs):
+        """
+        User detail
+        :return:
+        :rtype: QuerySet
+        """
+        user_detail = super(UserDetailView, self).get_object(**kwargs)
+#        user_detail.bets.all()
+        return user_detail
