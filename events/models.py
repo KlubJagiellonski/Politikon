@@ -20,6 +20,21 @@ from .managers import EventManager, BetManager, TransactionManager
 
 from .managers import EventManager, BetManager, TransactionManager
 
+_MONTHS = {
+        1 : 'Stycznia',
+        2 : 'Lutego',
+        3 : 'Marca',
+        4 : 'Kwietnia',
+        5 : 'Maja',
+        6 : 'Czerwca',
+        7 : 'Lipca',
+        8 : 'Sierpnia',
+        9 : 'Września',
+        10 : 'Października',
+        11 : 'Listopada',
+        12 : 'Grudnia'
+        }
+
 class Event(models.Model):
 
     EVENT_OUTCOME_CHOICES = Choices(
@@ -119,10 +134,39 @@ class Event(models.Model):
         return getattr(self, attr)
 
     def get_chart_points(self):
+        last_trans = {}
+        tch = Transaction.TRANSACTION_TYPE_CHOICES
+        skip_events = (
+                tch.EVENT_CANCELLED_REFUND_CHOICE,
+                tch.EVENT_WON_PRIZE_CHOICE,
+                tch.EVENT_WON_PRIZE_CHOICE
+                )
+        for t in Transaction.objects.filter(event=self).iterator():
+            if t.type in skip_events:
+                continue
+            date = t.date
+            d_date = date.replace(hour=0,minute=0,second=0,microsecond=0)
+            if t.type == tch.BUY_NO_CHOICE or \
+                    t.type == tch.SELL_NO_CHOICE:
+                last_trans[d_date] = 100-t.price
+            else:
+                last_trans[d_date] = t.price
+
+        data = list(last_trans.iteritems())
+        sorted(data,key=lambda x:x[0])
+
+        labels = []
+        points = []
+        for kv in data:
+            labels.append(str(kv[0].day)+ ' %s'%_MONTHS[kv[0].month])
+            points.append(kv[1])
+
+        print data
+
         return {
                 'id' : self.id,
-                'labels' : ['1 listopada','2 listopada'],
-                'points' : [self.current_buy_for_price,self.current_buy_for_price]
+                'labels' : labels,
+                'points' : points
                 }
 
 

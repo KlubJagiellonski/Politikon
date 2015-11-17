@@ -20,7 +20,8 @@ class HomeView(TemplateView):
         latest_events = list(Event.objects.get_events('latest'))
 
         json_data = {
-                'featured_events' : self.makeFeaturedEventsBetfeedData(featured_events)
+                'events' : self.makeFeaturedEventsBetfeedData(latest_events+featured_events),
+                'front_event' : json.dumps(front_event.get_chart_points())
                 }
 
 
@@ -36,9 +37,9 @@ class HomeView(TemplateView):
         })
         return context
 
-    def makeFeaturedEventsBetfeedData(self,featured_events):
+    def makeFeaturedEventsBetfeedData(self,events):
         data = []
-        for ev in featured_events:
+        for ev in events:
             data.append(ev.get_chart_points())
         return json.dumps(data)
 

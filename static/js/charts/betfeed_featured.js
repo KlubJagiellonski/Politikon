@@ -21,8 +21,8 @@ var FEATURED_CHART_STYLE = { responsive: true,showScale: false, scaleShowLabels:
 //wykresy na wydarzenia w betfeedzie
 
 function makeChart(data,opts){
-    var id = 'bet-'+data.id+'-canvas';
 
+    var id = opts.id;
     var setStyle;
     if(opts && opts.setStyle){
         setStyle = opts.setStyle;
@@ -37,24 +37,29 @@ function makeChart(data,opts){
         chartStyle = CHART_STYLE;
     }
 
-    var betCanvas = document.getElementById(id).getContext("2d");
-    var chartData = {
-        labels : data.labels,
-        datasets : [SET_STYLE]
-    };
+    var betCanvases = document.querySelectorAll(id);
+    for (var i = 0, len = betCanvases.length; i < len; i++) {
+        var chartData = {
+            labels : data.labels,
+            datasets : [SET_STYLE]
+        };
 
-    chartData.datasets[0].data = data.points;
+        chartData.datasets[0].data = data.points;
 
-    new Chart(betCanvas).Line(chartData,chartStyle);
+        new Chart(betCanvases[i].getContext('2d')).Line(chartData,chartStyle);
+    }
 }
 
-function renderCharts(chartData){
-    console.log(chartData);
-    for (var i = 0, len = chartData.length; i < len; i++) {
-        makeChart(chartData[i]);
+function renderCharts(events,featuredEvent){
+    for (var i = 0, len = events.length; i < len; i++) {
+        makeChart(events[i],{
+            id : '.bet-'+events[i].id+'-canvas'
+        });
     }
     // var frontchartData = chartData;
 
-    // var ctx = document.getElementById("featured-canvas").getContext("2d");
-    // makeChart(FEATURED_chartData, {chartStyle:FEATURED_CHART_STYLE});
+    makeChart(featuredEvent, {
+        id : '#featured-canvas',
+        chartStyle:FEATURED_CHART_STYLE
+    });
 }

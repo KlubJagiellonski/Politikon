@@ -6,9 +6,10 @@
 
     <script type="text/javascript">
         $(function(){
-                var CHART_DATA = {{json_data.featured_events|safe}};
+                var EVENTS_DATA = {{json_data.events|safe}};
+                var FEATURED_EVENT_DATA = {{json_data.front_event|safe}};
                 if(renderCharts){
-                    renderCharts(CHART_DATA);
+                    renderCharts(EVENTS_DATA,FEATURED_EVENT_DATA);
                 }
         });
 
