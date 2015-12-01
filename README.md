@@ -177,6 +177,14 @@ boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
 docker run -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance politikon
 ```
 
+* INFO: regarding to latest bug database is losing consistency during dump. To retrieve consistency do the following:
+```
+# go to dbshell
+python manage.py dbshell
+UPDATE events_bet SET user_id = 1 WHERE user_id NOT IN (SELECT id FROM accounts_userprofile);
+UPDATE events_transaction SET user_id = 1 WHERE user_id NOT IN (SELECT id FROM accounts_userprofile);
+```
+
 * WARNING: destructive code ahead - if you need to rebuild docker containers:
 ```
 #list running images:
