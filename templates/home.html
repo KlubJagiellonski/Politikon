@@ -4,10 +4,22 @@
 
 {% block content %}
 
+    <script type="text/javascript">
+        $(function(){
+                var EVENTS_DATA = {{json_data.events|safe}};
+                var FEATURED_EVENT_DATA = {{json_data.front_event|safe}};
+                if(renderCharts){
+                    renderCharts(EVENTS_DATA,FEATURED_EVENT_DATA);
+                }
+        });
+
+
+    </script>
+
 	<section id="featured" class="section-nopadding">
 		<figure>
 			{% if front_event.big_image %}
-			<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+            <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 			{% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
 			{% endif %}

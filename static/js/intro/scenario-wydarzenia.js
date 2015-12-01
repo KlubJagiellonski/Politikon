@@ -11,17 +11,17 @@ function startIntro(){
               {
                 element: '#betfeed',
                 intro: '<b>Wydarzenia</b><br/><br/>Tutaj znajdziesz wszystkie aktywne wydarzenia na POLITIKONIE.',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '#betfeed .bet',
                 intro: 'Przez "aktywne" rozumiemy takie, na których rozstrzygnięcie możesz postawić.<br/><br/>Wystarczy, że skorzystasz z przycisków TAK / NIE, bądź [+] / [-].',
-		position: 'top'
+        position: 'top'
               },
               {
                 element: '#header .tabs',
                 intro: '<b>Sortuj wydarzenia.</b><br/><br/>Skorzystaj z dostępnych opcji sortowania, by wyświetlić najbardziej interesujące Cię wydarzenia.',
-		position: 'top',
+        position: 'top',
               },
               {
                 intro: "<b>Stawiaj na politykę!</b><br/><br/>Wybierz interesujące Cię wydarzenia i stawiaj na ich rozstrzygnięcie!"

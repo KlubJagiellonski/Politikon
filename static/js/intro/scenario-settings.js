@@ -10,22 +10,22 @@ function startIntro(){
               {
                 element: '#settings-profile',
                 intro: '<b>Obecne ustawienia</b><br/><br/>Tutaj znajdziesz informacje o Twoim profilu: Twoją nazwę w POLITIKONIE, avatar, login, datę dołącznie do gry i dane kontaktowe.',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '#settings-profile .profile-avatar',
                 intro: 'By zmienić swoje zdjęcie, po prostu kliknij na aktualny avatar i wybierz nową fotografię.',
-		position: 'right'
+        position: 'right'
               },
               {
                 element: '#userinfo .tabs',
                 intro: 'Ustawienia zostały podzielone na dwie sekcje.<br/><br/>Pierwsza zawiera ustawienia związane z Twoim profilem w grze, druga - ustawienia pozwalające uzyskać dostęp do Twojego konta.',
-		position: 'right'
+        position: 'right'
               },
               {
                 element: '#loadmore .btn',
                 intro: 'Po wprowadzeniu zmian, zapisz je klikając w ten przycisk.',
-		position: 'top'
+        position: 'top'
               }
             ]
           });

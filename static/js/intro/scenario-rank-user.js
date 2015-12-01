@@ -10,47 +10,47 @@ function startIntro(){
               {
                 element: '#userstats',
                 intro: '<b>Twoje wyniki.</b><br/><br/>Tutaj możesz poznać swoje aktualne wyniki - wartość portfela, liczbę wolnych reputów i reputację w POLITIKONIE. Możesz użyć tych danych, by porównać się z innymi graczami.',
-		position: 'bottom'
+        position: 'bottom'
               },
               {
                 element: '#userstats .position',
                 intro: '<b>Twoja pozycja w rankingu.</b><br/><br/>Sprawdź, które miejsca w rankingu zajmujesz. Jak poszło Ci w tym tygodniu, a jak w całym miesiącu? Które miejsce zajmujesz w rankingu ogólnym?',
-		position: 'right'
+        position: 'right'
               },
               {
                 element: '#ranking',
                 intro: 'Swoją pozycję możesz dosłownie <b>zobaczyć!</b> Wystarczy rzut oka na ten wykres. ',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 element: '#userinfo .zakladki-content',
                 intro: '<b>Pełne zestawienie.</b><br/><br/>Miejsca poszczególnych graczy możesz sprawdzić tutaj. Jeśli chcesz dowiedzieć się o nich więcej - po prostu kliknij w wybranego gracza, by wyświetlić jego profil.',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '#userinfo .tabs',
                 intro: 'Możesz zmieniać wyświetlane rankingi za pomocą tych przycisków.<br/><br/><b>Przełącz widok na ranking 7-dniowy</b> zanim przejdziemy dalej!',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '.ranking-event',
                 intro: '<b>Ten gracz radzi sobie wyśmienicie!</b> Jest na pierwszej pozycji!<br/><br/><b>Chcesz go pokonać?</b> Nie ma sprawy! Twoje miejsce w rankingu zależy od trzech wskaźników:<br/>- wartości portfela,<br/>- liczbie wolnych reputów<br/>- reputacji w POLITIKONIE<br/><br/>Dbaj o nie, a niedługo będziesz czarnym koniem tych rozgrywek!',
-		position: 'top',
+        position: 'top',
               },
               {
                 element: '.rank-wallet',
                 intro: '<b>Wartość portfela</b><br/><br/>To wskaźnik wyrażający łączną wartość nabytych (i ciągle nierozstrzygniętych) zakładów oraz wolnych reputów posiadanych przez gracza.',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 element: '.rank-freereputy',
                 intro: '<b>Wolne reputy</b><br/><br/>To reputy, krórych nie zainwestowałeś jeszcze w żadne zakłady. Możesz przeznaczyć je na obstawianie wydarzeń.',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 element: '.rank-reputation',
                 intro: '<b>Reputacja</b><br/><br/>To wskaźnik samodzielność gracza. Im więcej reputów wygrałeś na zakładach, a mniej otrzymałeś od systemu - tym wskaźnik reputacji będzie większy.',
-		position: 'bottom',
+        position: 'bottom',
               },
               {
                 intro: "<b>Zadowolony ze swojego miejsca w rankingu?</b><br/><br/>Jeśli tak - gratulujemy! Jeśli nie - zajrzyj na profile najlepszych graczy i sprawdź jak osiągnęli sukces. Może zainspirują Cię do obstawienia kilku wydarzeń ;-)"
