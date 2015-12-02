@@ -61,21 +61,9 @@ $(function(){
 $(document).ready(function() {
     $('#settings-submit #loadmore').click(function(){
         if ($('.active [href=#profil]').length > 0) {
-            console.log('YYYYYYYYYYYYYYY');
             $('#profil form').submit();
-
-            //$.ajax({
-            //    url:'/accounts/user_settings',
-            //    method: 'POST',
-            //    data: form_data
-            //}).done(function(msg){
-            //    console.log('recived my data');
-            //    console.log(msg)
-            //});
         } else if ($('.active [href=#haslo]').length > 0) {
-            console.log('XXXXXXXXXXXXXXXX');
             $('#haslo form').submit();
-
         }
     });
 });
