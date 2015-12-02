@@ -161,8 +161,6 @@ class Event(models.Model):
             labels.append(str(kv[0].day)+ ' %s'%_MONTHS[kv[0].month])
             points.append(kv[1])
 
-        print data
-
         return {
                 'id' : self.id,
                 'labels' : labels,
