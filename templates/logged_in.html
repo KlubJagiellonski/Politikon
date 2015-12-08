@@ -3,7 +3,7 @@
 			<nav class="avatarmenu">
 			<ul>
 				<div class="arrowup"></div>
-				<a href="#"><li>{{ user.full_name }}</li></a>
+				<a href="{% url 'accounts:user_profile' %}"><li>{{ user.full_name }}</li></a>
                 <a href="{% url 'accounts:user_settings' %}"><li>Ustawienia</li></a>
                 <a href="{% url 'accounts:logout' %}"><li>Wyloguj</li></a>
 			</ul>
