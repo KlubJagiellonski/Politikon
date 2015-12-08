@@ -46,12 +46,11 @@ def user_settings_view(request):
     return render(request, 'accounts/user_settings.html', context)
 
 
-def user_profile_view(request):
-    user = UserProfile.objects.get(pk=request.session['_auth_user_id'])
-    context = {
-        'object': user,
-    }
-    return render(request, 'accounts/userprofile_detail.html', context)
+class UserProfileDetailView(DetailView):
+    model = UserProfile
+
+    def get_object(self, **kwargs):
+        return self.request.user
 
 
 class UsersView(ListView):
