@@ -60,6 +60,7 @@ class UserProfile(AbstractBaseUser):
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
+    web_site = models.CharField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
     facebook_user_id = models.IntegerField(u"facebook ID", default=None, blank=True, null=True)
     facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
@@ -68,6 +69,8 @@ class UserProfile(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
+    FACEBOOK_URL = 'https://www.facebook.com/{0}'
+    TWITTER_URL = 'https://twitter.com/{0}'
 
     def __unicode__(self):
         return "%s" % self.username
@@ -224,3 +227,39 @@ class UserProfile(AbstractBaseUser):
             return self.avatarURL
         else:
             return STATIC_URL + "img/blank-avatar.jpg"
+
+    def get_twitter_url(self):
+        """
+        Get this user twitter url: https://twitter.com/user
+
+        :return: twitter user url
+        :rtype: str
+        """
+        return self.TWITTER_URL.format(self.twitter_user)
+
+    def get_facebook_url(self):
+        """
+        Get this user facebook url: https://www.facebook.com/
+
+        :return: facebook user url
+        :rtype: str
+        """
+        return self.FACEBOOK_URL.format(self.facebook_user)
+
+    def get_twitter_disconnect_url(self):
+        """
+        Url to disconnect user account from his Twitter account
+
+        :return: Twitter disconnection url
+        :rtype: str
+        """
+        # TODO: return that url
+
+    def get_facebook_disconnect_url(self):
+        """
+        Url to disconnect user account from his Twitter account
+
+        :return: Twitter disconnection url
+        :rtype: str
+        """
+        # TODO: return that url

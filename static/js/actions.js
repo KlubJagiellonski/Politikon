@@ -45,8 +45,7 @@ $(document).ready(function() {
  
 //zakładki    
 $(function(){
-    //TODO: remove if unused
-/*  $('ul.tabs li:first').addClass('active');
+  $('ul.tabs li:first').addClass('active');
   $('.zakladki-content article').hide();
   $('.zakladki-content article:first').show();
   $('ul.tabs li').on('click',function(){
@@ -57,6 +56,14 @@ $(function(){
     $(activeTab).show();
     return false;
   });
-  */
-})
-    
+});
+
+$(document).ready(function() {
+    $('#settings-submit #loadmore').click(function(){
+        if ($('.active [href=#profil]').length > 0) {
+            $('#profil form').submit();
+        } else if ($('.active [href=#haslo]').length > 0) {
+            $('#haslo form').submit();
+        }
+    });
+});
