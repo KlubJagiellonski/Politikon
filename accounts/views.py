@@ -3,7 +3,7 @@ from django.contrib.auth import logout as auth_logout
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
-from django.views.generic import RedirectView, ListView, DetailView
+from django.views.generic import RedirectView, ListView, DetailView, UpdateView
 
 from models import UserProfile
 
@@ -44,6 +44,13 @@ def user_settings_view(request):
         'messages': messages,
     }
     return render(request, 'accounts/user_settings.html', context)
+
+
+class UserProfileDetailView(DetailView):
+    model = UserProfile
+
+    def get_object(self, **kwargs):
+        return self.request.user
 
 
 class UsersView(ListView):
