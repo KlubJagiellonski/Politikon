@@ -192,10 +192,11 @@ class UserProfile(AbstractBaseUser):
         self.total_cash = F('total_cash') + amount
         self.total_given_cash = F('total_given_cash') + amount
 
-        from events.models import Transaction, TRANSACTION_TYPES_DICT
+        from events.models import Transaction
 
         transaction = Transaction.objects.create(
-            user=self, type=TRANSACTION_TYPES_DICT['TOPPED_UP_BY_APP'],
+            user=self,
+            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP,
             quantity=1, price=amount)
 
         # from canvas.models import ActivityLog

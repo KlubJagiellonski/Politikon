@@ -172,6 +172,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 LOGIN_REDIRECT_URL = '/'
 URL_PATH = ''
