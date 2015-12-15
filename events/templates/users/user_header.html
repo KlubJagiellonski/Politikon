@@ -1,0 +1,58 @@
+	<section id="profile">
+		<div class="profilechart">
+			<canvas id="profile-canvas" height="70"></canvas>
+		</div>
+	</section>
+	<section id="profileuser">
+		<div class="profile-avatar uservip"><img src="{% static 'img/blank-avatar.jpg' %}"/></div>
+		<div class="nickname"><h1>{{ user.username }} <span class="nickvip">VIP</span></h1></div>
+	</section>
+
+	<section id="userstats" class="body-margin">
+		<div class="container">
+			<div class="wallet">
+				<div class="icon"></div>
+				<p class="lewa"><span>wartość portfela</span><br/><span class="darkorange">2 156</span></p>
+				<p class="lewa"><span>zmiana w 7 dni</span><br/><span class="changeYES">+519</span></p>
+				<p class="lewa"><span>zakłady</span><br/><span>65</span></p>
+			</div>
+			<div class="freereput">
+				<div class="icon"></div>
+				<p class="lewa"><span>wolne reputy</span><br/><span class="changeYES">1 025</span></p>
+			</div>
+			<div class="position">
+				<div class="icon"></div>
+				<p class="lewa"><span>ranking</span><br/><span class="grey">986</span></p>
+				<p class="lewa"><span>miesiąc</span><br/><span class="grey">568</span></p>
+				<p class="lewa"><span>tydzień</span><br/><span class="grey">12</span></p>
+			</div>
+		</div>
+	</section>
+
+	<section id="bet-desc" class="astable">
+		<div class="lewa">
+			<p>Tutaj krótki opis użytkownika, dodawany przez niego własnoręcznie podczas rejestracji i edycji konta. Nunc sed dui semper, volutpat diam interdum, cursus ligula. Quisque id augue ut orci gravida congue ac eget velit. Etiam ex augue, consectetur sit amet vestibulum ornare, ultricies sit amet augue. Integer non consequat eros, quis pulvinar sapien.  Fusce vitae lacinia felis. Nunc egestas egestas elementum. </p>
+		</div>
+		<div class="prawa user-social">
+			<div class="sm-tt">
+				<a href="#">
+				<div class="sm-bg tt"></div>
+				<span>@NickNaTwitterze</span>
+				</a>
+			</div>
+
+			<div class="sm-fb">
+				<a href="#">
+				<div class="sm-bg fb"></div>
+				<span>Przykładowy użytkownik</span>
+				</a>
+			</div>
+
+			<div class="sm-gp">
+				<a href="#">
+				<div class="sm-bg gp"></div>
+				<span>Nazwa użytkownika z Google Plus</span>
+				</a>
+			</div>
+		</div>
+	</section>
