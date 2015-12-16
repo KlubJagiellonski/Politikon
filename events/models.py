@@ -110,7 +110,7 @@ class Event(models.Model):
 
     @property
     def is_in_progress(self):
-        return self.outcome == EVENT_OUTCOME_CHOICES.IN_PROGRESS
+        return self.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
 
     @property
     def publish_channel(self):
@@ -127,10 +127,10 @@ class Event(models.Model):
         }
 
     def price_for_outcome(self, outcome, direction='BUY'):
-        if (direction, outcome) not in BET_OUTCOMES_TO_PRICE_ATTR:
+        if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:
             raise UnknownOutcome()
 
-        attr = BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
+        attr = Bet.BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
     def get_chart_points(self):
@@ -167,12 +167,18 @@ class Event(models.Model):
                 'points' : points
                 }
 
+    def get_user_bet(self, user):
+        bets = self.bets.filter(user=user)
+        if bets.exists():
+            return bets[0]
+        else:
+            return Bet(event=self, user=user)
 
     def increment_quantity(self, outcome, by_amount):
-        if outcome not in BET_OUTCOMES_TO_QUANTITY_ATTR:
+        if outcome not in Bet.BET_OUTCOMES_TO_QUANTITY_ATTR:
             raise UnknownOutcome()
 
-        attr = BET_OUTCOMES_TO_QUANTITY_ATTR[outcome]
+        attr = Bet.BET_OUTCOMES_TO_QUANTITY_ATTR[outcome]
         setattr(self, attr, getattr(self, attr) + by_amount)
 
         self.recalculate_prices()

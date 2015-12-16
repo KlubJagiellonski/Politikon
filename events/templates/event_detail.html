@@ -41,7 +41,7 @@
 				<div class="voted">1 256</div>
 			</div>
 			<div id ="makeabet">
-				<div class="change changeNO">-19</div>
+				<div class="change changeNO">{{ event.price_change }}</div>
                 {% if bet %}
 				{% render_bet event bet False %}
                 {% endif %}

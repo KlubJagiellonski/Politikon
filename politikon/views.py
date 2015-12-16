@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 
 from accounts.models import UserProfile
-from events.models import Event
+from events.models import Event, Bet
 from events.views import create_bets_dict
 from constance import config
 import json
@@ -14,8 +14,15 @@ class HomeView(TemplateView):
         return self.request.user
 
     def get_context_data(self, *args, **kwargs):
+        user = self.get_object()
+
         context = super(HomeView, self).get_context_data(*args, **kwargs)
         front_event = Event.objects.get_front_event()
+        if front_event:
+            context.update({
+                'front_event': front_event,
+                'front_event_bet': front_event.get_user_bet(user),
+            })
         featured_events = list(Event.objects.get_featured_events())
         latest_events = list(Event.objects.get_events('latest'))
 
@@ -24,10 +31,7 @@ class HomeView(TemplateView):
                 'front_event' : json.dumps(front_event.get_chart_points())
                 }
 
-
-        user = self.get_object()
         context.update({
-            'front_event' : front_event,
             'featured_events': featured_events,
             'latest_events': latest_events,
             'bets': create_bets_dict(user, [front_event]+featured_events+latest_events),

@@ -1,12 +1,32 @@
+from django.contrib import auth
 from django.db import models
+#from events.models import Event, Bet, Transaction
+from collections import defaultdict
+
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientCash, InsufficientBets
+from django.utils.translation import ugettext as _
+from vendor.Pubnub import Pubnub as PubNub
+
+BET_OUTCOMES_DICT = {
+    'YES': True,
+    'NO': False,
+}
+
+BET_OUTCOMES_INV_DICT = {
+    True: 'YES',
+    False: 'NO',
+}
 
 
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
-        allowed_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+        from events.models import Event
+        allowed_outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
         return self.filter(outcome=allowed_outcome)
 
     def get_events(self, mode):
+        from events.models import Event
         if mode == 'popular':
             return self.ongoing_only_queryset().order_by('turnover')
         elif mode == 'latest':
@@ -14,20 +34,23 @@ class EventManager(models.Manager):
         elif mode == 'changed':
             return self.ongoing_only_queryset().order_by('-absolute_price_change')
         elif mode == 'finished':
-            excluded_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+            excluded_outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
         return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
 
     def get_front_event(self):
-        front_events = self.ongoing_only_queryset().filter(is_front=True).order_by('estimated_end_date')
-        if front_events.count()>0:
+        front_events = self.ongoing_only_queryset().filter(is_front=True)\
+            .order_by('estimated_end_date')
+        if front_events.exists():
             return front_events[0]
         else:
             return None
 
     def associate_people_with_events(self, user, events_list):
+        from events.models import Bet
+
         event_ids = set([e.id for e in events_list])
         # friends = user.friends.all()
         bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
@@ -50,6 +73,7 @@ class BetManager(models.Manager):
         return self.filter(user__id=user.id, event__in=events)
 
     def get_user_event_and_bet_for_update(self, user, event_id, for_outcome):
+        from events.models import Event
         event = list(Event.objects.select_for_update().filter(id=event_id))
         try:
             event = event[0]
@@ -72,6 +96,9 @@ class BetManager(models.Manager):
 
     def buy_a_bet(self, user, event_id, for_outcome, price):
         """ Always remember about wrapping this in a transaction! """
+
+        from events.models import Transaction
+
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
@@ -126,6 +153,8 @@ class BetManager(models.Manager):
 
     def sell_a_bet(self, user, event_id, for_outcome, price):
         """ Always remember about wrapping this in a transaction! """
+        from events.models import Transaction
+
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         requested_price = price

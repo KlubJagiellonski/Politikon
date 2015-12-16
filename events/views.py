@@ -86,9 +86,9 @@ class EventDetailView(DetailView):
 def create_transaction(request, event_id):
     data = json.loads(request.body)
     try:
-        buy = (data['buy'] == 'True')
-        outcome = data['outcome']
-        for_price = data['for_price']
+        buy = (data['buy'] == 'True')   # kupno, sprzedaz
+        outcome = data['outcome']     # tak nie
+        for_price = data['for_price']  # cena
     except:
         return HttpResponseBadRequest(_("Something went wrong, try again in a few seconds."))
     try:

@@ -29,7 +29,7 @@
 					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
-                        {% render_bet front_event bets.front_event.id False %}
+                        {% render_bet front_event front_event_bet False %}
 					</div>
 				</div>
 			</figcaption>
