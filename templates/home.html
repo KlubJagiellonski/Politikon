@@ -29,7 +29,7 @@
 					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
 						<div class="change changeYES">+21</div>
-                        {% render_bet front_event front_event_bet False %}
+                        {% render_bet front_event front_event_bet.extension False %}
 					</div>
 				</div>
 			</figcaption>
@@ -37,13 +37,13 @@
 	</section>
 	
 	<section id="betfeed">
-        {% render_events featured_events bets people %}
+        {% render_events featured_events people %}
 	</section>
 	
 	<section id="betfeed" class="hotbets">
 		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
 		<div>
-            {% render_events featured_events bets people %}
+            {% render_events featured_events people %}
 		</div>
 	</section>
 	

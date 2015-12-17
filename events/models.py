@@ -168,11 +168,39 @@ class Event(models.Model):
                 }
 
     def get_user_bet(self, user):
-        bets = self.bets.filter(user=user)
-        if bets.exists():
-            return bets[0]
-        else:
-            return Bet(event=self, user=user)
+        if user.pk:
+            bets = self.bets.filter(user=user)
+            if bets.exists():
+                bet = bets[0]
+                bet.extension = {
+                    'has_any': True,
+                    'buyYES': bet.outcome,
+                    'buyNO': not bet.outcome,
+                    'outcomeYES': "YES" if bet.outcome else "NO",
+                    'outcomeNO': "YES" if bet.outcome else "NO",
+                    'priceYES': self.current_buy_for_price if bet.outcome else self.current_sell_against_price,
+                    'priceNO': self.current_sell_for_price if bet.outcome else self.current_buy_against_price,
+                    'textYES': "+" if bet.outcome else "-",
+                    'textNO': "-" if bet.outcome else "+",
+                    'has': bet.has,
+                    'classOutcome': "YES" if bet.outcome else "NO",
+                    'textOutcome': "TAK" if bet.outcome else "NIE",
+                    'avgPrice': round(bet.bought_avg_price, 2),
+                }
+            else:
+                bet = Bet(event=self, user=user)
+                bet.extension = {
+                        'has_any': False,
+                        'buyYES': True,
+                        'buyNO': True,
+                        'outcomeYES': "YES",
+                        'outcomeNO': "NO",
+                        'priceYES': self.current_buy_for_price,
+                        'priceNO': self.current_buy_against_price,
+                        'textYES': "TAK",
+                        'textNO': "NIE"
+                    }
+            return bet
 
     def increment_quantity(self, outcome, by_amount):
         if outcome not in Bet.BET_OUTCOMES_TO_QUANTITY_ATTR:

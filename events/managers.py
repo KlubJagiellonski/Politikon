@@ -102,9 +102,9 @@ class BetManager(models.Manager):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
-            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.BUY_YES
+            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
         else:
-            transaction_type = self.model.TRANSACTION_TYPE_CHOICES.BUY_NO
+            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO
 
         requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
@@ -140,14 +140,15 @@ class BetManager(models.Manager):
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(user, transaction)
 
-        PubNub().publish({
-            'channel': event.publish_channel,
-            'message': {
-                'updates': {
-                    'events': [event.event_dict]
-                }
-            }
-        })
+        # # TODO: To z jakiegos powodu nie dziala
+        # PubNub().publish({
+        #     'channel': event.publish_channel,
+        #     'message': {
+        #         'updates': {
+        #             'events': [event.event_dict]
+        #         }
+        #     }
+        # })
 
         return user, event, bet
 
@@ -194,14 +195,15 @@ class BetManager(models.Manager):
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(user, transaction)
 
-        PubNub().publish({
-            'channel': event.publish_channel,
-            'message': {
-                'updates': {
-                    'events': [event.event_dict]
-                }
-            }
-        })
+        # # TODO: To z jakiegos powodu nie dziala
+        # PubNub().publish({
+        #     'channel': event.publish_channel,
+        #     'message': {
+        #         'updates': {
+        #             'events': [event.event_dict]
+        #         }
+        #     }
+        # })
 
         return user, event, bet
 

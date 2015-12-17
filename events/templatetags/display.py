@@ -19,10 +19,9 @@ def render_event(event, bet, people):
     }
 
 @register.inclusion_tag('render_events.html')
-def render_events(events, bets, people):
+def render_events(events, people):
     return {
         'events': events,
-        'bets': bets,
         'people': people
     }
 
