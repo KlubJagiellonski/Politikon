@@ -19,16 +19,16 @@
 	<section id="featured" class="section-nopadding">
 		<figure>
 			{% if front_event.big_image %}
-            <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+                <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 			{% else %}
-            <img src="{{ STATIC_URL }}img/featured.jpg"/>
+                <img src="{{ STATIC_URL }}img/featured.jpg"/>
 			{% endif %}
 			<figcaption>
 				<a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
 				<div class="opis">
 					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
 					<div id="makeabet" class="prawa">
-						<div class="change changeYES">+21</div>
+						<div class="change changeYES">{{ front_event.price_change }}</div>
                         {% render_bet front_event front_event_bet.extension False %}
 					</div>
 				</div>
@@ -43,7 +43,7 @@
 	<section id="betfeed" class="hotbets">
 		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
 		<div>
-            {% render_events featured_events people %}
+            {% render_events latest_events people %}
 		</div>
 	</section>
 	

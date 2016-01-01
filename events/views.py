@@ -31,6 +31,8 @@ class EventsListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
         events = list(self.get_queryset())
+        for i in range(len(events)):
+            events[i].my_bet = events[i].get_user_bet(self.request.user)
         context.update({
             'events': events,
             'bets': create_bets_dict(self.request.user, events)
@@ -58,19 +60,15 @@ class EventDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
         event = self.get_event()
-        bets = create_bets_dict(self.request.user, [event])
-        if event.id in bets:
-            bet = bets[event.id]
-        else:
-            bet = None
         user = self.request.user
+        event_bet = event.get_user_bet(user)
         if user and user.is_authenticated():
             user_bets = Bet.objects.get_users_bets_for_events(user, [event])
         else:
             user_bets = []
         context.update({
             'event': event,
-            'bet': bet,
+            'bet': event_bet,
             'active': 1,
             'event_dict': event.event_dict,
             'bets': user_bets,

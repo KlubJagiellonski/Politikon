@@ -169,7 +169,9 @@ class Event(models.Model):
 
     def get_user_bet(self, user):
         if user.pk:
-            bets = self.bets.filter(user=user)
+            # TODO: resolve problem with bets > 1.   Which bet choose?
+            # comment: mayby condition has__gt=0 resolve this problem.
+            bets = self.bets.filter(user=user, has__gt=0).order_by('-id')
             if bets.exists():
                 bet = bets[0]
                 bet.extension = {
@@ -190,16 +192,16 @@ class Event(models.Model):
             else:
                 bet = Bet(event=self, user=user)
                 bet.extension = {
-                        'has_any': False,
-                        'buyYES': True,
-                        'buyNO': True,
-                        'outcomeYES': "YES",
-                        'outcomeNO': "NO",
-                        'priceYES': self.current_buy_for_price,
-                        'priceNO': self.current_buy_against_price,
-                        'textYES': "TAK",
-                        'textNO': "NIE"
-                    }
+                    'has_any': False,
+                    'buyYES': True,
+                    'buyNO': True,
+                    'outcomeYES': "YES",
+                    'outcomeNO': "NO",
+                    'priceYES': self.current_buy_for_price,
+                    'priceNO': self.current_buy_against_price,
+                    'textYES': "TAK",
+                    'textNO': "NIE"
+                }
             return bet
 
     def increment_quantity(self, outcome, by_amount):

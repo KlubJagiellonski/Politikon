@@ -2,6 +2,8 @@ from .models import Bet
 
 
 def create_bets_dict(user, events):
+    # TODO: remove it
+    # DEPRECATED use event.get_user_bet(user)
     bets = dict()
     if user is not None:
         bets = Bet.objects.get_users_bets_for_events(user, events)

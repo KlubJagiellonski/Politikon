@@ -280,7 +280,7 @@ footer ul a, footer .socialmedia div,
 #makeabet .currentbet {text-align: center;}
 #makeabet .currentbet p:first-of-type {padding-top: 3px; font-size: 1.25em; font-weight: 700;}
 #makeabet .currentbet p:last-of-type {color: #999; font-size: 1em; font-weight: 700;}
-#makeabet .currentbet span, .reputy-small {display: inline-block; width: 20px; height: 20px; background: url(../img/02reputysmall.png) center no-repeat; margin-bottom: -4px;}
+.reputy-small {display: inline-block; width: 20px; height: 20px; background: url(../img/02reputysmall.png) center no-repeat; margin-bottom: -4px;}
 
 .orangeheader {display: table; padding: 22px 23px 22px; font-size: 1.55em; font-weight: 700; color: #fff; text-transform: uppercase; background: #ea6a2a;}
 .goupheader {margin-top: -32px; margin-bottom: 30px;}
