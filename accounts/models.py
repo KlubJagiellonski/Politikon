@@ -115,7 +115,7 @@ class UserProfile(AbstractBaseUser):
             'user_id': self.id,
             'total_cash': self.total_cash_formatted,
             'portfolio_value': self.portfolio_value_formatted,
-            'reputation': self.reputation
+            'reputation': float(self.reputation)
         }
 
     @property

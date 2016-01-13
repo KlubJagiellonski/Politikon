@@ -40,10 +40,10 @@
 				</ul>
 				<div class="voted">1 256</div>
 			</div>
-			<div id ="makeabet">
-				<div class="change changeNO">-19</div>
+			<div id="makeabet" {% if bet.extension.has_any %} class="morebets" {% endif %} >
+				<div class="change changeNO">{{ event.price_change }}</div>
                 {% if bet %}
-				{% render_bet event bet False %}
+				{% render_bet event bet.extension True %}
                 {% endif %}
 			</div>
 		</div>
