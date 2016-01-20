@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext_lazy as _
+from constance import config
 
 from models import *
 
@@ -59,8 +60,8 @@ class UserChangeForm(forms.ModelForm):
 
 
 class MyUserAdmin(UserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
+    # form = UserChangeForm
+    # add_form = UserCreationForm
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
                     'is_staff', 'is_deleted')
@@ -86,9 +87,9 @@ class MyUserAdmin(UserAdmin):
         (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}))
 
     def topup(self, request, queryset):
-        amount = 100
         for user in queryset:
-            user.topup_cash(amount)
+            user.topup_cash(config.ADMIN_TOPUP)
+
     topup.short_description = 'Doładuj konto o 100'
 
 admin.site.register(UserProfile, MyUserAdmin)
