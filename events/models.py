@@ -189,20 +189,24 @@ class Event(models.Model):
                     'textOutcome': "TAK" if bet.outcome else "NIE",
                     'avgPrice': round(bet.bought_avg_price, 2),
                 }
+                return bet
             else:
                 bet = Bet(event=self, user=user)
-                bet.extension = {
-                    'has_any': False,
-                    'buyYES': True,
-                    'buyNO': True,
-                    'outcomeYES': "YES",
-                    'outcomeNO': "NO",
-                    'priceYES': self.current_buy_for_price,
-                    'priceNO': self.current_buy_against_price,
-                    'textYES': "TAK",
-                    'textNO': "NIE"
-                }
-            return bet
+        else:
+            bet = Bet(event=self)
+        # this bet.extension is for users with no bets and for anonymous
+        bet.extension = {
+            'has_any': False,
+            'buyYES': True,
+            'buyNO': True,
+            'outcomeYES': "YES",
+            'outcomeNO': "NO",
+            'priceYES': self.current_buy_for_price,
+            'priceNO': self.current_buy_against_price,
+            'textYES': "TAK",
+            'textNO': "NIE"
+        }
+        return bet
 
     def increment_quantity(self, outcome, by_amount):
         if outcome not in Bet.BET_OUTCOMES_TO_QUANTITY_ATTR:

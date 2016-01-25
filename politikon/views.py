@@ -18,7 +18,7 @@ class HomeView(TemplateView):
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
         front_event = Event.objects.get_front_event()
-        if front_event and user.pk:
+        if front_event:
             context.update({
                 'front_event': front_event,
                 'front_event_bet': front_event.get_user_bet(user),
