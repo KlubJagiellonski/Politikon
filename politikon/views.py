@@ -31,9 +31,9 @@ class HomeView(TemplateView):
             latest_events[i].my_bet = latest_events[i].get_user_bet(user)
 
         json_data = {
-                'events' : self.makeFeaturedEventsBetfeedData(latest_events+featured_events),
-                'front_event' : json.dumps(front_event.get_chart_points())
-                }
+            'events' : self.makeFeaturedEventsBetfeedData(latest_events+featured_events),
+            'front_event' : json.dumps(front_event.get_chart_points()) or None
+        }
 
         context.update({
             'featured_events': featured_events,
