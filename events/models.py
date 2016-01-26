@@ -175,6 +175,7 @@ class Event(models.Model):
             if bets.exists():
                 bet = bets[0]
                 bet.extension = {
+                    'is_user': True,
                     'has_any': True,
                     'buyYES': bet.outcome,
                     'buyNO': not bet.outcome,
@@ -196,6 +197,7 @@ class Event(models.Model):
             bet = Bet(event=self)
         # this bet.extension is for users with no bets and for anonymous
         bet.extension = {
+            'is_user': False,
             'has_any': False,
             'buyYES': True,
             'buyNO': True,
@@ -206,6 +208,8 @@ class Event(models.Model):
             'textYES': "TAK",
             'textNO': "NIE"
         }
+        if user.pk:
+            bet.extension['is_user'] = True
         return bet
 
     def increment_quantity(self, outcome, by_amount):
