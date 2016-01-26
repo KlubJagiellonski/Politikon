@@ -1,8 +1,9 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
+from datetime import datetime
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import ugettext as _
 
 from django.template.defaultfilters import slugify
@@ -18,7 +19,6 @@ from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
 from politikon.choices import Choices
 from .managers import EventManager, BetManager, TransactionManager
 
-from .managers import EventManager, BetManager, TransactionManager
 
 _MONTHS = {
         1 : 'Stycznia',
@@ -44,6 +44,11 @@ class Event(models.Model):
         ('FINISHED_NO', 4, u'rozstrzygnięte na NIE'),
     )
 
+    BOOLEAN_OUTCOME_DICT = {
+        EVENT_OUTCOME_CHOICES.FINISHED_YES: True,
+        EVENT_OUTCOME_CHOICES.FINISHED_NO: False
+    }
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -55,57 +60,57 @@ class Event(models.Model):
         'B'
     ])
 
-    title = models.TextField(u"tytuł wydarzenia")
-    short_title = models.TextField(u"tytuł promocyjny wydarzenia")
+    title = models.TextField(u'tytuł wydarzenia')
+    short_title = models.TextField(u'tytuł promocyjny wydarzenia')
 
-    title_fb_yes = models.TextField(u"tytuł na TAK obiektu FB")
-    title_fb_no = models.TextField(u"tytuł na NIE obiektu FB")
+    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB')
+    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB')
 
-    description = models.TextField(u"pełny opis wydarzenia", default='')
+    description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.ImageField(u"mały obrazek 340x250", upload_to="events_small", null=True)
-    big_image = models.ImageField(u"duży obrazek 1250x510", upload_to="events_big", null=True)
+    small_image = models.ImageField(u'mały obrazek 340x250', upload_to='events_small', null=True)
+    big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
 
-    is_featured = models.BooleanField(u"featured", default=False)
-    is_front = models.BooleanField(u"front", default=False)
-    outcome = models.PositiveIntegerField(u"rozstrzygnięcie", choices=EVENT_OUTCOME_CHOICES, default=1)
+    is_featured = models.BooleanField(u'featured', default=False)
+    is_front = models.BooleanField(u'front', default=False)
+    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.DateTimeField(u"przewidywana data rozstrzygnięcia")
-    end_date = models.DateTimeField(u"data rozstrzygnięcia", null=True)
+    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
+    end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
-    current_buy_for_price = models.IntegerField(u"cena nabycia akcji zdarzenia", default=50.0)
-    current_buy_against_price = models.IntegerField(u"cena nabycia akcji zdarzenia przeciwnego", default=50.0)
-    current_sell_for_price = models.IntegerField(u"cena sprzedaży akcji zdarzenia", default=50.0)
-    current_sell_against_price = models.IntegerField(u"cena sprzedaży akcji zdarzenia przeciwnego", default=50.0)
+    current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia', default=50.0)
+    current_buy_against_price = models.IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=50.0)
+    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia', default=50.0)
+    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego', default=50.0)
 
-    last_transaction_date = models.DateTimeField(u"data ostatniej transakcji", null=True)
+    last_transaction_date = models.DateTimeField(u'data ostatniej transakcji', null=True)
 
-    Q_for = models.IntegerField(u"zakładów na TAK", default=0)
-    Q_against = models.IntegerField(u"zakładów na NIE", default=0)
-    turnover = models.IntegerField(u"obrót", default=0, db_index=True)
+    Q_for = models.IntegerField(u'zakładów na TAK', default=0)
+    Q_against = models.IntegerField(u'zakładów na NIE', default=0)
+    turnover = models.IntegerField(u'obrót', default=0, db_index=True)
 
-    absolute_price_change = models.IntegerField(u"zmiana ceny (wartość absolutna)", db_index=True, default=0)
-    price_change = models.IntegerField(u"zmiana ceny", default=0)
+    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True, default=0)
+    price_change = models.IntegerField(u'zmiana ceny', default=0)
 
-    B = models.FloatField(u"stała B", default=5)
+    B = models.FloatField(u'stała B', default=5)
 
     def __unicode__(self):
         return self.title
 
     def get_relative_url(self):
-        return "/event/%(id)d-%(title)s" % { 'id' : self.id, 'title': slugify(unidecode(self.title))}
+        return '/event/%(id)d-%(title)s' % { 'id' : self.id, 'title': slugify(unidecode(self.title))}
 
     def get_absolute_url(self):
-        return "http://%(domain)s%(url)s" % {
+        return 'http://%(domain)s%(url)s' % {
             'domain': current_domain(),
-            'url': reverse("events:event_detail", kwargs={'event_id': self.id})
+            'url': reverse('events:event_detail', kwargs={'event_id': self.id})
         }
 
     def get_absolute_facebook_object_url(self):
-        return "http://%(domain)s%(url)s" % {
+        return 'http://%(domain)s%(url)s' % {
             'domain': current_domain(),
-            'url': reverse("events:event_facebook_object_detail", kwargs={'event_id': self.id})
+            'url': reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
         }
 
     @property
@@ -114,7 +119,7 @@ class Event(models.Model):
 
     @property
     def publish_channel(self):
-        return "event_%d" % self.id
+        return 'event_%d' % self.id
 
     @property
     def event_dict(self):
@@ -255,6 +260,77 @@ class Event(models.Model):
 
         super(Event, self).save(**kwargs)
 
+    @transaction.atomic
+    def finish(self, outcome):
+        if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
+            return False
+        self.outcome = outcome
+        self.end_date = datetime.now()
+        self.save()
+        return True
+
+    @transaction.atomic
+    def finish_with_outcome(self, outcome):
+        if not self.finish(outcome):
+            return False
+        for bet in Bet.objects.filter(event=self):
+            if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
+                bet.rewarded_total += 100 * bet.has
+                bet.user.total_cash += bet.rewarded_total
+                bet.user.save()
+                bet.save()
+                Transaction.objects.create(
+                    user=bet.user,
+                    event=self,
+                    type=Transaction.TRANSACTION_TYPE_CHOICES.EVENT_WON_PRIZE,
+                    quantity=bet.has,
+                    price=bet.bought_avg_price
+                )
+        return True
+
+    @transaction.atomic
+    def finish_yes(self):
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_YES)
+
+    @transaction.atomic
+    def finish_no(self):
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.\
+                                         FINISHED_NO)
+
+    @transaction.atomic
+    def cancel(self):
+        if not self.finish(self.EVENT_OUTCOME_CHOICES.CANCELLED):
+            return False
+        users = {}
+        for t in Transaction.objects.filter(event=self).order_by('user'):
+            if not t.user in users:
+                users.update({
+                    t.user: 0
+                })
+            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO:
+                users[t.user] += t.quantity * t.price
+            elif t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
+                users[t.user] -= t.quantity * t.price
+        for user, refund in users.iteritems():
+            if refund == 0:
+                continue
+            user.total_cash += refund
+            user.save()
+            if refund > 0:
+                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
+            else:
+                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_DEBIT
+            Transaction.objects.create(
+                user=user,
+                event=self,
+                type=transaction_type,
+                price=abs(refund)
+            )
+        return True
+
 
 class Bet(models.Model):
 
@@ -275,18 +351,17 @@ class Bet(models.Model):
         'NO': 'Q_against'
     }
 
-
     objects = BetManager()
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet')
     event = models.ForeignKey(Event, null=False, related_name='bets', related_query_name='bet')
     outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
-    has = models.PositiveIntegerField(u"posiadane zakłady", default=0, null=False)
-    bought = models.PositiveIntegerField(u"kupione zakłady", default=0, null=False)
-    sold = models.PositiveIntegerField(u"sprzedane zakłady", default=0, null=False)
-    bought_avg_price = models.FloatField(u"kupione po średniej cenie", default=0, null=False)
-    sold_avg_price = models.FloatField(u"sprzedane po średniej cenie", default=0, null=False)
-    rewarded_total = models.IntegerField(u"nagroda za wynik", default=0, null=False)
+    has = models.PositiveIntegerField(u'posiadane zakłady', default=0, null=False)
+    bought = models.PositiveIntegerField(u'kupione zakłady', default=0, null=False)
+    sold = models.PositiveIntegerField(u'sprzedane zakłady', default=0, null=False)
+    bought_avg_price = models.FloatField(u'kupione po średniej cenie', default=0, null=False)
+    sold_avg_price = models.FloatField(u'sprzedane po średniej cenie', default=0, null=False)
+    rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
 
     @property
     def bet_dict(self):
@@ -304,7 +379,7 @@ class Bet(models.Model):
         }
 
     def __unicode__(self):
-        return u"zakłady %s na %s" % (self.user, self.event)
+        return u'zakłady %s na %s' % (self.user, self.event)
 
 
 class Transaction(models.Model):
@@ -315,8 +390,9 @@ class Transaction(models.Model):
         ('BUY_NO', 3, u'zakup udziałów na NIE'),
         ('SELL_NO', 4, u'sprzedaż udziałów na NIE'),
         ('EVENT_CANCELLED_REFUND', 5, u'zwrot po anulowaniu wydarzenia'),
-        ('EVENT_WON_PRIZE', 6, u'wygrana po rozstrzygnięciu wydarzenia'),
-        ('TOPPED_UP_BY_APP', 7, u'doładowanie konta przez aplikację'),
+        ('EVENT_CANCELLED_DEBIT', 6, u'obciążenie konta po anulowaniu wydarzenia'),
+        ('EVENT_WON_PRIZE', 7, u'wygrana po rozstrzygnięciu wydarzenia'),
+        ('TOPPED_UP_BY_APP', 8, u'doładowanie konta przez aplikację'),
     )
 
     objects = TransactionManager()
@@ -324,9 +400,9 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions', related_query_name='transaction')
     event = models.ForeignKey(Event, null=True, related_name='transactions', related_query_name='transaction')
     type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
-    date = models.DateTimeField(auto_now_add=True)
-    quantity = models.PositiveIntegerField(u"ilość", default=1)
-    price = models.IntegerField(u"cena jednostkowa", default=0, null=False)
+    date = models.DateTimeField('data', auto_now_add=True)
+    quantity = models.PositiveIntegerField(u'ilość', default=1)
+    price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
 
     def __unicode__(self):
-        return "%s przez %s" % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
+        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
