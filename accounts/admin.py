@@ -60,8 +60,8 @@ class UserChangeForm(forms.ModelForm):
 
 
 class MyUserAdmin(UserAdmin):
-    # form = UserChangeForm
-    # add_form = UserCreationForm
+    form = UserChangeForm
+    add_form = UserCreationForm
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
                     'is_staff', 'is_deleted')
@@ -86,10 +86,15 @@ class MyUserAdmin(UserAdmin):
         }), (None, {'fields': ('name', )}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}))
 
-    def topup(self, request, queryset):
-        for user in queryset:
-            user.topup_cash(config.ADMIN_TOPUP)
+    class Topup:
+        def __call__(self, request, queryset):
+            for user in queryset:
+                user.topup_cash(config.ADMIN_TOPUP)
 
-    topup.short_description = 'Doładuj konto o 100'
+        @property
+        def short_description(self):
+            return 'Doładuj konto o %s' % config.ADMIN_TOPUP
+
+    topup = Topup()
 
 admin.site.register(UserProfile, MyUserAdmin)
