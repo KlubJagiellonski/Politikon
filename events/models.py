@@ -217,6 +217,30 @@ class Event(models.Model):
             bet.extension['is_user'] = True
         return bet
 
+    def get_bet_social(self):
+        """
+        Get users who bought this event
+        :return: Dict with 4 keys: 2 QuerySet with YES users and NO users, 2 integers with counts
+        :rtype: dict{}
+        """
+        response = {}
+        bet_social_yes = Bet.objects.filter(
+                event=self,
+                outcome=True,  # bought YES
+                has__gt=0,
+        )
+        response['yes_count'] = bet_social_yes.count()
+        response['yes_bets'] = bet_social_yes[:6]
+
+        bet_social_no = Bet.objects.filter(
+                event=self,
+                outcome=False,  # bought NO
+                has__gt=0,
+        )
+        response['no_count'] = bet_social_no.count()
+        response['no_bets'] = bet_social_no[:6]
+        return response
+
     def increment_quantity(self, outcome, by_amount):
         if outcome not in Bet.BET_OUTCOMES_TO_QUANTITY_ATTR:
             raise UnknownOutcome()
@@ -227,7 +251,7 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def increment_turnover(self, by_amount):
-        self.turnover += by_amount;
+        self.turnover += by_amount
 
     def recalculate_prices(self):
         factor = 100.
