@@ -20,25 +20,19 @@
 		<div class="bet-social">
 			<div class="peopleYES lewa">
 				<ul>
-                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    {% for bet in bet_social.yes_bets %}
+                        <li><a href="{{ bet.user.get_absolute_url }}"><img class="{% if bet.user.is_vip %}uservip{% endif %}" src="{{ bet.user.get_avatar_url }}"/></a></li>
+                    {% endfor %}
 				</ul>
-				<div class="voted">1 256</div>
+				<div class="voted">{{ bet_social.yes_count }}</div>
 			</div>
 			<div class="peopleNO prawa">
 				<ul>
-                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-                    <li><a href="#"><img class="uservip" src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
-					<li><a href="#"><img src="{{ STATIC_URL }}img/blank-avatar.jpg"/></a></li>
+                    {% for bet in bet_social.no_bets %}
+                        <li><a href="{{ bet.user.get_absolute_url }}"><img class="{% if bet.user.is_vip %}uservip{% endif %}" src="{{ bet.user.get_avatar_url }}"/></a></li>
+                    {% endfor %}
 				</ul>
-				<div class="voted">1 256</div>
+				<div class="voted">{{ bet_social.no_count }}</div>
 			</div>
 			<div id="makeabet" {% if bet.extension.has_any %} class="morebets" {% endif %} >
 				<div class="change changeNO">{{ event.price_change }}</div>
