@@ -9,6 +9,7 @@ from .forms import EventForm
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
+        'end_date',
         'outcome',
         'current_buy_for_price',
         'current_buy_against_price',

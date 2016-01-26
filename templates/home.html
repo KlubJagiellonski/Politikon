@@ -16,68 +16,68 @@
 
     </script>
 
-	<section id="featured" class="section-nopadding">
-		<figure>
-			{% if front_event.big_image %}
-                <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
-			{% else %}
-                <img src="{{ STATIC_URL }}img/featured.jpg"/>
-			{% endif %}
-			<figcaption>
-				<a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
-				<div class="opis">
-					<a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
-					<div id="makeabet" class="prawa">
-						<div class="change changeYES">{{ front_event.price_change }}</div>
-                        {% render_bet front_event front_event_bet.extension False %}
-					</div>
-				</div>
-			</figcaption>
-		</figure>
-	</section>
-	
-	<section id="betfeed">
+    <section id="featured" class="section-nopadding">
+        <figure>
+            {% if front_event.big_image %}
+            <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+            {% else %}
+            <img src="{{ STATIC_URL }}img/featured.jpg"/>
+            {% endif %}
+            <figcaption>
+            <a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
+            <div class="opis">
+                <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
+                <div id="makeabet" class="prawa">
+                    <div class="change changeYES">{{ front_event.price_change }}</div>
+                    {% render_bet front_event front_event_bet.extension False %}
+                </div>
+            </div>
+            </figcaption>
+        </figure>
+    </section>
+
+    <section id="betfeed">
         {% render_events featured_events people %}
-	</section>
-	
-	<section id="betfeed" class="hotbets">
-		<h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
-		<div>
+    </section>
+
+    <section id="betfeed" class="hotbets">
+        <h3 class="orangeheader goupheader">Największe zmiany <div class="prawa hotbet-icon"></div></h3>
+        <div>
             {% render_events latest_events people %}
-		</div>
-	</section>
-	
-	<section id="ranking-short">
-		<h3 class="orangetxt lewa">Najlepsi gracze</h3>
-		<ul class="tabs prawa">
-			<li><a href="#tydzien">Tydzień</a></li>
-			<li><a href="#miesiac">Miesiąc</a></li>
-			<li><a href="#calosc">Całość</a></li>
-		</ul>
-		<div class="clr"></div>
-		<div id="userrank_content" class="zakladki-content">
+        </div>
+    </section>
 
-			<article id="tydzien">
-			{% for user in users %}
-				<div class="userrank{% if user.is_vip %} uservip{% endif %}">
-					<a href="{{ user.get_absolute_url }}">
-						<img src="{{ user.get_avatar_url }}"/>
-						<div class="wolnereputy"><span class="astable">{{ user.reputation }}</span></div>
-						<div class="username">{{ user.username }}</div>
-					</a>
-				</div>
-			{% endfor %}
-			</article>
-		</div>
-	</section>
-	
-	
-	<section id="loadmore">
-		<a href="#"><div class="btn astable">Wyświetl więcej zakładów</div></a>
-				<div class="more lewa"></div>
-				<div class="more prawa"></div>
-				<div class="more centrum"></div>
+    <section id="ranking-short">
+        <h3 class="orangetxt lewa">Najlepsi gracze</h3>
+        <ul class="tabs prawa">
+            <li><a href="#tydzien">Tydzień</a></li>
+            <li><a href="#miesiac">Miesiąc</a></li>
+            <li><a href="#calosc">Całość</a></li>
+        </ul>
+        <div class="clr"></div>
+        <div id="userrank_content" class="zakladki-content">
 
-	</section>
-	
-{% endblock %}
+            <article id="tydzien">
+                {% for user in users %}
+                <div class="userrank{% if user.is_vip %} uservip{% endif %}">
+                    <a href="{{ user.get_absolute_url }}">
+                        <img src="{{ user.get_avatar_url }}"/>
+                        <div class="wolnereputy"><span class="astable">{{ user.reputation }}</span></div>
+                        <div class="username">{{ user.username }}</div>
+                    </a>
+                </div>
+                {% endfor %}
+            </article>
+        </div>
+    </section>
+
+
+    <section id="loadmore">
+        <a href="{% url 'events:events' %}"><div class="btn astable">Wyświetl więcej zakładów</div></a>
+        <div class="more lewa"></div>
+        <div class="more prawa"></div>
+        <div class="more centrum"></div>
+
+    </section>
+
+    {% endblock %}
