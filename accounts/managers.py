@@ -4,6 +4,8 @@ import uuid
 from django.contrib.auth.models import BaseUserManager, UserManager
 from django.http import HttpResponseForbidden
 
+from constance import config
+
 
 class UserProfileManager(BaseUserManager):
     def return_new_user_object(self, username, password=None):
@@ -30,6 +32,7 @@ class UserProfileManager(BaseUserManager):
         )
         user.set_password(password)
         user.is_active = True
+        user.topup_cash(config.STARTING_CASH)
         user.save(using=self._db)
 
         return user
