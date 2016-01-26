@@ -58,8 +58,11 @@ function renderCharts(events,featuredEvent){
     }
     // var frontchartData = chartData;
 
-    makeChart(featuredEvent, {
-        id : '#featured-canvas',
-        chartStyle:FEATURED_CHART_STYLE
-    });
+
+    if(featuredEvent){
+        makeChart(featuredEvent, {
+            id : '#featured-canvas',
+            chartStyle:FEATURED_CHART_STYLE
+        });
+    }
 }

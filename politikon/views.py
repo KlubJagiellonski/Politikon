@@ -15,16 +15,20 @@ class HomeView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         user = self.get_object()
+        json_data = {}
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
         front_event = Event.objects.get_front_event()
-        front_event_json = None
+
         if front_event:
             context.update({
                 'front_event': front_event,
                 'front_event_bet': front_event.get_user_bet(user),
             })
-            front_event_json = json.dumps(front_event.get_chart_points())
+            json_data['front_event']=json.dumps(front_event.get_chart_points())
+        else:
+            json_data['front_event']='null'
+
         featured_events = list(Event.objects.get_featured_events())
         for i in range(len(featured_events)):
             featured_events[i].my_bet = featured_events[i].get_user_bet(user)
@@ -32,10 +36,7 @@ class HomeView(TemplateView):
         for i in range(len(latest_events)):
             latest_events[i].my_bet = latest_events[i].get_user_bet(user)
 
-        json_data = {
-            'events' : self.makeFeaturedEventsBetfeedData(latest_events+featured_events),
-            'front_event' : front_event_json
-        }
+        json_data['events']=self.makeFeaturedEventsBetfeedData(latest_events+featured_events)
 
         context.update({
             'featured_events': featured_events,
