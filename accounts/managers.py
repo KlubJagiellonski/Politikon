@@ -32,8 +32,8 @@ class UserProfileManager(BaseUserManager):
         )
         user.set_password(password)
         user.is_active = True
-        user.topup_cash(config.STARTING_CASH)
         user.save(using=self._db)
+        user.topup_cash(config.STARTING_CASH)
 
         return user
 
