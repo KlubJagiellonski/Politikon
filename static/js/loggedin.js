@@ -14,7 +14,7 @@ $(function(){
             $('.overlay').addClass("opacity");
         }, 100); // opoznienie
     });
-})
+});
 //pokaż menu z avatara
 $(function(){
         $('#maintop .graj img').on('click',function(){
@@ -31,7 +31,7 @@ $(function(){
                 $('.overlay').addClass("opacity");
             }, 100); // opoznienie
     });
-})
+});
 //pokaż powiadomienia
 $(function(){
         $('#maintop .userdata .wallet').on('click',function(){
@@ -48,7 +48,7 @@ $(function(){
                 $('.overlay').addClass("opacity");
             }, 100); // opoznienie
     });
-})
+});
 //ukryj wszystko po klieknieciu w overlay
 $(function(){
         $('.overlay').on('click',function(){
@@ -65,19 +65,18 @@ $(function(){
                 $('.overlay').removeClass("display");
             }, 150); // opoznienie
     });
-})
+});
 
 //notifications - scroll setup
 $(function() {
-			
         // the element we want to apply the jScrollPane
         var $el					= $('#jp-container').jScrollPane({
                 verticalGutter 	: -16
         }),
-                        
-        // the extension functions and options 	
+
+        // the extension functions and options
                 extensionPlugin 	= {
-                        
+
                         extPluginOpts	: {
                                 // speed for the fadeOut animation
                                 mouseLeaveFadeSpeed	: 500,
@@ -95,30 +94,30 @@ $(function() {
                         elementtimeout	: null,	// avoids showing the scrollbar when moving from inside the element to outside, passing over the scrollbar
                         isScrolling		: false,// true if scrolling
                         addHoverFunc	: function() {
-                                
+
                                 // run only if the window has a width bigger than deviceWidth
                                 if( $(window).width() <= this.extPluginOpts.deviceWidth ) return false;
-                                
+
                                 var instance		= this;
-                                
+
                                 // functions to show / hide the scrollbar
                                 $.fn.jspmouseenter 	= $.fn.show;
                                 $.fn.jspmouseleave 	= $.fn.fadeOut;
-                                
+
                                 // hide the jScrollPane vertical bar
                                 var $vBar			= this.getContentPane().siblings('.jspVerticalBar').hide();
-                                
+
                                 /*
                                  * mouseenter / mouseleave events on the main element
                                  * also scrollstart / scrollstop - @James Padolsey : http://james.padolsey.com/javascript/special-scroll-events-for-jquery/
                                  */
                                 $el.bind('mouseenter.jsp',function() {
-                                        
+
                                         // show the scrollbar
                                         $vBar.stop( true, true ).jspmouseenter();
-                                        
+
                                         if( !instance.extPluginOpts.useTimeout ) return false;
-                                        
+
                                         // hide the scrollbar after hovertimeout_t ms
                                         clearTimeout( instance.hovertimeout );
                                         instance.hovertimeout 	= setTimeout(function() {
@@ -126,10 +125,9 @@ $(function() {
                                                 if( !instance.isScrolling )
                                                         $vBar.stop( true, true ).jspmouseleave( instance.extPluginOpts.mouseLeaveFadeSpeed || 0 );
                                         }, instance.extPluginOpts.hovertimeout_t );
-                                        
-                                        
+
                                 }).bind('mouseleave.jsp',function() {
-                                        
+
                                         // hide the scrollbar
                                         if( !instance.extPluginOpts.useTimeout )
                                                 $vBar.stop( true, true ).jspmouseleave( instance.extPluginOpts.mouseLeaveFadeSpeed || 0 );
@@ -138,20 +136,17 @@ $(function() {
                                         if( !instance.isScrolling )
                                                         $vBar.stop( true, true ).jspmouseleave( instance.extPluginOpts.mouseLeaveFadeSpeed || 0 );
                                         }
-                                        
+
                                 });
-                                
+
                                 if( this.extPluginOpts.useTimeout ) {
-                                        
                                         $el.bind('scrollstart.jsp', function() {
-                                        
                                                 // when scrolling show the scrollbar
                                                 clearTimeout( instance.hovertimeout );
                                                 instance.isScrolling	= true;
                                                 $vBar.stop( true, true ).jspmouseenter();
-                                                
                                         }).bind('scrollstop.jsp', function() {
-                                                
+
                                                 // when stop scrolling hide the scrollbar (if not hovering it at the moment)
                                                 clearTimeout( instance.hovertimeout );
                                                 instance.isScrolling	= false;
@@ -159,9 +154,8 @@ $(function() {
                                                         if( !instance.isScrollbarHover )
                                                                 $vBar.stop( true, true ).jspmouseleave( instance.extPluginOpts.mouseLeaveFadeSpeed || 0 );
                                                 }, instance.extPluginOpts.hovertimeout_t );
-                                                
                                         });
-                                        
+
                                         // wrap the scrollbar
                                         // we need this to be able to add the mouseenter / mouseleave events to the scrollbar
                                         var $vBarWrapper	= $('<div/>').css({
@@ -173,20 +167,20 @@ $(function() {
                                                 width		: $vBar.width(),
                                                 height		: $vBar.height()
                                         }).bind('mouseenter.jsp',function() {
-                                                
+
                                                 clearTimeout( instance.hovertimeout );
                                                 clearTimeout( instance.elementtimeout );
-                                                
+
                                                 instance.isScrollbarHover	= true;
-                                                
+
                                                 // show the scrollbar after 100 ms.
-                                                // avoids showing the scrollbar when moving from inside the element to outside, passing over the scrollbar								
+                                                // avoids showing the scrollbar when moving from inside the element to outside, passing over the scrollbar
                                                 instance.elementtimeout	= setTimeout(function() {
                                                         $vBar.stop( true, true ).jspmouseenter();
-                                                }, 100 );	
-                                                
+                                                }, 100 );
+
                                         }).bind('mouseleave.jsp',function() {
-                                                
+
                                                 // hide the scrollbar after hovertimeout_t
                                                 clearTimeout( instance.hovertimeout );
                                                 instance.isScrollbarHover	= false;
@@ -195,21 +189,21 @@ $(function() {
                                                         if( !instance.isScrolling )
                                                                 $vBar.stop( true, true ).jspmouseleave( instance.extPluginOpts.mouseLeaveFadeSpeed || 0 );
                                                 }, instance.extPluginOpts.hovertimeout_t );
-                                                
+
                                         });
-                                        
+
                                         $vBar.wrap( $vBarWrapper );
-                                
+
                                 }
-                        
+
                         }
-                        
+
                 },
-                
+
                 // the jScrollPane instance
                 jspapi 			= $el.data('jsp');
-                
-        // extend the jScollPane by merging	
+
+        // extend the jScollPane by merging
         $.extend( true, jspapi, extensionPlugin );
         jspapi.addHoverFunc();
 

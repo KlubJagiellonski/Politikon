@@ -8,7 +8,7 @@ $(function(){
             $('.blankoverlay').addClass("opacity");
         }, 100); // opoznienie
     });
-})
+});
 
 //ukryj wszystko po klieknieciu w overlay
 $(function(){
@@ -21,7 +21,7 @@ $(function(){
                 $('.overlay').removeClass("display");
             }, 150); // opoznienie
     });
-})
+});
 
 //ukryj okno logowania po kliknieciu w X
 $(function(){
@@ -34,7 +34,7 @@ $(function(){
                 $('.overlay').removeClass("display");
             }, 150); // opoznienie
     });
-})
+});
 
 //pokaż okno logowania
 $(function(){
@@ -47,7 +47,7 @@ $(function(){
                 $('.blankoverlay').addClass("display");
             }, 150); // opoznienie
     });
-})
+});
 
 //zamykanie okien logowania
 $(function(){
@@ -57,7 +57,7 @@ $(function(){
                 $('.overlay').removeClass('display');
             }, 150); // opoznienie
     });
-})
+});
 
 //pokaż rejestrację przez e-mail
 $(function(){
@@ -65,20 +65,20 @@ $(function(){
             $('.rejestracja').removeClass('opacity');
             $('.logowanie').removeClass('opacity');
             $('.przypomnienie').removeClass('opacity');
-            
+
             setTimeout(function (){
                 $('.rejestracja').removeClass('asblock');
                 $('.logowanie').removeClass('asblock');
                 $('.przypomnienie').removeClass('asblock');
-                
+
                 $('.rejestracjaemail').addClass('asblock');
             }, 150); // opoznienie
-            
+
             setTimeout(function (){
                 $('.rejestracjaemail').addClass('opacity');
             }, 200); // opoznienie
     });
-})
+});
 
 //pokaż rejestrację
 $(function(){
@@ -86,20 +86,20 @@ $(function(){
             $('.rejestracjaemail').removeClass('opacity');
             $('.logowanie').removeClass('opacity');
             $('.przypomnienie').removeClass('opacity');
-            
+
             setTimeout(function (){
                 $('.rejestracjaemail').removeClass('asblock');
                 $('.logowanie').removeClass('asblock');
                 $('.przypomnienie').removeClass('asblock');
-                
+
                 $('.rejestracja').addClass('asblock');
             }, 150); // opoznienie
-            
+
             setTimeout(function (){
                 $('.rejestracja').addClass('opacity');
             }, 200); // opoznienie
     });
-})
+});
 
 //pokaż logowanie
 $(function(){
@@ -107,20 +107,20 @@ $(function(){
             $('.rejestracjaemail').removeClass('opacity');
             $('.rejestracja').removeClass('opacity');
             $('.przypomnienie').removeClass('opacity');
-            
+
             setTimeout(function (){
                 $('.rejestracjaemail').removeClass('asblock');
                 $('.rejestracja').removeClass('asblock');
                 $('.przypomnienie').removeClass('asblock');
-                
+
                 $('.logowanie').addClass('asblock');
             }, 150); // opoznienie
-            
+
             setTimeout(function (){
                 $('.logowanie').addClass('opacity');
             }, 200); // opoznienie
     });
-})
+});
 
 //pokaż reset hasła
 $(function(){
@@ -128,17 +128,17 @@ $(function(){
             $('.rejestracjaemail').removeClass('opacity');
             $('.rejestracja').removeClass('opacity');
             $('.logowanie').removeClass('opacity');
-            
+
             setTimeout(function (){
                 $('.rejestracjaemail').removeClass('asblock');
                 $('.rejestracja').removeClass('asblock');
                 $('.logowanie').removeClass('asblock');
-                
+
                 $('.przypomnienie').addClass('asblock');
             }, 150); // opoznienie
-            
+
             setTimeout(function (){
                 $('.przypomnienie').addClass('opacity');
             }, 200); // opoznienie
     });
-})
+});
