@@ -62,23 +62,27 @@ $(function() {
 
         // kupowanie i sprzedawanie zakładów
         $(".a_bet").on('click', function(e) {
-			e.preventDefault();
-			var event_id = $(this).data('event_id');
-			var data = { buy: $(this).data('buy'), outcome: $(this).data('outcome'), for_price : $(this).data('price') };
+            e.preventDefault();
+            var event_id = $(this).data('event_id');
+            var data = { buy: $(this).data('buy'), outcome: $(this).data('outcome'), for_price : $(this).data('price') };
             var makebet = $(this).parent();
             var word_yes = 'TAK';    // TODO: resolve multi-language problem
             var word_no = 'NIE';    // TODO: resolve multi-language problem
+            var word_eng_yes = 'YES';    // TODO: resolve multi-language problem
+            var word_eng_no = 'NO';    // TODO: resolve multi-language problem
+            var word_true = 'True';
+            var word_false = 'False';
 
-//			console.log('sent: ' + JSON.stringify(data));
-			$.ajax({
-				type: 'POST',
-				data: JSON.stringify(data),
-				contentType: 'application/json',
-				url: '/event/'+event_id+'/transaction/create/',
-				success: function(data) {
-//					console.log(JSON.stringify(data));
-					if(data.updates && data.updates.user){
-//						console.log('RESP: ' + JSON.stringify(data.updates));
+            // console.log('sent: ' + JSON.stringify(data));
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                url: '/event/'+event_id+'/transaction/create/',
+                success: function(data) {
+                    // console.log(JSON.stringify(data));
+                    if(data.updates && data.updates.user){
+                        // console.log('RESP: ' + JSON.stringify(data.updates));
                         var event = data.updates.events[0];
                         var bet = data.updates.bets[0];
                         var user = data.updates.user;
@@ -94,49 +98,61 @@ $(function() {
                             makebet.children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
                             makebet.children('.a_betYES').children('.betYES').children('.txt').html('+');
                             makebet.children('.a_betNO').data('price', event.sell_for_price);
+                            makebet.children('.a_betNO').data('outcome', word_eng_yes);
+                            makebet.children('.a_betNO').data('buy', word_false);
                             makebet.children('.a_betNO').children('.betNO').children('.value').html(event.sell_for_price);
                             makebet.children('.a_betNO').children('.betNO').children('.txt').html('-');
                             makebet.children('.currentbet').children().first()
-                                .removeClass('change')
-                                .addClass('changeYES')
-                                .html(bets_type);
+                            .removeClass('change')
+                            .addClass('changeYES')
+                            .html(bets_type);
                         } else {    // bet.outcome = false
                             // You have NO bets for the event
                             bets_type = word_no;
                             makebet.addClass('morebets');
                             makebet.children('.a_betYES').data('price', event.sell_against_price);
+                            makebet.children('.a_betYES').data('outcome', word_eng_no);
+                            makebet.children('.a_betYES').data('buy', word_false);
                             makebet.children('.a_betYES').children('.betYES').children('.value').html(event.sell_against_price);
                             makebet.children('.a_betYES').children('.betYES').children('.txt').html('-');
                             makebet.children('.a_betNO').data('price', event.buy_against_price);
                             makebet.children('.a_betNO').children('.betNO').children('.value').html(event.buy_against_price);
                             makebet.children('.a_betNO').children('.betNO').children('.txt').html('+');
                             makebet.children('.currentbet').children().first()
-                                .removeClass('change')
-                                .addClass('changeNO')
-                                .html(bets_type);
+                            .removeClass('change')
+                            .addClass('changeNO')
+                            .html(bets_type);
                         }
                         if (bet.has == 0) {    // bet.has = 0
                             // You don't have any bets for the event
                             makebet.removeClass('morebets');
-                            makebet.children('.a_betNO').children('.betNO').children('.txt').html(word_no);
                             makebet.children('.a_betYES').children('.betYES').children('.txt').html(word_yes);
+                            makebet.children('.a_betNO').children('.betNO').children('.txt').html(word_no);
+                            makebet.children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
+                            makebet.children('.a_betNO').children('.betNO').children('.value').html(event.buy_against_price);
+                            makebet.children('.a_betYES').data('price', event.buy_for_price);
+                            makebet.children('.a_betNO').data('price', event.buy_against_price);
+                            makebet.children('.a_betYES').data('buy', word_true);
+                            makebet.children('.a_betNO').data('buy', word_true);
+                            makebet.children('.a_betYES').data('outcome', word_eng_yes);
+                            makebet.children('.a_betNO').data('outcome', word_eng_no);
                             makebet.children('.currentbet').hide();
                             makebet.children('.currentbet').children().first()
-                                .removeClass('changeNO')
-                                .removeClass('changeYES')
-                                .addClass('change')
-                                .html(bets_type);
+                            .removeClass('changeNO')
+                            .removeClass('changeYES')
+                            .addClass('change')
+                            .html(bets_type);
                         } else {
                             makebet.children('.currentbet').show();
                         }
 
-						$(".walletvalue").fadeOut(200,function(){$(this).text(user.portfolio_value).fadeIn(200);});
-						$(".freevalue").fadeOut(200,function(){$(this).text(user.total_cash).fadeIn(200);});
-						$(".reputationvalue").fadeOut(200,function(){$(this).text(user.reputation+"%").fadeIn(200);});
-					}
-				}
-			});
-		}); // end $(".a_bet").on()
+                        $(".walletvalue").fadeOut(200,function(){$(this).text(user.portfolio_value).fadeIn(200);});
+                        $(".freevalue").fadeOut(200,function(){$(this).text(user.total_cash).fadeIn(200);});
+                        $(".reputationvalue").fadeOut(200,function(){$(this).text(user.reputation+"%").fadeIn(200);});
+                    }
+                }
+            });
+        }); // end $(".a_bet").on()
 
 
     });
