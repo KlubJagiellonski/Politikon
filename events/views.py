@@ -64,17 +64,13 @@ class EventDetailView(DetailView):
         event = self.get_event()
         user = self.request.user
         event_bet = event.get_user_bet(user)
-        if user and user.is_authenticated():
-            user_bets = Bet.objects.get_users_bets_for_events(user, [event])
-        else:
-            user_bets = []
+        bet_social = event.get_bet_social()
         context.update({
             'event': event,
             'bet': event_bet,
             'active': 1,
             'event_dict': event.event_dict,
-            'bets': user_bets,
-            'bet_dicts': [bet.bet_dict for bet in user_bets]
+            'bet_social': bet_social,
         })
         return context
 
