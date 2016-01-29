@@ -27,9 +27,12 @@
             <a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
             <div class="opis">
                 <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
-                <div id="makeabet" class="prawa">
+                <div id="makeabet" class="prawa{% if front_event_bet.extension.has_any %} morebets{% endif %}">
                     <div class="change changeYES">{{ front_event.price_change }}</div>
-                    {% render_bet front_event front_event_bet.extension False %}
+                    {% comment%}
+                    <div class="change changeYES{% if front_event_bet.extension.has_any %}{% endif %}">{{ front_event.price_change }}</div>
+                    {% endcomment %}
+                    {% render_bet front_event front_event_bet.extension True %}
                 </div>
             </div>
             </figcaption>
