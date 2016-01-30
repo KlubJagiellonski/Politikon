@@ -33,9 +33,11 @@ class EventsListView(ListView):
         events = list(self.get_queryset())
         for i in range(len(events)):
             events[i].my_bet = events[i].get_user_bet(self.request.user)
+        mode = self.kwargs['mode']
         context.update({
             'events': events,
-            'bets': create_bets_dict(self.request.user, events)
+            'bets': create_bets_dict(self.request.user, events),
+            'active': mode
         })
         return context
 

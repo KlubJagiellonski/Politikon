@@ -39,7 +39,6 @@ $(function() {
         });
 
         //zakładki
-        $('ul.tabs li:first').addClass('active');
         $('.zakladki-content article').hide();
         $('.zakladki-content article:first').show();
         $('ul.tabs li').on('click',function(){

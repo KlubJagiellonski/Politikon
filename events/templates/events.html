@@ -5,19 +5,19 @@
 
 {% block content %}
 
-	<section id="header"  class="body-margin">
-		<h2>Wydarzenia</h2>
-		<ul class="tabs prawa">
-			<li {% if request.path == "/events/" %} class="active"{% endif %}><a href="/events/">Najpopularniejsze</a></li>
-			<li {% if request.path|startswith:"/events/changed" %} class="active"{% endif %}><a href="/events/changed">Największe zmiany</a></li>
-			<li {% if request.path|startswith:"/events/latest" %} class="active"{% endif %}><a href="/events/latest">Najnowsze</a></li>
-			<li {% if request.path|startswith:"/events/finished" %} class="active"{% endif %}><a href="/events/finished">Zakończone</a></li>
-		</ul>
-	</section>
+<section id="header"  class="body-margin">
+    <h2>Wydarzenia</h2>
+    <ul class="tabs prawa">
+        <li {% if active == "popular" %} class="active"{% endif %}><a href="/events/">Najpopularniejsze</a></li>
+        <li {% if active == "changed" %} class="active"{% endif %}><a href="/events/changed">Największe zmiany</a></li>
+        <li {% if active == "latest" %} class="active"{% endif %}><a href="/events/latest">Najnowsze</a></li>
+        <li {% if active == "finished" %} class="active"{% endif %}><a href="/events/finished">Zakończone</a></li>
+    </ul>
+</section>
 
 
-	<section id="betfeed">
-		{% render_events events people %}
-	</section>
+<section id="betfeed">
+    {% render_events events people %}
+</section>
 
 {% endblock %}

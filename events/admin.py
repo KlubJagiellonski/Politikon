@@ -9,6 +9,7 @@ from .forms import EventForm
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
+        'end_date',
         'outcome',
         'current_buy_for_price',
         'current_buy_against_price',
@@ -20,7 +21,7 @@ class EventAdmin(admin.ModelAdmin):
     ]
 
     list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
-                    'estimated_end_date', 'current_buy_for_price',
+                    'estimated_end_date', 'end_date', 'current_buy_for_price',
                     'current_buy_against_price', 'Q_for', 'Q_against']
 
     def save_model(self, request, obj, form, change):
@@ -36,7 +37,8 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class BetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold', 'bought_avg_price', 'sold_avg_price', 'rewarded_total']
+    list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold',
+                    'bought_avg_price', 'sold_avg_price', 'rewarded_total']
 
 
 class TransactionAdmin(admin.ModelAdmin):
