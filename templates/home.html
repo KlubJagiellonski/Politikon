@@ -28,7 +28,7 @@
             <div class="opis">
                 <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
                 <div id="makeabet" class="prawa{% if front_event_bet.extension.has_any %} morebets{% endif %}">
-                    <div class="change changeYES{% if front_event_bet.extension.has_any %} hidden{% endif %}">{{ front_event.price_change }}</div>
+                    <div class="change {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}{% if front_event_bet.extension.has_any %} hidden{% endif %}">{{ front_event.price_change }}</div>
                     {% render_bet front_event front_event_bet.extension True %}
                 </div>
             </div>
