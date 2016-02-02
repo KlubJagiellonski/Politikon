@@ -88,6 +88,9 @@ $(function() {
                         var bets_type = '';     // YES or NO
                         makebet.children('.currentbet').children('p').children('.has_bets').html(bet.has);
                         makebet.children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price * 100) / 100);
+                        if (makebet.attr('class') == 'prawa') {
+                            makebet.children('.change').addClass('hidden');
+                        }
 
                         if (bet.outcome == true) {
                             // You have YES bets for the event
@@ -136,6 +139,9 @@ $(function() {
                             makebet.children('.a_betYES').data('outcome', word_eng_yes);
                             makebet.children('.a_betNO').data('outcome', word_eng_no);
                             makebet.children('.currentbet').hide();
+                            if (makebet.attr('class') == 'prawa') {
+                                makebet.children('.change').removeClass('hidden');
+                            }
                             makebet.children('.currentbet').children().first()
                             .removeClass('changeNO')
                             .removeClass('changeYES')

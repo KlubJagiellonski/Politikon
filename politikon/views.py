@@ -30,9 +30,17 @@ class HomeView(TemplateView):
             json_data['front_event']='null'
 
         featured_events = list(Event.objects.get_featured_events())
+        try:
+            featured_events.remove(front_event)
+        except:
+            pass
         for i in range(len(featured_events)):
             featured_events[i].my_bet = featured_events[i].get_user_bet(user)
         latest_events = list(Event.objects.get_events('latest'))
+        try:
+            latest_events.remove(front_event)
+        except:
+            pass
         for i in range(len(latest_events)):
             latest_events[i].my_bet = latest_events[i].get_user_bet(user)
 
