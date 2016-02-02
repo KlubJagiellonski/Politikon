@@ -158,7 +158,7 @@ class Event(models.Model):
                 last_trans[d_date] = t.price
 
         data = list(last_trans.iteritems())
-        sorted(data,key=lambda x:x[0])
+        data = sorted(data,key=lambda x:x[0])
 
         labels = []
         points = []
