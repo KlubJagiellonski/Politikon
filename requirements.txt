@@ -1,5 +1,5 @@
 #Deployment and work
-Django==1.8.4
+Django==1.8.8
 
 # For distinction dev settings from production settings
 -e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings

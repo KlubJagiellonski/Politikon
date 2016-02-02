@@ -142,10 +142,10 @@ class Event(models.Model):
         last_trans = {}
         tch = Transaction.TRANSACTION_TYPE_CHOICES
         skip_events = (
-                tch.EVENT_CANCELLED_REFUND_CHOICE,
-                tch.EVENT_WON_PRIZE_CHOICE,
-                tch.EVENT_WON_PRIZE_CHOICE
-                )
+            tch.EVENT_CANCELLED_DEBIT_CHOICE,
+            tch.EVENT_CANCELLED_REFUND_CHOICE,
+            tch.EVENT_WON_PRIZE_CHOICE,
+        )
         for t in Transaction.objects.filter(event=self).iterator():
             if t.type in skip_events:
                 continue
@@ -167,10 +167,10 @@ class Event(models.Model):
             points.append(kv[1])
 
         return {
-                'id' : self.id,
-                'labels' : labels,
-                'points' : points
-                }
+            'id' : self.id,
+            'labels' : labels,
+            'points' : points
+        }
 
     def get_user_bet(self, user):
         if user.pk:
