@@ -2,11 +2,13 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
+from image_cropping import ImageCroppingMixin
+
 from .models import Bet, Event, Transaction
 from .forms import EventForm
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(ImageCroppingMixin, admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
         'end_date',

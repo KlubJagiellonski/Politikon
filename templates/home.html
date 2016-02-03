@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load cropping %}
 
 {% block content %}
 
@@ -18,8 +19,8 @@
 
     <section id="featured" class="section-nopadding">
         <figure>
-            {% if front_event.big_image %}
-            <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+            {% if front_event.image %}
+            <img src="{% cropped_thumbnail front_event.image "big_image" %}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}

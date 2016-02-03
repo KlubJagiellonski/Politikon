@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from math import exp
+from unidecode import unidecode
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
-from django.template.defaultfilters import slugify
-from unidecode import unidecode
-
-from math import exp
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+    UnknownOutcome, InsufficientCash, InsufficientBets
+from .managers import EventManager, BetManager, TransactionManager
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
-from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
-    UnknownOutcome, InsufficientCash, InsufficientBets
+from image_cropping import ImageCropField, ImageRatioField
 
 from politikon.choices import Choices
-from .managers import EventManager, BetManager, TransactionManager
 
 
 _MONTHS = {
@@ -69,8 +69,9 @@ class Event(models.Model):
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.ImageField(u'mały obrazek 340x250', upload_to='events_small', null=True)
-    big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
+    image = ImageCropField(u'obrazek 1250x510', upload_to='events_big', null=True)
+    big_image = ImageRatioField('image', '1250x510')
+    small_image = ImageRatioField('image', '340x250')
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)

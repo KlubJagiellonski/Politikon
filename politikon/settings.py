@@ -233,6 +233,8 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
     'djcelery',
+    'image_cropping',
+    'easy_thumbnails',
     'gunicorn',
 
     'grappelli',
@@ -335,3 +337,8 @@ JINJA2_EXTENSIONS = [
 GRAPPELLI_ADMIN_TITLE = 'Politikon'
 GRAPPELLI_AUTOCOMPLETE_LIMIT = 10
 # GRAPPELLI_SWITCH_USER = True
+
+from easy_thumbnails.conf import Settings as thumbnail_settings
+THUMBNAIL_PROCESSORS = (
+        'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS

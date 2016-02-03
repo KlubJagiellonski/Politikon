@@ -1,8 +1,9 @@
 {% load display %}
+{% load cropping %}
 <div class="bet">
     <figure>
-        {% if event.small_image %}
-        <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+        {% if event.image %}
+        <img src="{% cropped_thumbnail event.image "small_image" %}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}

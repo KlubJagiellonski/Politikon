@@ -52,6 +52,8 @@ hiredis
 python-dateutil==1.5
 pytz
 
+django-image-cropping
+easy-thumbnails
 Pillow==2.9.0
 requests==2.0.0
 jsonfield
