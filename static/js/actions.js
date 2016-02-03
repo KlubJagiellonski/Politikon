@@ -79,7 +79,7 @@ $(function() {
                 contentType: 'application/json',
                 url: '/event/'+event_id+'/transaction/create/',
                 success: function(data) {
-                    console.log(JSON.stringify(data));
+                    // console.log(JSON.stringify(data));
                     if(data.updates && data.updates.user){
                         // console.log('RESP: ' + JSON.stringify(data.updates));
                         var event = data.updates.events[0];

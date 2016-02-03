@@ -258,7 +258,7 @@ footer ul a, footer .socialmedia div,
 #makeabet .betYES:hover {background: #c7df42;}
 #makeabet .betNO:hover {background: #f34f23;}
 
-#makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px;}
+#makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px; color:#333;}
 .change {width: 36px; height: 36px; border: 2px solid #fff; font-size: 0.875em; line-height: 36px; text-align: center; border-radius: 50%; background: #fff; margin: 0 auto;
         background: #fefefe;
         background: -moz-linear-gradient(top,  #fefefe 0%, #d8d8d8 100%);
