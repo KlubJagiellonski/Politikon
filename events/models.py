@@ -35,6 +35,7 @@ _MONTHS = {
         12 : 'Grudnia'
         }
 
+
 class Event(models.Model):
 
     EVENT_OUTCOME_CHOICES = Choices(
@@ -301,6 +302,7 @@ class Event(models.Model):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total += 100 * bet.has
                 bet.user.total_cash += bet.rewarded_total
+                bet.is_new_resolved = True
                 bet.user.save()
                 bet.save()
                 Transaction.objects.create(
@@ -386,6 +388,8 @@ class Bet(models.Model):
     bought_avg_price = models.FloatField(u'kupione po średniej cenie', default=0, null=False)
     sold_avg_price = models.FloatField(u'sprzedane po średniej cenie', default=0, null=False)
     rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
+    # this is used to show event in my wallet.
+    is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte', default=False, null=False)
 
     @property
     def bet_dict(self):
@@ -404,6 +408,51 @@ class Bet(models.Model):
 
     def __unicode__(self):
         return u'zakłady %s na %s' % (self.user, self.event)
+
+    def is_won(self):
+        """
+        winning bet when bet has outcome True  and event.outcome is 3 (FINISHED_YES) or
+                    when bet has outcome False and event.outcome is 4 (FINISHED_NO)
+        :return: True if won
+        :rtype: bool
+        """
+        if self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+            return True
+        elif not self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+            return True
+        return False
+
+    def get_wallet_change(self):
+        """
+        Get amount won or lose after event finished. If won price is with '+' else '-'
+        bellow zero
+        :return: more or less than zero
+        :rtype: str
+        """
+        if self.is_won():
+            sign = '+'
+        else:
+            sign = '-'
+        return '{}{}'.format(sign, self.get_invested())
+
+    def get_invested(self):
+        """
+        How many invested in this bet
+        :return: price above zero
+        :rtype: float
+        """
+        return self.has * self.bought_avg_price
+
+    def get_won(self):
+        """
+        Get won amount
+        :return: price
+        :rtype: int
+        """
+        if self.is_won():
+            return self.get_invested()
+        else:
+            return 0
 
 
 class Transaction(models.Model):

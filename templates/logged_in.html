@@ -12,7 +12,7 @@
 
 		<div class="userdata prawa">
 			<div class="lewa wallet notification"> <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
-				<span>3</span>
+				<span>{{ user.get_newest_results.count }}</span>
 				<div class="arrowup"></div>
 			</div>
 
@@ -38,81 +38,35 @@
 			</a>
 		</div>
 
-		<section id="wallet-not" class="centrum">
-			<div class="container">
-				<div class="inside">
-					<div class="header">
-						Najnowsze wyniki
-						<a href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
-					</div>
-					<div id="jp-container" class="jp-container">
-						<a href="#"><div class="betresult new">
-							<img src="img/bet-small.jpg"/>
-							<div class="status">
-								<h3 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h3>
-								<p><span class="betdetails">Zak≈Çad:</span> <span class="changeYES">TAK</span> 3 x <span class="reputy-small"></span> 60</p>
-								<p><span class="betdetails">Wynik:</span> <span class="changeNO">NIE</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-							</div>
-							<div class="status-change">
-								zmiana portfela:
-								<div class="changeNO">-180</div>
-								<p><span class="invested">180</span> <span class="won">0</span></p>
-							</div>
-						</div></a>
-						<a href="#"><div class="betresult new">
-							<img src="img/bet-small.jpg"/>
-							<div class="status">
-								<h3 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h3>
-								<p><span class="betdetails">Zak≈Çad:</span> <span class="changeYES">TAK</span> 3 x <span class="reputy-small"></span> 60</p>
-								<p><span class="betdetails">Wynik:</span> <span class="changeYES">TAK</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-							</div>
-							<div class="status-change">
-								zmiana portfela:
-								<div class="changeYES">+180</div>
-								<p><span class="invested">180</span> <span class="won">180</span></p>
-							</div>
-						</div></a>
-						<a href="#"><div class="betresult new">
-							<img src="img/bet-small.jpg"/>
-							<div class="status">
-								<h3 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h3>
-								<p><span class="betdetails">Zak≈Çad:</span> <span class="changeYES">TAK</span> 3 x <span class="reputy-small"></span> 60</p>
-								<p><span class="betdetails">Wynik:</span> <span class="changeNO">NIE</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-							</div>
-							<div class="status-change">
-								zmiana portfela:
-								<div class="changeNO">-180</div>
-								<p><span class="invested">180</span> <span class="won">0</span></p>
-							</div>
-						</div></a>
-						<a href="#"><div class="betresult">
-							<img src="img/bet-small.jpg"/>
-							<div class="status">
-								<h3 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h3>
-								<p><span class="betdetails">Zak≈Çad:</span> <span class="changeYES">TAK</span> 3 x <span class="reputy-small"></span> 60</p>
-								<p><span class="betdetails">Wynik:</span> <span class="changeNO">NIE</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-							</div>
-							<div class="status-change">
-								zmiana portfela:
-								<div class="changeNO">-180</div>
-								<p><span class="invested">180</span> <span class="won">0</span></p>
-							</div>
-						</div></a>
-						<a href="#"><div class="betresult">
-							<img src="img/bet-small.jpg"/>
-							<div class="status">
-								<h3 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</h3>
-								<p><span class="betdetails">Zak≈Çad:</span> <span class="changeYES">TAK</span> 3 x <span class="reputy-small"></span> 60</p>
-								<p><span class="betdetails">Wynik:</span> <span class="changeNO">NIE</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-							</div>
-							<div class="status-change">
-								zmiana portfela:
-								<div class="changeNO">-180</div>
-								<p><span class="invested">180</span> <span class="won">0</span></p>
-							</div>
-						</div></a>
-					</div>
-					<a href="#"><div class="viewall">Wy≈õwietl wszystkie wyniki</div></a>
-				</div>
-			</div>
-		</section>
+<section id="wallet-not" class="centrum">
+    <div class="container">
+        <div class="inside">
+            <div class="header">
+                Najnowsze wyniki
+                <a href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
+            </div>
+            <div id="jp-container" class="jp-container">
+                {% for bet in user.get_newest_results %}
+                    <a href="{{ bet.event.get_relative_url }}"><div class="betresult new">
+                        {% if bet.event.small_image %}
+                            <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                        {% else %}
+                            <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                        {% endif %}
+                        <div class="status">
+                            <h3 class="skroc">{{ bet.event }}</h3>
+                            <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
+                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
+                        </div>
+                        <div class="status-change">
+                            zmiana portfela:
+                            <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
+                            <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
+                        </div>
+                    </div></a>
+                {% endfor %}
+            </div>
+            <a href="#"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
+        </div>
+    </div>
+</section>
