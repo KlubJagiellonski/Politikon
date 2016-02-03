@@ -131,6 +131,7 @@ class BetManager(models.Manager):
         bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
 
         user.total_cash -= bought_for_total
+        user.portfolio_value += bought_for_total
         user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
@@ -188,6 +189,7 @@ class BetManager(models.Manager):
         bet.save(update_fields=['sold_avg_price', 'has', 'sold'])
 
         user.total_cash += sold_for_total
+        user.portfolio_value -= sold_for_total
         user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=-quantity)
