@@ -2,9 +2,8 @@ import os
 from path import path
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
-SITE_ID = 1
+SITE_ID = 2
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 

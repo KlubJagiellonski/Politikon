@@ -2,7 +2,6 @@ import dj_database_url
 import os
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 2
 
