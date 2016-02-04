@@ -70,10 +70,6 @@ $(function(){
 //notifications - scroll setup
 $(function() {
     $(document).ready(function() {
-        // TODO: repair this or remove.
-        // it is disabled because adds margin that broke view.
-        return null;
-
         // the element we want to apply the jScrollPane
         var $el = $('#jp-container').jScrollPane({
                 verticalGutter: -16
@@ -211,5 +207,16 @@ $(function() {
         // extend the jScollPane by merging
         $.extend(true, jspapi, extensionPlugin);
         jspapi.addHoverFunc();
+
+        $('.a-betresult').click(function(){
+            // set new finished bet as a read
+            var bet_id = $(this).data('bet_id');
+            $.ajax({
+                type: 'get',
+                contentType: 'application/json;charset=utf-8',
+                url: '/bet/viewed/'+bet_id,
+                success: function(data) {}
+            });
+        });
     });
 });
