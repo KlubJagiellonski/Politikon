@@ -152,3 +152,24 @@ def create_transaction(request, event_id):
     }
 
     return JSONResponse(json.dumps(result))
+
+
+@login_required
+def one_bet_viewed(request, bet_id):
+    """
+    Uncheck new finished event as read
+    :param request:
+    :type request: WSGIRequest
+    :param bet_id: bet.id
+    :type bet_id: int
+    :return: json list with bet ids
+    :rtype: JSONResponse
+    """
+
+    bets = Bet.objects.filter(id=bet_id, user=request.user)
+    if bets.exists():
+        bet = bets[0]
+        bet.is_new_resolved = False
+        bet.save()
+
+    return JSONResponse(json.dumps([bet_id]))

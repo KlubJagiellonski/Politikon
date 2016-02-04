@@ -12,7 +12,9 @@
 
 		<div class="userdata prawa">
 			<div class="lewa wallet notification"> <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
-				<span>{{ user.get_newest_results.count }}</span>
+				{% if user.get_newest_results.count %}
+                    <span>{{ user.get_newest_results.count }}</span>
+                {% endif %}
 				<div class="arrowup"></div>
 			</div>
 
@@ -47,7 +49,7 @@
             </div>
             <div id="jp-container" class="jp-container">
                 {% for bet in user.get_newest_results %}
-                    <a href="{{ bet.event.get_relative_url }}"><div class="betresult new">
+                    <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}"><div class="betresult new">
                         {% if bet.event.small_image %}
                             <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
                         {% else %}
