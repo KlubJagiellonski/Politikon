@@ -264,3 +264,9 @@ class UserProfile(AbstractBaseUser):
         :rtype: str
         """
         # TODO: return that url
+
+    def get_newest_results(self):
+        return self.bets.filter(
+            is_new_resolved=True,
+            has__gt=0,
+        ).order_by('-event__end_date')
