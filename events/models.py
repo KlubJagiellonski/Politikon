@@ -431,9 +431,11 @@ class Bet(models.Model):
         """
         if self.is_won():
             sign = '+'
+            wallet_change = self.get_won() - self.get_invested()
         else:
             sign = '-'
-        return '{}{}'.format(sign, self.get_invested())
+            wallet_change = self.get_invested()
+        return '{}{}'.format(sign, wallet_change)
 
     def get_invested(self):
         """
@@ -450,7 +452,10 @@ class Bet(models.Model):
         :rtype: int
         """
         if self.is_won():
-            return self.get_invested()
+            if self.outcome:
+                return self.has * self.event.current_sell_for_price
+            else:
+                return self.has * self.event.current_sell_against_price
         else:
             return 0
 

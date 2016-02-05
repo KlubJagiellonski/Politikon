@@ -58,7 +58,7 @@
                         <div class="status">
                             <h3 class="skroc">{{ bet.event }}</h3>
                             <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
-                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
+                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 2 %}ANULOWANE{% elif bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span></p>
                         </div>
                         <div class="status-change">
                             zmiana portfela:
