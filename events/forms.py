@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 
 from .models import Event
 
-
 class EventForm(forms.ModelForm):
     solve_event = forms.CharField(label="Rozstrzygnij event. TAK / NIE / \
                                   ANULUJ", required=False)

@@ -64,7 +64,7 @@ class MyUserAdmin(UserAdmin):
     add_form = UserCreationForm
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
-                    'is_staff', 'is_deleted')
+                    'is_staff', 'is_vip', 'is_deleted')
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )
@@ -77,6 +77,7 @@ class MyUserAdmin(UserAdmin):
         (None, {'fields': ('name', )}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}),
+        (_('Additional'), {'fields': ('is_vip', 'is_deleted')}),
         (_('Important dates'), {'fields': ('last_login', )}), )
 
     add_fieldsets = (
