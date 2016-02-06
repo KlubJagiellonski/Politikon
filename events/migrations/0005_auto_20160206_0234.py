@@ -8,7 +8,7 @@ import image_cropping.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0003_auto_20160202_1906'),
+        ('events', '0004_bet_is_new_resolved'),
     ]
 
     operations = [
