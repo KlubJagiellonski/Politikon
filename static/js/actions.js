@@ -41,6 +41,7 @@ $(function() {
         //zakładki
         $('.zakladki-content article').hide();
         $('.zakladki-content article:first').show();
+        $('ul.tabs > li:first').addClass('active');
         $('ul.tabs li').on('click',function(){
             $('ul.tabs li').removeClass('active');
             $(this).addClass('active');
@@ -49,6 +50,13 @@ $(function() {
             $(activeTab).show();
             return false;
         });
+
+        // możliwość url do strony i zakładki np: /accounts/user_profile/#powiadomieniaowynikach
+        var anchor = window.location.hash.split('#');
+        if (anchor.length > 1) {
+            var tab_choosen = anchor[1];
+            $('#userinfo > ul > li > a[href=#' + tab_choosen + ']').click();
+        }
 
         // wysyłanie formularza zmiany danych profilu
         $('#settings-submit #loadmore').click(function(){

@@ -255,5 +255,11 @@ $(function() {
             });
             check_bets_viewed(bets);
         });
+
+        // It is neccessairy only when using wallet on /accounts/user_profile site.
+        $('#go-to-all-results').click(function(){
+            $('.overlay').click();
+            $('#userinfo > ul > li > a[href=#powiadomieniaowynikach]').click();
+        });
     });
 });
