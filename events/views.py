@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.vary import vary_on_headers
 from django.views.generic import DetailView, ListView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
@@ -155,7 +156,8 @@ def create_transaction(request, event_id):
 
 
 @login_required
-def one_bet_viewed(request, bet_id):
+@vary_on_headers('HTTP_X_REQUESTED_WITH')
+def bets_viewed(request):
     """
     Uncheck new finished event as read
     :param request:
@@ -166,10 +168,16 @@ def one_bet_viewed(request, bet_id):
     :rtype: JSONResponse
     """
 
-    bets = Bet.objects.filter(id=bet_id, user=request.user)
-    if bets.exists():
-        bet = bets[0]
+    bets_id_list = request.GET.getlist('bets[]')
+    bets_resolved = []
+    for bet_id in bets_id_list:
+        try:
+            bet = Bet.objects.get(user=request.user, id=int(bet_id))
+        except ValueError:
+            continue
+            # TODO: log somewhere or do something
         bet.is_new_resolved = False
         bet.save()
+        bets_resolved.append(bet_id)
 
-    return JSONResponse(json.dumps([bet_id]))
+    return JSONResponse(json.dumps(bets_resolved))

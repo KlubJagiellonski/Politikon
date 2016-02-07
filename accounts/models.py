@@ -266,7 +266,18 @@ class UserProfile(AbstractBaseUser):
         # TODO: return that url
 
     def get_newest_results(self):
+        """
+        Get finished events and not seen by user
+        :return: Bets list
+        :rtype: QuerySet[Bet]
+        """
+        events_finished = (
+            Event.EVENT_OUTCOME_CHOICES.CANCELLED,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_NO,
+        )
         return self.bets.filter(
+            event__outcome__in=events_finished,
             is_new_resolved=True,
             has__gt=0,
         ).order_by('-event__end_date')

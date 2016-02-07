@@ -65,21 +65,43 @@
 	<section id="userinfo" class="hotbets prefooter-margin">
 		<ul class="tabs lewa">
 			<li><a href="#zawartoscportfela">Zawartość portfela</a></li>
+			<li><a href="#powiadomieniaowynikach">Powiadomienia o wynikach</a></li>
 			<li><a href="#historiatransakcji">Historia transakcji</a></li>
 		</ul>
 		<div class="clr"></div>
 		<div class="zakladki-content">
 			<article id="zawartoscportfela">
-
-                {% for bet in object.bets.all %}
+                {% for bet in object.bets.get_in_progress %}
                     <div class="betinwallet betresult new"><a href="#">
                         <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
                         <div class="status">
                             <h3 class="skroc">{{ bet.event }}</h3>
-                            <p><span class="betdetails">Zakład:</span> <span class="changeYES">{{ bet.outcome }}</span> {{ bet.bought }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
-                            <p class="detailed-status"><span class="invested">{{ bet.bought }}</span> <span class="maywin">{{ bet.rewarded_total }}</span> <span class="inwallet">{{ bet.has }}</span></p>
+                            <p><span class="betdetails">Zakład:</span> <span class="changeYES">{{ bet.outcome }}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
+                            <p class="detailed-status"><span class="invested">{{ bet.get_invested }}</span> <span class="maywin">{{ bet.get_won }}</span> <span class="inwallet">{{ bet.get_wallet_change }}</span></p>
                         </div>
                     </a></div>
+                {% endfor %}
+			</article>
+
+			<article id="powiadomieniaowynikach">
+                {% for bet in object.bets.get_finished %}
+                    <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}"><div class="betresult new">
+                        {% if bet.event.small_image %}
+                            <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                        {% else %}
+                            <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                        {% endif %}
+                        <div class="status">
+                            <h3 class="skroc">{{ bet.event }}</h3>
+                            <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
+                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 2 %}ANULOWANE{% elif bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span></p>
+                        </div>
+                        <div class="status-change">
+                            zmiana portfela:
+                            <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
+                            <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
+                        </div>
+                    </div></a>
                 {% endfor %}
 			</article>
 

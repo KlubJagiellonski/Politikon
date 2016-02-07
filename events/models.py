@@ -424,17 +424,19 @@ class Bet(models.Model):
 
     def get_wallet_change(self):
         """
-        Get amount won or lose after event finished. If won price is with '+' else '-'
-        bellow zero
+        Get amount won or lose after event finished. For events in progress get amount possible
+        to win. For amount greater than 0 '+' else '-' for less than 0.
         :return: more or less than zero
         :rtype: str
         """
-        if self.is_won():
-            sign = '+'
+        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             wallet_change = self.get_won() - self.get_invested()
         else:
-            sign = '-'
-            wallet_change = self.get_invested()
+            wallet_change = -self.get_invested()
+        sign = ''
+        if wallet_change > 0:
+            sign = '+'
+
         return '{}{}'.format(sign, wallet_change)
 
     def get_invested(self):
@@ -443,15 +445,17 @@ class Bet(models.Model):
         :return: price above zero
         :rtype: float
         """
+        if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
+            return 0
         return self.has * self.bought_avg_price
 
     def get_won(self):
         """
-        Get won amount
+        Get amount won or possibility to win.
         :return: price
         :rtype: int
         """
-        if self.is_won():
+        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             if self.outcome:
                 return self.has * self.event.current_sell_for_price
             else:

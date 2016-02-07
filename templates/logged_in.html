@@ -13,7 +13,7 @@
 		<div class="userdata prawa">
 			<div class="lewa wallet notification"> <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
 				{% if user.get_newest_results.count %}
-                    <span>{{ user.get_newest_results.count }}</span>
+                    <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
                 {% endif %}
 				<div class="arrowup"></div>
 			</div>
@@ -45,7 +45,7 @@
         <div class="inside">
             <div class="header">
                 Najnowsze wyniki
-                <a href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
+                <a id="all-bets-result" href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
             </div>
             <div id="jp-container" class="jp-container">
                 {% for bet in user.get_newest_results %}
@@ -68,7 +68,7 @@
                     </div></a>
                 {% endfor %}
             </div>
-            <a href="#"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
+            <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
         </div>
     </div>
 </section>
