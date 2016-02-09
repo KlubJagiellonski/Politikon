@@ -1,3 +1,5 @@
+{% load display %}
+
 		<div class="graj avatar prawa">
 			<img src="{{ user.get_avatar_url }}" />
 			<nav class="avatarmenu">
@@ -55,11 +57,7 @@
                         {% else %}
                             <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
                         {% endif %}
-                        <div class="status">
-                            <h3 class="skroc">{{ bet.event }}</h3>
-                            <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
-                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 2 %}ANULOWANE{% elif bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span></p>
-                        </div>
+                        {% render_bet_status bet %}
                         <div class="status-change">
                             zmiana portfela:
                             <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>

@@ -464,6 +464,30 @@ class Bet(models.Model):
         else:
             return 0
 
+    def is_finished_yes(self):
+        """
+        Result for bet
+        :return: True if event resolved for YES
+        :rtype: bool
+        """
+        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+
+    def is_finished_no(self):
+        """
+        Result for bet
+        :return: True if event resolved for NO
+        :rtype: bool
+        """
+        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+
+    def is_cancelled(self):
+        """
+        Result for bet
+        :return: True if canceled bet
+        :rtype: bool
+        """
+        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED
+
 
 class Transaction(models.Model):
 
