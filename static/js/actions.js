@@ -41,7 +41,6 @@ $(function() {
         //zakładki
         $('.zakladki-content article').hide();
         $('.zakladki-content article:first').show();
-        $('ul.tabs > li:first').addClass('active');
         $('ul.tabs li').on('click',function(){
             $('ul.tabs li').removeClass('active');
             $(this).addClass('active');
