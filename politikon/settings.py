@@ -180,6 +180,7 @@ SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'missing.html'
 
+
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
@@ -197,8 +198,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  'fields': 'id, name, email'
+  'fields': 'id, name, email, friends'
 }
+
 
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
