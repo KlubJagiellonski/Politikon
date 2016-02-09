@@ -208,15 +208,58 @@ $(function() {
         $.extend(true, jspapi, extensionPlugin);
         jspapi.addHoverFunc();
 
-        $('.a-betresult').click(function(){
-            // set new finished bet as a read
-            var bet_id = $(this).data('bet_id');
+        /**
+         * Send request to set bet as viewed by me and remove it from wallet.
+         * @param bets_id_list
+         */
+        function check_bets_viewed(bets_id_list) {
             $.ajax({
                 type: 'get',
+                data: {bets: bets_id_list},
                 contentType: 'application/json;charset=utf-8',
-                url: '/bet/viewed/'+bet_id,
-                success: function(data) {}
+                url: '/bets/viewed/',
+                success: function(data) {
+                    $('.a-betresult').each(function(){
+                        var this_bet_id = $(this).data('bet_id');
+                        for (var i = 0; i < data.length; i+=1) {
+                            if (data[i] == this_bet_id) {
+                                $(this).remove();
+                                break;
+                            }
+                        }
+                    });
+                    if ($('.a-betresult').length > 0) {
+                        $('#wallet_notification_count').html($('.a-betresult').length);
+                    } else {
+                        $('#wallet_notification_count').remove();
+                    }
+                    $('.overlay').click();
+                },
+                error: function(xhr, data) {
+                    console.log('Some error when BETs sent: bezradny');
+                }
             });
+        }
+
+        $('.a-betresult').click(function(){
+            // set new finished bet as a read
+            var bets = [$(this).data('bet_id')];
+            check_bets_viewed(bets);
+        });
+
+        $('#all-bets-result').click(function(){
+            // set all new finished bets as a read
+            var bets = [];
+            $('.a-betresult').each(function(){
+                bets.push($(this).data('bet_id'));
+            });
+            check_bets_viewed(bets);
+        });
+
+        // It is neccessairy only when using wallet on /accounts/user_profile site.
+        $('#go-to-all-results').click(function(){
+            $('.overlay').click();
+            $('#userinfo > ul > li > a[href=#powiadomieniaowynikach]').click();
         });
     });
 });

@@ -1,3 +1,5 @@
+{% load display %}
+
 		<div class="graj avatar prawa">
 			<img src="{{ user.get_avatar_url }}" />
 			<nav class="avatarmenu">
@@ -13,7 +15,7 @@
 		<div class="userdata prawa">
 			<div class="lewa wallet notification"> <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
 				{% if user.get_newest_results.count %}
-                    <span>{{ user.get_newest_results.count }}</span>
+                    <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
                 {% endif %}
 				<div class="arrowup"></div>
 			</div>
@@ -45,7 +47,7 @@
         <div class="inside">
             <div class="header">
                 Najnowsze wyniki
-                <a href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
+                <a id="all-bets-result" href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
             </div>
             <div id="jp-container" class="jp-container">
                 {% for bet in user.get_newest_results %}
@@ -55,11 +57,7 @@
                         {% else %}
                             <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
                         {% endif %}
-                        <div class="status">
-                            <h3 class="skroc">{{ bet.event }}</h3>
-                            <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
-                            <p><span class="betdetails">Wynik:</span> <span class="{% if bet.event.outcome == 3 %}changeYES{% elif bet.event.outcome == 4 %}changeNO{% endif %}">{% if bet.event.outcome == 3 %}TAK{% elif bet.event.outcome == 4 %}NIE{% endif %}</span> <span class="why">(przeczytaj uzasadnienie)</span></p>
-                        </div>
+                        {% render_bet_status bet %}
                         <div class="status-change">
                             zmiana portfela:
                             <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
@@ -68,7 +66,7 @@
                     </div></a>
                 {% endfor %}
             </div>
-            <a href="#"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
+            <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
         </div>
     </div>
 </section>

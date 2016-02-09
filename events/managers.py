@@ -210,6 +210,35 @@ class BetManager(models.Manager):
 
         return user, event, bet
 
+    def get_in_progress(self):
+        """
+        Get bets in progress and attribute has > 0, that bets are in user wallet.
+        :return: Bets in user wallet
+        :rtype: QuerySet[Bet]
+        """
+        from events.models import Event
+        return self.filter(
+            event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+            has__gt=0,
+        )
+
+    def get_finished(self):
+        """
+        Get finished bets and attribute has > 0, that bets are on user result list.
+        :return: Bets on user result list
+        :rtype: QuerySet[Bet]
+        """
+        from events.models import Event
+        events_finshed = (
+            Event.EVENT_OUTCOME_CHOICES.CANCELLED,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_NO,
+        )
+        return self.filter(
+            event__outcome__in=events_finshed,
+            has__gt=0,
+        )
+
 
 class TransactionManager(models.Manager):
     pass

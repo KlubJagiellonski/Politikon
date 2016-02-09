@@ -502,9 +502,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .history-event .lewa {max-width: 58%; height: 16px;}
 #userinfo .history-event .prawa {width: 37.5%; font-weight: 700;}
 #userinfo .history-event span {display: block;; float: left;}
-#userinfo .history-event .prawa .history-action {width: 27%;}
+#userinfo .history-event .prawa .history-action {width: 31%;}
 #userinfo .history-event span .reputy-small {margin-right: 10px;}
-#userinfo .history-event .reputy-change {width: 32%;}
+#userinfo .history-event .reputy-change {width: 21%;}
 #userinfo .history-event .event-date {background: url(../img/time.png) left no-repeat; height: 21px; padding-left: 40px; padding-top: 9px; margin-top: -7px; font-size: .875em; font-weight: 300; color: #b4b4b4;}
 #userinfo .history-event .changeNO, #userinfo .history-event .changeYES {font-weight: 700}
 
