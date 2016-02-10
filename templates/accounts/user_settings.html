@@ -47,10 +47,10 @@
 						<input name="web_site" type="url" class="jednalinia" id="website" value="{{ user.web_site }}" data-parsley-type="url" data-parsley-trigger="focusout">
 						<span>Połączone konta:</span>
                         {% if user.twitter_user %}
-                            <div class="social-connect connection"><div class="connect-tt">{{ user.twitter_user }}</div><a href="{{ user.get_twitter_disconnect_url }}"><div class="connectme">Rozłącz z Twitterem</div></a></div>
+                            <div class="social-connect connection"><div class="connect-tt"></div>{{ user.twitter_user }}</div>
                         {% endif %}
                         {% if user.facebook_user %}
-                            <div class="social-connect connection"><div class="connect-fb"></div>{{ user.facebook_user }} <a href="{{ user.get_twitter_disconnect_url }}"><div class="connectme">Rozłącz z Facebookiem</div></a></div>
+                            <div class="social-connect connection"><div class="connect-fb"></div>{{ user.facebook_user }}</div>
                         {% endif %}
 					</div>
 				</form>
