@@ -72,6 +72,7 @@ class EventDetailView(DetailView):
             'active': 1,
             'event_dict': event.event_dict,
             'bet_social': bet_social,
+            'related_events': event.get_related(user),
         })
         return context
 

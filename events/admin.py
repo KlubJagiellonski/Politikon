@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
-from .models import Bet, Event, Transaction
+from .models import Bet, Event, Transaction, RelatedEvent
 from .forms import EventForm
 
 
@@ -45,6 +45,11 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'event', 'type', 'date', 'quantity', 'price']
 
 
+class RelatedEventAdmin(admin.ModelAdmin):
+    list_display = ['id', 'event', 'related']
+
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(Bet, BetAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(RelatedEvent, RelatedEventAdmin)
