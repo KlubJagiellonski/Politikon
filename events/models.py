@@ -75,7 +75,7 @@ class Event(models.Model):
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
-    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='')
+    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')

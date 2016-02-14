@@ -6,6 +6,12 @@ from .models import Bet, Event, Transaction, RelatedEvent
 from .forms import EventForm
 
 
+class RelatedEventInline(admin.TabularInline):
+    model = RelatedEvent
+    fk_name = 'event'
+    extra = 1
+
+
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
@@ -23,6 +29,8 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
                     'estimated_end_date', 'end_date', 'current_buy_for_price',
                     'current_buy_against_price', 'Q_for', 'Q_against']
+
+    inlines = [RelatedEventInline, ]
 
     def save_model(self, request, obj, form, change):
         if request.method == 'POST':
@@ -45,11 +53,6 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'event', 'type', 'date', 'quantity', 'price']
 
 
-class RelatedEventAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event', 'related']
-
-
 admin.site.register(Event, EventAdmin)
 admin.site.register(Bet, BetAdmin)
 admin.site.register(Transaction, TransactionAdmin)
-admin.site.register(RelatedEvent, RelatedEventAdmin)
