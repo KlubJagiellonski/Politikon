@@ -75,7 +75,7 @@ class Event(models.Model):
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
-    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='')
+    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
@@ -358,6 +358,24 @@ class Event(models.Model):
             )
         return True
 
+    def get_related(self, user, number=9):
+        """
+        Get events related to this event
+        :param user: logged user if exists
+        :type user: UserProfile
+        :param number: maximal events number
+        :type number: int
+        :return: list of related events
+        :rtype:  QuerySet
+        """
+        relates = self.these_events.all().only('related')[:number]
+        events = []
+        for relation in relates:
+            event = relation.related
+            event.my_bet = event.get_user_bet(user)
+            events.append(event)
+        return events
+
 
 class Bet(models.Model):
 
@@ -513,3 +531,14 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
+
+
+class RelatedEvent(models.Model):
+    """
+    Relates between events. Relates are one side: one element in this model means that "related"
+    event is on the list "Powiązane Wydarzenia" "event". Other side relation need another element.
+    """
+    event = models.ForeignKey(Event, null=True, related_name='these_events',
+                              related_query_name='this_event')
+    related = models.ForeignKey(Event, null=True, related_name='relates',
+                                related_query_name='related')

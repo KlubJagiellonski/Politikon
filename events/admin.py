@@ -2,8 +2,14 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
-from .models import Bet, Event, Transaction
+from .models import Bet, Event, Transaction, RelatedEvent
 from .forms import EventForm
+
+
+class RelatedEventInline(admin.TabularInline):
+    model = RelatedEvent
+    fk_name = 'event'
+    extra = 1
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -23,6 +29,8 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
                     'estimated_end_date', 'end_date', 'current_buy_for_price',
                     'current_buy_against_price', 'Q_for', 'Q_against']
+
+    inlines = [RelatedEventInline, ]
 
     def save_model(self, request, obj, form, change):
         if request.method == 'POST':

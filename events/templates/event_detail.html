@@ -75,61 +75,14 @@
 		</div>
 	</section>
 
-	<section id="betfeed" class="hotbets">
-		<h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
-		<div>
-		<div class="bet">
-			<figure>
-                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
-				<figcaption>
-					<a href="#"><div class="details-chart"><canvas id="bet-canvas01" height="70"></canvas></div></a>
-					<div class="change changepreview changeNO">-19</div>
-					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
-					<div id ="makeabet">
-						<div class="change changeNO">-19</div>
-						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
-						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
-					</div>
-
-				</figcaption>
-			</figure>
-		</div>
-
-		<div class="bet">
-			<figure>
-                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
-				<figcaption>
-					<a href="#"><div class="details-chart"><canvas id="bet-canvas02" height="70"></canvas></div></a>
-					<div class="change changepreview changeNO">-19</div>
-					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
-					<div id ="makeabet">
-						<div class="change changeNO">-19</div>
-						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
-						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
-					</div>
-
-				</figcaption>
-			</figure>
-		</div>
-
-		<div class="bet">
-			<figure>
-                <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
-				<figcaption>
-					<a href="#"><div class="details-chart"><canvas id="bet-canvas03" height="70"></canvas></div></a>
-					<div class="change changepreview changeNO">-19</div>
-					<a href="#"><h2 class="skroc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</h2></a>
-					<div id ="makeabet">
-						<div class="change changeNO">-19</div>
-						<a href="#TAK"><div class="betYES"><span class="value lewa">15</span><span class="txt prawa">TAK</span></div></a>
-						<a href="#NIE"><div class="betNO"><span class="value prawa">72</span><span class="txt lewa">NIE</span></div></a>
-					</div>
-
-				</figcaption>
-			</figure>
-		</div>
-		</div>
-	</section>
+    {% if related_events %}
+        <section id="betfeed" class="hotbets">
+            <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
+            <div>
+                {% render_events related_events people %}
+            </div>
+        </section>
+    {% endif %}
 
 
 	<section id="comments" class="prefooter-margin">--tutaj aplet komentarzy z fb--</section>
