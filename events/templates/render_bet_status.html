@@ -1,5 +1,5 @@
 <div class="status">
     <h3 class="skroc">{{ bet.event }}</h3>
-    <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }}</p>
+    <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|floatformat:"0" }}</p>
     <p><span class="betdetails">Wynik:</span> <span class="{% if bet.is_finished_yes %}changeYES{% elif bet.is_finished_no %}changeNO{% endif %}">{% if bet.is_cancelled %}ANULOWANE{% elif bet.is_finished_yes %}TAK{% elif bet.is_finished_no %}NIE{% endif %}</span></p>
 </div>
