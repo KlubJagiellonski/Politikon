@@ -19,12 +19,21 @@
     <section id="featured" class="section-nopadding">
         <figure>
             {% if front_event.big_image %}
-            <img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
+            <!--<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />-->
+            <div style="background: url({{ front_event.big_image.url }}); height: 70vh; min-height: 200px; background-size: cover">
+
+            </div>
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}
             <figcaption>
-            <a href="{{ front_event.get_relative_url }}"><div class="details"><canvas id="featured-canvas" height="70"></canvas></div></a>
+            <a href="{{ front_event.get_relative_url }}">
+                <div class="details">
+                    <div>
+                        <canvas id="featured-canvas" height="70"></canvas>
+                    </div>
+                </div>
+            </a>
             <div class="opis">
                 <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
                 <div id="makeabet" class="prawa collapsible{% if front_event_bet.extension.has_any %} morebets{% endif %}">
