@@ -40,7 +40,7 @@
 			<a href="#">
 			<div class="lewa stats">
 				<p>reputacja</p>
-				<p class="reputationvalue">{{ user.reputation }}%</p>
+				<p class="reputationvalue">{{ user.reputation|floatformat:1 }}</p>
 			</div>
 			</a>
 		</div>
