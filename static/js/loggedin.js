@@ -17,19 +17,23 @@ $(function(){
 });
 //pokaż menu z avatara
 $(function(){
-        $('#maintop .graj img').on('click',function(){
+    $('#maintop .graj img').on('click',function() {
+        if (! $('#maintop .graj .avatarmenu ul').hasClass('display')) {
             $('#maintop .mainmenu').removeClass('display');
             $('#maintop .mainmenu').removeClass('opacity');
-            $('#wallet-not').css({'margin-top' : ''});
+            $('#wallet-not').css({'margin-top': ''});
             $('#wallet-not').removeClass("opacity");
             $('#maintop .userdata .wallet .arrowup').removeClass("display");
             $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
             $('#maintop .graj .avatarmenu ul').addClass("display");
             $('.overlay').addClass("display");
-            setTimeout(function (){
+            setTimeout(function () {
                 $('#maintop .graj .avatarmenu ul').addClass("opacity");
                 $('.overlay').addClass("opacity");
             }, 100); // opoznienie
+        } else {
+            $('.overlay').click();
+        }
     });
 });
 //pokaż powiadomienia
