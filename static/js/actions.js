@@ -94,9 +94,10 @@ $(function() {
                         var user = data.updates.user;
                         var bets_type = '';     // YES or NO
                         makebets.each(function(idx) {
+                            console.log($(this));
                             $(this).children('.currentbet').children('p').children('.has_bets').html(bet.has);
                             $(this).children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price * 100) / 100);
-                            if ($(this).attr('class') == 'prawa') {
+                            if ($(this).hasClass('collapsible')) {
                                 $(this).children('.change').addClass('hidden');
                             }
 
@@ -147,7 +148,7 @@ $(function() {
                                 $(this).children('.a_betYES').data('outcome', word_eng_yes);
                                 $(this).children('.a_betNO').data('outcome', word_eng_no);
                                 $(this).children('.currentbet').hide();
-                                if ($(this).attr('class') == 'prawa') {
+                                if ($(this).hasClass('collapsible')) {
                                     $(this).children('.change').removeClass('hidden');
                                 }
                                 $(this).children('.currentbet').children().first()
