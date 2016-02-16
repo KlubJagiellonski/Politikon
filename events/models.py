@@ -284,6 +284,12 @@ class Event(models.Model):
         if not self.id:
             self.recalculate_prices()
 
+        if self.is_front:
+            front_events = Event.objects.filter(is_front=True)
+            for e in front_events:
+                e.is_front = False
+                e.save()
+
         super(Event, self).save(**kwargs)
 
     @transaction.atomic
