@@ -34,19 +34,23 @@ $(function(){
 });
 //pokaż powiadomienia
 $(function(){
-        $('#maintop .userdata .wallet').on('click',function(){
+    $('#maintop .userdata .wallet.notification').on('click',function(){
+        if (! $('#maintop .userdata .wallet .arrowup').hasClass("display")) {
             $('#maintop .mainmenu').removeClass('display');
             $('#maintop .mainmenu').removeClass('opacity');
             $('#maintop .graj .avatarmenu ul').removeClass('display');
             $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-            $('#wallet-not').css({'margin-top' : '0px'});
+            $('#wallet-not').css({'margin-top': '0px'});
             $('#maintop .userdata .wallet .arrowup').addClass("display");
             $('.overlay').addClass("display");
-            setTimeout(function (){
+            setTimeout(function () {
                 $('#wallet-not').addClass("opacity");
                 $('#maintop .userdata .wallet .arrowup').addClass("opacity");
                 $('.overlay').addClass("opacity");
             }, 100); // opoznienie
+        } else {
+            $('.overlay').click();
+        }
     });
 });
 //ukryj wszystko po klieknieciu w overlay

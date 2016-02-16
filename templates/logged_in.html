@@ -13,11 +13,14 @@
 		</div>
 
 		<div class="userdata prawa">
-			<div class="lewa wallet notification"> <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
+            {% comment %}
+                <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
+            {% endcomment %}
+			<div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
 				{% if user.get_newest_results.count %}
                     <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
+                    <div class="arrowup"></div>
                 {% endif %}
-				<div class="arrowup"></div>
 			</div>
 
 			<a href="#">
