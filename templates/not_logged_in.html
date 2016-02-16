@@ -3,25 +3,23 @@
 	<div id="login">
 		<div class="header">Graj w Politikon! <span class="prawa login-close"></span></div>
 
-		<aside class="rejestracja asblock opacity">
+		<aside class="rejestracja">
 			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>
 			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>
-			<p>Możesz także zarejestrować się używając <a href="#" class="show-rejestracjaemail">adresu e-mail</a></p>
+{#			<p>Możesz także zarejestrować się używając <a href="#" class="show-rejestracjaemail">adresu e-mail</a></p>#}
 			<div class="other"><p>Masz już konto? <a href="#" class="show-logowanie">Zaloguj się tutaj</a>.</p></div>
 		</aside>
 
-		<aside class="logowanie">
+		<aside class="logowanie asblock opacity">
 			<a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zaloguj się przez Twittera</span></div></a>
 			<a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zaloguj się przez Facebooka</span></div></a>
-			<p class="or"><span>lub zaloguj się przez e-mail</span></p>
-			<form data-parsley-validate>
-				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
-
-				<input type="submit" class="przycisk" value="Zaloguj się">
-
-			</form>
-			<p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
+{#			<p class="or"><span>lub zaloguj się przez e-mail</span></p>#}
+{#			<form data-parsley-validate>#}
+{#				<input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>#}
+{#				<input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>#}
+{#				<input type="submit" class="przycisk" value="Zaloguj się">#}
+{#			</form>#}
+{#			<p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>#}
 			<div class="other"><p>Nie masz jeszcze konta? <a href="#" class="show-rejestracja">Zarejestruj się!</a></p></div>
 		</aside>
 
