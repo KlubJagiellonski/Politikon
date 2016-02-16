@@ -94,7 +94,8 @@ CONSTANCE_CONFIG = {
     'BIG_EVENT_IMAGE_WIDTH': (1250, 'big event image width'),
     'BIG_EVENT_IMAGE_HEIGHT': (510, 'big event image height'),
     'DAILY_TOPUP': (100, 'daily cash topup'),
-    'ADMIN_TOPUP' : (100,'amount of cash in admin panel')
+    'ADMIN_TOPUP' : (100,'amount of cash in admin panel'),
+    'REQUIRED_FRIENDS_THRESHOLD' : (3,'required number of registered friends')
 }
 
 # Absolute path to the directory static files should be collected to.
@@ -173,15 +174,16 @@ SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'missing.html'
 
+
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
-    'accounts.pipeline.save_profile',
     'social.pipeline.mail.mail_validation',
     'social.pipeline.user.create_user',
+    'accounts.pipeline.save_profile',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.debug.debug',
     'social.pipeline.social_auth.load_extra_data',
@@ -190,8 +192,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  'fields': 'id, name, email'
+  'fields': 'id, name, email, friends'
 }
+
 
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
