@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -21,19 +21,19 @@ from .managers import EventManager, BetManager, TransactionManager
 
 
 _MONTHS = {
-        1 : 'Stycznia',
-        2 : 'Lutego',
-        3 : 'Marca',
-        4 : 'Kwietnia',
-        5 : 'Maja',
-        6 : 'Czerwca',
-        7 : 'Lipca',
-        8 : 'Sierpnia',
-        9 : 'Września',
-        10 : 'Października',
-        11 : 'Listopada',
-        12 : 'Grudnia'
-        }
+    1 : 'Stycznia',
+    2 : 'Lutego',
+    3 : 'Marca',
+    4 : 'Kwietnia',
+    5 : 'Maja',
+    6 : 'Czerwca',
+    7 : 'Lipca',
+    8 : 'Sierpnia',
+    9 : 'Września',
+    10 : 'Października',
+    11 : 'Listopada',
+    12 : 'Grudnia'
+}
 
 
 class Event(models.Model):
@@ -69,8 +69,10 @@ class Event(models.Model):
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.ImageField(u'mały obrazek 340x250', upload_to='events_small', null=True)
-    big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
+    small_image = models.ImageField(u'mały obrazek 340x250',
+                                    upload_to='events_small', null=True)
+    big_image = models.ImageField(u'duży obrazek 1250x510',
+                                  upload_to='events_big', null=True)
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
@@ -78,7 +80,7 @@ class Event(models.Model):
     outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
+    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia', default=datetime.now()+timedelta(days=7))
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia', default=50.0)
