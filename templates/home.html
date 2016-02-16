@@ -63,7 +63,7 @@
                     <a href="{{ user.get_absolute_url }}">
                         <img src="{{ user.get_avatar_url }}"/>
                         <div class="wolnereputy"><span class="astable">{{ user.reputation }}</span></div>
-                        <div class="username">{{ user.username }}</div>
+                        <div class="username">{{ user.username|truncatechars:12 }}</div>
                     </a>
                 </div>
                 {% endfor %}
@@ -77,7 +77,6 @@
         <div class="more lewa"></div>
         <div class="more prawa"></div>
         <div class="more centrum"></div>
-
     </section>
 
 {% endblock %}
