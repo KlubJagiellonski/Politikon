@@ -17,9 +17,13 @@ from .managers import UserProfileManager
 from .utils import format_int, save_profile
 
 from events.models import Bet, Event
+import os
 
 
 logger = logging.getLogger(__name__)
+
+def get_image_path(instance, filename):
+    return os.path.join('photos', str(instance.id), filename)
 
 
 class UserProfile(AbstractBaseUser):
@@ -35,6 +39,7 @@ class UserProfile(AbstractBaseUser):
     username = models.CharField(u"username", max_length=100, unique=True)
     email = models.CharField(u"email", max_length=255)
     avatarURL = models.CharField(u"avatar_url", max_length=255, default='')
+    avatar = models.ImageField(upload_to=get_image_path,blank=True,null=True)
 
     name = models.CharField(max_length=100, blank=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
