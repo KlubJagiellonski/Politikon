@@ -53,10 +53,12 @@ class UserProfileDetailView(DetailView):
         return self.request.user
 
 
-class UsersView(ListView):
+class UsersListView(ListView):
     """
-    Users list
+    Users list in rank
     """
+    template_name = 'accounts/rank.html'
+
     def get_queryset(self):
         """
         Users list

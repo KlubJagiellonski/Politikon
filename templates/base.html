@@ -80,7 +80,7 @@
 				<div class="arrowup"></div>
 				<a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
 				<a href="/events/"><li {% if request.path|startswith:"/events/" %} class="active"{% endif %}>Wydarzenia</li></a>
-				<a href="#"><li>Rankingi</li></a>
+				<a href="{% url 'accounts:rank' %}"><li>Rankingi</li></a>
 			</ul>
 		</nav>
 
@@ -109,7 +109,7 @@
 				<h5>Politikon</h5>
 				<li><a href="#">Jak grać?</a></li>
 				<li><a href="#">Wydarzenia</a></li>
-				<li><a href="#">Rankingi</a></li>
+				<li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
 			</ul>
 			<ul>
 				<li><a href="#">Regulamin</a></li>
