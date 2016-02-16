@@ -90,9 +90,9 @@
 		</div>
 
 		<div class="socialmedia prawa">
-			<a href="#"><div class="sm-bg tt"></div></a>
-			<a href="#"><div class="sm-bg fb"></div></a>
-			<a href="#"><div class="sm-bg gp"></div></a>
+			<a href="{% url 'social:begin' 'twitter' %}"><div class="sm-bg tt"></div></a>
+			<a href="{% url 'social:begin' 'facebook' %}"><div class="sm-bg fb"></div></a>
+{#			<a href="{% url 'social:begin' 'google' %}"><div class="sm-bg gp"></div></a>#}
 		</div>
 {% else %}
 {% include 'logged_in.html' %}
@@ -125,9 +125,9 @@
 		</div>
 		<div class="prawa">
 			<div class="socialmedia prawa">
-				<a href="{% url 'social:begin' 'twitter' %}"><div class="tt lewa"></div></a>
-				<a href="{% url 'social:begin' 'facebook' %}"><div class="fb lewa"></div></a>
-				<a href="{% url 'social:begin' 'google' %}"><div class="gp lewa"></div></a>
+				<a href="http://twitter.com/"><div class="tt lewa"></div></a>
+				<a href="http://facebook.com/"><div class="fb lewa"></div></a>
+{#				<a href="http://plus.google.com/"><div class="gp lewa"></div></a>#}
 			</div>
 			<a href=#"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
 		</div>
