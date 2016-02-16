@@ -26,7 +26,7 @@ def save_profile(strategy, user, response, details,
 
     backend = kwargs['backend']
 
-    if backend.name == 'facebook':
+    if is_new and backend.name == 'facebook':
         url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
 
         try:
