@@ -38,3 +38,9 @@ def render_featured_events(events, people):
         'events': events,
         'people': people
     }
+
+@register.inclusion_tag('render_bet_status.html')
+def render_bet_status(bet):
+    return {
+        'bet': bet,
+    }

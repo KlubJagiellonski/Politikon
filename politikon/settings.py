@@ -13,7 +13,6 @@ DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 # Django settings for politikon project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Jakub Lipinski', ''),
@@ -107,12 +106,6 @@ STATIC_ROOT = DJANGO_PROJECT_ROOT / 'static_build'
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 # STATIC_URL = '/static/'
-
-# Additional locations
-TEMPLATE_DIRS = (
-    os.path.join(DJANGO_PROJECT_ROOT, 'templates'),
-    DJANGO_PROJECT_ROOT
-)
 
 STATICFILES_DIRS = (
     DJANGO_PROJECT_ROOT / 'static',

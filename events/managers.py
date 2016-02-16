@@ -38,7 +38,8 @@ class EventManager(models.Manager):
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
-        return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
+        return self.ongoing_only_queryset().filter(is_featured=True).\
+            order_by('estimated_end_date')
 
     def get_front_event(self):
         front_events = self.ongoing_only_queryset().filter(is_front=True)\
@@ -130,6 +131,7 @@ class BetManager(models.Manager):
         bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
 
         user.total_cash -= bought_for_total
+        user.portfolio_value += bought_for_total
         user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
@@ -187,6 +189,7 @@ class BetManager(models.Manager):
         bet.save(update_fields=['sold_avg_price', 'has', 'sold'])
 
         user.total_cash += sold_for_total
+        user.portfolio_value -= sold_for_total
         user.save(update_fields=['total_cash'])
 
         event.increment_quantity(for_outcome, by_amount=-quantity)
@@ -206,6 +209,35 @@ class BetManager(models.Manager):
         # })
 
         return user, event, bet
+
+    def get_in_progress(self):
+        """
+        Get bets in progress and attribute has > 0, that bets are in user wallet.
+        :return: Bets in user wallet
+        :rtype: QuerySet[Bet]
+        """
+        from events.models import Event
+        return self.filter(
+            event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+            has__gt=0,
+        )
+
+    def get_finished(self):
+        """
+        Get finished bets and attribute has > 0, that bets are on user result list.
+        :return: Bets on user result list
+        :rtype: QuerySet[Bet]
+        """
+        from events.models import Event
+        events_finshed = (
+            Event.EVENT_OUTCOME_CHOICES.CANCELLED,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
+            Event.EVENT_OUTCOME_CHOICES.FINISHED_NO,
+        )
+        return self.filter(
+            event__outcome__in=events_finshed,
+            has__gt=0,
+        )
 
 
 class TransactionManager(models.Manager):

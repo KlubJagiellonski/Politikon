@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.vary import vary_on_headers
 from django.views.generic import DetailView, ListView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
@@ -33,9 +34,11 @@ class EventsListView(ListView):
         events = list(self.get_queryset())
         for i in range(len(events)):
             events[i].my_bet = events[i].get_user_bet(self.request.user)
+        mode = self.kwargs['mode']
         context.update({
             'events': events,
-            'bets': create_bets_dict(self.request.user, events)
+            'bets': create_bets_dict(self.request.user, events),
+            'active': mode
         })
         return context
 
@@ -62,17 +65,14 @@ class EventDetailView(DetailView):
         event = self.get_event()
         user = self.request.user
         event_bet = event.get_user_bet(user)
-        if user and user.is_authenticated():
-            user_bets = Bet.objects.get_users_bets_for_events(user, [event])
-        else:
-            user_bets = []
+        bet_social = event.get_bet_social()
         context.update({
             'event': event,
             'bet': event_bet,
             'active': 1,
             'event_dict': event.event_dict,
-            'bets': user_bets,
-            'bet_dicts': [bet.bet_dict for bet in user_bets]
+            'bet_social': bet_social,
+            'related_events': event.get_related(user),
         })
         return context
 
@@ -154,3 +154,31 @@ def create_transaction(request, event_id):
     }
 
     return JSONResponse(json.dumps(result))
+
+
+@login_required
+@vary_on_headers('HTTP_X_REQUESTED_WITH')
+def bets_viewed(request):
+    """
+    Uncheck new finished event as read
+    :param request:
+    :type request: WSGIRequest
+    :param bet_id: bet.id
+    :type bet_id: int
+    :return: json list with bet ids
+    :rtype: JSONResponse
+    """
+
+    bets_id_list = request.GET.getlist('bets[]')
+    bets_resolved = []
+    for bet_id in bets_id_list:
+        try:
+            bet = Bet.objects.get(user=request.user, id=int(bet_id))
+        except ValueError:
+            continue
+            # TODO: log somewhere or do something
+        bet.is_new_resolved = False
+        bet.save()
+        bets_resolved.append(bet_id)
+
+    return JSONResponse(json.dumps(bets_resolved))

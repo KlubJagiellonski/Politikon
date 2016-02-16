@@ -1,5 +1,6 @@
 static_build/uploads/*
 static/.webassets-cache/*
+static/uploads/*
 .pycharm_helpers/*
 src/*
 *.pyc

@@ -258,7 +258,7 @@ footer ul a, footer .socialmedia div,
 #makeabet .betYES:hover {background: #c7df42;}
 #makeabet .betNO:hover {background: #f34f23;}
 
-#makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px;}
+#makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px; color:#333;}
 .change {width: 36px; height: 36px; border: 2px solid #fff; font-size: 0.875em; line-height: 36px; text-align: center; border-radius: 50%; background: #fff; margin: 0 auto;
         background: #fefefe;
         background: -moz-linear-gradient(top,  #fefefe 0%, #d8d8d8 100%);
@@ -502,9 +502,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .history-event .lewa {max-width: 58%; height: 16px;}
 #userinfo .history-event .prawa {width: 37.5%; font-weight: 700;}
 #userinfo .history-event span {display: block;; float: left;}
-#userinfo .history-event .prawa .history-action {width: 27%;}
+#userinfo .history-event .prawa .history-action {width: 31%;}
 #userinfo .history-event span .reputy-small {margin-right: 10px;}
-#userinfo .history-event .reputy-change {width: 32%;}
+#userinfo .history-event .reputy-change {width: 21%;}
 #userinfo .history-event .event-date {background: url(../img/time.png) left no-repeat; height: 21px; padding-left: 40px; padding-top: 9px; margin-top: -7px; font-size: .875em; font-weight: 300; color: #b4b4b4;}
 #userinfo .history-event .changeNO, #userinfo .history-event .changeYES {font-weight: 700}
 
@@ -599,6 +599,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 .settings-form .noconnection .connectme {background: #ea6a2a; color: #fff;}
 
 #settings-submit {padding-top: 40px;}
+
+.hidden {display:none;}
 
 
 
