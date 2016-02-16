@@ -118,7 +118,7 @@ footer ul a, footer .socialmedia div,
 
 .parsley-errors-list li {width: 100%; background: #fff5f5; border: 1px solid #8c0808; padding: 5px 0; color: #8c0808; font-weight: 700; margin: -11px 0 10px;}
 
-#maintop {height: 100px; background: #f6f6f6; z-index: 5000; position: relative; 
+#maintop {height: 100px; background: #f6f6f6; z-index: 5000; position: relative;
         -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
         -moz-box-shadow:    0px 5px 5px 0px rgba(0, 0, 0, 0.1);
         box-shadow:         0px 5px 5px 0px rgba(0, 0, 0, 0.1);
@@ -197,11 +197,11 @@ footer ul a, footer .socialmedia div,
 .sticktotop .userdata .wallet .arrowup {margin-top: 31px !important;}
 .sticktotop #wallet-not .container {margin-top: 72px;}
 
-.arrowup {width: 0; height: 0; 
+.arrowup {width: 0; height: 0;
 	border-left: 10px solid transparent;
 	border-right: 10px solid transparent;
 	border-bottom: 10px solid #fff;
-        
+
         margin: 0 auto;
         margin-top: -10px;
 }
@@ -330,9 +330,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
         width: 93%;
         height: 100%;
         padding: 0 3.5%;
-        position: absolute; 
-        background: url(../img/01figurebg.png) bottom center repeat-x; 
-        color: white; 
+        position: absolute;
+        background: url(../img/01figurebg.png) bottom center repeat-x;
+        color: white;
         top: 0px;
 }
 #featured figure {  display: block; position: relative; z-index: 4000;}
@@ -340,8 +340,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #featured .opis {position: absolute; bottom: 0px;  max-width: 1170px; height: 120px;}
 #featured h1 {width: 65.81%; height: 80px; color: #fafafa; font-size: 2.5em; font-weight: 700; line-height: 1em; text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);}
 
-#featured .details {position: absolute; top: 0px; width: 100%; max-width: 1250px; height: 100%; margin-left: -3.5%; background: rgba(0,0,0,0.5);  opacity: 0;}
-#featured-canvas {height: 70px; width: 90% !important; margin-left: 5%; margin-top: 50px; z-index: 4500;}
+#featured .details {position: absolute; top: 0px; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5);  opacity: 0; padding: 5%;}
+#featured-canvas { width: 90%; height: 90%; z-index: 4500;}
 
 #featured #makeabet {width: 370px !important; margin-top: 10px;}
 
@@ -447,7 +447,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #bet-desc .rss-related .rss-reload {background: url(../img/reload.png) center no-repeat; width: 20px; height: 20px; cursor: pointer;}
 #bet-desc .rss-related .rss-reload:hover { opacity: 0.5;
         transform:rotate(270deg);
-        -webkit-transform:rotate(270deg); 
+        -webkit-transform:rotate(270deg);
         -moz-transform:rotate(270deg);
         -o-transform:rotate(270deg);
 }
