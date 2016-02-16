@@ -16,7 +16,7 @@
                 {% for user in object_list %}
                     <a href="#"><div class="ranking-event">
                         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
-                            <p class="rank">{{ object_list.number }}</p>
+                            <p class="rank">{{ forloop.counter }}</p>
                             <img src="{{ user.get_avatar_url }}"/>
                             <p class="nickname">{{ user.username }}</p>
                         </div>
