@@ -15,6 +15,8 @@ def save_profile(strategy, user, response, details,
     # print(strategy)
     # print(details)
     # uid = kwargs['uid']
+    playing_friends_count = len(response['friends']['data'])
+
     backend = kwargs['backend']
 
     if is_new and backend.name == 'facebook':
@@ -29,11 +31,13 @@ def save_profile(strategy, user, response, details,
             user.avatar.save('{0}_social.jpg'.format(user.username),
                                    ContentFile(response.content))
 
-        playing_friends_count = len(response['friends']['data'])
         if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
             user.is_active = False
         else:
             user.is_active = True
 
         user.save()
+
+
+    # print user.avatar.url
 
