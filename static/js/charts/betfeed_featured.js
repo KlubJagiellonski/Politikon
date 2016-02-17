@@ -16,9 +16,17 @@ var SET_STYLE = {
 
 var CHART_STYLE = {responsive: true,showScale: false,scaleShowLabels: false,datasetStrokeWidth : 6,bezierCurveTension : 0.5,pointDotRadius : 6,pointHitDetectionRadius : 10};
 
-var FEATURED_CHART_STYLE = { responsive: true,showScale: false, scaleShowLabels: false, datasetStrokeWidth : 6, bezierCurveTension : 0.5, pointDotRadius : 6, pointHitDetectionRadius : 40};
+var FEATURED_CHART_STYLE = {
+    responsive: true,
+    showScale: false,
+    scaleShowLabels: false,
+    datasetStrokeWidth : 6,
+    bezierCurveTension : 0.5,
+    pointDotRadius : 6,
+    pointHitDetectionRadius : 40};
 
 //wykresy na wydarzenia w betfeedzie
+
 
 function makeChart(data,opts){
 
@@ -62,7 +70,7 @@ function renderCharts(events,featuredEvent){
     if(featuredEvent){
         makeChart(featuredEvent, {
             id : '#featured-canvas',
-            chartStyle:FEATURED_CHART_STYLE
+            chartStyle: FEATURED_CHART_STYLE
         });
     }
 }

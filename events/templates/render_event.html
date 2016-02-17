@@ -2,7 +2,7 @@
 <div class="bet">
     <figure>
         {% if event.small_image %}
-        <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+        <div style="background: url({{ event.small_image.url }}); background-size: cover; min-height: 250px;"></div>
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}

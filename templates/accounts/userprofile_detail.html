@@ -76,8 +76,8 @@
                         <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
                         <div class="status">
                             <h3 class="skroc">{{ bet.event }}</h3>
-                            <p><span class="betdetails">Zakład:</span> <span class="changeYES">{{ bet.outcome }}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
-                            <p class="detailed-status"><span class="invested">{{ bet.get_invested }}</span> <span class="maywin">{{ bet.get_won }}</span> <span class="inwallet">{{ bet.get_wallet_change }}</span></p>
+                            <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|floatformat:"0" }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
+                            <p class="detailed-status"><span class="invested">{{ bet.get_invested|floatformat:"0" }}</span> <span class="maywin">{{ bet.get_won|floatformat:"0" }}</span> <span class="inwallet">{{ bet.get_wallet_change|floatformat:"0" }}</span></p>
                         </div>
                     </a></div>
                 {% endfor %}
@@ -110,7 +110,7 @@
                     <div class="history-event">
                         <span class="skroc lewa">{{ transaction.event.title }}</span>
                         <div class="prawa">
-                            <span class="history-action">{{ transaction.get_type_display }}</span>
+                            <span class="history-action">{{ transaction.get_type_display|upper }}</span>
                             <span class="reputy-change"><span class="reputy-small"></span>{{ transaction.price }}</span>
                             <span class="event-date">{{ transaction.date }}</span>
                         </div>
