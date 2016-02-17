@@ -22,8 +22,10 @@ import os
 
 logger = logging.getLogger(__name__)
 
+
 def get_image_path(instance, filename):
-    return os.path.join('photos', str(instance.id), filename)
+    ext = filename.split('.')[-1]
+    return os.path.join('avatars', str(instance.username)+'.'+ext)
 
 
 class UserProfile(AbstractBaseUser):
@@ -229,8 +231,8 @@ class UserProfile(AbstractBaseUser):
         :return: avatar url
         :rtype: str
         """
-        if self.avatarURL:
-            return self.avatarURL
+        if self.avatar:
+            return self.avatar
         else:
             return STATIC_URL + "img/blank-avatar.jpg"
 
