@@ -1,12 +1,13 @@
-from social.pipeline.partial import partial
-
+import urllib2
 import logging
 logger = logging.getLogger(__name__)
-from constance import  config
-import urllib2
-from requests import request, HTTPError
 
 from django.core.files.base import ContentFile
+from social.pipeline.partial import partial
+
+from constance import config
+from requests import request, HTTPError
+
 
 @partial
 def save_profile(strategy, user, response, details,
@@ -47,7 +48,6 @@ def save_profile(strategy, user, response, details,
             else:
                 user.avatar.save('{0}_social.jpg'.format(user.username),
                                     ContentFile(response.content))
-        user.save()
 
     if is_new and backend.name == 'facebook':
         url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
@@ -69,7 +69,4 @@ def save_profile(strategy, user, response, details,
             user.is_active = True
 
         user.save()
-
-
-    # print user.avatar.url
 
