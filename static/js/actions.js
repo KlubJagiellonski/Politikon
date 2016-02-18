@@ -66,6 +66,29 @@ $(function() {
             }
         });
 
+        //wgrywanie awatara przy pomocy wcisniecia obrazka
+        $('.profile-avatar').click(function () {
+            var $input = $('input[type=file]', $(this).parent()),
+                $wrapper = $(this).closest('.upload-wrapper');
+            if ($input.val() || $wrapper.data('current')) {
+                $wrapper.data('current', '');
+                $wrapper.data('current-url', '');
+                $input.val('').change();
+            } else {
+                $input.click();
+            }
+        });
+        function getExtension(fname) {
+            return fname.substr((~-fname.lastIndexOf(".") >>> 0) + 2);
+        }
+        $('.upload-wrapper').on('change', 'input[type=file]', function (event) {
+            var $wrapper = $(this).closest('.upload-wrapper');
+            if (event.target.files && event.target.files[0]) {
+            } else {
+            }
+            // $(this).closest('.upload-wrapperd
+        });
+
         // kupowanie i sprzedawanie zakładów
         $(".a_bet").on('click', function(e) {
             e.preventDefault();

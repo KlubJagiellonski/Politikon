@@ -4,83 +4,92 @@
 
 {% block content %}
 
-	<section id="settings-profile" class="body-margin">
-		<a href=#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}"/></figure></a>
-		<div class="current-settings lewa">
-			<div class="astable">
-				<h2>{{ user.name }}</h2>
-				<p><span class="what">Użytkownik:</span> <span class="value">{{ user.username }}</span></p>
-				<p><span class="what">Dołączył do gry:</span> <span class="value">{{ user.created_date }}</span></p>
-			</div>
-			<div class="astable">
-				<p><span class="what">Adres e-mail:</span> <span class="value"><a href="email:{{ user.email }}">{{ user.email }}</a></span></p>
-				<p><span class="what">Połączone konta:</span> <span class="value">
+<section id="settings-profile" class="body-margin">
+    <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" id="avatar-form">
+        {% csrf_token %}
+        <div class="upload-wrapper" data-current="{{ forms.avatar.avatar.image }}" data-current-url="{% if forms.avatar.avatar %}{{ forms.avatar.avatar.url }}{% endif %}">
+            <a href=#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}"/></figure></a>
+            <div class="hidden">
+                {{ forms.avatar }}
+            </div>
+        </div>
+    </form>
+    <div class="current-settings lewa">
+        <div class="astable">
+            <h2>{% if user.name %}{{ user.name }}{% else %}-{% endif %}</h2>
+            <p><span class="what">Użytkownik:</span> <span class="value">{{ user.username }}</span></p>
+            <p><span class="what">Dołączył do gry:</span> <span class="value">{{ user.created_date }}</span></p>
+        </div>
+        <div class="astable">
+            <p><span class="what">Adres e-mail:</span> <span class="value"><a href="emailto:{{ user.email }}">{{ user.email }}</a></span></p>
+            <p><span class="what">Połączone konta:</span> <span class="value">
+                {% if user.twitter_user %}
+                <a href="{{ user.get_twitter_url }}"><span class="att-tt">{{ user.twitter_user }}</span></a>
+                {% endif %}
+                {% if user.facebook_user %}
+                <a href="{{ user.get_facebook_url }}"><span class="att-fb">{{ user.facebook_user }}</span></a>
+                {% endif %}
+            </span></p>
+        </div>
+    </div>
+</section>
+
+<section id="userinfo" class="hotbets">
+    <ul class="tabs lewa">
+        <li class="active"><a href="#profil">Twój profil</a></li>
+        <li><a href="#haslo">E-mail i hasło</a></li>
+    </ul>
+    <div class="clr"></div>
+    <div class="zakladki-content">
+        <article id="profil">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="main-form">
+                {% csrf_token %}
+                <div class="lewa">
+                    <span>Wyświetlane imię i nazwisko:</span>
+                    <input name="name" type="text" class="jednalinia" id="{{ forms.main.description.name_id }}" value="{{ user.name }}" data-parsley-minlength="3" data-parsley-trigger="focusout" required />
+                    <span>Opis użytkownika:</span>
+                    <textarea name="description" class="wielelinii" id="{{ forms.main.description.auto_id }}" data-parsley-minlength="10" data-parsley-trigger="focusout">{{ user.description }}</textarea>
+                </div>
+                <div class="prawa">
+                    <span>Twoja strona www:</span>
+                    <input name="web_site" type="url" class="jednalinia" id="{{ forms.main.web_site.auto_id }}" value="{{ user.web_site }}" data-parsley-type="url" data-parsley-trigger="focusout">
+                    <span>Połączone konta:</span>
                     {% if user.twitter_user %}
-                        <a href="{{ user.get_twitter_url }}"><span class="att-tt">{{ user.twitter_user }}</span></a>
+                    <div class="social-connect connection"><div class="connect-tt"></div>{{ user.twitter_user }}</div>
                     {% endif %}
                     {% if user.facebook_user %}
-                        <a href="{{ user.get_facebook_url }}"><span class="att-fb">{{ user.facebook_user }}</span></a>
+                    <div class="social-connect connection"><div class="connect-fb"></div>{{ user.facebook_user }}</div>
                     {% endif %}
-				</span></p>
-			</div>
-		</div>
-	</section>
+                </div>
+            </form>
+        </article>
 
-	<section id="userinfo" class="hotbets">
-		<ul class="tabs lewa">
-			<li class="active"><a href="#profil">Twój profil</a></li>
-			<li><a href="#haslo">E-mail i hasło</a></li>
-		</ul>
-		<div class="clr"></div>
-		<div class="zakladki-content">
-			<article id="profil">
-				<form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form">
-                    {% csrf_token %}
-					<div class="lewa">
-						<span>Wyświetlane imię i nazwisko:</span>
-						<input name="user_name" type="text" class="jednalinia" id="displayname" value="{{ user.name }}" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-						<span>Opis użytkownika:</span>
-						<textarea name="description" class="wielelinii" id="description" data-parsley-minlength="10" data-parsley-trigger="focusout">{{ user.description }}</textarea>
-					</div>
-					<div class="prawa">
-						<span>Twoja strona www:</span>
-						<input name="web_site" type="url" class="jednalinia" id="website" value="{{ user.web_site }}" data-parsley-type="url" data-parsley-trigger="focusout">
-						<span>Połączone konta:</span>
-                        {% if user.twitter_user %}
-                            <div class="social-connect connection"><div class="connect-tt"></div>{{ user.twitter_user }}</div>
-                        {% endif %}
-                        {% if user.facebook_user %}
-                            <div class="social-connect connection"><div class="connect-fb"></div>{{ user.facebook_user }}</div>
-                        {% endif %}
-					</div>
-				</form>
-			</article>
-			
-			<article id="haslo">
-				<form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form">
-                    {% csrf_token %}
-					<div class="lewa">
-						<span>Zmień adres e-mail:</span>
-						<input name="email" type="email" class="jednalinia" id="newemail" value="{{ user.email }}" placeholder="Twój adres e-mail" data-parsley-trigger="focusout" required>
-						<input name="checkemail" type="email" class="jednalinia" id="checkmail" placeholder="wpisz ponownie adres e-mail" data-parsley-equalto="#newemail" data-parsley-trigger="focusout" reqired>
-					</div>
-					<div class="prawa">
-						<span>Zmień swoje hasło:</span>
-						<input name="oldpass" type="password" class="jednalinia" id="oldpass" placeholder="wpisz obecne hasło" data-parsley-minlength="4" data-parsley-trigger="focusout">
-							
-						<input name="newpass" type="password" class="jednalinia" id="newpass" placeholder="wpisz nowe hasło" data-parsley-minlength="4" data-parsley-trigger="focusout">
-						<input name="checkpass" type="password" class="jednalinia" id="checkpass" placeholder="wpisz ponownie nowe hasło" data-parsley-minlength="4" data-parsley-equalto="#newpass" data-parsley-trigger="focusout" reqired>
-					</div>
-				</form>
-			</article>
-		</div>
-	</section>
-	
-	<section id="settings-submit" class="prefooter-margin">
-        {% for message in messages %}
-            <div{% if message.1 %} class="error"{% endif %}>{{ message.0 }}</div>
-        {% endfor %}
-        <a href="#" id="loadmore"><div class="btn astable">Zapisz zmiany</div></a>
-    </section>
+        <article id="haslo">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="email-form">
+                {% csrf_token %}
+                <div class="lewa">
+                    <span>Zmień adres e-mail:</span>
+                    <input name="email" type="email" class="jednalinia" id="{{ forms.email.email1.auto_id }}" value="{{ user.email }}" placeholder="{{ forms.email.email1.label }}" data-parsley-trigger="focusout" required>
+                    <input name="checkemail" type="email" class="jednalinia" id="{{ forms.email.email2.auto_id }}" placeholder="{{ forms.email.email2.label }}" data-parsley-equalto="#newemail" data-parsley-trigger="focusout" required>
+                </div>
+                {% comment %}
+                <div class="prawa">
+                    <span>Zmień swoje hasło:</span>
+                    <input name="oldpass" type="password" class="jednalinia" id="{{ forms.email.old_password.auto_id }}" placeholder="{{ forms.email.old_password.label }}" data-parsley-minlength="4" data-parsley-trigger="focusout">
+                    <input name="newpass" type="password" class="jednalinia" id="{{ forms.email.password1.auto_id }}" placeholder="{{ forms.email.password1.label }}" data-parsley-minlength="4" data-parsley-trigger="focusout">
+                    <input name="checkpass" type="password" class="jednalinia" id="{{ forms.email.password2.auto_id }}" placeholder="{{ forms.email.password2.label }}" data-parsley-minlength="4" data-parsley-equalto="#newpass" data-parsley-trigger="focusout" required>
+                </div>
+                {% endcomment %}
+            </form>
+        </article>
+    </div>
+</section>
+
+<section id="settings-submit" class="prefooter-margin">
+    {% for message in messages %}
+    <div{% if message.1 %} class="error"{% endif %}>{{ message.0 }}</div>
+    {% endfor %}
+    <a href="#" id="loadmore"><div class="btn astable">Zapisz zmiany</div></a>
+</section>
 
 {% endblock %}

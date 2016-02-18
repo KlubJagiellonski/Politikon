@@ -1,11 +1,29 @@
-from django.shortcuts import render
+from django.http import HttpResponsePermanentRedirect
+from django.contrib.auth import logout as auth_logout
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView, DetailView
 
-from models import UserProfile
+from politikon.forms import MultipleFormsView
+from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
+from .models import UserProfile
 
 
-def user_settings_view(request):
+class UserUpdateView(MultipleFormsView):
+    """
+    User settings
+    """
+    template_name = 'accounts/user_settings.html'
+    form_classes = {
+        'main': UserProfileForm,
+        'email': UserProfileEmailForm,
+        'avatar': UserProfileAvatarForm
+    }
+    success_url = reverse_lazy('success')
+
+
+def user_settings_view(renuest):
 
     user = UserProfile.objects.get(pk=request.session['_auth_user_id'])
     # messages musi zawierac tuples: tresc i czy to jest komunikat o bladzie,
@@ -45,6 +63,9 @@ def user_settings_view(request):
 
 
 class UserProfileDetailView(DetailView):
+    """
+    User profile
+    """
     model = UserProfile
 
     def get_object(self, **kwargs):
