@@ -16,14 +16,20 @@ def save_profile(strategy, user, response, details,
     When new account then gets profile picture and checks number of
     friends/followers already in game. If more than
     config.REQUIRED_FRIENDS_THRESHOLD, then user is active by default.
-    :type strategy: strategy instance
+    :type strategy: DjangoStrategy
+    :param strategy: instance of strategy
     :type user: UserProfile
+    :param user: instance of logging user
+    :type response: dict
     :param response: response from social service
+    :type details: dict
     :param details: details from social service (username, fullname, last_name,
     email, first_name)
+    :type is_new: bool
     :param is_new: is it new account
     """
     # print(is_new)
+    # print(response)
     # print(strategy)
     # print(details)
     # uid = kwargs['uid']
