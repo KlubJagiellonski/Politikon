@@ -10,7 +10,19 @@ from django.core.files.base import ContentFile
 
 @partial
 def save_profile(strategy, user, response, details,
-                         is_new=False,*args,**kwargs):
+                 is_new=False,*args,**kwargs):
+    """
+    Saves profile when logging with social auth.
+    When new account then gets profile picture and checks number of
+    friends/followers already in game. If more than
+    config.REQUIRED_FRIENDS_THRESHOLD, then user is active by default.
+    :type strategy: strategy instance
+    :type user: UserProfile
+    :param response: response from social service
+    :param details: details from social service (username, fullname, last_name,
+    email, first_name)
+    :param is_new: is it new account
+    """
     # print(is_new)
     # print(strategy)
     # print(details)
@@ -33,6 +45,7 @@ def save_profile(strategy, user, response, details,
 
     if is_new and backend.name == 'facebook':
         url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+        #TODO: check if these are active accounts of friend
         playing_friends_count = len(response['friends']['data'])
 
         try:
