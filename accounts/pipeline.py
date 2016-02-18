@@ -15,12 +15,12 @@ def save_profile(strategy, user, response, details,
     # print(strategy)
     # print(details)
     # uid = kwargs['uid']
-    playing_friends_count = len(response['friends']['data'])
 
     backend = kwargs['backend']
 
     if is_new and backend.name == 'facebook':
         url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+        playing_friends_count = len(response['friends']['data'])
 
         try:
             response = request('GET', url, params={'type': 'large'})
