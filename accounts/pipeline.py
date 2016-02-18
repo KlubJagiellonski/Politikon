@@ -18,6 +18,19 @@ def save_profile(strategy, user, response, details,
 
     backend = kwargs['backend']
 
+    if is_new and backend.name == 'twitter':
+        if not response['default_profile_image']:
+            url = response['profile_image_url'].replace('_normal', '')
+            try:
+                response = request('GET', url)
+                response.raise_for_status()
+            except HTTPError:
+                pass
+            else:
+                user.avatar.save('{0}_social.jpg'.format(user.username),
+                                    ContentFile(response.content))
+        user.save()
+
     if is_new and backend.name == 'facebook':
         url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
         playing_friends_count = len(response['friends']['data'])
