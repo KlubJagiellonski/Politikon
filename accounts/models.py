@@ -232,7 +232,7 @@ class UserProfile(AbstractBaseUser):
         :rtype: str
         """
         if self.avatar:
-            return self.avatar
+            return self.avatar.url
         else:
             return STATIC_URL + "img/blank-avatar.jpg"
 
