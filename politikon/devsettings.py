@@ -29,8 +29,17 @@ FACEBOOK_APPLICATION_SECRET_KEY = "aeadbbcf643847743b8ea9551b8b2986"
 FACEBOOK_APPLICATION_NAMESPACE = "politikon_dev"
 
 # Since below these are test app settings, it should be safe to open-source it
-TWITTER_CONSUMER_KEY = "07cM50zfHeEZg2uuN0lkyyC4w"
-TWITTER_CONSUMER_SECRET = "NQE2HRp135fn4rQSxvdMdcZ4Ug3HzG8wwhoKGGUjtxbFVk8Id4"
+TWITTER_CONSUMER_KEY = "c96DyRfYWpIYTktS7CymHFNBJ"
+TWITTER_CONSUMER_SECRET = "omcuLc58rqAYhvjis5FjgTqrH2mDoqFqRhwP9bhxlZuleQS6HL"
+TWITTER_TOKEN = ''
+TWITTER_TOKEN_SECRET = ''
+
+# oauth-tokens settings
+OAUTH_TOKENS_HISTORY = True                                        # to keep in DB expired access tokens
+OAUTH_TOKENS_TWITTER_CLIENT_ID = 'politikon-ppeczek'                                # application ID
+OAUTH_TOKENS_TWITTER_CLIENT_SECRET = 'Ppw9AHdVlz1V8sSzlmQZRwGFaGk22XZWon6S0c00e80zpDNs85'                            # application secret key
+OAUTH_TOKENS_TWITTER_USERNAME = 'PiotrPeczek'                                 # user login
+OAUTH_TOKENS_TWITTER_PASSWORD = 'pp292113'                                 # user password
 
 # social_auth configuration
 SOCIAL_AUTH_TWITTER_KEY = TWITTER_CONSUMER_KEY

@@ -237,6 +237,11 @@ INSTALLED_APPS = (
     'django_assets',
     'social.apps.django_app.default',
 
+    'oauth_tokens',
+    'm2m_history',
+    'taggit',
+    'twitter_api',
+
     'constance',
     'constance.backends.database',
     'djcelery',
