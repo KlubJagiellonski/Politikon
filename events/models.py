@@ -80,7 +80,7 @@ class Event(models.Model):
     outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia', default=datetime.now()+timedelta(days=7))
+    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia', default=50.0)
