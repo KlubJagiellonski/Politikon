@@ -71,11 +71,10 @@ def save_profile(strategy, user, response, details,
             user.is_active = True
 
         user.name = details['fullname']
-        user.facebook_user_id = response['id']
-        user.facebook_user = response['id']
+        user.facebook_user = user.facebook_user_id = response['id']
         user.save()
 
-        url = 'http://graph.facebook.com/%s/picture' % response['id']#.format(response['id'])
+        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
         try:
             response = request('GET', url, params={'type': 'large'})
             response.raise_for_status()
