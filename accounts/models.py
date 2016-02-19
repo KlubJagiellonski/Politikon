@@ -32,6 +32,7 @@ class UserProfile(AbstractBaseUser):
 
     objects = UserProfileManager()
     # przeliczane rankingi: ranking, miesiąc, tydzień
+    # TODO: czy to potrzebne?
     snapshots = SnapshotAddon(fields=[
         'total_cash',
         'total_given_cash',
@@ -40,7 +41,6 @@ class UserProfile(AbstractBaseUser):
 
     username = models.CharField(u"username", max_length=100, unique=True)
     email = models.CharField(u"email", max_length=255)
-    avatarURL = models.CharField(u"avatar_url", max_length=255, default='')
     avatar = models.ImageField(upload_to=get_image_path,blank=True,null=True)
 
     name = models.CharField(max_length=100, blank=True)
@@ -54,6 +54,7 @@ class UserProfile(AbstractBaseUser):
 
     created_date = models.DateTimeField(auto_now_add=True)
 
+    # TODO: czy to potrzebne?
     # Every new network relations also has to have 'related_name="django_user"'
     #     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
 
@@ -69,9 +70,9 @@ class UserProfile(AbstractBaseUser):
 
     web_site = models.CharField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
-    facebook_user_id = models.IntegerField(u"facebook ID", default=None, blank=True, null=True)
+    facebook_user_id = models.BigIntegerField(u"facebook ID", default=None, blank=True, null=True)
     facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
-    twitter_user_id = models.IntegerField(u"twitter ID", default=None, blank=True, null=True)
+    twitter_user_id = models.BigIntegerField(u"twitter ID", default=None, blank=True, null=True)
     twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True, null=True)
 
     USERNAME_FIELD = 'username'

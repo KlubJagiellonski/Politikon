@@ -38,6 +38,11 @@ def save_profile(strategy, user, response, details,
     backend = kwargs['backend']
 
     if is_new and backend.name == 'twitter':
+        user.name = response['name']
+        user.twitter_user_id = response['id']
+        user.twitter_user = response['screen_name']
+        user.save()
+
         if not response['default_profile_image']:
             url = response['profile_image_url'].replace('_normal', '')
             try:
@@ -50,10 +55,26 @@ def save_profile(strategy, user, response, details,
                                     ContentFile(response.content))
 
     if is_new and backend.name == 'facebook':
-        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
-        #TODO: check if these are active accounts of friend
-        playing_friends_count = len(response['friends']['data'])
+        playing_friends_count = 0
+        for friend in response['friends']['data']:
+            try:
+                user = UserProfile.objects.get('facebook_user_id', friend['id'])
+            except:
+                pass
+            else:
+                if user.is_active:
+                    playing_friends_count += 1
 
+        if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
+            user.is_active = False
+        else:
+            user.is_active = True
+
+        user.name = details['fullname']
+        user.facebook_user = user.facebook_user_id = response['id']
+        user.save()
+
+        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
         try:
             response = request('GET', url, params={'type': 'large'})
             response.raise_for_status()
@@ -62,11 +83,4 @@ def save_profile(strategy, user, response, details,
         else:
             user.avatar.save('{0}_social.jpg'.format(user.username),
                                    ContentFile(response.content))
-
-        if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
-            user.is_active = False
-        else:
-            user.is_active = True
-
-        user.save()
 

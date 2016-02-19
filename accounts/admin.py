@@ -64,7 +64,7 @@ class MyUserAdmin(UserAdmin):
     add_form = UserCreationForm
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
-                    'is_staff', 'is_deleted')
+                    'is_staff', 'is_deleted', 'facebook_user', 'twitter_user')
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )
