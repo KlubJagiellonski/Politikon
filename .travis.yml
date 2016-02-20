@@ -4,6 +4,8 @@ install:
 branches:
     only:
         - master
+before_script:
+    - flake8
 script: coverage run manage.py test politikon
 after_success:
     - coverage report

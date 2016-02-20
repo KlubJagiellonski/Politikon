@@ -9,6 +9,8 @@ gunicorn==19.3.0
 path.py==2.4.1
 ipdb
 ipython
+flake8
+coveralls
 
 djangorestframework
 newrelic
