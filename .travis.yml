@@ -4,7 +4,7 @@ install:
 branches:
     only:
         - master
-script: coverage run manage.py test politikon
+script: coverage run manage.py test
 after_success:
     - coverage report
     - coveralls

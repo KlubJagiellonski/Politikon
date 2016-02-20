@@ -1,8 +1,9 @@
+*.pyc
+.coverage
+.idea/
+.pycharm_helpers/*
+src/*
+src/smartsettings
 static_build/uploads/*
 static/.webassets-cache/*
 static/uploads/*
-.pycharm_helpers/*
-src/*
-*.pyc
-src/smartsettings
-.idea/
