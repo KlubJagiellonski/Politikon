@@ -248,7 +248,7 @@ class UserProfile(AbstractBaseUser):
 
     def get_facebook_url(self):
         """
-        Get this user facebook url: https://www.facebook.com/
+        Get this user facebook url: https://www.facebook.com/user
 
         :return: facebook user url
         :rtype: str
