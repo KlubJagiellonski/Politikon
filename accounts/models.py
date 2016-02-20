@@ -244,7 +244,9 @@ class UserProfile(AbstractBaseUser):
         :return: twitter user url
         :rtype: str
         """
-        return self.TWITTER_URL.format(self.twitter_user)
+        if self.twitter_user:
+            return self.TWITTER_URL.format(self.twitter_user)
+        return None
 
     def get_facebook_url(self):
         """
@@ -253,7 +255,9 @@ class UserProfile(AbstractBaseUser):
         :return: facebook user url
         :rtype: str
         """
-        return self.FACEBOOK_URL.format(self.facebook_user)
+        if self.facebook_user:
+            return self.FACEBOOK_URL.format(self.facebook_user)
+        return None
 
     def get_twitter_disconnect_url(self):
         """
