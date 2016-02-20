@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/KlubJagiellonski/Politikon.svg?branch=master)](https://travis-ci.org/KlubJagiellonski/Politikon)
+[![Coverage Status](https://coveralls.io/repos/github/KlubJagiellonski/Politikon/badge.svg?branch=master)](https://coveralls.io/github/KlubJagiellonski/Politikon?branch=master)
 
 # Politikon - stawiamy na politykę
 www.politikon.org.pl
