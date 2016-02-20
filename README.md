@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/KlubJagiellonski/Politikon.svg?branch=master)](https://travis-ci.org/KlubJagiellonski/Politikon)
+
 # Politikon - stawiamy na politykę
 www.politikon.org.pl
 
