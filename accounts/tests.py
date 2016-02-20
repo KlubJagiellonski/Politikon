@@ -43,3 +43,24 @@ class UserProfileModelTestCase(TestCase):
 
         url = user.get_facebook_url()
         self.assertEqual('https://www.facebook.com/facesmith', url)
+
+    def test_twitter_user(self):
+        """
+        Check method for account connected with twitter
+        """
+        j_smith = UserProfile.objects.create(
+            username='johnsmith',
+            name='John Smith',
+        )
+
+        url = j_smith.get_facebook_url()
+        self.assertIsNone(url)
+
+        url = j_smith.get_twitter_url()
+        self.assertIsNone(url)
+
+        j_smith.twitter_user = 'jsmith'
+        j_smith.save()
+
+        url = j_smith.get_twitter_url()
+        self.assertEqual('https://twitter.com/jsmith', url)
