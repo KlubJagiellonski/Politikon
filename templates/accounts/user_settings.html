@@ -7,8 +7,8 @@
 <section id="settings-profile" class="body-margin">
     <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" id="avatar-form">
         {% csrf_token %}
-        <div class="upload-wrapper" data-current="{{ forms.avatar.avatar.image }}" data-current-url="{% if forms.avatar.avatar %}{{ forms.avatar.avatar.url }}{% endif %}">
-            <a href=#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}"/></figure></a>
+        <div class="upload-wrapper" data-current="{{ forms.avatar.instance.avatar }}" data-current-url="{% if forms.avatar.instance.avatar %}{{ forms.avatar.instance.avatar.url }}{% else %}{{ user.get_avatar_url }}{% endif %}">
+            <a href="#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}" class="preview" /></figure></a>
             <div class="hidden">
                 {{ forms.avatar }}
             </div>

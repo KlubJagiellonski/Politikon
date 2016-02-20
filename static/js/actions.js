@@ -57,19 +57,73 @@ $(function() {
             $('#userinfo > ul > li > a[href=#' + tab_choosen + ']').click();
         }
 
-        // wysyłanie formularza zmiany danych profilu
-        $('#settings-submit #loadmore').click(function(){
-            if ($('.active [href=#profil]').length > 0) {
-                $('#profil form').submit();
-            } else if ($('.active [href=#haslo]').length > 0) {
-                $('#haslo form').submit();
+        // handle the custom upload widget
+        function setPreviewSrc($wrapper, src) {
+            var changeCallback = $wrapper.data('change-callback'),
+            $preview = $wrapper.find('.preview'),
+            width = $wrapper.data('preview-width') || $preview.width(),
+            height = $wrapper.data('preview-height') || $preview.height();
+            if (src) {
+                $.when(prepareImage(src, width, height)).then(function (src) {
+                    $wrapper.find('.preview').attr('src', src).show();
+                    if (changeCallback) {
+                        changeCallback(src);
+                    }
+                });
+            } else {
+                $wrapper.find('.preview').hide();
+                if (changeCallback) {
+                    changeCallback('');
+                }
             }
-        });
+        }
+        // function updateUploadWidget() {
+            // var previewUrl = $(this).data('current-url');
+            // if ($(this).data('current') || $('input[type=file]', $(this)).val()) {
+                // $('.action', $(this)).html('CLEAR');
+                // $('.upload-box', $(this)).addClass('clear');
+            // } else {
+                // $('.action', $(this)).html('UPLOAD NOW');
+                // $('.upload-box', $(this)).removeClass('clear');
+            // }
+            // if (previewUrl !== 'fixed') {
+                // if (previewUrl) {
+                    // setPreviewSrc($(this), previewUrl);
+                // } else {
+                    // setPreviewSrc($(this), '');
+                // }
+            // }
+        // }
+        function prepareImage(src, width, height) {
+            var image = new Image(),
+            dfd = $.Deferred();
+            image.src = src;
+            image.onload = function () {
+                var cropped = document.createElement('canvas'),
+                ctx = cropped.getContext('2d'),
+                sourceRatio = image.width / image.height,
+                destinationRatio = width / height,
+                srcWidth, srcHeight;
+                if (sourceRatio > destinationRatio) {
+                    srcHeight = image.height;
+                    srcWidth = image.height * destinationRatio;
+                } else {
+                    srcWidth = image.width;
+                    srcHeight = image.width / destinationRatio;
+                }
+                cropped.width = width;
+                cropped.height = height;
+                ctx.drawImage(image, (image.width - srcWidth) / 2.0, (image.height - srcHeight) / 2.0, srcWidth, srcHeight, 0, 0, width, height);
+                dfd.resolve(cropped.toDataURL());
+            };
+            return dfd;
 
-        //wgrywanie awatara przy pomocy wcisniecia obrazka
-        $('.profile-avatar').click(function () {
+        }
+        $('.profile-avatar').parent('a').click(function () {
             var $input = $('input[type=file]', $(this).parent()),
-                $wrapper = $(this).closest('.upload-wrapper');
+                $wrapper = $(this);
+                console.log($input);
+                console.log($wrapper);
             if ($input.val() || $wrapper.data('current')) {
                 $wrapper.data('current', '');
                 $wrapper.data('current-url', '');
@@ -84,10 +138,26 @@ $(function() {
         $('.upload-wrapper').on('change', 'input[type=file]', function (event) {
             var $wrapper = $(this).closest('.upload-wrapper');
             if (event.target.files && event.target.files[0]) {
+                var ext = getExtension(event.target.files[0].name),
+                FR = new FileReader();
+                if (ext !== 'jpeg' && ext !== 'jpg' && ext !== 'png') {
+                    $(this).val('').change();
+                    alert('This file type is not supported');
+                    return;
+                }
+                FR.onload = function (e) {
+                    setPreviewSrc($wrapper, e.target.result);
+                    $wrapper.data('current-url', 'fixed');
+                };
+                FR.readAsDataURL(event.target.files[0]);
             } else {
+                $wrapper.data('current-url', '');
             }
-            // $(this).closest('.upload-wrapperd
+            // $(this).closest('.upload-wrapper').each(updateUploadWidget);
         });
+        // $('.upload-wrapper').each(updateUploadWidget)
+        // .data('updater', updateUploadWidget);
+
 
         // kupowanie i sprzedawanie zakładów
         $(".a_bet").on('click', function(e) {
