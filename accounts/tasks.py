@@ -19,7 +19,8 @@ def topup_accounts_task():
             try:
                 user.topup_cash(topup_amount)
             except:
-                logger.exception("Fatal error during topping up of user #%d <%s>" % (user.id, user))
+                logger.exception("Fatal error during topping up of user \
+                                 #%d <%s>" % (user.id, user))
 
 
 @task
@@ -30,9 +31,8 @@ def update_portfolio_value():
 
     users_value = defaultdict(float)
 
-    queryset = Bet.objects \
-                .select_related('event') \
-                .filter(event__outcome=EVENT_OUTCOMES_DICT['IN_PROGRESS'])
+    queryset = Bet.objects.select_related('event').\
+        filter(event__outcome=EVENT_OUTCOMES_DICT['IN_PROGRESS'])
     for bet in queryset.iterator():
         price_field = "current_sell_for_price"
         if bet.outcome is False:
@@ -40,12 +40,14 @@ def update_portfolio_value():
 
         users_value[bet.user_id] += bet.has * getattr(bet.event, price_field)
 
-    logger.debug("'events:tasks:update_portfolio_value' setting 0 value portfolios.")
-    UserProfile.objects.all() \
-            .exclude(portfolio_value=0., id__in=users_value.keys()) \
-            .update(portfolio_value=0.)
+    logger.debug("'events:tasks:update_portfolio_value' setting 0 value \
+                 portfolios.")
+    UserProfile.objects.all().\
+        exclude(portfolio_value=0., id__in=users_value.keys()).\
+        update(portfolio_value=0.)
 
-    logger.debug("'events:tasks:update_portfolio_value' updating portfolios value for %d users." % (len(users_value), ))
+    logger.debug("'events:tasks:update_portfolio_value' updating portfolios \
+                 value for %d users." % (len(users_value), ))
     for user_id, user_value in users_value.iteritems():
         UserProfile.objects.filter(id=user_id) \
                     .exclude(portfolio_value=user_value) \
@@ -63,9 +65,12 @@ def create_accounts_snapshot():
 
     for user in queryset.iterator():
         try:
-            logger.debug("'accounts:tasks:create_accounts_snapshot' snapshotting user <%s>" % unicode(user.pk))
+            logger.debug("'accounts:tasks:create_accounts_snapshot' \
+                         snapshotting user <%s>" % unicode(user.pk))
             user.snapshots.create_snapshot()
         except:
-            logger.exception("Fatal error during create_accounts_snapshot of user #%d" % (user.id,))
+            logger.exception("Fatal error during create_accounts_snapshot of \
+                             user #%d" % (user.id,))
 
-    logger.debug("'accounts:tasks:create_accounts_snapshot' finished snapshotting Users.")
+    logger.debug("'accounts:tasks:create_accounts_snapshot' finished \
+                 snapshotting Users.")

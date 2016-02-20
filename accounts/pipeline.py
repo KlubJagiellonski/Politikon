@@ -1,6 +1,4 @@
-import urllib2
 import logging
-logger = logging.getLogger(__name__)
 
 from django.core.files.base import ContentFile
 from social.pipeline.partial import partial
@@ -8,10 +6,14 @@ from social.pipeline.partial import partial
 from constance import config
 from requests import request, HTTPError
 
+from .models import UserProfile
+
+logger = logging.getLogger(__name__)
+
 
 @partial
 def save_profile(strategy, user, response, details,
-                 is_new=False,*args,**kwargs):
+                 is_new=False, *args, **kwargs):
     """
     Saves profile when logging with social auth.
     When new account then gets profile picture and checks number of
@@ -52,13 +54,14 @@ def save_profile(strategy, user, response, details,
                 pass
             else:
                 user.avatar.save('{0}_social.jpg'.format(user.username),
-                                    ContentFile(response.content))
+                                 ContentFile(response.content))
 
     if is_new and backend.name == 'facebook':
         playing_friends_count = 0
         for friend in response['friends']['data']:
             try:
-                user = UserProfile.objects.get('facebook_user_id', friend['id'])
+                user = UserProfile.objects.\
+                    get('facebook_user_id', friend['id'])
             except:
                 pass
             else:
@@ -82,5 +85,4 @@ def save_profile(strategy, user, response, details,
             pass
         else:
             user.avatar.save('{0}_social.jpg'.format(user.username),
-                                   ContentFile(response.content))
-
+                             ContentFile(response.content))

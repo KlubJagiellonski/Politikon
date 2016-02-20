@@ -1,10 +1,11 @@
+import json
+
+from constance import config
+
 from django.views.generic import TemplateView
 
 from accounts.models import UserProfile
-from events.models import Event, Bet
-from events.views import create_bets_dict
-from constance import config
-import json
+from events.models import Event
 
 
 class HomeView(TemplateView):
@@ -25,9 +26,10 @@ class HomeView(TemplateView):
                 'front_event': front_event,
                 'front_event_bet': front_event.get_user_bet(user),
             })
-            json_data['front_event']=json.dumps(front_event.get_chart_points())
+            json_data['front_event'] = json.\
+                dumps(front_event.get_chart_points())
         else:
-            json_data['front_event']='null'
+            json_data['front_event'] = 'null'
 
         featured_events = list(Event.objects.get_featured_events()[:6])
         for i in range(len(featured_events)):
@@ -36,20 +38,21 @@ class HomeView(TemplateView):
         for i in range(len(popular_events)):
             popular_events[i].my_bet = popular_events[i].get_user_bet(user)
 
-        json_data['events']=self.makeFeaturedEventsBetfeedData(popular_events+featured_events)
+        json_data['events'] = self.\
+            makeFeaturedEventsBetfeedData(popular_events + featured_events)
 
         context.update({
             'featured_events': featured_events,
             'popular_events': popular_events,
-            'json_data' : json_data,
-            'config' : config,
-            'users': UserProfile.objects.filter(is_active=True, is_deleted=False)[:30],
+            'json_data': json_data,
+            'config': config,
+            'users': UserProfile.objects.filter(is_active=True,
+                                                is_deleted=False)[:30],
         })
         return context
 
-    def makeFeaturedEventsBetfeedData(self,events):
+    def makeFeaturedEventsBetfeedData(self, events):
         data = []
         for ev in events:
             data.append(ev.get_chart_points())
         return json.dumps(data)
-

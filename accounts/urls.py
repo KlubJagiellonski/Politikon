@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url
 from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import reverse_lazy
 
-from .views import UsersListView, UserDetailView, user_settings_view, UserProfileDetailView
+from .views import UsersListView, UserDetailView, user_settings_view,\
+    UserProfileDetailView
 
 
 urlpatterns = patterns('',

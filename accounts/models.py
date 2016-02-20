@@ -1,20 +1,16 @@
 # coding: utf-8
-import datetime
 import logging
-import urllib2
 
-from django.contrib.auth.models import AbstractBaseUser, User
-from django.core.files.base import ContentFile
+from django.contrib.auth.models import AbstractBaseUser
 from django.db import models, transaction
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
 from politikon.settings import STATIC_URL
 
 from bladepolska.snapshots import SnapshotAddon
-from constance import config
 
 from .managers import UserProfileManager
-from .utils import format_int, save_profile
+from .utils import format_int
 
 from events.models import Bet, Event
 import os
@@ -41,7 +37,7 @@ class UserProfile(AbstractBaseUser):
 
     username = models.CharField(u"username", max_length=100, unique=True)
     email = models.CharField(u"email", max_length=255)
-    avatar = models.ImageField(upload_to=get_image_path,blank=True,null=True)
+    avatar = models.ImageField(upload_to=get_image_path, blank=True, null=True)
 
     name = models.CharField(max_length=100, blank=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
@@ -56,24 +52,31 @@ class UserProfile(AbstractBaseUser):
 
     # TODO: czy to potrzebne?
     # Every new network relations also has to have 'related_name="django_user"'
-    #     facebook_user = models.OneToOneField(FacebookUser, null=True, related_name="django_user", on_delete=models.SET_NULL)
+    #     facebook_user = models.OneToOneField(FacebookUser, null=True,
+    #     related_name="django_user", on_delete=models.SET_NULL)
 
     friends = models.ManyToManyField('self', related_name='friend_of')
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
 
-    total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
-    reputation = models.DecimalField(u"reputation", default=0, max_digits=12, decimal_places=2,)
+    total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w \
+                                           historii", default=0.)
+    reputation = models.DecimalField(u"reputation", default=0, max_digits=12,
+                                     decimal_places=2,)
     unused_reput = models.IntegerField(u"wolne reputy", default=0)
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
     web_site = models.CharField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
-    facebook_user_id = models.BigIntegerField(u"facebook ID", default=None, blank=True, null=True)
-    facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
-    twitter_user_id = models.BigIntegerField(u"twitter ID", default=None, blank=True, null=True)
-    twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True, null=True)
+    facebook_user_id = models.BigIntegerField(u"facebook ID", default=None,
+                                              blank=True, null=True)
+    facebook_user = models.CharField(u"facebook URL", max_length=255,
+                                     default=None, blank=True, null=True)
+    twitter_user_id = models.BigIntegerField(u"twitter ID", default=None,
+                                             blank=True, null=True)
+    twitter_user = models.CharField(u"twitter URL", max_length=255,
+                                    default=None, blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -90,7 +93,9 @@ class UserProfile(AbstractBaseUser):
         if facebook_friends_ids is None:
             return
 
-        # django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
+        # django_friends_ids = FacebookUser.objects.\
+            # django_users_for_ids(facebook_friends_ids).\
+            # values_list('id', flat=True)
         # django_friends_ids_set = set(django_friends_ids)
 
         friends_through_model = self.friends.through
@@ -100,17 +105,22 @@ class UserProfile(AbstractBaseUser):
         current_friends_ids_set = self.friends_ids_set
 
         # Add new
-        new_friends_ids = list(django_friends_ids_set - current_friends_ids_set)
-        logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % len(new_friends_ids))
+        new_friends_ids = list(django_friends_ids_set -
+                               current_friends_ids_set)
+        logger.debug("'User::synchronize_facebook_friends' adding %d new \
+                     friends." % len(new_friends_ids))
 
         if new_friends_ids:
-            new_friends_through = [friends_through_model(from_user=self, to_user_id=friend_id) for friend_id in
-                                   new_friends_ids]
+            new_friends_through = [friends_through_model(from_user=self,
+                                                         to_user_id=friend_id)
+                                   for friend_id in new_friends_ids]
             friends_manager.bulk_create(new_friends_through)
 
         # Remove stale
-        stale_friends_ids = list(current_friends_ids_set - django_friends_ids_set)
-        logger.debug("'User::synchronize_facebook_friends' removing %d stale friends." % len(stale_friends_ids))
+        stale_friends_ids = list(current_friends_ids_set -
+                                 django_friends_ids_set)
+        logger.debug("'User::synchronize_facebook_friends' removing %d stale \
+                     friends." % len(stale_friends_ids))
 
         if stale_friends_ids:
             first_way_qs = Q(from_user=self, to_user__in=stale_friends_ids)
@@ -131,8 +141,9 @@ class UserProfile(AbstractBaseUser):
         friends_through_model = self.friends.through
         friends_manager = friends_through_model.objects
 
-        current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id',
-                                                                                                      'to_user_id')
+        current_friends_ids = friends_manager.\
+            filter(Q(from_user=self) | Q(to_user=self)).\
+            values_list('from_user_id', 'to_user_id')
 
         current_friends_ids_set = set()
         for from_id, to_id in current_friends_ids:
@@ -142,7 +153,6 @@ class UserProfile(AbstractBaseUser):
                 current_friends_ids_set.add(to_id)
 
         return current_friends_ids_set
-
 
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
@@ -166,7 +176,8 @@ class UserProfile(AbstractBaseUser):
         user_bets = Bet.objects \
             .select_related('event') \
             .filter(user=self,
-                    event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS_CHOICE.value)
+                    event__outcome=Event.
+                    EVENT_OUTCOME_CHOICES.IN_PROGRESS_CHOICE.value)
 
         for bet in user_bets.iterator():
             price_field = "current_sell_for_price"
@@ -189,7 +200,8 @@ class UserProfile(AbstractBaseUser):
         if float(self.total_given_cash) == 0:
             self.reputation = 0
         else:
-            self.reputation = round(self.portfolio_value / float(self.total_given_cash), 2)
+            self.reputation = round(self.portfolio_value /
+                                    float(self.total_given_cash), 2)
 
     @property
     def profile_photo(self):
@@ -202,7 +214,7 @@ class UserProfile(AbstractBaseUser):
 
         from events.models import Transaction
 
-        transaction = Transaction.objects.create(
+        Transaction.objects.create(
             user=self,
             type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP,
             quantity=1, price=amount)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from django.contrib.auth.models import BaseUserManager, UserManager
+from django.contrib.auth.models import BaseUserManager
 from django.http import HttpResponseForbidden
 
 from constance import config
@@ -23,9 +23,9 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if len(self.model.objects.filter(email=email)) > 0 and len(email) > 0:
             return HttpResponseForbidden()
-        #TODO change ascii to utf-8
+        # TODO change ascii to utf-8
         username = username.encode('ascii', 'ignore')
-        #TODO self.name = username for casual users
+        # TODO self.name = username for casual users
         # and username = email b/c username has to be unique
         while len(self.model.objects.filter(username=username)) > 0:
             username = uuid.uuid4().hex[:30]
@@ -91,7 +91,9 @@ class UserProfileManager(BaseUserManager):
         # from canvas.models import ActivityLog
         #     ActivityLog.objects.register_new_user_activity(user)
 
-        logger.debug("UserManager(user %s).get_for_facebook_user(%s), created: %d, has_chaged: %d" % (
-            unicode(user), unicode(facebook_user), created, user_has_changed))
+        # logger.debug("UserManager(user %s).get_for_facebook_user(%s), \
+            # created: %d, has_chaged: %d" % (
+            # unicode(user), unicode(facebook_user),
+            # created, user_has_changed))
 
         return user
