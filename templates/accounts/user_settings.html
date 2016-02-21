@@ -42,7 +42,7 @@
     <div class="clr"></div>
     <div class="zakladki-content">
         <article id="profil">
-            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="main-form">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="profil">
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Wyświetlane imię i nazwisko:</span>
@@ -65,7 +65,7 @@
         </article>
 
         <article id="haslo">
-            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="email-form">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="haslo">
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Zmień adres e-mail:</span>

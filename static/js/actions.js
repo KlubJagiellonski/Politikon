@@ -57,6 +57,22 @@ $(function() {
             $('#userinfo > ul > li > a[href=#' + tab_choosen + ']').click();
         }
 
+        // wysyłanie formularza zmiany danych profilu
+        $('#settings-submit #loadmore').click(function(){
+            // $('form').submit();
+                $('#profil form').submit();
+                $('#haslo form').submit();
+                $('#avatar-form form').submit();
+            // if ($('.active').find('a').attr('href') == '#profil') {
+                // $('#profil form').submit();
+            // } else if ($('.active').find('a').attr('href') == '#haslo') {
+                // $('#haslo form').submit();
+            // }
+            // if ($('.preview').attr('src') != $('.upload-wrapper').data('current-url')) {
+                // $('#avatar-form form').submit();
+            // }
+        });
+
         // handle the custom upload widget
         function setPreviewSrc($wrapper, src) {
             var changeCallback = $wrapper.data('change-callback'),
@@ -77,23 +93,6 @@ $(function() {
                 }
             }
         }
-        // function updateUploadWidget() {
-            // var previewUrl = $(this).data('current-url');
-            // if ($(this).data('current') || $('input[type=file]', $(this)).val()) {
-                // $('.action', $(this)).html('CLEAR');
-                // $('.upload-box', $(this)).addClass('clear');
-            // } else {
-                // $('.action', $(this)).html('UPLOAD NOW');
-                // $('.upload-box', $(this)).removeClass('clear');
-            // }
-            // if (previewUrl !== 'fixed') {
-                // if (previewUrl) {
-                    // setPreviewSrc($(this), previewUrl);
-                // } else {
-                    // setPreviewSrc($(this), '');
-                // }
-            // }
-        // }
         function prepareImage(src, width, height) {
             var image = new Image(),
             dfd = $.Deferred();
@@ -122,8 +121,6 @@ $(function() {
         $('.profile-avatar').parent('a').click(function () {
             var $input = $('input[type=file]', $(this).parent()),
                 $wrapper = $(this);
-                console.log($input);
-                console.log($wrapper);
             if ($input.val() || $wrapper.data('current')) {
                 $wrapper.data('current', '');
                 $wrapper.data('current-url', '');

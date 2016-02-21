@@ -1,15 +1,19 @@
 from django.http import HttpResponsePermanentRedirect
+from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView, DetailView
 
+from politikon.decorators import class_view_decorator
 from politikon.forms import MultipleFormsView
 from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
 from .models import UserProfile
 
 
+@class_view_decorator(login_required)
 class UserUpdateView(MultipleFormsView):
     """
     User settings
@@ -21,6 +25,27 @@ class UserUpdateView(MultipleFormsView):
         'avatar': UserProfileAvatarForm
     }
     success_url = reverse_lazy('success')
+
+    def main_form_valid(self, form):
+        print("jaj")
+        return form.main(self.request, redirect_url=self.get_success_url())
+
+    def main_form_invalid(self, form):
+        print(form.errors)
+        return form.main(self.request, redirect_url=self.get_success_url())
+    # def form_valid(self, form):
+        # print("jaj")
+        # form.save()
+        # messages.success(self.request, _('Successfully updated profile.'))
+        # return redirect(self.success_url)
+
+    # def form_invalid(self, form):
+        # print(form.errors)
+        # for field, errors in form.errors.iteritems():
+            # name = form.fields[field].label
+            # form.errors[field] = [u'{name}: {error}'.format(name=name, error=e)
+                                  # for e in errors]
+        # return super(UserUpdateView, self).form_invalid(form)
 
 
 def user_settings_view(renuest):

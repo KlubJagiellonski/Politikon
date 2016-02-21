@@ -155,7 +155,11 @@ class UserProfile(AbstractBaseUser):
         return current_friends_ids_set
 
     def get_full_name(self):
-        return "%s (%s)" % (self.name, self.username)
+        length = 8
+        username = self.username[0:length]
+        if len(self.username) > length:
+            username += "..."
+        return "%s (%s)" % (self.name, username)
 
     @property
     def full_name(self):
