@@ -1,9 +1,6 @@
-from django.http import HttpResponsePermanentRedirect
-from django.contrib.auth import logout as auth_logout
-from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
-from django.views.generic import RedirectView, ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView
 
 from models import UserProfile
 
@@ -31,7 +28,8 @@ def user_settings_view(request):
                     messages.append((_("e-mails doesn't match"), False))
             if request.POST.get('oldpass') and request.POST.get('newpass'):
                 if user.check_password(request.POST.get('oldpass')):
-                    if request.POST.get('newpass') == request.POST.get('checkpass'):
+                    if request.POST.get('newpass') == request.POST.\
+                            get('checkpass'):
                         user.set_password(request.POST.get('newpass'))
                         user.save()
                         messages.append((_("password updated"), False))
@@ -65,7 +63,8 @@ class UsersListView(ListView):
         :return:
         :rtype: QuerySet
         """
-        return UserProfile.objects.filter(is_active=True, is_deleted=False)[:30]
+        return UserProfile.objects.filter(is_active=True,
+                                          is_deleted=False)[:30]
 
 
 class UserDetailView(DetailView):

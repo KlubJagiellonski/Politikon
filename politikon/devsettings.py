@@ -37,9 +37,10 @@ SOCIAL_AUTH_TWITTER_KEY = TWITTER_CONSUMER_KEY
 SOCIAL_AUTH_TWITTER_SECRET = TWITTER_CONSUMER_SECRET
 SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APPLICATION_ID
 SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APPLICATION_SECRET_KEY
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email','user_friends','public_profile']
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/' #TODO to avoid missing registration/login.html error 
-#need custom login view probably
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile']
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'  # TODO to avoid missing
+# registration/login.html error
+# need custom login view probably
 
 # sandbox keys
 PUBNUB_PUBLISH_KEY = 'pub-c-c852ffa1-72fc-41ed-9720-2f88b0e54880'
@@ -48,9 +49,11 @@ PUBNUB_SECRET_KEY = 'sec-c-ZmE0OTc5MDYtYWUxNi00YTJjLWFjOGMtODVhNGQ5Y2JmNTdj'
 PUBNUB_IS_SSL = False
 
 
-DATABASE_URL = 'postgres://postgres:postgres@' + os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + os.environ['POSTGRES_PORT_5432_TCP_PORT']  + '/' + 'politikon'
+DATABASE_URL = 'postgres://postgres:postgres@' + \
+    os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + \
+    os.environ['POSTGRES_PORT_5432_TCP_PORT'] + '/' + 'politikon'
 
-#disabling SSL on local
+# disabling SSL on local
 SSLIFY_DISABLE = True
 
 STATIC_URL = '/static/'

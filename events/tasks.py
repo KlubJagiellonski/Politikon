@@ -13,9 +13,12 @@ def create_open_events_snapshot():
 
     for event in queryset.iterator():
         try:
-            logger.debug("'events:tasks:create_open_events_snapshot' snapshotting event <%s>" % unicode(event.pk))
+            logger.debug("'events:tasks:create_open_events_snapshot' \
+                         snapshotting event <%s>" % unicode(event.pk))
             event.snapshots.create_snapshot()
         except:
-            logger.exception("Fatal error during create_open_events_snapshot of event #%d" % (event.id,))
+            logger.exception("Fatal error during create_open_events_snapshot \
+                             of event #%d" % (event.id,))
 
-    logger.debug("'events:tasks:create_open_events_snapshot' finished snapshotting Events.")
+    logger.debug("'events:tasks:create_open_events_snapshot' finished \
+                 snapshotting Events.")

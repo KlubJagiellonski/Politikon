@@ -1,12 +1,13 @@
-from celery.schedules import crontab
-from datetime import timedelta
-import dj_database_url
 import os
-from path import path
-import urlparse
+import smartsettings
 import sys
-import social
-import accounts
+import urlparse
+
+from celery.schedules import crontab
+from constance import config
+from datetime import timedelta
+from path import path
+
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
 
@@ -84,18 +85,20 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
-# CONSTANCE_DATABASE_CACHE_BACKEND = 'default' # prior to changes in django-constances
+# CONSTANCE_DATABASE_CACHE_BACKEND = 'default' # prior to changes in
+# django-constances
 
 CONSTANCE_CONFIG = {
-    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
+    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and \
+                                 it\'s publication'),
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (340, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (250, 'small event image height'),
     'BIG_EVENT_IMAGE_WIDTH': (1250, 'big event image width'),
     'BIG_EVENT_IMAGE_HEIGHT': (510, 'big event image height'),
     'DAILY_TOPUP': (100, 'daily cash topup'),
-    'ADMIN_TOPUP' : (100,'amount of cash in admin panel'),
-    'REQUIRED_FRIENDS_THRESHOLD' : (3,'required number of registered friends')
+    'ADMIN_TOPUP': (100, 'amount of cash in admin panel'),
+    'REQUIRED_FRIENDS_THRESHOLD': (3, 'required number of registered friends')
 }
 
 # Absolute path to the directory static files should be collected to.
@@ -199,7 +202,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 MIDDLEWARE_CLASSES = (
     # forcing one hostname on production
     'politikon.modules.HostnameRedirectMiddleware',
-    # forcing SSL using https://github.com/rdegges/django-sslify. This need to be the first middleware
+    # forcing SSL using https://github.com/rdegges/django-sslify.
+    # This need to be the first middleware
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
     'politikon.modules.BasicAuthMiddleware',
@@ -310,7 +314,6 @@ LOGGING = {
     }
 }
 
-import smartsettings
 # @TODO: add ensure_exists('<setting name>') to django-smartsettings
 smartsettings.config(globals(), {
     'FLAVOURS': (
@@ -320,8 +323,6 @@ smartsettings.config(globals(), {
     ),
     'DEFAULT': 'DEV'  # default flavour always loads localsettings.py!
 })
-
-from constance import config
 
 JINJA2_GLOBALS = {
     'config': config

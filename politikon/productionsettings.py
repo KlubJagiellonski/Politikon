@@ -5,14 +5,17 @@ DEBUG = False
 
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl', 'politikon-staging.herokuapp.com']
+ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl',
+                 'politikon-staging.herokuapp.com']
 CATCHALL_REDIRECT_HOSTNAME = os.environ.get("CATCHALL_REDIRECT_HOSTNAME")
 
 DATABASES = {'default': dj_database_url.config()}
 
 FACEBOOK_APPLICATION_ID = os.environ.get("FACEBOOK_APPLICATION_ID")
-FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get("FACEBOOK_APPLICATION_SECRET_KEY")
-FACEBOOK_APPLICATION_NAMESPACE = os.environ.get("FACEBOOK_APPLICATION_NAMESPACE")
+FACEBOOK_APPLICATION_SECRET_KEY = os.environ.\
+    get("FACEBOOK_APPLICATION_SECRET_KEY")
+FACEBOOK_APPLICATION_NAMESPACE = os.environ.\
+    get("FACEBOOK_APPLICATION_NAMESPACE")
 
 TWITTER_CONSUMER_KEY = os.environ.get("TWITTER_CONSUMER_KEY")
 TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
@@ -22,14 +25,16 @@ SOCIAL_AUTH_TWITTER_SECRET = TWITTER_CONSUMER_SECRET
 SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APPLICATION_ID
 SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APPLICATION_SECRET_KEY
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile']
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/' #TODO to avoid missing registration/login.html error 
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'  # TODO to avoid missing
+# registration/login.html error
 
 PUBNUB_PUBLISH_KEY = os.environ.get("PUBNUB_PUBLISH_KEY")
 PUBNUB_SUBSCRIBE_KEY = os.environ.get("PUBNUB_SUBSCRIBE_KEY")
 PUBNUB_SECRET_KEY = os.environ.get("PUBNUB_SECRET_KEY")
 PUBNUB_IS_SSL = False
 
-os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
+os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').\
+    replace(',', ';')
 if 'MEMCACHIER_USERNAME' in os.environ and 'MEMCACHIER_PASSWORD' in os.environ:
     os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '')
     os.environ['MEMCACHE_PASSWORD'] = os.environ.get('MEMCACHIER_PASSWORD', '')

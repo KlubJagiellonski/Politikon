@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
 from django.contrib import admin
 from django import forms
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin, User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext_lazy as _
 from constance import config
 
-from models import *
+from .models import UserProfile
 
 
 class UserCreationForm(forms.ModelForm):

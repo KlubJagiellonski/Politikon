@@ -1,14 +1,10 @@
 import json
 import logging
-logger = logging.getLogger(__name__)
 
-from django.shortcuts import render_to_response
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -17,10 +13,12 @@ from django.views.generic import DetailView, ListView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
-from .models import Event, Bet, Transaction
+from .models import Event, Bet
 from .utils import create_bets_dict
 
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
+
+logger = logging.getLogger(__name__)
 
 
 class EventsListView(ListView):
@@ -61,7 +59,8 @@ class EventDetailView(DetailView):
         return get_object_or_404(Event, id=self.kwargs['pk'])
 
     def get_context_data(self, *args, **kwargs):
-        context = super(EventDetailView, self).get_context_data(*args, **kwargs)
+        context = super(EventDetailView, self).get_context_data(*args,
+                                                                **kwargs)
         event = self.get_event()
         user = self.request.user
         event_bet = event.get_user_bet(user)
@@ -88,12 +87,15 @@ def create_transaction(request, event_id):
         outcome = data['outcome']     # tak nie
         for_price = data['for_price']  # cena
     except:
-        return HttpResponseBadRequest(_("Something went wrong, try again in a few seconds."))
+        return HttpResponseBadRequest(_("Something went wrong, try again in a \
+                                        few seconds."))
     try:
         if buy:
-            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id, outcome, for_price)
+            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id,
+                                                     outcome, for_price)
         else:
-            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
+            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id,
+                                                      outcome, for_price)
     except NonexistantEvent:
         raise Http404
     except PriceMismatch as e:

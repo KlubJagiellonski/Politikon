@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 
 from .models import Bet, Event, Transaction, RelatedEvent
 from .forms import EventForm
