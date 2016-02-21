@@ -1,9 +1,9 @@
 from django.http import HttpResponsePermanentRedirect
 from django.contrib import messages
-from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView, DetailView
 
@@ -14,7 +14,7 @@ from .models import UserProfile
 
 
 @class_view_decorator(login_required)
-class UserUpdateView(MultipleFormsView):
+class UserUpdateView(MultipleFormsView, UpdateView):
     """
     User settings
     """
@@ -24,28 +24,27 @@ class UserUpdateView(MultipleFormsView):
         'email': UserProfileEmailForm,
         'avatar': UserProfileAvatarForm
     }
-    success_url = reverse_lazy('success')
+    model = UserProfile
+    success_url = reverse_lazy('accounts:user_settings')
 
-    def main_form_valid(self, form):
-        print("jaj")
-        return form.main(self.request, redirect_url=self.get_success_url())
+    def get_object(self):
+        return UserProfile.objects.get(pk=self.request.session['_auth_user_id'])
 
-    def main_form_invalid(self, form):
-        print(form.errors)
-        return form.main(self.request, redirect_url=self.get_success_url())
-    # def form_valid(self, form):
-        # print("jaj")
-        # form.save()
-        # messages.success(self.request, _('Successfully updated profile.'))
-        # return redirect(self.success_url)
+    def forms_valid(self, forms):
+        forms['main'].save(self.request)
+        forms['avatar'].save(self.request)
+        messages.success(self.request, _('Successfully updated profile.'))
+        return redirect(self.success_url)
 
-    # def form_invalid(self, form):
-        # print(form.errors)
-        # for field, errors in form.errors.iteritems():
-            # name = form.fields[field].label
-            # form.errors[field] = [u'{name}: {error}'.format(name=name, error=e)
+    def forms_invalid(self, forms):
+        print("invalid")
+        print(forms)
+        # print(forms.errors)
+        # for field, errors in forms.errors.iteritems():
+            # name = forms.fields[field].label
+            # forms.errors[field] = [u'{name}: {error}'.format(name=name, error=e)
                                   # for e in errors]
-        # return super(UserUpdateView, self).form_invalid(form)
+        return super(UserUpdateView, self).forms_invalid(forms)
 
 
 def user_settings_view(renuest):

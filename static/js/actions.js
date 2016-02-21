@@ -59,18 +59,14 @@ $(function() {
 
         // wysyłanie formularza zmiany danych profilu
         $('#settings-submit #loadmore').click(function(){
-            // $('form').submit();
+            if ($('.active').find('a').attr('href') == '#profil') {
                 $('#profil form').submit();
+            } else if ($('.active').find('a').attr('href') == '#haslo') {
                 $('#haslo form').submit();
+            }
+            if ($('.preview').attr('src') != $('.upload-wrapper').data('current-url')) {
                 $('#avatar-form form').submit();
-            // if ($('.active').find('a').attr('href') == '#profil') {
-                // $('#profil form').submit();
-            // } else if ($('.active').find('a').attr('href') == '#haslo') {
-                // $('#haslo form').submit();
-            // }
-            // if ($('.preview').attr('src') != $('.upload-wrapper').data('current-url')) {
-                // $('#avatar-form form').submit();
-            // }
+            }
         });
 
         // handle the custom upload widget

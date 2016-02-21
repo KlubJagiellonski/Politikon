@@ -46,7 +46,7 @@
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Wyświetlane imię i nazwisko:</span>
-                    <input name="name" type="text" class="jednalinia" id="{{ forms.main.description.name_id }}" value="{{ user.name }}" data-parsley-minlength="3" data-parsley-trigger="focusout" required />
+                    <input name="name" type="text" class="jednalinia" id="{{ forms.main.name.auto_id }}" value="{{ user.name }}" data-parsley-minlength="3" data-parsley-trigger="focusout" required />
                     <span>Opis użytkownika:</span>
                     <textarea name="description" class="wielelinii" id="{{ forms.main.description.auto_id }}" data-parsley-minlength="10" data-parsley-trigger="focusout">{{ user.description }}</textarea>
                 </div>
@@ -69,8 +69,8 @@
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Zmień adres e-mail:</span>
-                    <input name="email" type="email" class="jednalinia" id="{{ forms.email.email1.auto_id }}" value="{{ user.email }}" placeholder="{{ forms.email.email1.label }}" data-parsley-trigger="focusout" required>
-                    <input name="checkemail" type="email" class="jednalinia" id="{{ forms.email.email2.auto_id }}" placeholder="{{ forms.email.email2.label }}" data-parsley-equalto="#newemail" data-parsley-trigger="focusout" required>
+                    <input name="email" type="email" class="jednalinia" id="{{ forms.email.email.auto_id }}" value="{{ user.email }}" placeholder="{{ forms.email.email.label }}" data-parsley-trigger="focusout" required>
+                    <input name="checkemail" type="email" class="jednalinia" id="{{ forms.email.checkemail.auto_id }}" placeholder="{{ forms.email.checkemail.label }}" data-parsley-equalto="#newemail" data-parsley-trigger="focusout" required>
                 </div>
                 {% comment %}
                 <div class="prawa">
