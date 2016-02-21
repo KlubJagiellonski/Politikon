@@ -1,6 +1,8 @@
 """
 Test accounts module
 """
+from decimal import Decimal
+
 from django.test import TestCase
 
 from .models import UserProfile
@@ -20,7 +22,12 @@ class UserProfileModelTestCase(TestCase):
         )
 
         self.assertEqual('John Smith', user.name)
+        self.assertEqual('John Smith', user.get_short_name())
         self.assertEqual(False, user.is_vip)
+        self.assertEqual('John Smith (johnsmith)', user.get_full_name())
+        user.calc_reputation()
+        self.assertEqual(Decimal(0), user.reputation)
+        self.assertEqual(False, user.is_superuser)
 
     def test_user_urls(self):
         """
