@@ -34,14 +34,16 @@ function makeChart(data,opts){
     var setStyle;
     if(opts && opts.setStyle){
         setStyle = opts.setStyle;
-    }else{
+    }
+    else {
         setStyle = copyObj(SET_STYLE);
     }
 
     var chartStyle;
-    if(opts && opts.chartStyle){
+    if(opts && opts.chartStyle) {
         chartStyle = opts.chartStyle;
-    }else{
+    }
+    else {
         chartStyle = CHART_STYLE;
     }
 
@@ -58,18 +60,26 @@ function makeChart(data,opts){
     }
 }
 
-function renderCharts(events,featuredEvent){
-    for (var i = 0, len = events.length; i < len; i++) {
-        makeChart(events[i],{
-            id : '.bet-'+events[i].id+'-canvas'
-        });
+function renderCharts(events, featuredEvent, chartDetails) {
+    if (events) {
+        for (var i = 0, len = events.length; i < len; i++) {
+            makeChart(events[i],{
+                id : '.bet-'+events[i].id+'-canvas'
+            });
+        }
     }
     // var frontchartData = chartData;
 
-
-    if(featuredEvent){
+    if(featuredEvent) {
         makeChart(featuredEvent, {
             id : '#featured-canvas',
+            chartStyle: FEATURED_CHART_STYLE
+        });
+    }
+
+    if(chartDetails) {
+        makeChart(chartDetails, {
+            id : '#chart-details',
             chartStyle: FEATURED_CHART_STYLE
         });
     }

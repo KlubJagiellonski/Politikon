@@ -65,6 +65,7 @@ class EventDetailView(DetailView):
         user = self.request.user
         event_bet = event.get_user_bet(user)
         bet_social = event.get_bet_social()
+        json_data = json.dumps(event.get_chart_points())
         context.update({
             'event': event,
             'bet': event_bet,
@@ -72,6 +73,7 @@ class EventDetailView(DetailView):
             'event_dict': event.event_dict,
             'bet_social': bet_social,
             'related_events': event.get_related(user),
+            'json_data': json_data
         })
         return context
 
