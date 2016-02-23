@@ -206,7 +206,7 @@ MIDDLEWARE_CLASSES = (
     # This need to be the first middleware
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
-    'politikon.modules.BasicAuthMiddleware',
+    # 'politikon.modules.BasicAuthMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
