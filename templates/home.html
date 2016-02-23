@@ -6,10 +6,10 @@
 
     <script type="text/javascript">
         $(function(){
-                var EVENTS_DATA = {{json_data.events|safe}};
-                var FEATURED_EVENT_DATA = {{json_data.front_event|safe}};
-                if(renderCharts){
-                    renderCharts(EVENTS_DATA,FEATURED_EVENT_DATA);
+                var EVENTS_DATA = {{ json_data.events|safe }};
+                var FEATURED_EVENT_DATA = {{ json_data.front_event|safe }};
+                if(renderCharts) {
+                    renderCharts(EVENTS_DATA, FEATURED_EVENT_DATA);
                 }
         });
     </script>
@@ -17,7 +17,6 @@
     <section id="featured" class="section-nopadding">
         <figure>
             {% if front_event.big_image %}
-            <!--<img src="{{ front_event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />-->
             <div style="background: url({{ front_event.big_image.url }}); height: 70vh; min-height: 200px; background-size: cover">
 
             </div>

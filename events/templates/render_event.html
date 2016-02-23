@@ -7,7 +7,7 @@
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
         <figcaption>
-            <a href="{{ event.get_relative_url }}"><div class="details-chart"><canvas class="bet-{{event.id}}-canvas" height="70"></canvas></div></a>
+            <a href="{{ event.get_relative_url }}"><div class="details-chart"><canvas class="bet-{{ event.id }}-canvas" height="70"></canvas></div></a>
         <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change }}</div>
         <a href="{{ event.get_relative_url }}"><h2 class="skroc">{{ event.title }}</h2></a>
         <div id="makeabet" {% if bet.has_any %} class="morebets" {% endif %} >
