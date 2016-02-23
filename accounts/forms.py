@@ -7,21 +7,18 @@ from .models import UserProfile
 
 
 class UserProfileAvatarForm(forms.ModelForm):
-    """A form for updating user avatar.
+    """
+    A form for updating user avatar.
     """
 
     class Meta:
         model = UserProfile
         fields = ['avatar']
 
-    def clean(self):
-        super(UserProfileAvatarForm, self).clean()
-        print self.cleaned_data
-        return self.cleaned_data
-
 
 class UserProfileForm(forms.ModelForm):
-    """A form for updating user data, part 1. Includes name, website and user
+    """
+    A form for updating user data, part 1. Includes name, website and user
     description.
     """
 
@@ -34,14 +31,10 @@ class UserProfileForm(forms.ModelForm):
         self.fields['web_site'].required = False
         self.fields['description'].required = False
 
-    def clean(self):
-        super(UserProfileForm, self).clean()
-        print self.cleaned_data
-        return self.cleaned_data
-
 
 class UserProfileEmailForm(forms.ModelForm):
-    """A form for updating user data, part 2. Includes passwords and emails
+    """
+    A form for updating user data, part 2. Includes passwords and emails
     fields.
     """
     email = forms.CharField(label='Twój adres e-mail',
@@ -55,7 +48,6 @@ class UserProfileEmailForm(forms.ModelForm):
 
     def clean(self):
         super(UserProfileEmailForm, self).clean()
-        print self.cleaned_data
         if self.cleaned_data.get('email') != \
                 self.cleaned_data.get('checkemail'):
             self._errors['checkemail'] = 'Email addresses do not match.'

@@ -1,8 +1,6 @@
-from django.http import HttpResponsePermanentRedirect
-from django.contrib import messages
+# -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView, DetailView
@@ -29,10 +27,10 @@ class UserUpdateView(MultiFormsView):
     success_url = reverse_lazy('accounts:user_settings')
 
     def get_object(self):
-        return UserProfile.objects.get(pk=self.request.session['_auth_user_id'])
+        return get_object_or_404(UserProfile,
+                                 pk=self.request.session['_auth_user_id'])
 
     def main_form_valid(self, form):
-        print(self.request.FILES)
         user = self.get_object()
         user.name = self.request.POST.get('name')
         user.web_site = self.request.POST.get('web_site')
@@ -43,7 +41,6 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
     def email_form_valid(self, form):
-        print(self.request.FILES)
         user = self.get_object()
         user.email = self.request.POST.get('email')
         if self.request.FILES.get('avatar'):
@@ -52,15 +49,17 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
 
-def user_settings_view(renuest):
+def user_settings_view(request):
 
-    user = UserProfile.objects.get(pk=request.session['_auth_user_id'])
+    user = get_object_or_404(UserProfile, pk=request.session['_auth_user_id'])
     # messages musi zawierac tuples: tresc i czy to jest komunikat o bladzie,
     # np: ("niepoprawne stare haslo", True)
     messages = []
     if request.method == 'POST':
-        if request.POST.get('user_name'):
-            user.name = request.POST['user_name']
+        if request.FILES.get('avatar'):
+            user.avatar = request.FILES.get('avatar')
+        if request.POST.get('name'):
+            user.name = request.POST['name']
             user.description = request.POST['description']
             user.web_site = request.POST['web_site']
             user.save()
