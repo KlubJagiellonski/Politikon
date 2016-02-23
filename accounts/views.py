@@ -8,16 +8,17 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView, DetailView
 
 from politikon.decorators import class_view_decorator
-from politikon.forms import MultipleFormsView
+from politikon.forms import MultiFormsView
 from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
 from .models import UserProfile
 
 
 @class_view_decorator(login_required)
-class UserUpdateView(MultipleFormsView, UpdateView):
+class UserUpdateView(MultiFormsView):
     """
     User settings
     """
+    # TODO: nie do końca o to chodziło, ale jest lepiej
     template_name = 'accounts/user_settings.html'
     form_classes = {
         'main': UserProfileForm,
@@ -30,21 +31,25 @@ class UserUpdateView(MultipleFormsView, UpdateView):
     def get_object(self):
         return UserProfile.objects.get(pk=self.request.session['_auth_user_id'])
 
-    def forms_valid(self, forms):
-        forms['main'].save(self.request)
-        forms['avatar'].save(self.request)
-        messages.success(self.request, _('Successfully updated profile.'))
+    def main_form_valid(self, form):
+        print(self.request.FILES)
+        user = self.get_object()
+        user.name = self.request.POST.get('name')
+        user.web_site = self.request.POST.get('web_site')
+        user.description = self.request.POST.get('description')
+        if self.request.FILES.get('avatar'):
+            user.avatar = self.request.FILES.get('avatar')
+        user.save()
         return redirect(self.success_url)
 
-    def forms_invalid(self, forms):
-        print("invalid")
-        print(forms)
-        # print(forms.errors)
-        # for field, errors in forms.errors.iteritems():
-            # name = forms.fields[field].label
-            # forms.errors[field] = [u'{name}: {error}'.format(name=name, error=e)
-                                  # for e in errors]
-        return super(UserUpdateView, self).forms_invalid(forms)
+    def email_form_valid(self, form):
+        print(self.request.FILES)
+        user = self.get_object()
+        user.email = self.request.POST.get('email')
+        if self.request.FILES.get('avatar'):
+            user.avatar = self.request.FILES.get('avatar')
+        user.save()
+        return redirect(self.success_url)
 
 
 def user_settings_view(renuest):

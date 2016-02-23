@@ -14,6 +14,11 @@ class UserProfileAvatarForm(forms.ModelForm):
         model = UserProfile
         fields = ['avatar']
 
+    def clean(self):
+        super(UserProfileAvatarForm, self).clean()
+        print self.cleaned_data
+        return self.cleaned_data
+
 
 class UserProfileForm(forms.ModelForm):
     """A form for updating user data, part 1. Includes name, website and user
@@ -28,6 +33,11 @@ class UserProfileForm(forms.ModelForm):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['web_site'].required = False
         self.fields['description'].required = False
+
+    def clean(self):
+        super(UserProfileForm, self).clean()
+        print self.cleaned_data
+        return self.cleaned_data
 
 
 class UserProfileEmailForm(forms.ModelForm):
@@ -45,8 +55,9 @@ class UserProfileEmailForm(forms.ModelForm):
 
     def clean(self):
         super(UserProfileEmailForm, self).clean()
+        print self.cleaned_data
         if self.cleaned_data.get('email') != \
                 self.cleaned_data.get('checkemail'):
-            # self._errors['checkemail'] = 'Email addresses do not match.'
-            raise ValidationError('Email addresses do not match.')
+            self._errors['checkemail'] = 'Email addresses do not match.'
+            # raise ValidationError('Email addresses do not match.')
         return self.cleaned_data

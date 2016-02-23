@@ -59,14 +59,20 @@ $(function() {
 
         // wysyłanie formularza zmiany danych profilu
         $('#settings-submit #loadmore').click(function(){
+            var action;
+            var form;
             if ($('.active').find('a').attr('href') == '#profil') {
-                $('#profil form').submit();
+                action = 'main';
+                form = '#profil form';
             } else if ($('.active').find('a').attr('href') == '#haslo') {
-                $('#haslo form').submit();
+                action = 'email';
+                form = '#haslo form';
             }
-            if ($('.preview').attr('src') != $('.upload-wrapper').data('current-url')) {
-                $('#avatar-form form').submit();
-            }
+            $('<input />').attr('type', 'hidden')
+            .attr('name', 'action')
+            .attr('value', action)
+            .appendTo(form);
+            $(form).submit();
         });
 
         // handle the custom upload widget
