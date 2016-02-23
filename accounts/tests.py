@@ -5,6 +5,8 @@ from decimal import Decimal
 
 from django.test import TestCase
 
+from django.contrib.auth.models import User
+from .managers import UserProfileManager
 from .models import UserProfile
 
 
@@ -71,3 +73,23 @@ class UserProfileModelTestCase(TestCase):
 
         url = j_smith.get_twitter_url()
         self.assertEqual('https://twitter.com/jsmith', url)
+
+
+class UserProfileManagerTestCase(TestCase):
+    """
+    accounts/managers UserProfileManager
+    """
+    def test_create_user(self):
+        """
+        Create user
+        """
+        UserProfile.objects.create_user(
+            username='j_smith',
+            email='j_smith@example.com',
+            password='password9',
+        )
+        j_smith = UserProfile.objects.all()[0]
+        self.assertIsInstance(j_smith, UserProfile)
+        self.assertEqual('j_smith', j_smith.username)
+
+
