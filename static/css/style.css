@@ -141,21 +141,67 @@ footer ul a, footer .socialmedia div,
 #maintop .graj .prawa:hover {border-color: #c84d28;}
 
 #maintop .graj .avatarmenu {margin-right: -5px !important;}
-#maintop .graj .avatarmenu ul {max-width: 200px; display: none; opacity: 0; height: auto; position: absolute; right: 0px; background: #efefef; margin: 0 auto; margin-top: 5px;
-        -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
-        -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
-        box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+#maintop .graj .avatarmenu ul {
+    max-width: 200px;
+    display: none;
+    opacity: 0;
+    height: auto;
+    position: absolute;
+    right: 20px;
+    background: #efefef;
+    margin: 0 auto;
+    margin-top: 5px;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+    box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
 }
-#maintop .graj .avatarmenu ul li {float: none !important; text-align: center; background: #fff; padding-left: 50px; padding-right: 50px; margin-top: 0px !important; margin-right: 0px !important;
-        transition:all .1s ease-in-out;
-        -moz-transition:all .1s ease-in-out; /* Firefox 4 */
-        -webkit-transition:all .1s ease-in-out; /* Safari and Chrome */
-        -o-transition:all .1s ease-in-out; /* Opera */
+
+#maintop .graj .avatarmenu ul {
+    max-width: 300px;
+    min-width: 200px;
+}
+#maintop .graj .avatarmenu ul li:hover::before {
+    border-bottom: 10px solid #ea6a2a;
+}
+#maintop .graj .avatarmenu ul li:first-child:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: -49px;
+    left: 66%;
+    width: 0;
+    height: 30px;
+    background: transparent;
+    border: 10px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+#maintop .graj .avatarmenu ul li {
+    float: none !important;
+    position: relative;
+    text-align: center;
+    background: #fff;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    transition:all .1s ease-in-out;
+    -moz-transition:all .1s ease-in-out; /* Firefox 4 */
+    -webkit-transition:all .1s ease-in-out; /* Safari and Chrome */
+    -o-transition:all .1s ease-in-out; /* Opera */
 }
 #maintop .graj .avatarmenu ul li:hover {background: #ea6a2a; color: #fff;}
-#maintop .graj .avatarmenu ul a {display: table; width: 100%; margin-bottom: 2px !important;}
+
+#maintop .graj .avatarmenu ul li {
+    padding: 0;
+}
+#maintop .graj .avatarmenu ul li a {
+    margin-bottom: 2px !important;
+    display: block;
+    padding: 1em 0.5em;
+}
+
 #maintop .graj .avatarmenu ul a:last-of-type {margin-bottom: 0px !important;}
-#maintop .graj .avatarmenu ul .arrowup {display: inherit; float: right; margin-right: 70px;}
 
 #maintop .avatar {width: 8.5% !important; text-align: right;}
 #maintop .avatar img {width: 70px; height: 70px; border-radius: 50%; border: 3px solid #fff; margin-top: 15px; cursor: pointer;

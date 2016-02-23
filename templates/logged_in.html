@@ -3,13 +3,12 @@
 		<div class="graj avatar prawa">
 			<img src="{{ user.get_avatar_url }}" />
 			<nav class="avatarmenu">
-			<ul>
-				<div class="arrowup"></div>
-				<a href="{% url 'accounts:user_profile' %}"><li>{{ user.full_name }}</li></a>
-                <a href="{% url 'accounts:user_settings' %}"><li>Ustawienia</li></a>
-                <a href="{% url 'accounts:logout' %}"><li>Wyloguj</li></a>
-			</ul>
-		</nav>
+    			<ul>
+    				<li><a href="{% url 'accounts:user_profile' %}">{{ user.full_name }}</a></li>
+                    <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
+                    <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
+    			</ul>
+    		</nav>
 		</div>
 
 		<div class="userdata prawa">
