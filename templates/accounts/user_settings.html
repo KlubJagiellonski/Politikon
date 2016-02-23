@@ -9,9 +9,9 @@
         {% csrf_token %}
         <div class="upload-wrapper" data-current="{{ forms.avatar.instance.avatar }}" data-current-url="{% if forms.avatar.instance.avatar %}{{ forms.avatar.instance.avatar.url }}{% else %}{{ user.get_avatar_url }}{% endif %}">
             <a href="#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}" class="preview" /></figure></a>
-            <div class="hidden">
+            {#<div class="hidden">
                 {{ forms.avatar }}
-            </div>
+            </div>#}
         </div>
     </form>
     <div class="current-settings lewa">
