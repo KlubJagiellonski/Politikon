@@ -6,11 +6,11 @@
 
     <script type="text/javascript">
         $(function(){
-                var EVENTS_DATA = {{ json_data.events|safe }};
-                var FEATURED_EVENT_DATA = {{ json_data.front_event|safe }};
-                if(renderCharts) {
-                    renderCharts(EVENTS_DATA, FEATURED_EVENT_DATA);
-                }
+            var EVENTS_DATA = {{ json_data.events|safe }};
+            var FEATURED_EVENT_DATA = {{ json_data.front_event|safe }};
+            if(renderCharts) {
+                renderCharts(EVENTS_DATA, FEATURED_EVENT_DATA);
+            }
         });
     </script>
 

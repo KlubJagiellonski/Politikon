@@ -5,6 +5,15 @@
 
 {% block content %}
 
+<script type="text/javascript">
+    $(function(){
+        var EVENTS_DATA = {{ json_data|safe }};
+        if(renderCharts) {
+            renderCharts(EVENTS_DATA);
+        }
+    });
+</script>
+
 <section id="header"  class="body-margin">
     <h2>Wydarzenia</h2>
     <ul class="tabs prawa">
