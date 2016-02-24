@@ -119,10 +119,7 @@ class Event(models.Model):
                                                              (self.title))}
 
     def get_absolute_url(self):
-        return 'http://%(domain)s%(url)s' % {
-            'domain': current_domain(),
-            'url': reverse('events:event_detail', kwargs={'event_id': self.id})
-        }
+        return reverse('events:event_detail', kwargs={'pk': self.pk})
 
     def get_absolute_facebook_object_url(self):
         return 'http://%(domain)s%(url)s' % {

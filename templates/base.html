@@ -72,69 +72,69 @@
 {% endif %}
 
 <div id="body-wrapper">
-	<section id="maintop" class="section-nopadding">
-		<div class="logo lewa">
-			<a href="/"><div></div></a>
-		</div>
-		<nav class="astable lewa">
-			<div class="burger"></div>
-			<ul class="mainmenu">
-				<div class="arrowup"></div>
-				<a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
-				<a href="/events/"><li {% if request.path|startswith:"/events/" %} class="active"{% endif %}>Wydarzenia</li></a>
-				<a href="{% url 'accounts:rank' %}"><li>Rankingi</li></a>
-			</ul>
-		</nav>
+    <section id="maintop" class="section-nopadding">
+        <div class="logo lewa">
+            <a href="/"><div></div></a>
+        </div>
+        <nav class="astable lewa">
+            <div class="burger"></div>
+            <ul class="mainmenu">
+                <div class="arrowup"></div>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
+                <a href="/events/"><li {% if request.path|startswith:"/events/" %} class="active"{% endif %}>Wydarzenia</li></a>
+                <a href="{% url 'accounts:rank' %}"><li>Rankingi</li></a>
+            </ul>
+        </nav>
 
-{% if not user.is_authenticated %}
-		<div class="graj prawa">
-			<a href="#"><div class="prawa show-login">GRAJ!</div></a>
-		</div>
+        {% if not user.is_authenticated %}
+        <div class="graj prawa">
+            <a href="#"><div class="prawa show-login">GRAJ!</div></a>
+        </div>
 
-		<div class="socialmedia prawa">
-			<a href="{% url 'social:begin' 'twitter' %}"><div class="sm-bg tt"></div></a>
-			<a href="{% url 'social:begin' 'facebook' %}"><div class="sm-bg fb"></div></a>
-{#			<a href="{% url 'social:begin' 'google' %}"><div class="sm-bg gp"></div></a>#}
-		</div>
-{% else %}
-{% include 'logged_in.html' %}
-{% endif %}
+        <div class="socialmedia prawa">
+            <a href="{% url 'social:begin' 'twitter' %}"><div class="sm-bg tt"></div></a>
+            <a href="{% url 'social:begin' 'facebook' %}"><div class="sm-bg fb"></div></a>
+            {#<a href="{% url 'social:begin' 'google' %}"><div class="sm-bg gp"></div></a>#}
+        </div>
+        {% else %}
+        {% include 'logged_in.html' %}
+        {% endif %}
 
-	</section>
+    </section>
 
     {% block content %}{% endblock %}
 
-	<footer>
-		<div class="lewa">
+    <footer>
+        <div class="lewa">
 
-			<ul>
-				<h5>Politikon</h5>
-				<li><a href="javascript:void(0);" onclick="startIntro();">Jak grać?</a></li>
-				<li><a href="{% url 'events:events' %}">Wydarzenia</a></li>
-				<li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
-			</ul>
-			<ul>
-				<li><a href="#">Regulamin</a></li>
-				<li><a href="#">Reklama</a></li>
-				<li><a href="#">Kontakt</a></li>
-			</ul>
-			<ul>
-				<h5>Partnerzy</h5>
-				<li><a href="#">OSoM</a></li>
-				<li><a href="#">jagielloński24</a></li>
-				<li><a href="#">vivente!</a></li>
-			</ul>
-		</div>
-		<div class="prawa">
-			<div class="socialmedia prawa">
-				<a href="http://twitter.com/"><div class="tt lewa"></div></a>
-				<a href="http://facebook.com/"><div class="fb lewa"></div></a>
-{#				<a href="http://plus.google.com/"><div class="gp lewa"></div></a>#}
-			</div>
-			<a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
-		</div>
-		<div class="logo centrum"></div>
-	</footer>
+            <ul>
+                <h5>Politikon</h5>
+                <li><a href="javascript:void(0);" onclick="startIntro();">Jak grać?</a></li>
+                <li><a href="{% url 'events:events' %}">Wydarzenia</a></li>
+                <li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
+            </ul>
+            <ul>
+                <li><a href="#">Regulamin</a></li>
+                <li><a href="#">Reklama</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+            <ul>
+                <h5>Partnerzy</h5>
+                <li><a href="http://osomstudio.com/en/">OSoM</a></li>
+                <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
+                <li><a href="http://vivente.pl/">vivente!</a></li>
+            </ul>
+        </div>
+        <div class="prawa">
+            <div class="socialmedia prawa">
+                <a href="http://twitter.com/"><div class="tt lewa"></div></a>
+                <a href="http://facebook.com/"><div class="fb lewa"></div></a>
+                {#<a href="http://plus.google.com/"><div class="gp lewa"></div></a>#}
+            </div>
+            <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
+        </div>
+        <div class="logo centrum"></div>
+    </footer>
 </div>
 
 <!--jak grac-->

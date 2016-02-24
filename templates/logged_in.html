@@ -22,24 +22,24 @@
     {% endif %}
     </div>
 
-    <a href="#">
+    <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>wartość portfela</p>
             <p class="walletvalue">{{ user.portfolio_value }}</p>
         </div>
     </a>
 
-    <a href="#">
+    <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>wolne reputy</p>
             <p class="freevalue">{{ user.total_cash_formatted }}</p>
         </div>
     </a>
 
-    <a href="#">
+    <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>reputacja</p>
-            <p class="reputationvalue">{{ user.reputation|floatformat:1 }}</p>
+            <p class="reputationvalue">{{ user.reputation }}</p>
         </div>
     </a>
 </div>
