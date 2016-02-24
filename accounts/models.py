@@ -67,7 +67,7 @@ class UserProfile(AbstractBaseUser):
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
-    web_site = models.CharField(u"strona www", max_length=255, default='')
+    web_site = models.URLField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
     facebook_user_id = models.BigIntegerField(u"facebook ID", default=None,
                                               blank=True, null=True)

@@ -5,13 +5,13 @@
 {% block content %}
 
 <section id="settings-profile" class="body-margin">
-    <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" id="avatar">
+    <form action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" id="avatar">
         {% csrf_token %}
         <div class="upload-wrapper" data-current="{{ forms.avatar.instance.avatar }}" data-current-url="{% if forms.avatar.instance.avatar %}{{ forms.avatar.instance.avatar.url }}{% else %}{{ user.get_avatar_url }}{% endif %}">
             <a href="#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><img src="{{ user.get_avatar_url }}" class="preview" /></figure></a>
-            {% comment %}<div class="hidden">
+            <div class="hidden">
                 {{ forms.avatar }}
-            </div>{% endcomment %}
+            </div>
         </div>
     </form>
     <div class="current-settings lewa">
@@ -42,7 +42,7 @@
     <div class="clr"></div>
     <div class="zakladki-content">
         <article id="profil">
-            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="profil">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" class="settings-form" id="profil">
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Wyświetlane imię i nazwisko:</span>
@@ -65,7 +65,7 @@
         </article>
 
         <article id="haslo">
-            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="haslo">
+            <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" class="settings-form" id="haslo">
                 {% csrf_token %}
                 <div class="lewa">
                     <span>Zmień adres e-mail:</span>
