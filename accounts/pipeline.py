@@ -41,30 +41,23 @@ def save_profile(strategy, user, response, details,
 
     backend = kwargs['backend']
 
-    if backend.name == 'twitter':
-        playing_followers_count = 0
-        tuser = User.remote.fetch(response['id'])
-        # tuser.fetch_followers(all=True)
-        # twitter = Twitter(
-            # auth=OAuth(settings.TWITTER_TOKEN, settings.TWITTER_TOKEN_SECRET,
-                       # settings.TWITTER_CONSUMER_KEY,
-                       # settings.TWITTER_CONSUMER_SECRET))
-        # twitter_user = User.remote.fetch(response['id'])
-
     if is_new and backend.name == 'twitter':
         user.name = response['name']
         user.twitter_user_id = response['id']
         user.twitter_user = response['screen_name']
 
         playing_followers_count = 0
-        # twitter = Twitter(
-            # auth=OAuth(settings.TWITTER_TOKEN, settings.TWITTER_TOKEN_SECRET,
-                       # settings.TWITTER_CONSUMER_KEY,
-                       # settings.TWITTER_CONSUMER_SECRET))
-        # print(twitter)
-        # twitter_user = User.remote.fetch(response['id'])
-        # print(twitter_user.fetch_followers(all=True))
-
+        tuser = User.remote.fetch('PiotrPeczek')
+        followers = tuser.fetch_followers(all=True)
+        for follower in followers:
+            try:
+                user = UserProfile.objects.\
+                    get('twitter_user_id', twitter.id)
+            except:
+                pass
+            else:
+                if user.is_active:
+                    playing_friends_count += 1
         user.save()
 
         if not response['default_profile_image']:
