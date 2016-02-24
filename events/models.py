@@ -67,45 +67,45 @@ class Event(models.Model):
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.ImageField(u'mały obrazek 340x250',
-                                    upload_to='events_small', null=True)
-    big_image = models.ImageField(u'duży obrazek 1250x510',
-                                  upload_to='events_big', null=True)
+    small_image = models.\
+        ImageField(u'mały obrazek 340x250', upload_to='events_small',
+                   null=True)
+    big_image = models.\
+        ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
-    outcome = models.PositiveIntegerField(u'rozstrzygnięcie',
-                                          choices=EVENT_OUTCOME_CHOICES,
-                                          default=1)
-    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='',
-                                      blank=True)
+    outcome = models.\
+        PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
+                             default=1)
+    outcome_reason = models.\
+        TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.DateTimeField(u'przewidywana data \
-                                              rozstrzygnięcia')
+    estimated_end_date = models.\
+        DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
-    current_buy_for_price = models.IntegerField(u'cena nabycia akcji \
-                                                zdarzenia', default=50.0)
-    current_buy_against_price = models.IntegerField(u'cena nabycia akcji \
-                                                    zdarzenia przeciwnego',
-                                                    default=50.0)
-    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji \
-                                                 zdarzenia', default=50.0)
-    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji \
-                                                     zdarzenia przeciwnego',
-                                                     default=50.0)
+    current_buy_for_price = models.\
+        IntegerField(u'cena nabycia akcji zdarzenia', default=50.0)
+    current_buy_against_price = models.\
+        IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=50.0)
+    current_sell_for_price = models.\
+        IntegerField(u'cena sprzedaży akcji zdarzenia', default=50.0)
+    current_sell_against_price = models.\
+        IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego',
+                     default=50.0)
 
-    last_transaction_date = models.DateTimeField(u'data ostatniej transakcji',
-                                                 null=True)
+    last_transaction_date = models.\
+        DateTimeField(u'data ostatniej transakcji', null=True)
 
     Q_for = models.IntegerField(u'zakładów na TAK', default=0)
     Q_against = models.IntegerField(u'zakładów na NIE', default=0)
     turnover = models.IntegerField(u'obrót', default=0, db_index=True)
 
-    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość \
-                                                absolutna)', db_index=True,
-                                                default=0)
+    absolute_price_change = models.\
+        IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True,
+                     default=0)
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     B = models.FloatField(u'stała B', default=5)
@@ -119,10 +119,7 @@ class Event(models.Model):
                                                              (self.title))}
 
     def get_absolute_url(self):
-        return 'http://%(domain)s%(url)s' % {
-            'domain': current_domain(),
-            'url': reverse('events:event_detail', kwargs={'event_id': self.id})
-        }
+        return reverse('events:event_detail', kwargs={'pk': self.pk})
 
     def get_absolute_facebook_object_url(self):
         return 'http://%(domain)s%(url)s' % {

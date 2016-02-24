@@ -1,48 +1,48 @@
 {% load display %}
 
-		<div class="graj avatar prawa">
-			<img src="{{ user.get_avatar_url }}" />
-			<nav class="avatarmenu">
-    			<ul>
-    				<li><a href="{% url 'accounts:user_profile' %}">{{ user.full_name }}</a></li>
-                    <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
-                    <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
-    			</ul>
-    		</nav>
-		</div>
+<div class="graj avatar prawa">
+    <img src="{{ user.get_avatar_url }}" />
+    <nav class="avatarmenu">
+        <ul>
+            <li><a href="{% url 'accounts:user_profile' %}">{{ user.full_name }}</a></li>
+            <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
+            <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
+        </ul>
+    </nav>
+</div>
 
-		<div class="userdata prawa">
-            {% comment %}
-                <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
-            {% endcomment %}
-			<div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
-				{% if user.get_newest_results.count %}
-                    <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
-                    <div class="arrowup"></div>
-                {% endif %}
-			</div>
+<div class="userdata prawa">
+    {% comment %}
+    <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
+    {% endcomment %}
+    <div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
+        {% if user.get_newest_results.count %}
+            <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
+        <div class="arrowup"></div>
+    {% endif %}
+    </div>
 
-			<a href="#">
-			<div class="lewa stats">
-				<p>wartość portfela</p>
-				<p class="walletvalue">{{ user.portfolio_value }}</p>
-			</div>
-			</a>
+    <a href="{% url 'accounts:user_profile' %}">
+        <div class="lewa stats">
+            <p>wartość portfela</p>
+            <p class="walletvalue">{{ user.portfolio_value }}</p>
+        </div>
+    </a>
 
-			<a href="#">
-			<div class="lewa stats">
-				<p>wolne reputy</p>
-				<p class="freevalue">{{ user.unused_reput }}</p>
-			</div>
-			</a>
+    <a href="{% url 'accounts:user_profile' %}">
+        <div class="lewa stats">
+            <p>wolne reputy</p>
+            <p class="freevalue">{{ user.total_cash_formatted }}</p>
+        </div>
+    </a>
 
-			<a href="#">
-			<div class="lewa stats">
-				<p>reputacja</p>
-				<p class="reputationvalue">{{ user.reputation|floatformat:1 }}</p>
-			</div>
-			</a>
-		</div>
+    <a href="{% url 'accounts:user_profile' %}">
+        <div class="lewa stats">
+            <p>reputacja</p>
+            <p class="reputationvalue">{{ user.reputation }}</p>
+        </div>
+    </a>
+</div>
 
 <section id="wallet-not" class="centrum">
     <div class="container">
@@ -56,17 +56,17 @@
                     <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}"><div class="betresult new">
                         {% if bet.event.small_image %}
                             <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
-                        {% else %}
+                    {% else %}
                             <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
-                        {% endif %}
+                    {% endif %}
                         {% render_bet_status bet %}
                         <div class="status-change">
                             zmiana portfela:
-                            <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
+                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
                             <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
                         </div>
-                    </div></a>
-                {% endfor %}
+                </div></a>
+            {% endfor %}
             </div>
             <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
         </div>

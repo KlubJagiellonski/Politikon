@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -23,3 +26,5 @@ class EventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.action = None
         super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['estimated_end_date'].initial = datetime.now() + \
+            relativedelta(months=1)
