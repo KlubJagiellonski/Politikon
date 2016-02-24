@@ -143,7 +143,7 @@ class BetManager(models.Manager):
 
         user.total_cash -= bought_for_total
         user.portfolio_value += bought_for_total
-        user.save()
+        user.save(update_fields=['total_cash', 'portfolio_value'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
         """ Increment turnover only for buying bets """
