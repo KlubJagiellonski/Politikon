@@ -257,9 +257,22 @@ $(function() {
                         $(".freevalue").fadeOut(200,function(){$(this).text(user.total_cash).fadeIn(200);});
                         $(".reputationvalue").fadeOut(200,function(){$(this).text(user.reputation+"%").fadeIn(200);});
                     }
+                },
+                error: function (data) {
+                    var response = JSON.parse(data.responseText);
+                    notify(response.error, 'error');
                 }
             });
         }); // end $(".a_bet").on()
+
+        // powiadomienia
+        function notify(text, type) {
+            return noty({
+                layout: 'topRight',
+                text: text,
+                type: type,
+            });
+        };
 
 
     });
