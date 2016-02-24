@@ -68,6 +68,7 @@ $(function() {
                 action = 'email';
                 form = '#haslo form';
             }
+            $('form#avatar').find('.hidden').appendTo(form);
             $('<input />').attr('type', 'hidden')
             .attr('name', 'action')
             .attr('value', action)
@@ -186,7 +187,7 @@ $(function() {
                         var user = data.updates.user;
                         var bets_type = '';     // YES or NO
                         makebets.each(function(idx) {
-                            console.log($(this));
+                            // console.log($(this));
                             $(this).children('.currentbet').children('p').children('.has_bets').html(bet.has);
                             $(this).children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price * 100) / 100);
                             if ($(this).hasClass('collapsible')) {
