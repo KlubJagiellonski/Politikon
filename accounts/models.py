@@ -133,7 +133,7 @@ class UserProfile(AbstractBaseUser):
             'user_id': self.id,
             'total_cash': self.total_cash_formatted,
             'portfolio_value': self.portfolio_value_formatted,
-            'reputation': float(self.reputation)
+            'reputation': self.reputation_formatted
         }
 
     @property
@@ -195,6 +195,10 @@ class UserProfile(AbstractBaseUser):
     @property
     def total_cash_formatted(self):
         return format_int(self.total_cash)
+
+    @property
+    def reputation_formatted(self):
+        return "%s%%" % format_int(self.reputation)
 
     def calc_reputation(self):
         if float(self.total_given_cash) == 0:

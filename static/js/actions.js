@@ -255,7 +255,7 @@ $(function() {
 
                         $(".walletvalue").fadeOut(200,function(){$(this).text(user.portfolio_value).fadeIn(200);});
                         $(".freevalue").fadeOut(200,function(){$(this).text(user.total_cash).fadeIn(200);});
-                        $(".reputationvalue").fadeOut(200,function(){$(this).text(user.reputation+"%").fadeIn(200);});
+                        $(".reputationvalue").fadeOut(200,function(){$(this).text(user.reputation).fadeIn(200);});
                     }
                 },
                 error: function (data) {
