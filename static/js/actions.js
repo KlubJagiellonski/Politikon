@@ -260,14 +260,19 @@ $(function() {
                 },
                 error: function (data) {
                     var response = JSON.parse(data.responseText);
-                    var n = noty({
-                        layout: 'topRight',
-                        text: response.error,
-                        type: 'error',
-                    });
+                    notify(response.error, 'error');
                 }
             });
         }); // end $(".a_bet").on()
+
+        // powiadomienia
+        function notify(text, type) {
+            return noty({
+                layout: 'topRight',
+                text: text,
+                type: type,
+            });
+        };
 
 
     });
