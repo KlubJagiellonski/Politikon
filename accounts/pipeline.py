@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 @partial
-def save_profile(strategy, user, response, details,
-                 is_new=False, *args, **kwargs):
+def save_profile(strategy, user, response, details, is_new=False,
+                 *args, **kwargs):
     """
     Saves profile when logging with social auth.
     When new account then gets profile picture and checks number of
@@ -38,7 +38,6 @@ def save_profile(strategy, user, response, details,
     # print(is_new)
     # print(response)
     # print(strategy)
-    # print(details)
     # uid = kwargs['uid']
 
     backend = kwargs['backend']
@@ -46,7 +45,7 @@ def save_profile(strategy, user, response, details,
     if backend.name == 'twitter':
         if is_new or not user.is_active:
             playing_followers_count = 0
-            tuser = User.remote.fetch('PiotrPeczek')
+            tuser = User.remote.fetch(response['screen_name'])
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
@@ -60,7 +59,7 @@ def save_profile(strategy, user, response, details,
 
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
-                # messages.warning(kwargs['request, _('Your account is inactive. Wait for administrator approval.'))
+                messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
             else:
                 user.is_active = True
 
@@ -95,8 +94,7 @@ def save_profile(strategy, user, response, details,
 
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
-                # messages.warning(request, _('Your account is inactive. Wait for administrator approval.'))
-                # messages.warning(kwargs['request, _('Your account is inactive. Wait for administrator approval.'))
+                messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
             else:
                 user.is_active = True
 

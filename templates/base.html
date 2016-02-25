@@ -49,17 +49,6 @@
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/packaged/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/layouts/topRight.js"></script>
 
-{% if messages %}
-CHUJ
-<script type="text/javascript">
-$(function () {
-    {% for message in messages %}
-    console.log(message);
-    {% endfor %}
-});
-</script>
-{% endif %}
-
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/actions.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/charts/betfeed_featured.js"></script>
 
@@ -156,6 +145,20 @@ $(function () {
 <!--jak grac-->
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/intro.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>
+
+{% if messages %}
+<script type="text/javascript">
+$(function () {
+{% for message in messages %}
+    noty({
+        layout: 'topRight',
+        text: '{{ message }}',
+        type: '{{ message.tags }}'
+    });
+{% endfor %}
+});
+</script>
+{% endif %}
 
 </body>
 </html>
