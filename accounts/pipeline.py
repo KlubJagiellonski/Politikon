@@ -1,10 +1,12 @@
 import logging
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from social.pipeline.partial import partial
 
 from constance import config
 from requests import request, HTTPError
+from twitter_api.models import User
 
 from .models import UserProfile
 
@@ -43,6 +45,19 @@ def save_profile(strategy, user, response, details,
         user.name = response['name']
         user.twitter_user_id = response['id']
         user.twitter_user = response['screen_name']
+
+        playing_followers_count = 0
+        tuser = User.remote.fetch('PiotrPeczek')
+        followers = tuser.fetch_followers(all=True)
+        for follower in followers:
+            try:
+                user = UserProfile.objects.\
+                    get('twitter_user_id', twitter.id)
+            except:
+                pass
+            else:
+                if user.is_active:
+                    playing_friends_count += 1
         user.save()
 
         if not response['default_profile_image']:

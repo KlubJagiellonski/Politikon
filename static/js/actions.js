@@ -158,7 +158,6 @@ $(function() {
         // $('.upload-wrapper').each(updateUploadWidget)
         // .data('updater', updateUploadWidget);
 
-
         // kupowanie i sprzedawanie zakładów
         $(".a_bet").on('click', function(e) {
             e.preventDefault();

@@ -5,10 +5,13 @@ Django==1.8.8
 -e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings
 
 # Deployment
+psycopg2
 gunicorn==19.3.0
 path.py==2.4.1
 ipdb
 ipython
+
+# tests
 flake8
 coveralls
 
@@ -34,9 +37,9 @@ django-storages==1.1.8
 
 jsmin
 
-oauth2
+#oauth2
 #-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
-fandjango
+#fandjango
 python-openid
 
 #-e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
@@ -48,9 +51,9 @@ django-celery==3.1.16
 dj-database-url==0.2.1
 pylibmc
 django-pylibmc-sasl==0.2.4
-psycopg2
 hiredis
 
+# dates
 python-dateutil==1.5
 pytz
 
@@ -61,4 +64,11 @@ jsonfield
 unidecode
 
 django-sslify>=0.2
+
+# connecting with FB, TT
 python-social-auth
+
+# for twitter api -> getting user's followers
+git+https://github.com/ppeczek/django-m2m-history.git
+git+https://github.com/ppeczek/django-oauth-tokens.git
+git+https://github.com/ramusus/django-twitter-api.git
