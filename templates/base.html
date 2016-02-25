@@ -1,4 +1,5 @@
 {% load path %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -144,6 +145,20 @@
 <!--jak grac-->
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/intro.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>
+
+{% if messages %}
+<script type="text/javascript">
+$(function () {
+{% for message in messages %}
+    noty({
+        layout: 'topRight',
+        text: '{{ message }}',
+        type: '{{ message.tags }}'
+    });
+{% endfor %}
+});
+</script>
+{% endif %}
 
 </body>
 </html>

@@ -97,3 +97,6 @@ class UserProfileManager(BaseUserManager):
             # created, user_has_changed))
 
         return user
+
+    def get_admins(self):
+        return self.get_queryset().filter(is_staff=True, is_admin=True)

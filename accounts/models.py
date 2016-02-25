@@ -1,19 +1,18 @@
 # coding: utf-8
+from decimal import Decimal
 import logging
+import os
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models, transaction
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
-from politikon.settings import STATIC_URL
-
-from bladepolska.snapshots import SnapshotAddon
 
 from .managers import UserProfileManager
 from .utils import format_int
-
+from bladepolska.snapshots import SnapshotAddon
 from events.models import Bet, Event
-import os
+from politikon.settings import STATIC_URL
 
 
 logger = logging.getLogger(__name__)
@@ -62,7 +61,6 @@ class UserProfile(AbstractBaseUser):
                                            historii", default=0.)
     reputation = models.DecimalField(u"reputation", default=100, max_digits=12,
                                      decimal_places=2,)
-
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
     web_site = models.URLField(u"strona www", max_length=255, default='')
@@ -199,10 +197,11 @@ class UserProfile(AbstractBaseUser):
         return "%s%%" % format_int(self.reputation)
 
     def calculate_reputation(self):
-        if float(self.total_given_cash) == 0:
+        if self.total_given_cash == Decimal('0'):
             self.reputation = 0
         else:
-            self.reputation = (self.portfolio_value + self.total_cash) /\
+            self.reputation = \
+                Decimal(self.portfolio_value + self.total_cash) / \
                 self.total_given_cash * 100
 
     @property

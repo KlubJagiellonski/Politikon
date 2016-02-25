@@ -70,7 +70,7 @@ class MyUserAdmin(UserAdmin):
     ordering = ('id', )
     filter_horizontal = ()
 
-    actions = ['topup']
+    actions = ['topup', 'set_active', 'block']
 
     fieldsets = (
         (None, {'fields': ('username', 'password', 'email')}),
@@ -93,8 +93,20 @@ class MyUserAdmin(UserAdmin):
 
         @property
         def short_description(self):
-            return 'Doładuj konto o %s' % config.ADMIN_TOPUP
+            return 'Doładuj wybrane konta o %s' % config.ADMIN_TOPUP
 
     topup = Topup()
+
+    def set_active(modeladmin, request, queryset):
+        for user in queryset:
+            user.is_active = True
+            user.save(update_fields=['is_active'])
+    set_active.short_description = 'Aktywuj wybrane konta'
+
+    def block(modeladmin, request, queryset):
+        for user in queryset:
+            user.is_deleted = True
+            user.save(update_fields=['is_deleted'])
+    block.short_description = 'Zablokuj wybrane konta'
 
 admin.site.register(UserProfile, MyUserAdmin)

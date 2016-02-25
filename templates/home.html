@@ -5,7 +5,7 @@
 {% block content %}
 
     <script type="text/javascript">
-        $(function(){
+        $(function () {
             var EVENTS_DATA = {{ json_data.events|safe }};
             var FEATURED_EVENT_DATA = {{ json_data.front_event|safe }};
             if(renderCharts) {
