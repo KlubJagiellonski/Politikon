@@ -21,7 +21,7 @@
             <p><span class="what">Dołączył do gry:</span> <span class="value">{{ user.created_date }}</span></p>
         </div>
         <div class="astable">
-            <p><span class="what">Adres e-mail:</span> <span class="value"><a href="emailto:{{ user.email }}">{{ user.email }}</a></span></p>
+            <p><span class="what">Adres e-mail:</span> <span class="value">{% if user.email %}<a href="emailto:{{ user.email }}">{{ user.email }}</a>{% else %}-{% endif %}</span></p>
             <p><span class="what">Połączone konta:</span> <span class="value">
                 {% if user.twitter_user %}
                 <a href="{{ user.get_twitter_url }}"><span class="att-tt">{{ user.twitter_user }}</span></a>
@@ -29,6 +29,7 @@
                 {% if user.facebook_user %}
                 <a href="{{ user.get_facebook_url }}"><span class="att-fb">{{ user.facebook_user }}</span></a>
                 {% endif %}
+                {% if not user.twitter_user and not user.facebook_user %}-{% endif %}
             </span></p>
         </div>
     </div>

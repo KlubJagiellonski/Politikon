@@ -144,6 +144,8 @@ class BetManager(models.Manager):
         user.total_cash -= bought_for_total
         user.portfolio_value += bought_for_total
         user.save(update_fields=['total_cash', 'portfolio_value'])
+        user.calculate_reputation()
+        user.save(update_fields=['reputation'])
 
         event.increment_quantity(for_outcome, by_amount=quantity)
         """ Increment turnover only for buying bets """
@@ -205,7 +207,9 @@ class BetManager(models.Manager):
 
         user.total_cash += sold_for_total
         user.portfolio_value -= sold_for_total
-        user.save(update_fields=['total_cash'])
+        user.save(update_fields=['total_cash', 'portfolio_value'])
+        user.calculate_reputation()
+        user.save(update_fields=['reputation'])
 
         event.increment_quantity(for_outcome, by_amount=-quantity)
         event.save(force_update=True)

@@ -1,4 +1,4 @@
-#Deployment and work
+# Deployment and work
 Django==1.8.8
 
 # For distinction dev settings from production settings
@@ -21,28 +21,28 @@ newrelic
 # Admin
 django-grappelli
 
-#coffin and django-jinja --- can't find, probably deprecated
-#coffin
+# coffin and django-jinja --- can't find, probably deprecated
+# coffin
 # Was used for macros
-#django-jinja==1.4.1
-#jinja2
+# django-jinja==1.4.1
+# jinja2
 
-#Compresses linked and inline JavaScript or CSS into a single cached file.
+# Compresses linked and inline JavaScript or CSS into a single cached file.
 django-compressor==1.5
 
-#For distant static files
+# For distant static files
 django-assets
 boto
 django-storages==1.1.8
 
 jsmin
 
-#oauth2
-#-e git+https://github.com/jgorset/fandjango.git#egg=fandjango
-#fandjango
+# oauth2
+# -e git+https://github.com/jgorset/fandjango.git#egg=fandjango
+# fandjango
 python-openid
 
-#-e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
+# -e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
 django-redis-sessions
 -e git+https://github.com/tgrf/django-constance.git#egg=django-constance
 django-picklefield

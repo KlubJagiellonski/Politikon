@@ -58,12 +58,10 @@ class UserProfile(AbstractBaseUser):
     friends = models.ManyToManyField('self', related_name='friend_of')
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
-
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w \
                                            historii", default=0.)
-    reputation = models.DecimalField(u"reputation", default=0, max_digits=12,
+    reputation = models.DecimalField(u"reputation", default=100, max_digits=12,
                                      decimal_places=2,)
-    unused_reput = models.IntegerField(u"wolne reputy", default=0)
 
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
 
@@ -133,7 +131,7 @@ class UserProfile(AbstractBaseUser):
             'user_id': self.id,
             'total_cash': self.total_cash_formatted,
             'portfolio_value': self.portfolio_value_formatted,
-            'reputation': float(self.reputation)
+            'reputation': self.reputation_formatted
         }
 
     @property
@@ -196,11 +194,15 @@ class UserProfile(AbstractBaseUser):
     def total_cash_formatted(self):
         return format_int(self.total_cash)
 
-    def calc_reputation(self):
+    @property
+    def reputation_formatted(self):
+        return "%s%%" % format_int(self.reputation)
+
+    def calculate_reputation(self):
         if float(self.total_given_cash) == 0:
             self.reputation = 0
         else:
-            self.reputation = round(self.portfolio_value /
+            self.reputation = round(self.portfolio_value + self.total_cash /
                                     float(self.total_given_cash), 2)
 
     @property
