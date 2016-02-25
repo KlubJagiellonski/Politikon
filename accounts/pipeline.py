@@ -42,7 +42,6 @@ def save_profile(strategy, user, response, details,
     # uid = kwargs['uid']
 
     backend = kwargs['backend']
-    print(kwargs.get('request').session)
 
     if backend.name == 'twitter':
         if is_new or not user.is_active:
