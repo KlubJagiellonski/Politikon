@@ -202,8 +202,8 @@ class UserProfile(AbstractBaseUser):
         if float(self.total_given_cash) == 0:
             self.reputation = 0
         else:
-            self.reputation = round(self.portfolio_value + self.total_cash /
-                                    float(self.total_given_cash), 2)
+            self.reputation = (self.portfolio_value + self.total_cash) /\
+                self.total_given_cash * 100
 
     @property
     def profile_photo(self):
