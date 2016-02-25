@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.core.files.base import ContentFile
+from django.core.mail import send_mail
 from django.utils.translation import ugettext as _
 
 from constance import config
@@ -60,6 +61,16 @@ def save_profile(strategy, user, response, details, is_new=False,
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
                 messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
+                if is_new:
+                    recipent_list = []
+                    for admin in UserProfile.objects.get_admins():
+                        if admin.email:
+                            recipent_list.append(admin.email)
+                    if len(recipents) > 0:
+                        subject = u'Politikon - nowy użytkownik'
+                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
+                        from_email = settings.DEFAULT_EMAIL_FROM
+                        send_mail(subject, message, from_email, recipent_list)
             else:
                 user.is_active = True
 
@@ -95,6 +106,16 @@ def save_profile(strategy, user, response, details, is_new=False,
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
                 messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
+                if is_new:
+                    recipent_list = []
+                    for admin in UserProfile.objects.get_admins():
+                        if admin.email:
+                            recipent_list.append(admin.email)
+                    if len(recipents) > 0:
+                        subject = u'Politikon - nowy użytkownik'
+                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
+                        from_email = settings.DEFAULT_EMAIL_FROM
+                        send_mail(subject, message, from_email, recipent_list)
             else:
                 user.is_active = True
 
