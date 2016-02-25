@@ -198,11 +198,11 @@ class UserProfile(AbstractBaseUser):
     def reputation_formatted(self):
         return "%s%%" % format_int(self.reputation)
 
-    def calc_reputation(self):
+    def calculate_reputation(self):
         if float(self.total_given_cash) == 0:
             self.reputation = 0
         else:
-            self.reputation = round(self.portfolio_value /
+            self.reputation = round(self.portfolio_value + self.total_cash /
                                     float(self.total_given_cash), 2)
 
     @property
