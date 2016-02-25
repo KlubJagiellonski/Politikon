@@ -28,6 +28,7 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual(False, user.is_vip)
         self.assertEqual('John Smith (johnsmith)', user.get_full_name())
         user.calculate_reputation()
+        user.save()
         self.assertEqual(Decimal(0), user.reputation)
         self.assertEqual(False, user.is_superuser)
 

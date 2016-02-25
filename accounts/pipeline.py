@@ -1,11 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.files.base import ContentFile
-from social.pipeline.partial import partial
+from django.utils.translation import ugettext as _
 
 from constance import config
 from requests import request, HTTPError
+from social.pipeline.partial import partial
 from twitter_api.models import User
 
 from .models import UserProfile
@@ -40,64 +42,75 @@ def save_profile(strategy, user, response, details,
     # uid = kwargs['uid']
 
     backend = kwargs['backend']
+    print(kwargs.get('request').session)
 
-    if is_new and backend.name == 'twitter':
-        user.name = response['name']
-        user.twitter_user_id = response['id']
-        user.twitter_user = response['screen_name']
+    if backend.name == 'twitter':
+        if is_new or not user.is_active:
+            playing_followers_count = 0
+            tuser = User.remote.fetch('PiotrPeczek')
+            followers = tuser.fetch_followers(all=True)
+            for follower in followers:
+                try:
+                    user = UserProfile.objects.\
+                        get('twitter_user_id', twitter.id)
+                except:
+                    pass
+                else:
+                    if user.is_active:
+                        playing_friends_count += 1
 
-        playing_followers_count = 0
-        tuser = User.remote.fetch('PiotrPeczek')
-        followers = tuser.fetch_followers(all=True)
-        for follower in followers:
-            try:
-                user = UserProfile.objects.\
-                    get('twitter_user_id', twitter.id)
-            except:
-                pass
+            if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
+                user.is_active = False
+                # messages.warning(kwargs['request, _('Your account is inactive. Wait for administrator approval.'))
             else:
-                if user.is_active:
-                    playing_friends_count += 1
-        user.save()
+                user.is_active = True
 
-        if not response['default_profile_image']:
-            url = response['profile_image_url'].replace('_normal', '')
+            user.name = response['name']
+            user.twitter_user_id = response['id']
+            user.twitter_user = response['screen_name']
+            user.save()
+
+            if not response['default_profile_image']:
+                url = response['profile_image_url'].replace('_normal', '')
+                try:
+                    response = request('GET', url)
+                    response.raise_for_status()
+                except HTTPError:
+                    pass
+                else:
+                    user.avatar.save('{0}_social.jpg'.format(user.username),
+                                    ContentFile(response.content))
+
+    if backend.name == 'facebook':
+        if is_new or not user.is_active:
+            playing_friends_count = 0
+            for friend in response['friends']['data']:
+                try:
+                    user = UserProfile.objects.\
+                        get('facebook_user_id', friend['id'])
+                except:
+                    pass
+                else:
+                    if user.is_active:
+                        playing_friends_count += 1
+
+            if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
+                user.is_active = False
+                # messages.warning(request, _('Your account is inactive. Wait for administrator approval.'))
+                # messages.warning(kwargs['request, _('Your account is inactive. Wait for administrator approval.'))
+            else:
+                user.is_active = True
+
+            user.name = details['fullname']
+            user.facebook_user = user.facebook_user_id = response['id']
+            user.save()
+
+            url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
             try:
-                response = request('GET', url)
+                response = request('GET', url, params={'type': 'large'})
                 response.raise_for_status()
             except HTTPError:
                 pass
             else:
                 user.avatar.save('{0}_social.jpg'.format(user.username),
-                                 ContentFile(response.content))
-
-    if is_new and backend.name == 'facebook':
-        playing_friends_count = 0
-        for friend in response['friends']['data']:
-            try:
-                user = UserProfile.objects.\
-                    get('facebook_user_id', friend['id'])
-            except:
-                pass
-            else:
-                if user.is_active:
-                    playing_friends_count += 1
-
-        if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
-            user.is_active = False
-        else:
-            user.is_active = True
-
-        user.name = details['fullname']
-        user.facebook_user = user.facebook_user_id = response['id']
-        user.save()
-
-        url = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
-        try:
-            response = request('GET', url, params={'type': 'large'})
-            response.raise_for_status()
-        except HTTPError:
-            pass
-        else:
-            user.avatar.save('{0}_social.jpg'.format(user.username),
-                             ContentFile(response.content))
+                                ContentFile(response.content))

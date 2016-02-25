@@ -1,4 +1,5 @@
 {% load path %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -47,6 +48,17 @@
 
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/packaged/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/layouts/topRight.js"></script>
+
+{% if messages %}
+CHUJ
+<script type="text/javascript">
+$(function () {
+    {% for message in messages %}
+    console.log(message);
+    {% endfor %}
+});
+</script>
+{% endif %}
 
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/actions.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/charts/betfeed_featured.js"></script>
