@@ -23,11 +23,15 @@ class EventAdmin(admin.ModelAdmin):
         'last_transaction_date',
         'Q_for',
         'Q_against',
+        'turnover',
+        'absolute_price_change',
+        'price_change',
     ]
 
     list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
                     'estimated_end_date', 'end_date', 'current_buy_for_price',
-                    'current_buy_against_price', 'Q_for', 'Q_against']
+                    'current_buy_against_price', 'Q_for', 'Q_against',
+                    'turnover', 'absolute_price_change', 'price_change']
 
     inlines = [RelatedEventInline, ]
 
