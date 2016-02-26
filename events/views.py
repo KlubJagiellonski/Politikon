@@ -110,7 +110,7 @@ def create_transaction(request, event_id):
         raise Http404
     except PriceMismatch as e:
         result = {
-            'error': unicode(e),
+            'error': unicode(e.message.decode('utf-8')),
             'updates': {
                 'events': [
                     e.updated_event.event_dict
@@ -120,7 +120,7 @@ def create_transaction(request, event_id):
         return JSONResponseBadRequest(json.dumps(result))
     except InsufficientCash as e:
         result = {
-            'error': unicode(e),
+            'error': unicode(e.message.decode('utf-8')),
             'updates': {
                 'user': [
                     e.updated_user.statistics_dict
@@ -131,7 +131,7 @@ def create_transaction(request, event_id):
         return JSONResponseBadRequest(json.dumps(result))
     except InsufficientBets as e:
         result = {
-            'error': unicode(e),
+            'error': unicode(e.message.decode('utf-8')),
             'updates': {
                 'bets': [
                     e.updated_bet.bet_dict
@@ -142,13 +142,13 @@ def create_transaction(request, event_id):
         return JSONResponseBadRequest(json.dumps(result))
     except EventNotInProgress as e:
         result = {
-            'error': unicode(e),
+            'error': unicode(e.message.decode('utf-8')),
         }
 
         return JSONResponseBadRequest(json.dumps(result))
     except UnknownOutcome as e:
         result = {
-            'error': unicode(e),
+            'error': unicode(e.message.decode('utf-8')),
         }
 
         return JSONResponseBadRequest(json.dumps(result))
