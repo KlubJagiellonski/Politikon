@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from math import exp
 from unidecode import unidecode
+import pytz
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -158,15 +160,34 @@ class Event(models.Model):
             tch.EVENT_CANCELLED_REFUND_CHOICE.value,
             tch.EVENT_WON_PRIZE_CHOICE.value,
         )
-        for t in Transaction.objects.filter(event=self).\
-                exclude(type__in=skip_events).iterator():
+        points2 = [50] * (7 * 24)
+        dates2 = []
+        last_date = datetime.now().replace(tzinfo=pytz.UTC)
+        first_date = (last_date-relativedelta(weeks=1)).\
+            replace(minute=0, second=0, microsecond=0)
+        while first_date < last_date:
+            dates2.append(first_date)
+            first_date += relativedelta(hours=1)
+
+        for t in Transaction.objects.\
+                filter(event=self, date__gt=datetime.now()-
+                       relativedelta(weeks=2)).order_by('date').iterator():
+            if t.type in skip_events:
+                continue
             date = t.date
-            d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
+            d_date = date.replace(minute=0, second=0, microsecond=0)
             if t.type == tch.BUY_NO_CHOICE or \
                     t.type == tch.SELL_NO_CHOICE:
                 last_trans[d_date] = 100-t.price
             else:
                 last_trans[d_date] = t.price
+
+        for key, t in last_trans.iteritems():
+            points2[dates2.index(key)] = t
+
+        labels2 = []
+        for d in dates2:
+            labels2.append('%s %s (%s)' % (d.day, _MONTHS[d.month], d.hour))
 
         data = list(last_trans.iteritems())
         data = sorted(data, key=lambda x: x[0])
@@ -174,13 +195,16 @@ class Event(models.Model):
         labels = []
         points = []
         for kv in data:
+            print(kv)
             labels.append(str(kv[0].day) + ' %s' % _MONTHS[kv[0].month])
             points.append(kv[1])
 
         return {
             'id': self.id,
-            'labels': labels,
-            'points': points
+            'labels': labels2,
+            'points': points2
+            # 'labels': labels,
+            # 'points': points
         }
 
     def get_user_bet(self, user):
