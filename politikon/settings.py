@@ -3,6 +3,8 @@ import smartsettings
 import sys
 import urlparse
 
+from django.utils.translation import ugettext_lazy as _
+
 from celery.schedules import crontab
 from constance import config
 from datetime import timedelta
@@ -24,6 +26,15 @@ MANAGERS = ADMINS
 
 TIME_ZONE = 'Europe/Warsaw'
 LANGUAGE_CODE = 'pl'
+
+LOCALE_PATHS = [
+    '/app/locale',
+]
+
+LANGUAGES = [
+    ('pl', _('Polish')),
+    ('en', _('English')),
+]
 
 SITE_ID = 1
 
@@ -209,6 +220,7 @@ MIDDLEWARE_CLASSES = (
     # 'politikon.modules.BasicAuthMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

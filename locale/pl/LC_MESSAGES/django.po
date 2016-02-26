@@ -1,0 +1,88 @@
+# Politikon
+# Copyright (C) 2016
+# This file is distributed under the same license as the 0.1 package.
+# Piotr Pęczek <ppeczek@gmail.com>, 2016
+#
+#, fuzzy
+msgid "Politikon"
+msgstr "Politikon"
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-26 00:29+0100\n"
+"PO-Revision-Date: 2016-02-26 00:29+0100\n"
+"Last-Translator: Piotr Pęczek <ppeczek@gmail.com>\n"
+"Language-Team: none\n"
+"Language: PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: accounts/admin.py:79 accounts/admin.py:87
+msgid "Permissions"
+msgstr "Uprawnienia"
+
+#: accounts/admin.py:80
+msgid "Important dates"
+msgstr "Ważne daty"
+
+#: accounts/pipeline.py:62 accounts/pipeline.py:97
+msgid "Your account is inactive. Wait for administrator approval."
+msgstr "Twoje konto jest nieaktywne. Zaczekaj na aktywację przez administratora."
+
+#: accounts/views.py:66
+msgid "user's data updated"
+msgstr "dane użytkownika zaktualizowane"
+
+#: accounts/views.py:72
+msgid "e-mail updated"
+msgstr "e-mail zaktualizowany"
+
+#: accounts/views.py:74
+msgid "e-mails doesn't match"
+msgstr "e-maile się nie zgadzają"
+
+#: accounts/views.py:81
+msgid "password updated"
+msgstr "hasło zaktualizowane"
+
+#: accounts/views.py:83
+msgid "passwords doesn't match"
+msgstr "hasła się nie zgadzają"
+
+#: accounts/views.py:85
+msgid "wrong old password"
+msgstr "złe stare hasło"
+
+#: events/managers.py:87
+msgid "Requested event does not exist."
+msgstr "Wydarzenie nie istnieje."
+
+#: events/managers.py:90
+msgid "Event is no longer in progress."
+msgstr "Wydarzenie zostało zakończone"
+
+#: events/managers.py:123 events/managers.py:182
+msgid "Price has changed."
+msgstr "Cena uległa zmianie."
+
+#: events/managers.py:129
+msgid "You don't have enough cash."
+msgstr "Nie masz wystarczająco reputów."
+
+#: events/managers.py:188
+msgid "You don't have enough shares."
+msgstr "Nie masz wystarczająco zakładów."
+
+#: events/views.py:100
+msgid "Something went wrong, try again in a few seconds."
+msgstr "Spróbuj ponownie."
+
+#: politikon/settings.py:31
+msgid "Polish"
+msgstr "Polski"
+
+#: politikon/settings.py:32
+msgid "English"
+msgstr "Angielski"

@@ -8,7 +8,7 @@ RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo 
 
 RUN apt-get update -y -qq --fix-missing
 RUN apt-get upgrade -y -qq
-RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.4 libpq-dev git libmemcached-dev curl openssh-server mercurial
+RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.4 libpq-dev git libmemcached-dev curl openssh-server mercurial gettext vim
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:pass' | chpasswd
