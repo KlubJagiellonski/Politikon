@@ -214,8 +214,8 @@ class UserProfile(AbstractBaseUser):
             return self.facebook_user.profile_photo
 
     def topup_cash(self, amount):
-        self.total_cash = F('total_cash') + amount
-        self.total_given_cash = F('total_given_cash') + amount
+        self.total_cash += amount
+        self.total_given_cash += amount
 
         from events.models import Transaction
 

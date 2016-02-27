@@ -90,7 +90,7 @@ class MyUserAdmin(UserAdmin):
                                        'is_vip')}))
 
     class Topup:
-        def __call__(self, request, queryset):
+        def __call__(self, modeladmin, request, queryset):
             for user in queryset:
                 user.topup_cash(config.ADMIN_TOPUP)
 
