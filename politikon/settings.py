@@ -356,3 +356,6 @@ JINJA2_EXTENSIONS = [
 GRAPPELLI_ADMIN_TITLE = 'Politikon'
 GRAPPELLI_AUTOCOMPLETE_LIMIT = 10
 # GRAPPELLI_SWITCH_USER = True
+
+import djcelery
+djcelery.setup_loader()

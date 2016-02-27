@@ -38,6 +38,11 @@ class EventManager(models.Manager):
             excluded_outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
+    def get_in_progress(self):
+        from events.models import Event
+        return self.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS)
+
+
     def get_featured_events(self):
         return self.ongoing_only_queryset().filter(is_featured=True).\
             order_by('estimated_end_date')
@@ -212,6 +217,7 @@ class BetManager(models.Manager):
         user.save(update_fields=['reputation'])
 
         event.increment_quantity(for_outcome, by_amount=-quantity)
+        event.increment_turnover(quantity)
         event.save(force_update=True)
 
         # from canvas.models import ActivityLog

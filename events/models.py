@@ -157,13 +157,12 @@ class Event(models.Model):
         last_trans = {}
         tch = Transaction.TRANSACTION_TYPE_CHOICES
         skip_events = (
-            tch.EVENT_CANCELLED_DEBIT_CHOICE,
-            tch.EVENT_CANCELLED_REFUND_CHOICE,
-            tch.EVENT_WON_PRIZE_CHOICE,
+            tch.EVENT_CANCELLED_DEBIT_CHOICE.value,
+            tch.EVENT_CANCELLED_REFUND_CHOICE.value,
+            tch.EVENT_WON_PRIZE_CHOICE.value,
         )
-        for t in Transaction.objects.filter(event=self).iterator():
-            if t.type in skip_events:
-                continue
+        for t in Transaction.objects.filter(event=self).\
+                exclude(type__in=skip_events).iterator():
             date = t.date
             d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
             if t.type == tch.BUY_NO_CHOICE or \
@@ -401,6 +400,18 @@ class Event(models.Model):
         return events
 
 
+class RelatedEvent(models.Model):
+    """
+    Relates between events. Relates are one side: one element in this model
+    means that "related" event is on the list "Powiązane Wydarzenia" "event".
+    Other side relation need another element.
+    """
+    event = models.ForeignKey(Event, null=True, related_name='these_events',
+                              related_query_name='this_event')
+    related = models.ForeignKey(Event, null=True, related_name='relates',
+                                related_query_name='related')
+
+
 class Bet(models.Model):
 
     BET_OUTCOME_CHOICES = Choices(
@@ -578,15 +589,3 @@ class Transaction(models.Model):
     def __unicode__(self):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
                                  label, self.user)
-
-
-class RelatedEvent(models.Model):
-    """
-    Relates between events. Relates are one side: one element in this model
-    means that "related" event is on the list "Powiązane Wydarzenia" "event".
-    Other side relation need another element.
-    """
-    event = models.ForeignKey(Event, null=True, related_name='these_events',
-                              related_query_name='this_event')
-    related = models.ForeignKey(Event, null=True, related_name='relates',
-                                related_query_name='related')
