@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from math import exp
 from unidecode import unidecode
+import pytz
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -158,24 +160,59 @@ class Event(models.Model):
             tch.EVENT_CANCELLED_REFUND_CHOICE.value,
             tch.EVENT_WON_PRIZE_CHOICE.value,
         )
-        for t in Transaction.objects.filter(event=self).\
-                exclude(type__in=skip_events).iterator():
+
+        dates = []
+        last_date = datetime.now().\
+            replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+        first_date = (last_date-relativedelta(weeks=2)).\
+            replace(hour=0, minute=0, second=0, microsecond=0)
+        if (self.created_date > first_date):
+            first_date = self.created_date.\
+                replace(hour=0, minute=0, second=0, microsecond=0)
+            last_value = 50
+        else:
+            first_transactions = Transaction.objects.\
+                filter(date__lt=first_date, event=self).order_by('-date')
+            if len(first_transactions) > 0:
+                last_transaction = first_transactions[0]
+                if last_transaction.type == tch.BUY_NO_CHOICE or \
+                        last_transaction.type == tch.SELL_NO_CHOICE:
+                    last_value = 100 - last_transaction.price
+                else:
+                    last_value = last_transaction.price
+            else:
+                last_value = 50
+        while first_date < last_date:
+            dates.append(first_date)
+            first_date += relativedelta(days=1)
+
+        points = [None] * len(dates)
+        for t in Transaction.objects.\
+                filter(event=self, date__gt=datetime.now()-
+                       relativedelta(weeks=2), date__lt=last_date).\
+                order_by('date').iterator():
+            if t.type in skip_events:
+                continue
             date = t.date
             d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
             if t.type == tch.BUY_NO_CHOICE or \
                     t.type == tch.SELL_NO_CHOICE:
-                last_trans[d_date] = 100-t.price
+                last_trans[d_date] = 100 - t.price
             else:
                 last_trans[d_date] = t.price
 
-        data = list(last_trans.iteritems())
-        data = sorted(data, key=lambda x: x[0])
+        for key, t in last_trans.iteritems():
+            points[dates.index(key)] = t
+
+        for idx, point in enumerate(points):
+            if point is None:
+                points[idx] = last_value
+            else:
+                last_value = point
 
         labels = []
-        points = []
-        for kv in data:
-            labels.append(str(kv[0].day) + ' %s' % _MONTHS[kv[0].month])
-            points.append(kv[1])
+        for d in dates:
+            labels.append(str(d.day) + ' %s' % _MONTHS[d.month])
 
         return {
             'id': self.id,
