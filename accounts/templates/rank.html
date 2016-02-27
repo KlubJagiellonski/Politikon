@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load user %}
 
 {% block content %}
 
@@ -14,28 +15,23 @@
     <div class="zakladki-content">
         <article id="7dni">
             {% for user in object_list %}
-            <a href="#"><div class="ranking-event">
-                    <div class="lewa{% if user.is_vip %} uservip{% endif %}">
-                        <p class="rank">{{ forloop.counter }}</p>
-                        <img src="{{ user.get_avatar_url }}"/>
-                        <p class="nickname">{{ user.username }}</p>
-                    </div>
-                    <div class="prawa">
-                        <p class="rank-wallet">{{ user.portfolio_value }}</p>
-                        <p class="rank-freereputy">{{ user.total_cash_formatted }}</p>
-                        <p class="rank-reputation">{{ user.reputation_formatted }}</p>
-                    </div>
-            </div></a>
+            {% user_rank user %}
             {% endfor %}
-            <a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>
+            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="miesiac">
-            <a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>
+            {% for user in object_list %}
+            {% user_rank user %}
+            {% endfor %}
+            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="calosc">
-            <a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>
+            {% for user in object_list %}
+            {% user_rank user %}
+            {% endfor %}
+            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
     </div>
 </section>

@@ -105,10 +105,31 @@ class UserProfileManager(BaseUserManager):
         return self.get_queryset().filter(is_staff=True, is_admin=True)
 
     def get_best_weekly(self):
-        return self.get_users().order_by('-weekly_result')
+        return self.get_users().filter(weekly_result__isnull=False).\
+            order_by('-weekly_result')
 
     def get_best_monthly(self):
-        return self.get_users().order_by('-monthly_result')
+        return self.get_users().filter(monthly_result__isnull=False).\
+            order_by('-monthly_result')
 
     def get_best_overall(self):
         return self.get_users().order_by('-total_given_cash')
+
+    def get_user_positions(self, user):
+        best_weekly = list(self.get_best_weekly())
+        best_monthly = list(self.get_best_monthly())
+        best_overall = list(self.get_best_overall())
+        week_rank = "-"
+        month_rank = "-"
+        overall_rank = "-"
+        if user in best_weekly:
+            week_rank = best_weekly.index(user) + 1
+        if user in best_monthly:
+            month_rank = best_monthly.index(user) + 1
+        if user in best_overall:
+            overall_rank = best_overall.index(user) + 1
+        return {
+            'week_rank': week_rank,
+            'month_rank': month_rank,
+            'overall_rank': overall_rank
+        }

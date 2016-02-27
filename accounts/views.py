@@ -59,6 +59,33 @@ class UserProfileDetailView(DetailView):
     def get_object(self, **kwargs):
         return self.request.user
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserProfileDetailView, self).\
+            get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update(UserProfile.objects.get_user_positions(user))
+        return context
+
+
+class UserDetailView(DetailView):
+    model = UserProfile
+    template_name = 'userprofile_detail.html'
+
+    def get_object(self, **kwargs):
+        """
+        User detail
+        :return:
+        :rtype: QuerySet
+        """
+        user_detail = super(UserDetailView, self).get_object(**kwargs)
+        return user_detail
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserDetailView, self).get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update(UserProfile.objects.get_user_positions(user))
+        return context
+
 
 class UsersListView(ListView):
     """
@@ -74,18 +101,3 @@ class UsersListView(ListView):
         """
         return UserProfile.objects.filter(is_active=True,
                                           is_deleted=False)[:30]
-
-
-class UserDetailView(DetailView):
-    model = UserProfile
-    template_name = 'userprofile_detail.html'
-
-    def get_object(self, **kwargs):
-        """
-        User detail
-        :return:
-        :rtype: QuerySet
-        """
-        user_detail = super(UserDetailView, self).get_object(**kwargs)
-#        user_detail.bets.all()
-        return user_detail

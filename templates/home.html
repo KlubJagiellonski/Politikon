@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load user %}
 
 {% block content %}
 
@@ -64,35 +65,17 @@
         <div id="userrank_content" class="zakladki-content">
             <article id="tydzien">
                 {% for user in best_weekly %}
-                <div class="userrank{% if user.is_vip %} uservip{% endif %}">
-                    <a href="{{ user.get_absolute_url }}">
-                        <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
-                        <div class="wolnereputy"><span class="astable">{{ user.reputation_formatted }}</span></div>
-                        <div class="username">{{ user.name|truncatechars:12 }}</div>
-                    </a>
-                </div>
+                {% user_home user %}
                 {% endfor %}
             </article>
             <article id="miesiac">
                 {% for user in best_monthly %}
-                <div class="userrank{% if user.is_vip %} uservip{% endif %}">
-                    <a href="{{ user.get_absolute_url }}">
-                        <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
-                        <div class="wolnereputy"><span class="astable">{{ user.reputation_formatted }}</span></div>
-                        <div class="username">{{ user.name|truncatechars:12 }}</div>
-                    </a>
-                </div>
+                {% user_home user %}
                 {% endfor %}
             </article>
             <article id="calosc">
                 {% for user in best_overall %}
-                <div class="userrank{% if user.is_vip %} uservip{% endif %}">
-                    <a href="{{ user.get_absolute_url }}">
-                        <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
-                        <div class="wolnereputy"><span class="astable">{{ user.reputation_formatted }}</span></div>
-                        <div class="username">{{ user.name|truncatechars:12 }}</div>
-                    </a>
-                </div>
+                {% user_home user %}
                 {% endfor %}
             </article>
         </div>
