@@ -1,12 +1,15 @@
+from collections import defaultdict
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from django.contrib import auth
 from django.db import models
-# from events.models import Event, Bet, Transaction
-from collections import defaultdict
+from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientCash, InsufficientBets
-from django.utils.translation import ugettext as _
 # from vendor.Pubnub import Pubnub as PubNub
+
 
 BET_OUTCOMES_DICT = {
     'YES': True,
@@ -268,4 +271,16 @@ class BetManager(models.Manager):
 
 
 class TransactionManager(models.Manager):
-    pass
+    def get_user_transactions(self, user):
+        from events.models import Translation
+        return self.get_queryset().filter(user=user).\
+            exclude(type=Transaction.TRANSACTION_TYPE_CHOICES.
+                    TOPPED_UP_BY_APP.value)
+
+    def get_weekly_user_transactions(self, user):
+        last_week = datetime.now() - relativedelta(weeks=1)
+        return self.get_user_transactions(user).filter(date__gt=last_week)
+
+    def get_monthly_user_transactions(self, user):
+        last_month = datetime.now() - relativedelta(months=1)
+        return self.get_user_transactions(user).filter(date__gt=last_month)

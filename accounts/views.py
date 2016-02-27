@@ -17,7 +17,7 @@ class UserUpdateView(MultiFormsView):
     User settings
     """
     # TODO: nie do końca o to chodziło, ale jest lepiej
-    template_name = 'accounts/user_settings.html'
+    template_name = 'user_settings.html'
     form_classes = {
         'main': UserProfileForm,
         'email': UserProfileEmailForm,
@@ -49,52 +49,12 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
 
-def user_settings_view(request):
-
-    user = get_object_or_404(UserProfile, pk=request.session['_auth_user_id'])
-    # messages musi zawierac tuples: tresc i czy to jest komunikat o bladzie,
-    # np: ("niepoprawne stare haslo", True)
-    messages = []
-    if request.method == 'POST':
-        if request.FILES.get('avatar'):
-            user.avatar = request.FILES.get('avatar')
-        if request.POST.get('name'):
-            user.name = request.POST['name']
-            user.description = request.POST['description']
-            user.web_site = request.POST['web_site']
-            user.save()
-            messages.append((_("user's data updated"), False))
-        else:
-            if request.POST.get('checkemail'):
-                if request.POST.get('email') == request.POST.get('checkemail'):
-                    user.email = request.POST.get('email')
-                    user.save()
-                    messages.append((_("e-mail updated"), False))
-                else:
-                    messages.append((_("e-mails doesn't match"), False))
-            if request.POST.get('oldpass') and request.POST.get('newpass'):
-                if user.check_password(request.POST.get('oldpass')):
-                    if request.POST.get('newpass') == request.POST.\
-                            get('checkpass'):
-                        user.set_password(request.POST.get('newpass'))
-                        user.save()
-                        messages.append((_("password updated"), False))
-                    else:
-                        messages.append((_("passwords doesn't match"), True))
-                else:
-                    messages.append((_('wrong old password'), True))
-    context = {
-        'user': user,
-        'messages': messages,
-    }
-    return render(request, 'accounts/user_settings.html', context)
-
-
 class UserProfileDetailView(DetailView):
     """
     User profile
     """
     model = UserProfile
+    template_name = 'userprofile_detail.html'
 
     def get_object(self, **kwargs):
         return self.request.user
@@ -104,7 +64,7 @@ class UsersListView(ListView):
     """
     Users list in rank
     """
-    template_name = 'accounts/rank.html'
+    template_name = 'rank.html'
 
     def get_queryset(self):
         """
@@ -118,6 +78,7 @@ class UsersListView(ListView):
 
 class UserDetailView(DetailView):
     model = UserProfile
+    template_name = 'userprofile_detail.html'
 
     def get_object(self, **kwargs):
         """

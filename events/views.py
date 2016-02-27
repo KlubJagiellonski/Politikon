@@ -15,8 +15,8 @@ from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
 from .models import Event, Bet
 from .utils import create_bets_dict
-
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
+
 
 logger = logging.getLogger(__name__)
 

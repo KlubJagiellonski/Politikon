@@ -1,10 +1,12 @@
-from celery import task
-from constance import config
+from collections import defaultdict
+import logging
+
 from django.db import transaction
 
-from collections import defaultdict
+from celery import task
+from constance import config
 
-import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -74,3 +76,54 @@ def create_accounts_snapshot():
 
     logger.debug("'accounts:tasks:create_accounts_snapshot' finished \
                  snapshotting Users.")
+
+@task
+def update_weekly_result():
+    from events.models import Transaction
+    tch = Transaction.TRANSACTION_TYPE_CHOICES
+    income_transactions = (
+        tch.SELL_YES,
+        tch.SELL_NO,
+        tch.EVENT_CANCELLED_REFUND_CHOICE,
+        tch.EVENT_WON_PRIZE_CHOICE,
+    )
+    debit_transactions = (
+        tch.BUY_YES,
+        tch.BUY_NO,
+        tch.EVENT_CANCELLED_DEBIT_CHOICE,
+    )
+    result = 0
+    for user in User.objects.get_users():
+        for t in Transaction.objects.get_weekly_user_transactions(user):
+            if t in income_transactions:
+                result += t.price
+            elif t in debit_transactions:
+                result -= t.price
+        user.weekly_result = result
+        user.save()
+
+
+@task
+def update_monthly_result():
+    from events.models import Transaction
+    tch = Transaction.TRANSACTION_TYPE_CHOICES
+    income_transactions = (
+        tch.SELL_YES,
+        tch.SELL_NO,
+        tch.EVENT_CANCELLED_REFUND_CHOICE,
+        tch.EVENT_WON_PRIZE_CHOICE,
+    )
+    debit_transactions = (
+        tch.BUY_YES,
+        tch.BUY_NO,
+        tch.EVENT_CANCELLED_DEBIT_CHOICE,
+    )
+    result = 0
+    for user in User.objects.get_users():
+        for t in Transaction.objects.get_weekly_user_transactions(user):
+            if t in income_transactions:
+                result += t.price
+            elif t in debit_transactions:
+                result -= t.price
+        user.weekly_result = result
+        user.save()

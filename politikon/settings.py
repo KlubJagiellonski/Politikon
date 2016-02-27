@@ -65,6 +65,7 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_IMPORTS = ("accounts.tasks", "events.tasks")
 
 CELERYBEAT_SCHEDULE = {
+    # TODO: co to jest?
     'update_portfolio_values': {
         'task': 'accounts.tasks.update_portfolio_value',
         'schedule': timedelta(minutes=1)
@@ -91,7 +92,19 @@ CELERYBEAT_SCHEDULE = {
     # },
     'topup_accounts_task': {
         'task': 'accounts.tasks.topup_accounts_task',
-        'schedule': crontab(minute=0, hour=0)
+        'schedule': crontab(hour=0, minute=0)
+    },
+    'calculate_price_change': {
+        'task': 'events.tasks.calculate_price_change',
+        'schedule': crontab(hour=0, minute=0)
+    },
+    'update_weekly_result': {
+        'task': 'accounts.tasks.update_weekly_result',
+        'schedule': crontab(0, 0, day_of_week=1)
+    },
+    'update_monthly_result': {
+        'task': 'accounts.tasks.update_monthly_result',
+        'schedule': crontab(0, 0, day_of_month=1)
     },
 }
 

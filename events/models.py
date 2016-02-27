@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from math import exp
+from unidecode import unidecode
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
-
 from django.template.defaultfilters import slugify
-from unidecode import unidecode
 
-from math import exp
-
+from .exceptions import UnknownOutcome
+from .managers import EventManager, BetManager, TransactionManager
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
-from .exceptions import UnknownOutcome
-
 from politikon.choices import Choices
-from .managers import EventManager, BetManager, TransactionManager
 
 
 _MONTHS = {

@@ -46,8 +46,9 @@ class HomeView(TemplateView):
             'popular_events': popular_events,
             'json_data': json_data,
             'config': config,
-            'users': UserProfile.objects.filter(is_active=True,
-                                                is_deleted=False)[:30],
+            'best_weekly': UserProfile.objects.get_best_weekly()[:10],
+            'best_monthly': UserProfile.objects.get_best_monthly()[:10],
+            'best_overall': UserProfile.objects.get_best_overall()[:10]
         })
         return context
 

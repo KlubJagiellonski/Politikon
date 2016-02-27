@@ -62,6 +62,10 @@ class UserProfile(AbstractBaseUser):
     reputation = models.DecimalField(u"reputation", default=100, max_digits=12,
                                      decimal_places=2,)
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
+    weekly_result = models.IntegerField(u"wynik tygodniowy", null=True,
+                                        blank=True)
+    monthly_result = models.IntegerField(u"wynik miesięczny", null=True,
+                                        blank=True)
 
     web_site = models.URLField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
