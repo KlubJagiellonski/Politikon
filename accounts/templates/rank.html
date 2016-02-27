@@ -14,14 +14,14 @@
     <div class="clr"></div>
     <div class="zakladki-content">
         <article id="7dni">
-            {% for user in object_list %}
+            {% for user in best_weekly %}
             {% user_rank user %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="miesiac">
-            {% for user in object_list %}
+            {% for user in best_monthly %}
             {% user_rank user %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}

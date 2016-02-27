@@ -99,5 +99,12 @@ class UsersListView(ListView):
         :return:
         :rtype: QuerySet
         """
-        return UserProfile.objects.filter(is_active=True,
-                                          is_deleted=False)[:30]
+        return UserProfile.objects.get_best_overall()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UsersListView, self).get_context_data(*args, **kwargs)
+        context.update({
+            'best_weekly': UserProfile.objects.get_best_weekly(),
+            'best_monthly': UserProfile.objects.get_best_monthly()
+        })
+        return context
