@@ -64,19 +64,21 @@ class MyUserAdmin(UserAdmin):
     add_form = UserCreationForm
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
-                    'is_staff', 'is_deleted', 'facebook_user', 'twitter_user')
+                    'is_vip', 'is_staff', 'is_deleted', 'facebook_user',
+                    'twitter_user')
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )
     filter_horizontal = ()
 
-    actions = ['topup', 'set_active', 'block']
+    actions = ['topup', 'set_active', 'make_vip', 'block']
 
     fieldsets = (
         (None, {'fields': ('username', 'password', 'email')}),
         (None, {'fields': ('name', )}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff',
+                                       'is_vip')}),
         (_('Important dates'), {'fields': ('last_login', )}), )
 
     add_fieldsets = (
@@ -84,7 +86,8 @@ class MyUserAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2', 'email'),
             'classes': ('wide', )
         }), (None, {'fields': ('name', )}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff')}))
+        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff',
+                                       'is_vip')}))
 
     class Topup:
         def __call__(self, request, queryset):
@@ -102,6 +105,12 @@ class MyUserAdmin(UserAdmin):
             user.is_active = True
             user.save(update_fields=['is_active'])
     set_active.short_description = 'Aktywuj wybrane konta'
+
+    def make_vip(modeladmin, request, queryset):
+        for user in queryset:
+            user.is_vip = True
+            user.save(update_fields=['is_vip'])
+    make_vip.short_description = 'Uczyń użytkownikiem VIP'
 
     def block(modeladmin, request, queryset):
         for user in queryset:
