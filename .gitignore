@@ -7,3 +7,4 @@ src/smartsettings
 static_build/uploads/*
 static/.webassets-cache/*
 static/uploads/*
+static_build
