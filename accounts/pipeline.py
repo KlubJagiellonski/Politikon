@@ -55,9 +55,9 @@ def save_profile(strategy, user, response, details, is_new=False,
                     pass
                 else:
                     if user.is_active:
-                        playing_friends_count += 1
+                        playing_followers_count += 1
 
-            if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
+            if playing_followers_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
                 messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
             else:
