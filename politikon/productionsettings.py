@@ -24,8 +24,8 @@ TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
 OAUTH_TOKENS_HISTORY = True                                        # to keep in DB expired access tokens
 OAUTH_TOKENS_TWITTER_CLIENT_ID = TWITTER_CONSUMER_KEY
 OAUTH_TOKENS_TWITTER_CLIENT_SECRET = TWITTER_CONSUMER_SECRET
-OAUTH_TOKENS_TWITTER_USERNAME = ''                                 # user login
-OAUTH_TOKENS_TWITTER_PASSWORD = ''                                 # user password
+OAUTH_TOKENS_TWITTER_USERNAME = os.environ.get("TWITTER_USERNAME")                                 # user login
+OAUTH_TOKENS_TWITTER_PASSWORD = os.environ.get("TWITTER_PASSWORD")                                 # user password
 
 SOCIAL_AUTH_TWITTER_KEY = TWITTER_CONSUMER_KEY
 SOCIAL_AUTH_TWITTER_SECRET = TWITTER_CONSUMER_SECRET
