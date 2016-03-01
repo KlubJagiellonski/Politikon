@@ -51,12 +51,12 @@
         </div>
     </div>
 </section>
-{% comment %}
 <section id="bet-desc" class="astable">
     <div class="lewa">
-        <div class="astable share-zone">TODO -- tutaj widżety social media --</div>
+{#        <div class="astable share-zone">TODO -- tutaj widżety social media --</div>#}
         <p>{{ event.description}}</p>
     </div>
+    {% comment %}
     <div class="prawa rss-related">
         <div class="header">Na ten temat w mediach <span class="rss-reload prawa"></span></div>
         <div class="rss-news">
@@ -82,8 +82,8 @@
         </div>
 
     </div>
+    {% endcomment %}
 </section>
-{% endcomment %}
 {% if related_events %}
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
