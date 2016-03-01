@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 
 from django.conf import settings
@@ -66,7 +67,7 @@ def save_profile(strategy, user, response, details, is_new=False,
                     for admin in UserProfile.objects.get_admins():
                         if admin.email:
                             recipent_list.append(admin.email)
-                    if len(recipents) > 0:
+                    if len(recipent_list) > 0:
                         subject = u'Politikon - nowy użytkownik'
                         message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         from_email = settings.DEFAULT_EMAIL_FROM
@@ -111,7 +112,7 @@ def save_profile(strategy, user, response, details, is_new=False,
                     for admin in UserProfile.objects.get_admins():
                         if admin.email:
                             recipent_list.append(admin.email)
-                    if len(recipents) > 0:
+                    if len(recipent_list) > 0:
                         subject = u'Politikon - nowy użytkownik'
                         message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         from_email = settings.DEFAULT_EMAIL_FROM
