@@ -108,7 +108,7 @@
         </article>
 
         <article id="historiatransakcji">
-            {% for transaction in object.transactions.all %}
+            {% for transaction in object.transactions.all reversed %}
             <div class="history-event">
                 <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
                 <div class="prawa">
