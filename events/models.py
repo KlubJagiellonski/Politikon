@@ -34,6 +34,9 @@ _MONTHS = {
 
 
 class Event(models.Model):
+    """
+    Event model represents exactly real question which you can answer YES or NO.
+    """
 
     EVENT_OUTCOME_CHOICES = Choices(
         ('IN_PROGRESS', 1, u'w trakcie'),
@@ -46,6 +49,8 @@ class Event(models.Model):
         EVENT_OUTCOME_CHOICES.FINISHED_YES: True,
         EVENT_OUTCOME_CHOICES.FINISHED_NO: False
     }
+
+    PRIZE_FOR_WINNING = 100
 
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -356,7 +361,7 @@ class Event(models.Model):
             return False
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
-                bet.rewarded_total += 100 * bet.has
+                bet.rewarded_total += self.PRIZE_FOR_WINNING * bet.has
                 bet.user.total_cash += bet.rewarded_total
                 bet.is_new_resolved = True
                 bet.user.save()
@@ -560,10 +565,7 @@ class Bet(models.Model):
         """
         if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
                 IN_PROGRESS:
-            if self.outcome:
-                return self.has * self.event.current_sell_for_price
-            else:
-                return self.has * self.event.current_sell_against_price
+            return self.has * Event.PRIZE_FOR_WINNING
         else:
             return 0
 
