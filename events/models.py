@@ -540,7 +540,7 @@ class Bet(models.Model):
         if wallet_change > 0:
             sign = '+'
 
-        return '{}{}'.format(sign, wallet_change)
+        return '{}{:.1f}'.format(sign, wallet_change)
 
     def get_invested(self):
         """

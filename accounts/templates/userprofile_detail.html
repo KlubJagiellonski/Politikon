@@ -73,7 +73,7 @@
         <article id="zawartoscportfela">
             {% for bet in object.bets.get_in_progress %}
             <div class="betinwallet betresult new">
-                <a href="#">
+                <a href="{{ bet.event.get_relative_url }}">
                     <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
                     <div class="status">
                         <h3 class="skroc">{{ bet.event }}</h3>
