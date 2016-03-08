@@ -3,6 +3,7 @@ import json
 from constance import config
 
 from django.views.generic import TemplateView
+from django.http import HttpResponse
 
 from accounts.models import UserProfile
 from events.models import Event
@@ -57,3 +58,19 @@ class HomeView(TemplateView):
         for ev in events:
             data.append(ev.get_chart_points())
         return json.dumps(data)
+
+
+def acme_challenge(request):
+    """
+
+    :param request:
+    :type request: HttpRequest
+    :return:
+    :rtype: HttpResponse
+    """
+    response = 'Make sure your web server displays the following content at\n' \
+        'http://www.politikon.org.pl/.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvw' \
+        'sx3GQjYiwh922XI before continuing:\n\n' \
+        'lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI.gH-uL0atBurquAoTyPdNCmWNE4OqrHNOWrVMMu94hrU'
+
+    return HttpResponse(response)
