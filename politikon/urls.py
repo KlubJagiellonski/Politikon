@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
-from .views import HomeView
+from .views import HomeView, acme_challenge
 
 from django.contrib import admin
 admin.autodiscover()
@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
+    url(r'^.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI$',
+        acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')
 )
