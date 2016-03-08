@@ -71,7 +71,8 @@ def acme_challenge(request):
     :return:
     :rtype: HttpResponse
     """
-    response = 'lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI.gH-uL0atBurquAoTyPdNCmWNE4OqrHNOWrVM' \
-               'Mu94hrU'
+    response = '44jmcY27vf0Xqc44v7-kQx0O1ANUx5OeHysmzhxe_cc.gH-uL0atBurquAoT' \
+               'yPdNCmWNE4OqrHNOWrVMMu94hrU'
+
 
     return HttpResponse(response)

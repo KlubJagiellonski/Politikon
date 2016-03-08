@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
-    url(r'^.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI$',
+    url(r'^.well-known/acme-challenge/44jmcY27vf0Xqc44v7-kQx0O1ANUx5OeHysmzhxe_cc',
         acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')
