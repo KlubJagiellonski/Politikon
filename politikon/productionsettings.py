@@ -91,5 +91,3 @@ AWS_QUERYSTRING_AUTH = False
 
 STATIC_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
 ASSETS_AUTO_BUILD = False
-
-SSLIFY_DISABLE = True
