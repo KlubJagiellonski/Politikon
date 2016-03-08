@@ -62,15 +62,16 @@ class HomeView(TemplateView):
 
 def acme_challenge(request):
     """
+    Make sure your web server displays the following content at
+    http://www.politikon.org.pl/.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI
+    before continuing:
 
     :param request:
     :type request: HttpRequest
     :return:
     :rtype: HttpResponse
     """
-    response = 'Make sure your web server displays the following content at\n' \
-        'http://www.politikon.org.pl/.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvw' \
-        'sx3GQjYiwh922XI before continuing:\n\n' \
-        'lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI.gH-uL0atBurquAoTyPdNCmWNE4OqrHNOWrVMMu94hrU'
+    response = 'lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI.gH-uL0atBurquAoTyPdNCmWNE4OqrHNOWrVM' \
+               'Mu94hrU'
 
     return HttpResponse(response)
