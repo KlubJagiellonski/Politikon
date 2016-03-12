@@ -31,7 +31,7 @@ class EventManager(models.Manager):
     def get_events(self, mode):
         from events.models import Event
         if mode == 'popular':
-            return self.ongoing_only_queryset().order_by('turnover')
+            return self.ongoing_only_queryset().order_by('-turnover')
         elif mode == 'latest':
             return self.ongoing_only_queryset().order_by('-created_date')
         elif mode == 'changed':

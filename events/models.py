@@ -560,7 +560,7 @@ class Bet(models.Model):
         """
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
-        return self.has * self.bought_avg_price
+        return round(self.has * self.bought_avg_price, 1)
 
     def get_won(self):
         """
