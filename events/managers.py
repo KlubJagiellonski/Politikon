@@ -1,9 +1,9 @@
 from collections import defaultdict
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django.contrib import auth
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
@@ -272,15 +272,14 @@ class BetManager(models.Manager):
 
 class TransactionManager(models.Manager):
     def get_user_transactions(self, user):
-        from events.models import Translation
+        from events.models import Transaction
         return self.get_queryset().filter(user=user).\
-            exclude(type=Transaction.TRANSACTION_TYPE_CHOICES.
-                    TOPPED_UP_BY_APP.value)
+            exclude(type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
     def get_weekly_user_transactions(self, user):
-        last_week = datetime.now() - relativedelta(weeks=1)
+        last_week = now() - relativedelta(weeks=1)
         return self.get_user_transactions(user).filter(date__gt=last_week)
 
     def get_monthly_user_transactions(self, user):
-        last_month = datetime.now() - relativedelta(months=1)
+        last_month = now() - relativedelta(months=1)
         return self.get_user_transactions(user).filter(date__gt=last_month)

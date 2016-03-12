@@ -307,6 +307,11 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def increment_turnover(self, by_amount):
+        """
+        Turnover increases when for event occurs any operation (buy/sell)
+        :param by_amount: always 1 ???
+        :type by_amount: int
+        """
         self.turnover += by_amount
 
     def recalculate_prices(self):
