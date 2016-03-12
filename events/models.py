@@ -308,8 +308,8 @@ class Event(models.Model):
 
     def increment_turnover(self, by_amount):
         """
-        Turnover increases when for event occurs any operation (buy/sell)
-        :param by_amount: always 1 ???
+        Turnover increases +1 when operation buy or sell occurs
+        :param by_amount: operations count, usually 1
         :type by_amount: int
         """
         self.turnover += by_amount
