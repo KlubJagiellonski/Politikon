@@ -128,5 +128,5 @@ def update_monthly_result():
                 result += t.price
             elif t in debit_transactions:
                 result -= t.price
-        user.weekly_result = result
+        user.monthly_result = result
         user.save()
