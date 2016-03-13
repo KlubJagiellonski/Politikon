@@ -41,24 +41,32 @@ def calculate_price_change():
     logger.debug("'events:tasks:calculate_price_change' worker up")
     yesterday = now() - timedelta(days=1)
     tch = Transaction.TRANSACTION_TYPE_CHOICES
-    skip_events = (
-        tch.EVENT_CANCELLED_DEBIT_CHOICE.value,
-        tch.EVENT_CANCELLED_REFUND_CHOICE.value,
-        tch.EVENT_WON_PRIZE_CHOICE.value,
+    transaction_types = (
+        tch.BUY_YES,
+        tch.SELL_YES,
+        tch.BUY_NO,
+        tch.SELL_NO,
     )
     for event in Event.objects.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
-        transactions = Transaction.objects.filter(date__gt=yesterday).exclude(type__in=skip_events)
+        transactions = Transaction.objects.filter(
+            event=event,
+            date__lte=yesterday,
+            type__in=transaction_types,
+        ).order_by('-date')[:1]
+
         if transactions.exists():
             transaction = transactions[0]
-            if transaction.type == tch.BUY_NO_CHOICE or transaction.type == tch.SELL_NO_CHOICE:
-                value = Event.PRIZE_FOR_WINNING - transaction.price
-            else:
-                value = transaction.price
-            price_change = value - event.price_change
-            event.price_change = price_change
-            event.absolute_price_change = abs(price_change)
+            if transaction.type == tch.BUY_NO:
+                event.price_change = event.current_buy_against_price - transaction.price
+            elif transaction.type == tch.SELL_NO:
+                event.price_change = event.current_sell_against_price - transaction.price
+            elif transaction.type == tch.BUY_YES:
+                event.price_change = event.current_buy_for_price - transaction.price
+            elif transaction.type == tch.SELL_YES:
+                event.price_change = event.current_sell_for_price - transaction.price
+            event.absolute_price_change = abs(event.price_change)
             logger.debug(
                 "'events:tasks:calculate_price_change' changing price_change of event "
-                "<%s> to %s" % (unicode(event.pk), price_change)
+                "<%s> to %s" % (unicode(event.pk), event.price_change)
             )
             event.save()
