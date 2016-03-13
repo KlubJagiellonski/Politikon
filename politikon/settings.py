@@ -100,11 +100,11 @@ CELERYBEAT_SCHEDULE = {
     },
     'update_weekly_result': {
         'task': 'accounts.tasks.update_weekly_result',
-        'schedule': crontab(0, 0, day_of_week=1)
+        'schedule': crontab(minute=45)
     },
     'update_monthly_result': {
         'task': 'accounts.tasks.update_monthly_result',
-        'schedule': crontab(0, 0, day_of_month=1)
+        'schedule': crontab(minute=45)
     },
 }
 
