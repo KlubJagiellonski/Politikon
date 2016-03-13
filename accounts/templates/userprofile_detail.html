@@ -99,7 +99,7 @@
                         {{ bet.event.outcome_reason }}
                     </div>
                     <div class="status-change">
-                        zmiana portfela:
+                        zysk/strata:
                         <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
                         <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
                     </div>

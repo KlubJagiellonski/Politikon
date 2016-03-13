@@ -307,6 +307,11 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def increment_turnover(self, by_amount):
+        """
+        Turnover increases +1 when operation buy or sell occurs
+        :param by_amount: operations count, usually 1
+        :type by_amount: int
+        """
         self.turnover += by_amount
 
     def recalculate_prices(self):
@@ -555,7 +560,7 @@ class Bet(models.Model):
         """
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
-        return self.has * self.bought_avg_price
+        return round(self.has * self.bought_avg_price, 1)
 
     def get_won(self):
         """
