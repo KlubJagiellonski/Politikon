@@ -1,4 +1,3 @@
-from collections import defaultdict
 import logging
 
 from celery import task
@@ -6,7 +5,7 @@ from constance import config
 from django.db import transaction
 
 from accounts.models import UserProfile
-from events.models import Bet, Event, Transaction
+from events.models import Event, Transaction
 
 logger = logging.getLogger(__name__)
 
@@ -31,34 +30,22 @@ def topup_accounts_task():
 @task
 def update_portfolio_value():
     """
-    ???
+    Update all users portfolio_value
     """
     logger.debug("'accounts:tasks:update_portfolio_value' worker up")
 
-    users_value = defaultdict(float)
-
-    queryset = Bet.objects.select_related('event').\
-        filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS)
-    for bet in queryset.iterator():
-        price_field = "current_sell_for_price"
-        if bet.outcome is False:
-            price_field = "current_sell_against_price"
-
-        users_value[bet.user_id] += bet.has * getattr(bet.event, price_field)
-
-    logger.debug("'accounts:tasks:update_portfolio_value' setting 0 value portfolios.")
-    UserProfile.objects.all().\
-        exclude(portfolio_value=0., id__in=users_value.keys()).\
-        update(portfolio_value=0.)
-
-    logger.debug(
-        "'accounts:tasks:update_portfolio_value' updating portfolios value for %d users."
-        % len(users_value)
-    )
-    for user_id, user_value in users_value.iteritems():
-        UserProfile.objects.filter(id=user_id) \
-                    .exclude(portfolio_value=user_value) \
-                    .update(portfolio_value=user_value)
+    for user in UserProfile.objects.get_users().iterator():
+        portfolio_value = 0
+        # get all user bets for not resolved events and has > 0
+        for bet in user.bets.filter(has__gt=0).select_related('event').filter(
+            event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+        ).iterator():
+            if bet.outcome is False:
+                portfolio_value += bet.has * getattr(bet.event, "current_sell_against_price")
+            elif bet.outcome:
+                portfolio_value += bet.has * getattr(bet.event, "current_sell_for_price")
+        if user.portfolio_value != portfolio_value:
+            user.save(portfolio_value=portfolio_value)
 
     logger.debug("'accounts:tasks:update_portfolio_value' finished.")
 
@@ -83,7 +70,10 @@ def create_accounts_snapshot():
 
 
 @task
-def update_weekly_result():
+def update_users_classification():
+    """
+    Update weekly and monthly users classifications.
+    """
     tch = Transaction.TRANSACTION_TYPE_CHOICES
     income_transactions = (
         tch.SELL_YES,
@@ -96,37 +86,20 @@ def update_weekly_result():
         tch.BUY_NO,
         tch.EVENT_CANCELLED_DEBIT_CHOICE,
     )
-    result = 0
-    for user in UserProfile.objects.get_users():
-        for t in Transaction.objects.get_weekly_user_transactions(user):
+    for user in UserProfile.objects.get_users().iterator():
+        weekly_result = 0
+        for t in Transaction.objects.get_weekly_user_transactions(user).iterator():
             if t in income_transactions:
-                result += t.price
+                weekly_result += t.price
             elif t in debit_transactions:
-                result -= t.price
-        user.weekly_result = result
-        user.save()
+                weekly_result -= t.price
 
-
-@task
-def update_monthly_result():
-    tch = Transaction.TRANSACTION_TYPE_CHOICES
-    income_transactions = (
-        tch.SELL_YES,
-        tch.SELL_NO,
-        tch.EVENT_CANCELLED_REFUND_CHOICE,
-        tch.EVENT_WON_PRIZE_CHOICE,
-    )
-    debit_transactions = (
-        tch.BUY_YES,
-        tch.BUY_NO,
-        tch.EVENT_CANCELLED_DEBIT_CHOICE,
-    )
-    result = 0
-    for user in UserProfile.objects.get_users():
-        for t in Transaction.objects.get_weekly_user_transactions(user):
+        monthly_result = 0
+        for t in Transaction.objects.get_monthly_user_transactions(user).iterator():
             if t in income_transactions:
-                result += t.price
+                monthly_result += t.price
             elif t in debit_transactions:
-                result -= t.price
-        user.monthly_result = result
-        user.save()
+                monthly_result -= t.price
+
+        if user.weekly_result != weekly_result or user.monthly_result != monthly_result:
+            user.save(weekly_result=weekly_result, monthly_result=monthly_result)
