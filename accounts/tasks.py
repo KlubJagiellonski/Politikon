@@ -45,7 +45,8 @@ def update_portfolio_value():
             elif bet.outcome:
                 portfolio_value += bet.has * getattr(bet.event, "current_sell_for_price")
         if user.portfolio_value != portfolio_value:
-            user.save(portfolio_value=portfolio_value)
+            user.portfolio_value = portfolio_value
+            user.save(update_fields=['portfolio_value'])
 
     logger.debug("'accounts:tasks:update_portfolio_value' finished.")
 
@@ -102,4 +103,6 @@ def update_users_classification():
                 monthly_result -= t.price
 
         if user.weekly_result != weekly_result or user.monthly_result != monthly_result:
-            user.save(weekly_result=weekly_result, monthly_result=monthly_result)
+            user.weekly_result = weekly_result
+            user.monthly_result = monthly_result
+            user.save(update_fields=['weekly_result', 'monthly_result'])
