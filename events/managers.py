@@ -1,5 +1,5 @@
 from collections import defaultdict
-from dateutil.relativedelta import relativedelta
+from datetime import timedelta
 
 from django.contrib import auth
 from django.db import models
@@ -271,15 +271,26 @@ class BetManager(models.Manager):
 
 
 class TransactionManager(models.Manager):
+    """
+    Transactions Manager between user and event
+    """
+    def __init__(self):
+        """
+        set model as Transaction model
+        """
+        super(TransactionManager, self).__init__()
+
     def get_user_transactions(self, user):
+        # TODO: Gdzie umiescic import aby dzialal?
         from events.models import Transaction
-        return self.get_queryset().filter(user=user).\
-            exclude(type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
+        self.model = Transaction
+        return self.model.objects.filter(user=user).\
+            exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
     def get_weekly_user_transactions(self, user):
-        last_week = now() - relativedelta(weeks=1)
+        last_week = now() - timedelta(days=7)
         return self.get_user_transactions(user).filter(date__gt=last_week)
 
     def get_monthly_user_transactions(self, user):
-        last_month = now() - relativedelta(months=1)
+        last_month = now() - timedelta(days=30)
         return self.get_user_transactions(user).filter(date__gt=last_month)
