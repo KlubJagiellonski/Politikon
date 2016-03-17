@@ -90,17 +90,17 @@ def update_users_classification():
     for user in UserProfile.objects.get_users().iterator():
         weekly_result = 0
         for t in Transaction.objects.get_weekly_user_transactions(user).iterator():
-            if t in income_transactions:
-                weekly_result += t.price
-            elif t in debit_transactions:
-                weekly_result -= t.price
+            if t.type in income_transactions:
+                weekly_result += t.price * t.quantity
+            elif t.type in debit_transactions:
+                weekly_result -= t.price * t.quantity
 
         monthly_result = 0
         for t in Transaction.objects.get_monthly_user_transactions(user).iterator():
-            if t in income_transactions:
-                monthly_result += t.price
-            elif t in debit_transactions:
-                monthly_result -= t.price
+            if t.type in income_transactions:
+                monthly_result += t.price * t.quantity
+            elif t.type in debit_transactions:
+                monthly_result -= t.price * t.quantity
 
         if user.weekly_result != weekly_result or user.monthly_result != monthly_result:
             user.weekly_result = weekly_result
