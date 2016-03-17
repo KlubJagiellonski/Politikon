@@ -279,10 +279,11 @@ class TransactionManager(models.Manager):
         set model as Transaction model
         """
         super(TransactionManager, self).__init__()
-        from events.models import Transaction
-        self.model = Transaction
 
     def get_user_transactions(self, user):
+        # TODO: Gdzie umiescic import aby dzialal?
+        from events.models import Transaction
+        self.model = Transaction
         return self.model.objects.filter(user=user).\
             exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
