@@ -376,7 +376,7 @@ class Event(models.Model):
                     event=self,
                     type=Transaction.TRANSACTION_TYPE_CHOICES.EVENT_WON_PRIZE,
                     quantity=bet.has,
-                    price=bet.bought_avg_price
+                    price=self.PRIZE_FOR_WINNING
                 )
         return True
 
@@ -630,3 +630,15 @@ class Transaction(models.Model):
     def __unicode__(self):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
                                  label, self.user)
+
+    @property
+    def total(self):
+        """
+        Get total price for all quantity in transaction: total won, total bought, total sold
+        :return: total amount
+        :rtype: int
+        """
+        return self.quantity * self.price
+
+    class Meta:
+        ordering = ['-date']
