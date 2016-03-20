@@ -57,11 +57,11 @@ def calculate_price_change():
         if transactions.exists():
             transaction = transactions[0]
             if transaction.type == tch.BUY_NO:
-                event.price_change = event.current_buy_against_price - transaction.price
+                event.price_change = event.current_buy_against_price - abs(transaction.price)
             elif transaction.type == tch.SELL_NO:
                 event.price_change = event.current_sell_against_price - transaction.price
             elif transaction.type == tch.BUY_YES:
-                event.price_change = event.current_buy_for_price - transaction.price
+                event.price_change = event.current_buy_for_price - abs(transaction.price)
             elif transaction.type == tch.SELL_YES:
                 event.price_change = event.current_sell_for_price - transaction.price
             event.absolute_price_change = abs(event.price_change)
