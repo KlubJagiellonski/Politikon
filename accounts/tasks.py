@@ -75,32 +75,14 @@ def update_users_classification():
     """
     Update weekly and monthly users classifications.
     """
-    tch = Transaction.TRANSACTION_TYPE_CHOICES
-    income_transactions = (
-        tch.SELL_YES,
-        tch.SELL_NO,
-        tch.EVENT_CANCELLED_REFUND_CHOICE,
-        tch.EVENT_WON_PRIZE_CHOICE,
-    )
-    debit_transactions = (
-        tch.BUY_YES,
-        tch.BUY_NO,
-        tch.EVENT_CANCELLED_DEBIT_CHOICE,
-    )
     for user in UserProfile.objects.get_users().iterator():
         weekly_result = 0
         for t in Transaction.objects.get_weekly_user_transactions(user).iterator():
-            if t.type in income_transactions:
-                weekly_result += t.price * t.quantity
-            elif t.type in debit_transactions:
-                weekly_result -= t.price * t.quantity
+            weekly_result += t.price * t.quantity
 
         monthly_result = 0
         for t in Transaction.objects.get_monthly_user_transactions(user).iterator():
-            if t.type in income_transactions:
-                monthly_result += t.price * t.quantity
-            elif t.type in debit_transactions:
-                monthly_result -= t.price * t.quantity
+            monthly_result += t.price * t.quantity
 
         if user.weekly_result != weekly_result or user.monthly_result != monthly_result:
             user.weekly_result = weekly_result
