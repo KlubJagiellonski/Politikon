@@ -138,7 +138,7 @@ class BetManager(models.Manager):
 
         Transaction.objects.create(
             user_id=user.id, event_id=event.id, type=transaction_type,
-            quantity=quantity, price=current_tx_price)
+            quantity=quantity, price=current_tx_price * -1)
 
         event_total_bought_price = (bet.bought_avg_price * bet.bought)
         after_bought_quantity = bet.bought + quantity
