@@ -639,3 +639,6 @@ class Transaction(models.Model):
         :rtype: int
         """
         return self.quantity * self.price
+
+    class Meta:
+        ordering = ['-date']
