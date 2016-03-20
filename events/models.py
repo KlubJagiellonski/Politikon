@@ -182,9 +182,9 @@ class Event(models.Model):
                 last_transaction = first_transactions[0]
                 if last_transaction.type == tch.BUY_NO_CHOICE or \
                         last_transaction.type == tch.SELL_NO_CHOICE:
-                    last_value = 100 - last_transaction.price
+                    last_value = 100 - abs(last_transaction.price)
                 else:
-                    last_value = last_transaction.price
+                    last_value = abs(last_transaction.price)
             else:
                 last_value = 50
         while first_date < last_date:
@@ -202,9 +202,9 @@ class Event(models.Model):
             d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
             if t.type == tch.BUY_NO_CHOICE or \
                     t.type == tch.SELL_NO_CHOICE:
-                last_trans[d_date] = 100 - t.price
+                last_trans[d_date] = 100 - abs(t.price)
             else:
-                last_trans[d_date] = t.price
+                last_trans[d_date] = abs(t.price)
 
         for key, t in last_trans.iteritems():
             points[dates.index(key)] = t
@@ -401,11 +401,11 @@ class Event(models.Model):
                     t.user: 0
                 })
             if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO:
-                users[t.user] += t.quantity * t.price
-            elif t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
                     t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
-                users[t.user] -= t.quantity * t.price
+                # for transaction type BUY the price is below 0
+                users[t.user] += t.quantity * t.price
         for user, refund in users.iteritems():
             if refund == 0:
                 continue
