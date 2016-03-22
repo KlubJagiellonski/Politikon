@@ -113,7 +113,8 @@
                 <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
                 <div class="prawa">
                     <span class="history-action">{{ transaction.get_type_display|upper }}</span>
-                    <span class="reputy-change"><span class="reputy-small"></span>{# + - #}{{ transaction.price }}</span>
+                    <span class="reputy-change"><span class="reputy-small"></span>{# + - #}
+                    <span class={{ transaction.change_color_reputy }}> {{ transaction.price }}</span>
                     <span class="event-date">{{ transaction.date }}</span>
                 </div>
             </div>

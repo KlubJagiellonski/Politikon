@@ -623,3 +623,11 @@ class Transaction(models.Model):
     def __unicode__(self):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
                                  label, self.user)
+
+    def change_color_reputy(self, TRANSACTION_TYPE_CHOICES):
+        if TRANSACTION_TYPE_CHOICES in (1, 3, 6):
+            return "changeNO"
+        elif TRANSACTION_TYPE_CHOICES in (2, 4, 5, 7, 8):
+            return "changeYES"
+        else:
+            raise Exception
