@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
 from math import exp
 from unidecode import unidecode
 import pytz
@@ -9,12 +9,16 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.template.defaultfilters import slugify
+from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
 from .managers import EventManager, BetManager, TransactionManager
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
+
+
+logger = logging.getLogger(__name__)
 
 
 _MONTHS = {
@@ -167,8 +171,14 @@ class Event(models.Model):
         )
 
         dates = []
-        last_date = datetime.now().\
-            replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+        if self.end_date and self.end_date < datetime.now(tz=pytz.UTC):
+            # for finished event last date point is end_date
+            last_date = self.end_date.\
+                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+        else:
+            # for event in progress last date point is yesterday
+            last_date = datetime.now().\
+                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
         first_date = (last_date-relativedelta(weeks=2)).\
             replace(hour=0, minute=0, second=0, microsecond=0)
         if (self.created_date > first_date):
@@ -193,8 +203,7 @@ class Event(models.Model):
 
         points = [None] * len(dates)
         for t in Transaction.objects.\
-                filter(event=self, date__gt=datetime.now()-
-                       relativedelta(weeks=2), date__lt=last_date).\
+                filter(event=self, date__gt=first_date, date__lt=last_date).\
                 order_by('date').iterator():
             if t.type in skip_events:
                 continue
@@ -207,7 +216,10 @@ class Event(models.Model):
                 last_trans[d_date] = abs(t.price)
 
         for key, t in last_trans.iteritems():
-            points[dates.index(key)] = t
+            try:
+                points[dates.index(key)] = t
+            except ValueError:
+                logger.warning("Date is not in list 'dates': %s" % str(key))
 
         for idx, point in enumerate(points):
             if point is None:
