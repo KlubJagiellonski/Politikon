@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
 from math import exp
 from unidecode import unidecode
 import pytz
@@ -9,12 +9,16 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.template.defaultfilters import slugify
+from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
 from .managers import EventManager, BetManager, TransactionManager
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
+
+
+logger = logging.getLogger(__name__)
 
 
 _MONTHS = {
@@ -34,6 +38,9 @@ _MONTHS = {
 
 
 class Event(models.Model):
+    """
+    Event model represents exactly real question which you can answer YES or NO.
+    """
 
     EVENT_OUTCOME_CHOICES = Choices(
         ('IN_PROGRESS', 1, u'w trakcie'),
@@ -46,6 +53,8 @@ class Event(models.Model):
         EVENT_OUTCOME_CHOICES.FINISHED_YES: True,
         EVENT_OUTCOME_CHOICES.FINISHED_NO: False
     }
+
+    PRIZE_FOR_WINNING = 100
 
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -162,8 +171,14 @@ class Event(models.Model):
         )
 
         dates = []
-        last_date = datetime.now().\
-            replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+        if self.end_date and self.end_date < datetime.now(tz=pytz.UTC):
+            # for finished event last date point is end_date
+            last_date = self.end_date.\
+                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+        else:
+            # for event in progress last date point is yesterday
+            last_date = datetime.now().\
+                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
         first_date = (last_date-relativedelta(weeks=2)).\
             replace(hour=0, minute=0, second=0, microsecond=0)
         if (self.created_date > first_date):
@@ -177,19 +192,19 @@ class Event(models.Model):
                 last_transaction = first_transactions[0]
                 if last_transaction.type == tch.BUY_NO_CHOICE or \
                         last_transaction.type == tch.SELL_NO_CHOICE:
-                    last_value = 100 - last_transaction.price
+                    last_value = 100 - abs(last_transaction.price)
                 else:
-                    last_value = last_transaction.price
+                    last_value = abs(last_transaction.price)
             else:
                 last_value = 50
-        while first_date < last_date:
-            dates.append(first_date)
-            first_date += relativedelta(days=1)
+        step_date = first_date
+        while step_date < last_date:
+            dates.append(step_date)
+            step_date += relativedelta(days=1)
 
         points = [None] * len(dates)
         for t in Transaction.objects.\
-                filter(event=self, date__gt=datetime.now()-
-                       relativedelta(weeks=2), date__lt=last_date).\
+                filter(event=self, date__gt=first_date, date__lt=last_date).\
                 order_by('date').iterator():
             if t.type in skip_events:
                 continue
@@ -197,12 +212,15 @@ class Event(models.Model):
             d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
             if t.type == tch.BUY_NO_CHOICE or \
                     t.type == tch.SELL_NO_CHOICE:
-                last_trans[d_date] = 100 - t.price
+                last_trans[d_date] = 100 - abs(t.price)
             else:
-                last_trans[d_date] = t.price
+                last_trans[d_date] = abs(t.price)
 
         for key, t in last_trans.iteritems():
-            points[dates.index(key)] = t
+            try:
+                points[dates.index(key)] = t
+            except ValueError:
+                logger.warning("Date is not in list 'dates': %s" % str(key))
 
         for idx, point in enumerate(points):
             if point is None:
@@ -302,6 +320,11 @@ class Event(models.Model):
         self.recalculate_prices()
 
     def increment_turnover(self, by_amount):
+        """
+        Turnover increases +1 when operation buy or sell occurs
+        :param by_amount: operations count, usually 1
+        :type by_amount: int
+        """
         self.turnover += by_amount
 
     def recalculate_prices(self):
@@ -356,7 +379,7 @@ class Event(models.Model):
             return False
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
-                bet.rewarded_total += 100 * bet.has
+                bet.rewarded_total += self.PRIZE_FOR_WINNING * bet.has
                 bet.user.total_cash += bet.rewarded_total
                 bet.is_new_resolved = True
                 bet.user.save()
@@ -366,7 +389,7 @@ class Event(models.Model):
                     event=self,
                     type=Transaction.TRANSACTION_TYPE_CHOICES.EVENT_WON_PRIZE,
                     quantity=bet.has,
-                    price=bet.bought_avg_price
+                    price=self.PRIZE_FOR_WINNING
                 )
         return True
 
@@ -391,11 +414,11 @@ class Event(models.Model):
                     t.user: 0
                 })
             if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO:
-                users[t.user] += t.quantity * t.price
-            elif t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
                     t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
-                users[t.user] -= t.quantity * t.price
+                # for transaction type BUY the price is below 0
+                users[t.user] += t.quantity * t.price
         for user, refund in users.iteritems():
             if refund == 0:
                 continue
@@ -540,7 +563,7 @@ class Bet(models.Model):
         if wallet_change > 0:
             sign = '+'
 
-        return '{}{}'.format(sign, wallet_change)
+        return '{}{:.1f}'.format(sign, wallet_change)
 
     def get_invested(self):
         """
@@ -550,7 +573,7 @@ class Bet(models.Model):
         """
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
-        return self.has * self.bought_avg_price
+        return round(self.has * self.bought_avg_price, 1)
 
     def get_won(self):
         """
@@ -560,10 +583,7 @@ class Bet(models.Model):
         """
         if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
                 IN_PROGRESS:
-            if self.outcome:
-                return self.has * self.event.current_sell_for_price
-            else:
-                return self.has * self.event.current_sell_against_price
+            return self.has * Event.PRIZE_FOR_WINNING
         else:
             return 0
 
@@ -624,10 +644,14 @@ class Transaction(models.Model):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
                                  label, self.user)
 
-    def change_color_reputy(self, TRANSACTION_TYPE_CHOICES):
-        if TRANSACTION_TYPE_CHOICES in (1, 3, 6):
-            return "changeNO"
-        elif TRANSACTION_TYPE_CHOICES in (2, 4, 5, 7, 8):
-            return "changeYES"
-        else:
-            raise Exception
+    @property
+    def total(self):
+        """
+        Get total price for all quantity in transaction: total won, total bought, total sold
+        :return: total amount
+        :rtype: int
+        """
+        return self.quantity * self.price
+
+    class Meta:
+        ordering = ['-date']

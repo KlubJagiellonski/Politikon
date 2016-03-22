@@ -98,13 +98,9 @@ CELERYBEAT_SCHEDULE = {
         'task': 'events.tasks.calculate_price_change',
         'schedule': crontab(hour=0, minute=0)
     },
-    'update_weekly_result': {
-        'task': 'accounts.tasks.update_weekly_result',
-        'schedule': crontab(0, 0, day_of_week=1)
-    },
-    'update_monthly_result': {
-        'task': 'accounts.tasks.update_monthly_result',
-        'schedule': crontab(0, 0, day_of_month=1)
+    'update_users_classification': {
+        'task': 'accounts.tasks.update_users_classification',
+        'schedule': crontab(minute=45)
     },
 }
 

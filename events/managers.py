@@ -1,9 +1,9 @@
 from collections import defaultdict
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from datetime import timedelta
 
 from django.contrib import auth
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
@@ -31,7 +31,7 @@ class EventManager(models.Manager):
     def get_events(self, mode):
         from events.models import Event
         if mode == 'popular':
-            return self.ongoing_only_queryset().order_by('turnover')
+            return self.ongoing_only_queryset().order_by('-turnover')
         elif mode == 'latest':
             return self.ongoing_only_queryset().order_by('-created_date')
         elif mode == 'changed':
@@ -138,7 +138,7 @@ class BetManager(models.Manager):
 
         Transaction.objects.create(
             user_id=user.id, event_id=event.id, type=transaction_type,
-            quantity=quantity, price=current_tx_price)
+            quantity=quantity, price=current_tx_price * -1)
 
         event_total_bought_price = (bet.bought_avg_price * bet.bought)
         after_bought_quantity = bet.bought + quantity
@@ -271,16 +271,26 @@ class BetManager(models.Manager):
 
 
 class TransactionManager(models.Manager):
+    """
+    Transactions Manager between user and event
+    """
+    def __init__(self):
+        """
+        set model as Transaction model
+        """
+        super(TransactionManager, self).__init__()
+
     def get_user_transactions(self, user):
-        from events.models import Translation
-        return self.get_queryset().filter(user=user).\
-            exclude(type=Transaction.TRANSACTION_TYPE_CHOICES.
-                    TOPPED_UP_BY_APP.value)
+        # TODO: Gdzie umiescic import aby dzialal?
+        from events.models import Transaction
+        self.model = Transaction
+        return self.model.objects.filter(user=user).\
+            exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
     def get_weekly_user_transactions(self, user):
-        last_week = datetime.now() - relativedelta(weeks=1)
+        last_week = now() - timedelta(days=7)
         return self.get_user_transactions(user).filter(date__gt=last_week)
 
     def get_monthly_user_transactions(self, user):
-        last_month = datetime.now() - relativedelta(months=1)
+        last_month = now() - timedelta(days=30)
         return self.get_user_transactions(user).filter(date__gt=last_month)

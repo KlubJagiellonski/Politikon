@@ -113,7 +113,12 @@ class UserProfileManager(BaseUserManager):
             order_by('-monthly_result')
 
     def get_best_overall(self):
-        return self.get_users().order_by('-total_given_cash')
+        """
+        Get users ordered by the best reputation
+        :return: UserProfiles list
+        :rtype: QuerySet
+        """
+        return self.get_users().order_by('-reputation')
 
     def get_user_positions(self, user):
         best_weekly = list(self.get_best_weekly())

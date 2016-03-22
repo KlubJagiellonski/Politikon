@@ -1,4 +1,4 @@
-<a href="#"><div class="ranking-event">
+<a href="{{ user.get_absolute_url }}"><div class="ranking-event">
         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
             <p class="rank">{{ forloop.counter }}</p>
             <img src="{{ user.get_avatar_url }}"/>
