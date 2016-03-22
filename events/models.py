@@ -197,9 +197,10 @@ class Event(models.Model):
                     last_value = abs(last_transaction.price)
             else:
                 last_value = 50
-        while first_date < last_date:
-            dates.append(first_date)
-            first_date += relativedelta(days=1)
+        step_date = first_date
+        while step_date < last_date:
+            dates.append(step_date)
+            step_date += relativedelta(days=1)
 
         points = [None] * len(dates)
         for t in Transaction.objects.\
