@@ -173,8 +173,7 @@ class Event(models.Model):
         dates = []
         if self.end_date and self.end_date < datetime.now(tz=pytz.UTC):
             # for finished event last date point is end_date
-            last_date = self.end_date.\
-                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+            last_date = self.end_date
         else:
             # for event in progress last date point is yesterday
             last_date = datetime.now().\
