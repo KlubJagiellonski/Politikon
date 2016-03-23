@@ -26,7 +26,7 @@ b {font-weight: 700;}
 
  /* transitions */
 /*0,15 sek*/
-#maintop, #maintop .sm-bg, #maintop .graj .prawa, #maintop nav ul, #maintop nav ul li, #maintop .socialmedia, #maintop .logo div, #maintop .avatar img, #maintop .userdata, #maintop .userdata .wallet, #maintop nav ul .burger,
+#maintop .sm-bg, #maintop .graj .prawa, #maintop nav ul, #maintop nav ul li, #maintop .socialmedia, #maintop .logo div, #maintop .avatar img, #maintop .userdata, #maintop .userdata .wallet, #maintop nav ul .burger,
 .overlay, .betresult, #wallet-not .container,
 #login div, #login aside, #login, #login .przycisk,
 #featured .details,
