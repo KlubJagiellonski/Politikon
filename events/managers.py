@@ -267,7 +267,7 @@ class BetManager(models.Manager):
         return self.filter(
             event__outcome__in=events_finshed,
             has__gt=0,
-        )
+        ).order_by('-event__end_date')
 
 
 class TransactionManager(models.Manager):
