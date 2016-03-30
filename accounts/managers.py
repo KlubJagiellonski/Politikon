@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from unidecode import unidecode
 import uuid
 
 from django.contrib.auth.models import BaseUserManager
@@ -23,8 +24,7 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if len(self.model.objects.filter(email=email)) > 0 and len(email) > 0:
             return HttpResponseForbidden()
-        # TODO change ascii to utf-8
-        username = username.encode('ascii', 'ignore')
+        username = unidecode(username)
         # TODO self.name = username for casual users
         # and username = email b/c username has to be unique
         while len(self.model.objects.filter(username=username)) > 0:
