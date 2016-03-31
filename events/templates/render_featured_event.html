@@ -1,7 +1,7 @@
 <a class="no-decoration" href="{% url 'events:event_detail' event_id=event.id %}?{{ request.canvas_query }}">
     <div class="event">
         {% if event.small_image %}
-        <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />         
+        <img src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
         {% endif %}
         <h5 class="title">{{ event.title }}</h3>
         <p class="short-title">{{ event.short_title }}</p>

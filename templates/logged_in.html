@@ -1,10 +1,11 @@
 {% load display %}
+{% load format %}
 
 <div class="graj avatar prawa">
     <img src="{{ user.get_avatar_url }}" />
     <nav class="avatarmenu">
         <ul>
-            <li><a href="{% url 'accounts:user_profile' %}">{{ user.full_name }}</a></li>
+            <li><a href="{% url 'accounts:user_profile' %}">{{ user.name }}</a></li>
             <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
             <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
         </ul>
@@ -12,9 +13,7 @@
 </div>
 
 <div class="userdata prawa">
-    {% comment %}
-    <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)-->
-    {% endcomment %}
+    {# <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)--> #}
     <div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
         {% if user.get_newest_results.count %}
             <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
@@ -25,21 +24,21 @@
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>wartość portfela</p>
-            <p class="walletvalue">{{ user.portfolio_value_formatted }}</p>
+            <p class="walletvalue">{{ user.portfolio_value|formatted }}</p>
         </div>
     </a>
 
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>wolne reputy</p>
-            <p class="freevalue">{{ user.total_cash_formatted }}</p>
+            <p class="freevalue">{{ user.total_cash|formatted }}</p>
         </div>
     </a>
 
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
             <p>reputacja</p>
-            <p class="reputationvalue">{{ user.reputation_formatted }}</p>
+            <p class="reputationvalue">{{ user.reputation|formatted }}%</p>
         </div>
     </a>
 </div>
@@ -48,7 +47,7 @@
     <div class="container">
         <div class="inside">
             <div class="header">
-                Najnowsze wyniki
+                najnowsze wyniki
                 <a id="all-bets-result" href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
             </div>
             <div id="jp-container" class="jp-container">
@@ -62,8 +61,8 @@
                         {% render_bet_status bet %}
                         <div class="status-change">
                             zysk/strata:
-                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
-                            <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
+                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
+                            <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                         </div>
                 </div></a>
             {% endfor %}

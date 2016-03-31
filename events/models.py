@@ -13,6 +13,7 @@ from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
 from .managers import EventManager, BetManager, TransactionManager
+from .templatetags.format import formatted
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
@@ -260,7 +261,7 @@ class Event(models.Model):
                     'has': bet.has,
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",
-                    'avgPrice': round(bet.bought_avg_price, 2),
+                    'avgPrice': formatted(bet.bought_avg_price),
                 }
                 return bet
             else:
@@ -548,21 +549,15 @@ class Bet(models.Model):
     def get_wallet_change(self):
         """
         Get amount won or lose after event finished. For events in progress
-        get amount possible to win. For amount greater than 0 '+' else '-' for
-        less than 0.
+        get amount possible to win.
         :return: more or less than zero
-        :rtype: str
+        :rtype: int
         """
         if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
                 IN_PROGRESS:
-            wallet_change = self.get_won() - self.get_invested()
+            return self.get_won() - self.get_invested()
         else:
-            wallet_change = -self.get_invested()
-        sign = ''
-        if wallet_change > 0:
-            sign = '+'
-
-        return '{}{:.1f}'.format(sign, wallet_change)
+            return -self.get_invested()
 
     def get_invested(self):
         """
@@ -572,7 +567,7 @@ class Bet(models.Model):
         """
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
-        return round(self.has * self.bought_avg_price, 1)
+        return round(self.has * self.bought_avg_price, 0)
 
     def get_won(self):
         """

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load format %}
 
 {% block content %}
 
@@ -18,15 +19,15 @@
     <div class="container profile-stats">
         <div class="wallet">
             <div class="icon"></div>
-            <p class="lewa"><span>wartość portfela</span><br/><span class="darkorange">{{ object.portfolio_value_formatted }}</span></p>
+            <p class="lewa"><span>wartość portfela</span><br/><span class="darkorange">{{ object.portfolio_value|formatted }}</span></p>
         </div>
         <div class="freereput">
             <div class="icon"></div>
-            <p class="lewa"><span>wolne reputy</span><br/><span class="changeYES">{{ object.total_cash_formatted }}</span></p>
+            <p class="lewa"><span>wolne reputy</span><br/><span class="changeYES">{{ object.total_cash|formatted }}</span></p>
         </div>
         <div class="reputation">
             <div class="icon"></div>
-            <p class="lewa"><span>reputacja</span><br/><span>{{ object.reputation_formatted }}</span></p>
+            <p class="lewa"><span>reputacja</span><br/><span>{{ object.reputation|formatted }}%</span></p>
         </div>
         <div class="position">
             <div class="icon"></div>
@@ -77,8 +78,8 @@
                     <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
                     <div class="status">
                         <h3 class="skroc">{{ bet.event }}</h3>
-                        <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|floatformat:"0" }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
-                        <p class="detailed-status"><span class="invested">{{ bet.get_invested|floatformat:"0" }}</span> <span class="maywin">{{ bet.get_won|floatformat:"0" }}</span> <span class="inwallet">{{ bet.get_wallet_change|floatformat:"0" }}</span></p>
+                        <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price_formatted }} <span class="why">(aktualna cena: {{ bet.event.current_buy_for_price }})</span></p>
+                        <p class="detailed-status"><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="maywin">{{ bet.get_won|formatted }}</span> <span class="inwallet">{{ bet.get_wallet_change|formatted:"True" }}</span></p>
                     </div>
                 </a>
             </div>
@@ -100,8 +101,8 @@
                     </div>
                     <div class="status-change">
                         zysk/strata:
-                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change }}</div>
-                        <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won }}</span></p>
+                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
+                        <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                     </div>
             </a></div>
             {% endfor %}
@@ -113,7 +114,7 @@
                 <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
                 <div class="prawa">
                     <span class="history-action">{{ transaction.get_type_display|upper }}</span>
-                    <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total }}</span>
+                    <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total|formatted:"True" }}</span>
                     <span class="event-date">{{ transaction.date }}</span>
                 </div>
             </div>
