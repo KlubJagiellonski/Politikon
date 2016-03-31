@@ -9,9 +9,9 @@ from django.db.models import F, Q
 from django.core.urlresolvers import reverse
 
 from .managers import UserProfileManager
+from .utils import format_int
 from bladepolska.snapshots import SnapshotAddon
 from events.models import Bet, Event
-from events.templatetags.format import formatted
 from politikon.settings import STATIC_URL
 
 
@@ -131,9 +131,9 @@ class UserProfile(AbstractBaseUser):
     def statistics_dict(self):
         return {
             'user_id': self.id,
-            'total_cash': formatted(self.total_cash),
-            'portfolio_value': formatted(self.portfolio_value),
-            'reputation': "%s%%" % formatted(self.reputation)
+            'total_cash': self.total_cash_formatted,
+            'portfolio_value': self.portfolio_value_formatted,
+            'reputation': self.reputation_formatted
         }
 
     @property
@@ -187,6 +187,18 @@ class UserProfile(AbstractBaseUser):
             portfolio_value += bet.has * getattr(bet.event, price_field)
 
         return portfolio_value
+
+    @property
+    def portfolio_value_formatted(self):
+        return format_int(self.portfolio_value)
+
+    @property
+    def total_cash_formatted(self):
+        return format_int(self.total_cash)
+
+    @property
+    def reputation_formatted(self):
+        return "%s%%" % format_int(self.reputation)
 
     def calculate_reputation(self):
         if self.total_given_cash == Decimal('0'):
