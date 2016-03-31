@@ -1,3 +1,5 @@
+{% load format %}
+
 <a href="{{ user.get_absolute_url }}"><div class="ranking-event">
         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
             <p class="rank">{{ forloop.counter }}</p>
@@ -5,8 +7,8 @@
             <p class="nickname">{{ user.name }}</p>
         </div>
         <div class="prawa">
-            <p class="rank-wallet">{{ user.portfolio_value }}</p>
-            <p class="rank-freereputy">{{ user.total_cash_formatted }}</p>
-            <p class="rank-reputation">{{ user.reputation_formatted }}</p>
+            <p class="rank-wallet">{{ user.portfolio_value|formatted }}</p>
+            <p class="rank-freereputy">{{ user.total_cash|formatted }}</p>
+            <p class="rank-reputation">{{ user.reputation|formatted }}%</p>
         </div>
 </div></a>
