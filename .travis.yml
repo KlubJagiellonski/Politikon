@@ -4,7 +4,7 @@ install:
 branches:
     only:
         - master
-script: coverage run manage.py test
+script: coverage run --source=politikon,events,accounts manage.py test
 after_success:
-    - coverage report
+    - coverage report --omit=*/migrations/*
     - coveralls

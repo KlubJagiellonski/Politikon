@@ -13,7 +13,6 @@ from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
 from .managers import EventManager, BetManager, TransactionManager
-from .templatetags.format import formatted
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
@@ -261,7 +260,7 @@ class Event(models.Model):
                     'has': bet.has,
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",
-                    'avgPrice': formatted(bet.bought_avg_price),
+                    'avgPrice': bet.bought_avg_price,
                 }
                 return bet
             else:

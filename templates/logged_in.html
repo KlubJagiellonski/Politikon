@@ -62,7 +62,7 @@
                         <div class="status-change">
                             zysk/strata:
                         <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
-                            <p><span class="invested">{{ bet.get_invested }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
+                            <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                         </div>
                 </div></a>
             {% endfor %}
