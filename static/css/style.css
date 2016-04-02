@@ -315,6 +315,8 @@ footer ul a, footer .socialmedia div,
         background: linear-gradient(to bottom,  #fefefe 0%,#d8d8d8 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#d8d8d8',GradientType=0 );
 }
+#makeabet .change.changeYES {color: #809413;}
+#makeabet .change.changeNO {color: #a72e0e;}
 .changeYES {color: #809413;}
 .changeNO {color: #a72e0e;}
 

@@ -188,7 +188,7 @@ $(function() {
                         makebets.each(function(idx) {
                             // console.log($(this));
                             $(this).children('.currentbet').children('p').children('.has_bets').html(bet.has);
-                            $(this).children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price * 100) / 100);
+                            $(this).children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price));
                             if ($(this).hasClass('collapsible')) {
                                 $(this).children('.change').addClass('hidden');
                             }

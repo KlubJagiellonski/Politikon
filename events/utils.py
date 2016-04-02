@@ -29,7 +29,7 @@ def create_bets_dict(user, events):
                     'has': bet.has,
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",
-                    'avgPrice': round(bet.bought_avg_price, 2),
+                    'avgPrice': bet.bought_avg_price,
                 }
             else:
                 all_bets[event.id] = {
