@@ -41,20 +41,16 @@ def calculate_price_change():
     logger.debug("'events:tasks:calculate_price_change' worker up")
     yesterday = now() - timedelta(days=1)
     tch = Transaction.TRANSACTION_TYPE_CHOICES
-    transaction_types = (
-        tch.BUY_YES,
-        tch.SELL_YES,
-        tch.BUY_NO,
-        tch.SELL_NO,
-    )
     for event in Event.objects.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
+        # for in progress events get last transaction from day before yesterday
         transactions = Transaction.objects.filter(
             event=event,
-            date__lte=yesterday,
-            type__in=transaction_types,
+            date__range=(yesterday - timedelta(days=1), yesterday),
+            type__in=Transaction.BUY_SELL_TYPES,
         ).order_by('-date')[:1]
 
         if transactions.exists():
+            # if transaction exist calculate price change
             transaction = transactions[0]
             if transaction.type == tch.BUY_NO:
                 event.price_change = event.current_buy_against_price - abs(transaction.price)
@@ -69,4 +65,8 @@ def calculate_price_change():
                 "'events:tasks:calculate_price_change' changing price_change of event "
                 "<%s> to %s" % (unicode(event.pk), event.price_change)
             )
-            event.save()
+        else:
+            # price didn't change
+            event.price_change = 0
+            event.absolute_price_change = 0
+        event.save()

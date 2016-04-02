@@ -54,6 +54,7 @@ class Event(models.Model):
         EVENT_OUTCOME_CHOICES.FINISHED_NO: False
     }
 
+    BEGIN_PRICE = 50
     PRIZE_FOR_WINNING = 100
 
     objects = EventManager()
@@ -95,14 +96,14 @@ class Event(models.Model):
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
     current_buy_for_price = models.\
-        IntegerField(u'cena nabycia akcji zdarzenia', default=50.0)
+        IntegerField(u'cena nabycia akcji zdarzenia', default=BEGIN_PRICE)
     current_buy_against_price = models.\
-        IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=50.0)
+        IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
     current_sell_for_price = models.\
-        IntegerField(u'cena sprzedaży akcji zdarzenia', default=50.0)
+        IntegerField(u'cena sprzedaży akcji zdarzenia', default=BEGIN_PRICE)
     current_sell_against_price = models.\
         IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego',
-                     default=50.0)
+                     default=BEGIN_PRICE)
 
     last_transaction_date = models.\
         DateTimeField(u'data ostatniej transakcji', null=True)
@@ -116,6 +117,7 @@ class Event(models.Model):
                      default=0)
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
+    # constant for calculating event change
     B = models.FloatField(u'stała B', default=5)
 
     def __unicode__(self):
@@ -161,16 +163,13 @@ class Event(models.Model):
         attr = Bet.BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
+    @transaction.atomic
     def get_chart_points(self):
-        last_trans = {}
-        tch = Transaction.TRANSACTION_TYPE_CHOICES
-        skip_events = (
-            tch.EVENT_CANCELLED_DEBIT_CHOICE.value,
-            tch.EVENT_CANCELLED_REFUND_CHOICE.value,
-            tch.EVENT_WON_PRIZE_CHOICE.value,
-        )
-
-        dates = []
+        """
+        Get last transactions price for every day; days range is max 14
+        :return: chart points
+        :rtype: {int, [], []}
+        """
         if self.end_date and self.end_date < datetime.now(tz=pytz.UTC):
             # for finished event last date point is end_date
             last_date = self.end_date
@@ -178,58 +177,33 @@ class Event(models.Model):
             # for event in progress last date point is yesterday
             last_date = datetime.now().\
                 replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
-        first_date = (last_date-relativedelta(weeks=2)).\
+
+        first_date = (last_date - relativedelta(weeks=2)).\
             replace(hour=0, minute=0, second=0, microsecond=0)
-        if (self.created_date > first_date):
+        if self.created_date > first_date:
             first_date = self.created_date.\
                 replace(hour=0, minute=0, second=0, microsecond=0)
-            last_value = 50
-        else:
-            first_transactions = Transaction.objects.\
-                filter(date__lt=first_date, event=self).order_by('-date')
-            if len(first_transactions) > 0:
-                last_transaction = first_transactions[0]
-                if last_transaction.type == tch.BUY_NO_CHOICE or \
-                        last_transaction.type == tch.SELL_NO_CHOICE:
-                    last_value = 100 - abs(last_transaction.price)
-                else:
-                    last_value = abs(last_transaction.price)
-            else:
-                last_value = 50
+
+        # Default is start price: 50
+        last_price = Event.BEGIN_PRICE
         step_date = first_date
-        while step_date < last_date:
-            dates.append(step_date)
-            step_date += relativedelta(days=1)
-
-        points = [None] * len(dates)
-        for t in Transaction.objects.\
-                filter(event=self, date__gt=first_date, date__lt=last_date).\
-                order_by('date').iterator():
-            if t.type in skip_events:
-                continue
-            date = t.date
-            d_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
-            if t.type == tch.BUY_NO_CHOICE or \
-                    t.type == tch.SELL_NO_CHOICE:
-                last_trans[d_date] = 100 - abs(t.price)
-            else:
-                last_trans[d_date] = abs(t.price)
-
-        for key, t in last_trans.iteritems():
-            try:
-                points[dates.index(key)] = t
-            except ValueError:
-                logger.warning("Date is not in list 'dates': %s" % str(key))
-
-        for idx, point in enumerate(points):
-            if point is None:
-                points[idx] = last_value
-            else:
-                last_value = point
-
         labels = []
-        for d in dates:
-            labels.append(str(d.day) + ' %s' % _MONTHS[d.month])
+        points = []
+        while step_date < last_date:
+            labels.append(str(step_date.day) + ' %s' % _MONTHS[step_date.month])
+            step_date += relativedelta(days=1)
+            ts = Transaction.objects.filter(event=self,
+                                            date__lte=step_date,
+                                            type__in=Transaction.BUY_SELL_TYPES,
+                                            ).order_by('-date')[:1]
+            if ts.exists():
+                t = ts[0]
+                if t.type == Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO \
+                        or t.type == Transaction.TRANSACTION_TYPE_CHOICES.SELL_NO:
+                    last_price = 100 - abs(t.price)
+                else:
+                    last_price = abs(t.price)
+            points.append(last_price)
 
         return {
             'id': self.id,
@@ -238,6 +212,9 @@ class Event(models.Model):
         }
 
     def get_user_bet(self, user):
+        """
+        get bet summary for user; user maybe anonymous.
+        """
         if user.pk:
             # TODO: resolve problem with bets > 1.   Which bet choose?
             # comment: mayby condition has__gt=0 resolve this problem.
@@ -310,6 +287,14 @@ class Event(models.Model):
         return response
 
     def increment_quantity(self, outcome, by_amount):
+        """
+        Used when operation buy or sell occurs
+        :param outcome: event outcome - YES or NO; True for YES
+        :type outcome: bool
+        :param by_amount: operations count, usually 1
+        :type by_amount: int
+        :return:
+        """
         if outcome not in Bet.BET_OUTCOMES_TO_QUANTITY_ATTR:
             raise UnknownOutcome()
 
@@ -327,6 +312,9 @@ class Event(models.Model):
         self.turnover += by_amount
 
     def recalculate_prices(self):
+        """
+        Calculate 4 prices for event
+        """
         factor = 100.
 
         B = self.B
@@ -352,6 +340,10 @@ class Event(models.Model):
         self.current_sell_against_price = round(factor * sell_against_price, 0)
 
     def save(self, **kwargs):
+        """
+        Recalculate prices for event and optionally change front event
+        :param kwargs:
+        """
         if not self.id:
             self.recalculate_prices()
 
@@ -365,6 +357,13 @@ class Event(models.Model):
 
     @transaction.atomic
     def finish(self, outcome):
+        """
+        Set Event finish status
+        :param outcome: outcome status; True if YES
+        :type outcome: bool
+        :return: True if event is finished
+        :rtype: bool
+        """
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             return False
         self.outcome = outcome
@@ -374,6 +373,13 @@ class Event(models.Model):
 
     @transaction.atomic
     def finish_with_outcome(self, outcome):
+        """
+        main finish status
+        :param outcome: outcome status; True if YES
+        :type outcome: bool
+        :return: True if event is finished
+        :rtype: bool
+        """
         if not self.finish(outcome):
             return False
         for bet in Bet.objects.filter(event=self):
@@ -394,16 +400,31 @@ class Event(models.Model):
 
     @transaction.atomic
     def finish_yes(self):
+        """
+        if event is finished on YES then prizes calculate
+        :return: True if event is finished
+        :rtype: bool
+        """
         return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.
                                         FINISHED_YES)
 
     @transaction.atomic
     def finish_no(self):
+        """
+        if event is finished on NO then prizes calculate
+        :return: True if event is finished
+        :rtype: bool
+        """
         return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.
                                         FINISHED_NO)
 
     @transaction.atomic
     def cancel(self):
+        """
+        refund for users on cancel event.
+        :return: True if event is finished
+        :rtype: bool
+        """
         if not self.finish(self.EVENT_OUTCOME_CHOICES.CANCELLED):
             return False
         users = {}
@@ -469,6 +490,9 @@ class RelatedEvent(models.Model):
 
 
 class Bet(models.Model):
+    """
+    Created when user choose YES or NO for event.
+    """
 
     BET_OUTCOME_CHOICES = Choices(
         ('YES', True, u'udziały na TAK'),
@@ -495,6 +519,7 @@ class Bet(models.Model):
                               related_query_name='bet')
     outcome = models.BooleanField(u'zakład na TAK',
                                   choices=BET_OUTCOME_CHOICES)
+    # most important param: how many bets user has.
     has = models.PositiveIntegerField(u'posiadane zakłady', default=0,
                                       null=False)
     bought = models.PositiveIntegerField(u'kupione zakłady', default=0,
@@ -513,6 +538,11 @@ class Bet(models.Model):
 
     @property
     def bet_dict(self):
+        """
+        Dictionary with bet values
+        :return: bet vaules
+        :rtype: {}
+        """
         return {
             'bet_id': self.id,
             'event_id': self.event.id,
@@ -606,6 +636,9 @@ class Bet(models.Model):
 
 
 class Transaction(models.Model):
+    """
+    Operation buy or sell or other for user and event
+    """
 
     TRANSACTION_TYPE_CHOICES = Choices(
         ('BUY_YES', 1, u'zakup udziałów na TAK'),
@@ -617,6 +650,14 @@ class Transaction(models.Model):
          u'obciążenie konta po anulowaniu wydarzenia'),
         ('EVENT_WON_PRIZE', 7, u'wygrana po rozstrzygnięciu wydarzenia'),
         ('TOPPED_UP_BY_APP', 8, u'doładowanie konta przez aplikację'),
+    )
+
+    # Transactions changing event price: BUY_YES, SELL_YES, BUY_NO, SELL_NO
+    BUY_SELL_TYPES = (
+        TRANSACTION_TYPE_CHOICES.BUY_YES,
+        TRANSACTION_TYPE_CHOICES.SELL_YES,
+        TRANSACTION_TYPE_CHOICES.BUY_NO,
+        TRANSACTION_TYPE_CHOICES.SELL_NO,
     )
 
     objects = TransactionManager()
