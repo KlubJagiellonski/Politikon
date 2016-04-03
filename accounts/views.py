@@ -51,7 +51,7 @@ class UserUpdateView(MultiFormsView):
 
 class UserProfileDetailView(DetailView):
     """
-    User profile
+    Logged user profile detail (user.id from session)
     """
     model = UserProfile
     template_name = 'userprofile_detail.html'
@@ -68,8 +68,11 @@ class UserProfileDetailView(DetailView):
 
 
 class UserDetailView(DetailView):
+    """
+    User profile detail. Any user can see this page (user.id from url)
+    """
     model = UserProfile
-    template_name = 'userprofile_detail.html'
+    template_name = 'user_detail.html'
 
     def get_object(self, **kwargs):
         """
