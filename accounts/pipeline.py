@@ -71,13 +71,13 @@ def save_profile(strategy, user, response, details, is_new=False,
                         subject = u'Politikon - nowy użytkownik'
                         message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         from_email = settings.DEFAULT_EMAIL_FROM
-			try:
+                        try:
                             send_mail(subject, message, from_email, recipent_list)
                         except:
-			    # TODO: handle error
-			    print("Error: couldn't send emals")
-            else:
-                user.is_active = True
+                            # TODO: handle error
+                            print("Error: couldn't send emals")
+                    else:
+                        user.is_active = True
 
             user.name = response['name']
             user.twitter_user_id = response['id']
@@ -120,13 +120,13 @@ def save_profile(strategy, user, response, details, is_new=False,
                         subject = u'Politikon - nowy użytkownik'
                         message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         from_email = settings.DEFAULT_EMAIL_FROM
-			try:
+                        try:
                             send_mail(subject, message, from_email, recipent_list)
                         except:
-			    # TODO: handle error
-			    print("Error: couldn't send emals")
-            else:
-                user.is_active = True
+                            # TODO: handle error
+                            print("Error: couldn't send emals")
+                    else:
+                        user.is_active = True
 
             user.name = details['fullname']
             user.facebook_user = user.facebook_user_id = response['id']

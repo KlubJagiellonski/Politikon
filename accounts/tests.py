@@ -3,11 +3,13 @@ Test accounts module
 """
 from decimal import Decimal
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 
-from django.contrib.auth.models import User
 from .managers import UserProfileManager
 from .models import UserProfile
+from constance import config
+from events.templatetags.format import formatted
 
 
 class UserProfileModelTestCase(TestCase):
@@ -23,14 +25,22 @@ class UserProfileModelTestCase(TestCase):
             name='John Smith',
         )
 
+        self.assertEqual('johnsmith', user.__unicode__())
         self.assertEqual('John Smith', user.name)
         self.assertEqual('John Smith', user.get_short_name())
         self.assertEqual(False, user.is_vip)
         self.assertEqual('John Smith (johnsmith)', user.get_full_name())
+        self.assertEqual('John Smith (johnsmith)', user.full_name)
         user.calculate_reputation()
         user.save()
-        self.assertEqual(Decimal(0), user.reputation)
         self.assertEqual(False, user.is_superuser)
+        self.assertEqual({
+            'user_id': 1,
+            'total_cash': formatted(0),
+            'portfolio_value': formatted(0),
+            'reputation': '0%',
+        }, user.statistics_dict)
+        self.assertEqual(0, user.current_portfolio_value)
 
     def test_user_urls(self):
         """
@@ -74,6 +84,15 @@ class UserProfileModelTestCase(TestCase):
 
         url = j_smith.get_twitter_url()
         self.assertEqual('https://twitter.com/jsmith', url)
+
+    def test_playing_user(self):
+        """
+        Create user and play
+        """
+        user = UserProfile.objects.create(
+            username='johnsmith',
+            name='John Smith',
+        )
 
 
 class UserProfileManagerTestCase(TestCase):
