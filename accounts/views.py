@@ -90,6 +90,7 @@ class UserDetailView(DetailView):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
         user = self.get_object()
         context.update(UserProfile.objects.get_user_positions(user))
+        context['json_data'] = json.dumps(user.get_reputation_history())
         return context
 
 
