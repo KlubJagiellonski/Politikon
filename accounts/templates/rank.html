@@ -15,14 +15,14 @@
     <div class="zakladki-content">
         <article id="7dni">
             {% for user in best_weekly %}
-            {% user_rank user %}
+            {% user_rank user user.weekly_result %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="miesiac">
             {% for user in best_monthly %}
-            {% user_rank user %}
+            {% user_rank user user.monthly_result %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
