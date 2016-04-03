@@ -172,12 +172,17 @@ class UserProfile(AbstractBaseUser):
 
     @property
     def current_portfolio_value(self):
+        """
+        Calculate current portfolio_value, it is changing on event price change
+        :return: portfolio value
+        :rtype: int
+        """
         portfolio_value = 0
         user_bets = Bet.objects \
             .select_related('event') \
             .filter(user=self,
-                    event__outcome=Event.
-                    EVENT_OUTCOME_CHOICES.IN_PROGRESS_CHOICE.value)
+                    event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+                    has__gt=0)
 
         for bet in user_bets.iterator():
             price_field = "current_sell_for_price"

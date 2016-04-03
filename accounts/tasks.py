@@ -35,15 +35,7 @@ def update_portfolio_value():
     logger.debug("'accounts:tasks:update_portfolio_value' worker up")
 
     for user in UserProfile.objects.get_users().iterator():
-        portfolio_value = 0
-        # get all user bets for not resolved events and has > 0
-        for bet in user.bets.filter(has__gt=0).select_related('event').filter(
-            event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
-        ).iterator():
-            if bet.outcome is False:
-                portfolio_value += bet.has * getattr(bet.event, "current_sell_against_price")
-            elif bet.outcome:
-                portfolio_value += bet.has * getattr(bet.event, "current_sell_for_price")
+        portfolio_value = user.current_portfolio_value()
         if user.portfolio_value != portfolio_value:
             user.portfolio_value = portfolio_value
             user.save(update_fields=['portfolio_value'])

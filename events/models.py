@@ -559,6 +559,17 @@ class Bet(models.Model):
     def __unicode__(self):
         return u'zakłady %s na %s' % (self.user, self.event)
 
+    def current_event_price(self):
+        """
+        Get current price for event. Price depend on bet.outcome
+        :return: current price
+        :rtype: int
+        """
+        if self.outcome:
+            return self.event.current_buy_for_price
+        else:
+            return self.event.current_buy_against_price
+
     def is_won(self):
         """
         winning bet when bet has outcome True  and event.outcome is 3
