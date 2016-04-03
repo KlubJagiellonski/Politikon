@@ -10,7 +10,7 @@
             <p class="rank-wallet">{{ user.portfolio_value|formatted }}</p>
             <p class="rank-freereputy">{{ user.total_cash|formatted }}</p>
             <p class="rank-reputation">{{ user.reputation|formatted }}%
-                {% if profit %}<br/><span class="small">({% if profit > 0 %}+{% endif %}{{ profit }}%)</span>{% endif %}
+                {% if profit %}<br/><span class="small">({{ profit|formatted:"True" }}%)</span>{% endif %}
             </p>
         </div>
 </div></a>
