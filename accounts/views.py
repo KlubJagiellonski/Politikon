@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
@@ -64,6 +66,7 @@ class UserProfileDetailView(DetailView):
             get_context_data(*args, **kwargs)
         user = self.get_object()
         context.update(UserProfile.objects.get_user_positions(user))
+        context['json_data'] = json.dumps(user.get_reputation_history())
         return context
 
 

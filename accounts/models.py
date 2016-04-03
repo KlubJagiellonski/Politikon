@@ -1,16 +1,19 @@
 # coding: utf-8
+from datetime import timedelta
 from decimal import Decimal
 import logging
 import os
+import pytz
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models, transaction
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
+from django.utils.timezone import now
 
 from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
-from events.models import Bet, Event
+from events.models import Bet, Event, _MONTHS
 from events.templatetags.format import formatted
 from politikon.settings import STATIC_URL
 
@@ -189,12 +192,29 @@ class UserProfile(AbstractBaseUser):
         return portfolio_value
 
     def calculate_reputation(self):
-        if self.total_given_cash == Decimal('0'):
-            self.reputation = 0
+        """
+        Calculate and set user reputation
+        """
+        self.reputation = self.reputation_formula(self.portfolio_value,
+                                                  self.total_cash, self.total_given_cash)
+
+    @classmethod
+    def reputation_formula(cls, portfolio_value, total_cash, total_given_cash):
+        """
+        Calculate and return reputation
+        :param portfolio_value: total in wallet
+        :type portfolio_value: int
+        :param total_cash: unused reputation value
+        :type total_cash: int
+        :param total_given_cash: total reputation assigned for user
+        :type total_given_cash: int
+        :return: reputation value
+        :rtype: Decimal
+        """
+        if total_given_cash == 0:
+            return Decimal(0)
         else:
-            self.reputation = \
-                Decimal(self.portfolio_value + self.total_cash) / \
-                self.total_given_cash * 100
+            return Decimal(portfolio_value + total_cash) / total_given_cash * 100
 
     @property
     def profile_photo(self):
@@ -298,3 +318,31 @@ class UserProfile(AbstractBaseUser):
             is_new_resolved=True,
             has__gt=0,
         ).order_by('-event__end_date')
+
+    def get_reputation_history(self):
+        """
+        Get historical data for user reputation (7 days)
+        :return: chart points: dates and reputation
+        :rtype: {int, [], []}
+        """
+        start_date = now() - timedelta(days=7)
+        snapshots = self.snapshots.filter(
+            snapshot_of_id=self.id,
+            created_at__gte=start_date,
+        ).order_by('created_at')
+
+        labels = []
+        points = []
+        for snapshot in snapshots:
+            labels.append(
+                '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
+            )
+            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
+                                                 snapshot.total_given_cash)
+            points.append(str(int(reputation)))
+
+        return {
+            'id': self.id,
+            'labels': labels,
+            'points': points
+        }
