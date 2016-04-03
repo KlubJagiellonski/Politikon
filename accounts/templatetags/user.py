@@ -3,9 +3,10 @@ register = template.Library()
 
 
 @register.inclusion_tag('user_rank.html')
-def user_rank(user):
+def user_rank(user, profit=None):
     return {
-        'user': user
+        'user': user,
+        'profit': profit
     }
 
 
