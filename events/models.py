@@ -355,7 +355,7 @@ class Event(models.Model):
         if not self.id:
             self.recalculate_prices()
 
-        if self.is_front:
+        if self.is_front and self.is_in_progress:
             front_events = Event.objects.filter(is_front=True)
             for e in front_events:
                 e.is_front = False

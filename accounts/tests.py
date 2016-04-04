@@ -3,7 +3,7 @@ Test accounts module
 """
 from django.test import TestCase
 
-from .factories import UserProfileFactory
+from .factories import UserFactory, AdminFactory
 from .managers import UserProfileManager
 from .models import UserProfile
 from constance import config
@@ -18,7 +18,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Create user and check his attributes
         """
-        user = UserProfileFactory()
+        user = UserFactory()
 
         self.assertEqual('johnsmith', user.__unicode__())
         self.assertEqual('John Smith', user.name)
@@ -41,7 +41,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Check is urls are valid
         """
-        user = UserProfileFactory(
+        user = UserFactory(
             twitter_user='jsmith',
             facebook_user='facesmith'
         )
@@ -62,7 +62,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Check method for account connected with twitter
         """
-        user = UserProfileFactory()
+        user = UserFactory()
 
         url = user.get_facebook_url()
         self.assertIsNone(url)
@@ -80,7 +80,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Create user and play
         """
-        user = UserProfileFactory()
+        user = UserFactory()
 
 
 class UserProfileManagerTestCase(TestCase):
@@ -91,10 +91,19 @@ class UserProfileManagerTestCase(TestCase):
         """
         Create user
         """
-        UserProfileFactory(
-            email='user@example.com',
+        UserProfile.objects.create_user(
+            username='j_smith',
+            email='j_smith@example.com',
             password='password9',
         )
         user = UserProfile.objects.all()[0]
         self.assertIsInstance(user, UserProfile)
-        self.assertEqual('johnsmith', user.username)
+        self.assertEqual('j_smith', user.username)
+        self.assertTrue(user.check_password('password9'))
+        self.assertTrue(user.is_active)
+        self.assertEqual({
+            'user_id': 1,
+            'total_cash': formatted(config.STARTING_CASH),
+            'portfolio_value': formatted(0),
+            'reputation': '100%',
+        }, user.statistics_dict)

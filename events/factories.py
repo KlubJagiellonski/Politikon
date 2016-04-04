@@ -17,6 +17,16 @@ class EventFactory(factory.django.DjangoModelFactory):
     title_fb_yes = u'Tytuł na tak'
     title_fb_no = u'Tytuł na nie'
     description = u'Opis wydarzenia testowego.'
+    is_front = True
+    is_featured = True
+    outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+
+
+class ShortEventFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Event
+
+    estimated_end_date = datetime.now(tz=pytz.UTC)
 
 
 class RefugeesEventFactory(factory.django.DjangoModelFactory):
@@ -25,13 +35,13 @@ class RefugeesEventFactory(factory.django.DjangoModelFactory):
 
     estimated_end_date = datetime.now(tz=pytz.UTC)
     title = u'Odbędzie się w Polsce referendum w '\
-        'sprawie przyjmowania uchodźców.'
+        u'sprawie przyjmowania uchodźców.'
     short_title = u'.'
     title_fb_yes = u'.'
     title_fb_no = u'.'
     description = u'Do dnia 30 czerwca 2016 r. zostanie zebrane i złożone w '\
-        'sejmie minimum 500 tys. podpisów pod wnioskiem o referendum ws. '\
-        'przyjmowania uchodźców.'
+        u'sejmie minimum 500 tys. podpisów pod wnioskiem o referendum ws. '\
+        u'przyjmowania uchodźców.'
 
 
 class CruzEventFactory(factory.django.DjangoModelFactory):
@@ -44,7 +54,7 @@ class CruzEventFactory(factory.django.DjangoModelFactory):
     title_fb_yes = u'.'
     title_fb_no = u'.'
     description = u'Ted Cruz zdobywa największe poparcie w prawyborach '\
-        'partii republikańskiej w Wisconsin 5 kwietnia 2016 r.'
+        u'partii republikańskiej w Wisconsin 5 kwietnia 2016 r.'
 
 
 class BetFactory(factory.django.DjangoModelFactory):
