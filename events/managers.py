@@ -45,7 +45,6 @@ class EventManager(models.Manager):
         from events.models import Event
         return self.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS)
 
-
     def get_featured_events(self):
         return self.ongoing_only_queryset().filter(is_featured=True).\
             order_by('estimated_end_date')

@@ -2,12 +2,12 @@
 """
 Test events module
 """
-import pytz
 from datetime import timedelta
 from django.utils.timezone import datetime
 
 from django.test import TestCase
 
+from .factories import EventFactory, BetFactory, TransactionFactory
 from .models import Event
 
 
@@ -19,9 +19,7 @@ class EventsModelTestCase(TestCase):
         """
         Create event with minimal attributes
         """
-        Event.objects.create(
-            estimated_end_date=datetime.now(tz=pytz.UTC)
-        )
+        EventFactory()
         event = Event.objects.all()[0]
         self.assertIsInstance(event, Event)
 
@@ -29,14 +27,7 @@ class EventsModelTestCase(TestCase):
         """
         Create event with all attributes
         """
-        Event.objects.create(
-            estimated_end_date=datetime.now(tz=pytz.UTC),
-            title='Długi tytuł testowego wydarzenia',
-            short_title='Tytuł wydarzenia',
-            title_fb_yes='Tytuł na tak',
-            title_fb_no='Tytuł na nie',
-            description='Opis wydarzenia testowego.'
-        )
+        EventFactory()
         event = Event.objects.all()[0]
         self.assertIsInstance(event, Event)
         self.assertEqual(u'Długi tytuł testowego wydarzenia', event.title)
@@ -44,4 +35,12 @@ class EventsModelTestCase(TestCase):
                          event.__unicode__())
         self.assertEqual('/event/1-dlugi-tytul-testowego-wydarzenia',
                          event.get_relative_url())
+        self.assertEqual('/event/1-a', event.get_absolute_url())
         self.assertEqual(True, event.is_in_progress)
+        self.assertEqual({
+            'event_id': 1,
+            'buy_for_price': 50,
+            'buy_against_price': 50,
+            'sell_for_price': 50,
+            'sell_against_price': 50
+        }, event.event_dict)

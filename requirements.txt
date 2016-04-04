@@ -1,24 +1,25 @@
 # Deployment and work
 Django==1.8.12
+psycopg2
+path.py==2.4.1
+ipdb
+ipython
 
 # For distinction dev settings from production settings
 -e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings
 
 # Deployment
-psycopg2
 gunicorn==19.3.0
-path.py==2.4.1
-ipdb
-ipython
 
 # tests
-flake8
+factory_boy
 coveralls
+flake8
 
 djangorestframework
 newrelic
 
-# Admin
+# Admin skin
 django-grappelli
 
 # coffin and django-jinja --- can't find, probably deprecated

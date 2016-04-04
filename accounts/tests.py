@@ -1,11 +1,9 @@
 """
 Test accounts module
 """
-from decimal import Decimal
-
-from django.contrib.auth.models import User
 from django.test import TestCase
 
+from .factories import UserProfileFactory
 from .managers import UserProfileManager
 from .models import UserProfile
 from constance import config
@@ -20,10 +18,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Create user and check his attributes
         """
-        user = UserProfile.objects.create(
-            username='johnsmith',
-            name='John Smith',
-        )
+        user = UserProfileFactory()
 
         self.assertEqual('johnsmith', user.__unicode__())
         self.assertEqual('John Smith', user.name)
@@ -46,12 +41,11 @@ class UserProfileModelTestCase(TestCase):
         """
         Check is urls are valid
         """
-        user = UserProfile.objects.create(
-            username='johnsmith',
-            name='John Smith',
+        user = UserProfileFactory(
             twitter_user='jsmith',
             facebook_user='facesmith'
         )
+
         url = user.get_absolute_url()
         self.assertEqual('/accounts/1/', url)
 
@@ -68,31 +62,25 @@ class UserProfileModelTestCase(TestCase):
         """
         Check method for account connected with twitter
         """
-        j_smith = UserProfile.objects.create(
-            username='johnsmith',
-            name='John Smith',
-        )
+        user = UserProfileFactory()
 
-        url = j_smith.get_facebook_url()
+        url = user.get_facebook_url()
         self.assertIsNone(url)
 
-        url = j_smith.get_twitter_url()
+        url = user.get_twitter_url()
         self.assertIsNone(url)
 
-        j_smith.twitter_user = 'jsmith'
-        j_smith.save()
+        user.twitter_user = 'jsmith'
+        user.save()
 
-        url = j_smith.get_twitter_url()
+        url = user.get_twitter_url()
         self.assertEqual('https://twitter.com/jsmith', url)
 
     def test_playing_user(self):
         """
         Create user and play
         """
-        user = UserProfile.objects.create(
-            username='johnsmith',
-            name='John Smith',
-        )
+        user = UserProfileFactory()
 
 
 class UserProfileManagerTestCase(TestCase):
@@ -103,13 +91,10 @@ class UserProfileManagerTestCase(TestCase):
         """
         Create user
         """
-        UserProfile.objects.create_user(
-            username='j_smith',
-            email='j_smith@example.com',
+        UserProfileFactory(
+            email='user@example.com',
             password='password9',
         )
-        j_smith = UserProfile.objects.all()[0]
-        self.assertIsInstance(j_smith, UserProfile)
-        self.assertEqual('j_smith', j_smith.username)
-
-
+        user = UserProfile.objects.all()[0]
+        self.assertIsInstance(user, UserProfile)
+        self.assertEqual('johnsmith', user.username)
