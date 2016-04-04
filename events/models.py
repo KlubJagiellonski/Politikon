@@ -386,9 +386,7 @@ class Event(models.Model):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total += self.PRIZE_FOR_WINNING * bet.has
                 bet.user.total_cash += bet.rewarded_total
-                bet.is_new_resolved = True
                 bet.user.save()
-                bet.save()
                 Transaction.objects.create(
                     user=bet.user,
                     event=self,
@@ -396,6 +394,9 @@ class Event(models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
+            # This cause display event in "latest outcome"
+            bet.is_new_resolved = True
+            bet.save()
         return True
 
     @transaction.atomic
