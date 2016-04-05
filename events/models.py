@@ -55,6 +55,7 @@ class Event(models.Model):
     }
 
     BEGIN_PRICE = 50
+    DAYS_BEFORE_START = 3
     PRIZE_FOR_WINNING = 100
 
     objects = EventManager()
@@ -186,6 +187,11 @@ class Event(models.Model):
         step_date = first_date
         labels = []
         points = []
+
+        if step_date < self.created_date - relativedelta\
+                (days=Event.DAYS_BEFORE_START):
+            step_date = self.created_date - relativedelta\
+                (days=Event.DAYS_BEFORE_START)
 
         while self.created_date.replace\
                 (hour=0, minute=0, second=0, microsecond=0,
