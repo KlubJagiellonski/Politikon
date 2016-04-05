@@ -22,16 +22,14 @@ class EventsModelTestCase(TestCase):
         """
         Create event with minimal attributes
         """
-        ShortEventFactory()
-        event = Event.objects.all()[0]
+        event = ShortEventFactory()
         self.assertIsInstance(event, Event)
 
     def test_event_with_attributes(self):
         """
         Create event with all attributes
         """
-        EventFactory()
-        event = Event.objects.all()[0]
+        event = EventFactory()
         self.assertIsInstance(event, Event)
         self.assertEqual(u'Długi tytuł testowego wydarzenia', event.title)
         self.assertEqual(u'Długi tytuł testowego wydarzenia',
@@ -40,6 +38,7 @@ class EventsModelTestCase(TestCase):
                          event.get_relative_url())
         self.assertEqual('/event/1-a', event.get_absolute_url())
         self.assertTrue(event.is_in_progress)
+        self.assertEqual('event_1', event.publish_channel)
         self.assertEqual({
             'event_id': 1,
             'buy_for_price': 50,
@@ -47,6 +46,19 @@ class EventsModelTestCase(TestCase):
             'sell_for_price': 50,
             'sell_against_price': 50
         }, event.event_dict)
+
+    def test_increment_by_turnover(self):
+        """
+        Increment by turnover
+        """
+        event = EventFactory()
+        self.assertEqual(0, event.turnover)
+
+        event.increment_turnover(10)
+        self.assertEqual(10, event.turnover)
+
+        event.increment_turnover(-5)
+        self.assertEqual(5, event.turnover)
 
 
 class EventsManagerTestCase(TestCase):

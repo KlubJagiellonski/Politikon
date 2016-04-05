@@ -9,6 +9,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = 'johnsmith'
     name = 'John Smith'
+    is_active = True
 
 
 class BaBroracusFactory(factory.django.DjangoModelFactory):
@@ -17,6 +18,7 @@ class BaBroracusFactory(factory.django.DjangoModelFactory):
 
     username = 'babroracus'
     name = 'Ba Broracus'
+    is_active = True
 
 
 class BroHardFactory(factory.django.DjangoModelFactory):
@@ -25,6 +27,7 @@ class BroHardFactory(factory.django.DjangoModelFactory):
 
     username = 'brohard'
     name = 'Bro Hard'
+    is_active = True
 
 
 class AdminFactory(factory.django.DjangoModelFactory):
