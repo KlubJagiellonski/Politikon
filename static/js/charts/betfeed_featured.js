@@ -14,16 +14,33 @@ var SET_STYLE = {
     pointHighlightStroke : "rgba(220,220,220,1)"
 };
 
-var CHART_STYLE = {responsive: true,showScale: false,scaleShowLabels: false,datasetStrokeWidth : 6,bezierCurveTension : 0.5,pointDotRadius : 6,pointHitDetectionRadius : 10};
+var CHART_STYLE = {
+    responsive: true,
+    showScale: false,
+    scaleShowLabels: false,
+    datasetStrokeWidth: 6,
+    bezierCurveTension: 0.5,
+    pointDotRadius: 6,
+    scaleOverride : true,
+    scaleSteps : 10,
+    scaleStepWidth: 10,
+    scaleStartValue: 0,
+    pointHitDetectionRadius: 10
+};
 
-var FEATURED_CHART_STYLE = {
+var FRONT_CHART_STYLE = {
     responsive: true,
     showScale: false,
     scaleShowLabels: false,
     datasetStrokeWidth : 6,
     bezierCurveTension : 0.5,
     pointDotRadius : 6,
-    pointHitDetectionRadius : 40};
+    scaleOverride : true,
+    scaleSteps : 10,
+    scaleStepWidth: 10,
+    scaleStartValue: 0,
+    pointHitDetectionRadius : 40
+};
 
 //wykresy na wydarzenia w betfeedzie
 
@@ -73,14 +90,14 @@ function renderCharts(events, featuredEvent, chartDetails) {
     if(featuredEvent) {
         makeChart(featuredEvent, {
             id : '#featured-canvas',
-            chartStyle: FEATURED_CHART_STYLE
+            chartStyle: FRONT_CHART_STYLE
         });
     }
 
     if(chartDetails) {
         makeChart(chartDetails, {
             id : '#chart-details',
-            chartStyle: FEATURED_CHART_STYLE
+            chartStyle: FRONT_CHART_STYLE
         });
     }
 }
