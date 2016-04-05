@@ -20,7 +20,13 @@
 <section id="bet-details">
     <div class="astable">
         {% if event.small_image %}
-        <img class="chart-img" src="{{ event.small_image.url }}" width={{ config.SMALL_EVENT_IMAGE_WIDTH }} height={{ config.SMALL_EVENT_IMAGE_HEIGHT }} />
+        <div style="
+            background-image: url({{ event.small_image.url }});
+            width: 337px;
+            height: 214px;
+            float: left;
+            background-size: cover;
+        "></div>
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
