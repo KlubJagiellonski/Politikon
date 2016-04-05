@@ -84,9 +84,6 @@
     </div>
     {% endcomment %}
 </section>
-<section id="fb-comments">
-    <div class="fb-comments" data-href="{{ request.META.HTTP_HOST }}{{ event.get_relative_url }}" data-numposts="5"></div>
-</section>
 {% if related_events %}
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
@@ -96,12 +93,13 @@
 </section>
 {% endif %}
 
-{#	<section id="comments" class="prefooter-margin">--tutaj aplet komentarzy z fb--</section>#}
+<section id="comments" class="prefooter-margin">
+    <div class="fb-comments" data-href="{{ request.META.HTTP_HOST }}{{ event.get_relative_url }}" data-numposts="5"></div>
+</section>
 
 {% endblock %}
 
 {% comment %}
-{#
 ----- commented out TODO use or/and remove
 {% set FACEBOOK_OBJECT = "event" %}
 
@@ -218,5 +216,4 @@ ajaxResponseParser(message);
 
 {% endblock %}
 
-#}
 {% endcomment %}
