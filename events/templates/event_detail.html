@@ -18,19 +18,32 @@
 </section>
 
 <section id="bet-details">
-    <div class="astable">
+    <div class="astable" style="position: relative; background: #7D3A18;">
         {% if event.small_image %}
+        
         <div style="
-            background-image: url({{ event.small_image.url }});
-            width: 337px;
-            height: 214px;
+            background-image: url(https://politik.s3.amazonaws.com/events_small/500Szyd%C5%82o.jpg);
+            width: 100%;
+            height: 100%;
             float: left;
             background-size: cover;
+            position: absolute;
+            z-index: 100;
+            opacity: 0.3;
+        "></div>
+        <div style="
+            background-image: url({{ event.small_image.url }});
+            width: 30%;
+            height: 100%;
+            float: left;
+            background-size: cover;
+            position: absolute;
+            z-index: 100;
         "></div>
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
-        <div class="chart-container"><canvas id="chart-details" height="70"></canvas></div>
+        <div class="chart-container" style="position: relative; z-index:999"><canvas id="chart-details" height="70"></canvas></div>
     </div>
     <div class="bet-social">
         <div class="peopleYES lewa">
