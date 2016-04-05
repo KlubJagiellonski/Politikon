@@ -425,7 +425,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #ranking-short .userrank {width: 8.55%; float: left; margin-left: 1.6%; background: transparent; border-radius: 5px; border-top-left-radius: 50%; border-top-right-radius: 50%;}
 #ranking-short .userrank:hover {background: #eee;}
 #ranking-short .userrank:first-child {margin-left: 0;}
-#ranking-short .userrank .image {border: 2px solid #c84d28; border-radius: 50%;margin-bottom: 14px;width: 100px;height: 100px;margin: 0 auto;margin-bottom: 1em;background-size: cover;}
+#ranking-short .userrank.uservip {border: 2px solid #c84d28;}
+#ranking-short .userrank .image {border-radius: 50%;margin-bottom: 14px;width: 100px;height: 100px;margin: 0 auto;margin-bottom: 1em;background-size: cover;}
 #ranking-short .userrank .wolnereputy {height: 20px; width: 100%; color: #111; font-size: .875em; margin-bottom: 12px;}
 #ranking-short .userrank .wolnereputy span {background: url(../img/02reputysmall.png) top left no-repeat; padding-left: 30px; padding-top: 4px; margin: 0 auto;}
 #ranking-short .userrank .username {background: #fff; border-radius: 5px; padding: 10px 11%; width: 78%; text-align: center; color: #999; text-transform: uppercase; font-size: .75em;}
