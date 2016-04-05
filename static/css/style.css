@@ -533,7 +533,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .betinwallet {width: 46%; padding: 0 1.5%; margin-bottom: 20px; float: left;}
 #userinfo .betinwallet:nth-child(even) {float: right;}
 #userinfo .betinwallet .status {width: 70%;}
-#userinfo .betinwallet img {max-width: 25%;}
+#userinfo .betinwallet img {max-width: 25%; max-height: 100px;}
 #userinfo .detailed-status {font-size: .875em; color: #666; margin-top: 10px; opacity: 0;}
 #userinfo .betinwallet:hover .detailed-status {opacity: 1;}
 
