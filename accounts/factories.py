@@ -11,6 +11,22 @@ class UserFactory(factory.django.DjangoModelFactory):
     name = 'John Smith'
 
 
+class BaBroracusFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UserProfile
+
+    username = 'babroracus'
+    name = 'Ba Broracus'
+
+
+class BroHardFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UserProfile
+
+    username = 'brohard'
+    name = 'Bro Hard'
+
+
 class AdminFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
@@ -19,4 +35,3 @@ class AdminFactory(factory.django.DjangoModelFactory):
     name = 'Thomas Shelby'
     is_staff = True
     is_admin = True
-    is_active = True

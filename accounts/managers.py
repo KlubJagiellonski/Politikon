@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from unidecode import unidecode
-import uuid
-
 from django.contrib.auth.models import BaseUserManager
 from django.http import HttpResponseForbidden
 
+from .utils import process_username
 from constance import config
 
 
@@ -24,11 +22,7 @@ class UserProfileManager(BaseUserManager):
     def create_user(self, username, email, password=None):
         if len(self.model.objects.filter(email=email)) > 0 and len(email) > 0:
             return HttpResponseForbidden()
-        username = unidecode(username)
-        # TODO self.name = username for casual users
-        # and username = email b/c username has to be unique
-        while len(self.model.objects.filter(username=username)) > 0:
-            username = uuid.uuid4().hex[:30]
+        username = process_username(username)
         user = self.model(
             username=username,
             email=email,
@@ -41,11 +35,14 @@ class UserProfileManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None):
-        user = self.create_user(
-            username,
-            email,
-            password,
+        if len(self.model.objects.filter(email=email)) > 0 and len(email) > 0:
+            return HttpResponseForbidden()
+        username = process_username(username)
+        user = self.model(
+            username=username,
+            email=email,
         )
+        user.set_password(password)
         user.is_admin = True
         user.is_staff = True
         user.save(using=self._db)
@@ -53,6 +50,7 @@ class UserProfileManager(BaseUserManager):
         return user
 
     def create_user_with_random_password(self, username, **kwargs):
+        username = process_username(username)
         user = self.return_new_user_object(
             username,
             password=None

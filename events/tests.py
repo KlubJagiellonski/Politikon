@@ -11,6 +11,7 @@ from django.utils.timezone import datetime
 from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
     CruzEventFactory, BetFactory, TransactionFactory
 from .models import Event
+from .templatetags.format import formatted
 
 
 class EventsModelTestCase(TestCase):
@@ -38,7 +39,7 @@ class EventsModelTestCase(TestCase):
         self.assertEqual('/event/1-dlugi-tytul-testowego-wydarzenia',
                          event.get_relative_url())
         self.assertEqual('/event/1-a', event.get_absolute_url())
-        self.assertEqual(True, event.is_in_progress)
+        self.assertTrue(event.is_in_progress)
         self.assertEqual({
             'event_id': 1,
             'buy_for_price': 50,
@@ -50,11 +51,11 @@ class EventsModelTestCase(TestCase):
 
 class EventsManagerTestCase(TestCase):
     """
-    accounts/managers UserProfileManager
+    events/managers EventManager
     """
     def test_get_events(self):
         """
-        Test event get methods
+        Get events
         """
         event1 = EventFactory\
             (turnover=1,
@@ -103,7 +104,7 @@ class EventsManagerTestCase(TestCase):
 
     def test_get_front_event(self):
         """
-        Test get front event method
+        Get front event
         """
         front_event = Event.objects.get_front_event()
         self.assertIsNone(front_event)
@@ -118,7 +119,7 @@ class EventsManagerTestCase(TestCase):
 
     def test_get_featured_events(self):
         """
-        Test get featured events method
+        Get featured events
         """
         event1 = EventFactory()
         event2 = EventFactory()
@@ -128,3 +129,27 @@ class EventsManagerTestCase(TestCase):
         self.assertIsInstance(featured_events[0], Event)
         self.assertEqual(2, len(featured_events))
         self.assertEqual([event1, event2], list(featured_events))
+
+
+class EventsTemplatetagsTestCase(TestCase):
+    """
+    events/templatetags
+    """
+    def test_formatted(self):
+        """
+        Formatted templatetag
+        """
+        value = formatted(1000, True)
+        self.assertEqual("+1 000", value)
+
+        value = formatted(1000)
+        self.assertEqual("1 000", value)
+
+        value = formatted(-1000)
+        self.assertEqual("-1 000", value)
+
+        value = formatted(-100)
+        self.assertEqual("-100", value)
+
+        value = formatted(" ")
+        self.assertEqual(" ", value)
