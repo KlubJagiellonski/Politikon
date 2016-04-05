@@ -54,7 +54,7 @@
 <section id="bet-desc" class="astable">
     <div class="lewa">
 {#        <div class="astable share-zone">TODO -- tutaj widżety social media --</div>#}
-        <p>{{ event.description}}</p>
+        <p>{{ event.description }}</p>
     </div>
     {% comment %}
     <div class="prawa rss-related">
@@ -83,6 +83,9 @@
 
     </div>
     {% endcomment %}
+</section>
+<section id="fb-comments">
+    <div class="fb-comments" data-href="{{ request.META.HTTP_HOST }}{{ event.get_relative_url }}" data-numposts="5"></div>
 </section>
 {% if related_events %}
 <section id="betfeed" class="hotbets">
