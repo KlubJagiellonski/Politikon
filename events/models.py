@@ -175,20 +175,25 @@ class Event(models.Model):
             last_date = self.end_date
         else:
             # for event in progress last date point is yesterday
-            last_date = datetime.now().\
-                replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+            last_date = datetime.now().replace\
+                (hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
 
         first_date = (last_date - relativedelta(weeks=2)).\
             replace(hour=0, minute=0, second=0, microsecond=0)
-        if self.created_date > first_date:
-            first_date = self.created_date.\
-                replace(hour=0, minute=0, second=0, microsecond=0)
 
         # Default is start price: 50
         last_price = Event.BEGIN_PRICE
         step_date = first_date
         labels = []
         points = []
+
+        while self.created_date.replace\
+                (hour=0, minute=0, second=0, microsecond=0,
+                 tzinfo=pytz.UTC) > step_date:
+            labels.append(str(step_date.day) + ' %s' % _MONTHS[step_date.month])
+            step_date += relativedelta(days=1)
+            points.append(Event.BEGIN_PRICE)
+
         while step_date < last_date:
             labels.append(str(step_date.day) + ' %s' % _MONTHS[step_date.month])
             step_date += relativedelta(days=1)
@@ -199,7 +204,8 @@ class Event(models.Model):
             if ts.exists():
                 t = ts[0]
                 if t.type == Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO \
-                        or t.type == Transaction.TRANSACTION_TYPE_CHOICES.SELL_NO:
+                        or t.type == Transaction.\
+                        TRANSACTION_TYPE_CHOICES.SELL_NO:
                     last_price = 100 - abs(t.price)
                 else:
                     last_price = abs(t.price)
