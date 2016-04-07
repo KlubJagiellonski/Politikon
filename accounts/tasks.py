@@ -68,13 +68,8 @@ def update_users_classification():
     Update weekly and monthly users classifications.
     """
     for user in UserProfile.objects.get_users().iterator():
-        weekly_result = 0
-        for t in Transaction.objects.get_weekly_user_transactions(user).iterator():
-            weekly_result += t.price * t.quantity
-
-        monthly_result = 0
-        for t in Transaction.objects.get_monthly_user_transactions(user).iterator():
-            monthly_result += t.price * t.quantity
+        weekly_result = user.get_last_month_reputation_change()
+        monthly_result = user.get_last_month_reputation_change()
 
         if user.weekly_result != weekly_result or user.monthly_result != monthly_result:
             user.weekly_result = weekly_result

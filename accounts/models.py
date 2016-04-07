@@ -1,5 +1,6 @@
 # coding: utf-8
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 import logging
 import os
@@ -355,9 +356,11 @@ class UserProfile(AbstractBaseUser):
         points = []
         for snapshot in snapshots:
             labels.append(
-                '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
+                '{0} {1}'.format(snapshot.created_at.day,
+                                 _MONTHS[snapshot.created_at.month])
             )
-            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
+            reputation = self.reputation_formula(snapshot.portfolio_value,
+                                                 snapshot.total_cash,
                                                  snapshot.total_given_cash)
             points.append(str(int(reputation)))
 
@@ -366,3 +369,37 @@ class UserProfile(AbstractBaseUser):
             'labels': labels,
             'points': points
         }
+
+    def get_reputation_change(self, date):
+        """
+        Get change of reputation since date
+        :return: change of reputation
+        :rtype: int
+        """
+        snapshots = self.snapshots.filter(
+            snapshot_of_id=self.id,
+            created_at=date,
+        ).order_by('created_at')
+        if len(snapshots):
+            old_reputation = self.reputation_formula(snapshot.portfolio_value,
+                                                    snapshot.total_cash,
+                                                    snapshot.total_given_cash)
+            return int(self.reputation - old_reputation)
+        else:
+            return int(self.reputation) - 100
+
+    def get_last_week_reputation_change(self):
+        """
+        Get change of reputation since last week
+        :return: change of reputation
+        :rtype: int
+        """
+        return self.get_reputation_change(now()-timedelta(days=7))
+
+    def get_last_month_reputation_change(self):
+        """
+        Get change of reputation since last week
+        :return: change of reputation
+        :rtype: int
+        """
+        return self.get_reputation_change(now()-relativedelta(months=1))
