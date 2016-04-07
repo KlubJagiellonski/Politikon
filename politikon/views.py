@@ -35,16 +35,16 @@ class HomeView(TemplateView):
         featured_events = list(Event.objects.get_featured_events()[:6])
         for i in range(len(featured_events)):
             featured_events[i].my_bet = featured_events[i].get_user_bet(user)
-        popular_events = list(Event.objects.get_events('popular')[:3])
-        for i in range(len(popular_events)):
-            popular_events[i].my_bet = popular_events[i].get_user_bet(user)
+        changed_events = list(Event.objects.get_events('changed')[:3])
+        for i in range(len(changed_events)):
+            changed_events[i].my_bet = changed_events[i].get_user_bet(user)
 
         json_data['events'] = self.\
-            makeFeaturedEventsBetfeedData(popular_events + featured_events)
+            makeFeaturedEventsBetfeedData(changed_events + featured_events)
 
         context.update({
             'featured_events': featured_events,
-            'popular_events': popular_events,
+            'changed_events': changed_events,
             'json_data': json_data,
             'config': config,
             'best_weekly': UserProfile.objects.get_best_weekly()[:10],
