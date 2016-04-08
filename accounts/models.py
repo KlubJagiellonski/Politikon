@@ -89,6 +89,15 @@ class UserProfile(AbstractBaseUser):
     def __unicode__(self):
         return "%s" % self.username
 
+    def save(self, **kwargs):
+        """
+        Calculate reputation
+        :param kwargs:
+        """
+        self.calculate_reputation()
+
+        super(self, UserProfile).save(**kwargs)
+
     @transaction.atomic
     def synchronize_facebook_friends(self):
         # Get friends
@@ -240,7 +249,7 @@ class UserProfile(AbstractBaseUser):
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(self, transaction)
 
-        self.save(update_fields=['total_cash', 'total_given_cash'])
+        self.save()
 
     @property
     def is_superuser(self):

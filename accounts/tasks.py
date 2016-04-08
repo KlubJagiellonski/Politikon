@@ -38,7 +38,7 @@ def update_portfolio_value():
         portfolio_value = user.current_portfolio_value()
         if user.portfolio_value != portfolio_value:
             user.portfolio_value = portfolio_value
-            user.save(update_fields=['portfolio_value'])
+            user.save()
 
     logger.debug("'accounts:tasks:update_portfolio_value' finished.")
 
