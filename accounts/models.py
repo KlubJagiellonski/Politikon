@@ -63,7 +63,7 @@ class UserProfile(AbstractBaseUser):
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w \
                                            historii", default=0.)
     reputation = models.DecimalField(u"reputation", default=100, max_digits=12,
-                                     decimal_places=2,)
+                                     decimal_places=2, null=True)
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
     weekly_result = models.IntegerField(u"wynik tygodniowy", null=True,
                                         blank=True)
@@ -88,6 +88,16 @@ class UserProfile(AbstractBaseUser):
 
     def __unicode__(self):
         return "%s" % self.username
+
+    def save(self, **kwargs):
+        """
+        Calculate reputation
+        :param kwargs:
+        """
+        if self.pk:
+            self.calculate_reputation()
+
+        super(UserProfile, self).save(**kwargs)
 
     @transaction.atomic
     def synchronize_facebook_friends(self):
@@ -132,11 +142,15 @@ class UserProfile(AbstractBaseUser):
 
     @property
     def statistics_dict(self):
+        if self.reputation:
+            reputation = "%s%%" % formatted(self.reputation)
+        else:
+            reputation = None
         return {
             'user_id': self.id,
             'total_cash': formatted(self.total_cash),
             'portfolio_value': formatted(self.portfolio_value),
-            'reputation': "%s%%" % formatted(self.reputation)
+            'reputation': reputation
         }
 
     @property
@@ -217,9 +231,10 @@ class UserProfile(AbstractBaseUser):
         :rtype: Decimal
         """
         if total_given_cash == 0:
-            return Decimal(0)
+            return None
         else:
-            return Decimal(portfolio_value + total_cash) / total_given_cash * 100
+            return Decimal(portfolio_value + total_cash) / \
+                Decimal(total_given_cash) * 100
 
     @property
     def profile_photo(self):
@@ -240,7 +255,7 @@ class UserProfile(AbstractBaseUser):
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(self, transaction)
 
-        self.save(update_fields=['total_cash', 'total_given_cash'])
+        self.save()
 
     @property
     def is_superuser(self):

@@ -39,7 +39,7 @@ class UserProfileModelTestCase(TestCase):
             'user_id': 1,
             'total_cash': formatted(0),
             'portfolio_value': formatted(0),
-            'reputation': '0%',
+            'reputation': None,
         }, user.statistics_dict)
         self.assertEqual(0, user.current_portfolio_value)
 
