@@ -124,13 +124,29 @@ class Event(models.Model):
     def __unicode__(self):
         return self.title
 
+    def save(self, **kwargs):
+        """
+        Recalculate prices for event and optionally change front event
+        :param kwargs:
+        """
+        if not self.id:
+            self.recalculate_prices()
+
+        if self.is_front and self.is_in_progress:
+            front_events = Event.objects.filter(is_front=True)
+            for e in front_events:
+                e.is_front = False
+                e.save()
+
+        super(Event, self).save(**kwargs)
+
+    def get_absolute_url(self):
+        return reverse('events:event_detail', kwargs={'pk': self.pk})
+
     def get_relative_url(self):
         return '/event/%(id)d-%(title)s' % {'id': self.id,
                                             'title': slugify(unidecode
                                                              (self.title))}
-
-    def get_absolute_url(self):
-        return reverse('events:event_detail', kwargs={'pk': self.pk})
 
     def get_absolute_facebook_object_url(self):
         return 'http://%(domain)s%(url)s' % {
@@ -350,22 +366,6 @@ class Event(models.Model):
         self.current_buy_against_price = round(factor * buy_against_price, 0)
         self.current_sell_for_price = round(factor * sell_for_price, 0)
         self.current_sell_against_price = round(factor * sell_against_price, 0)
-
-    def save(self, **kwargs):
-        """
-        Recalculate prices for event and optionally change front event
-        :param kwargs:
-        """
-        if not self.id:
-            self.recalculate_prices()
-
-        if self.is_front and self.is_in_progress:
-            front_events = Event.objects.filter(is_front=True)
-            for e in front_events:
-                e.is_front = False
-                e.save()
-
-        super(Event, self).save(**kwargs)
 
     @transaction.atomic
     def finish(self, outcome):
