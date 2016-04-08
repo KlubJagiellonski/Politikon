@@ -378,12 +378,12 @@ class UserProfile(AbstractBaseUser):
         """
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
-            created_at=date,
+            created_at__gte=date,
         ).order_by('created_at')
         if len(snapshots):
-            old_reputation = self.reputation_formula(snapshot.portfolio_value,
-                                                    snapshot.total_cash,
-                                                    snapshot.total_given_cash)
+            old_reputation = self.reputation_formula\
+                (snapshots[0].portfolio_value, snapshots[0].total_cash,
+                 snapshots[0].total_given_cash)
             return int(self.reputation - old_reputation)
         else:
             return int(self.reputation) - 100
