@@ -2,23 +2,30 @@
 """
 Test accounts module
 """
-from .templatetags.path import startswith
+from django.test import TestCase
+
+from .templatetags.format import formatted
 
 
-#  class UserTemplatetagTestCase(TestCase):
-    #  """
-    #  accounts/templatetags
-    #  """
-    #  def test_startswith(self):
-        #  user = UserFactory()
-        #  user_templatetag = user_rank(user)
-        #  self.assertEqual({
-            #  'user': user,
-        #  }, user_templatetag)
+class UserTemplatetagTestCase(TestCase):
+    """
+    accounts/templatetags
+    """
+    def test_formatted(self):
+        """
+        Formatted templatetag
+        """
+        value = formatted(1000, True)
+        self.assertEqual("+1 000", value)
 
-    #  def test_user_home(self):
-        #  user = UserFactory()
-        #  user_templatetag = user_rank(user)
-        #  self.assertEqual({
-            #  'user': user,
-        #  }, user_templatetag)
+        value = formatted(1000)
+        self.assertEqual("1 000", value)
+
+        value = formatted(-1000)
+        self.assertEqual("-1 000", value)
+
+        value = formatted(-100)
+        self.assertEqual("-100", value)
+
+        value = formatted(" ")
+        self.assertEqual(" ", value)

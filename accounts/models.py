@@ -15,7 +15,7 @@ from django.utils.timezone import now
 from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
 from events.models import Bet, Event, _MONTHS
-from events.templatetags.format import formatted
+from politikon.templatetags.format import formatted
 from politikon.settings import STATIC_URL
 
 

@@ -16,7 +16,7 @@ from .pipeline import save_profile
 from .templatetags.user import user_home, user_rank
 from .utils import process_username
 from constance import config
-from events.templatetags.format import formatted
+from politikon.templatetags.format import formatted
 from politikon.templatetags.path import startswith
 
 

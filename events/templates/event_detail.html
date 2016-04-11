@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load format %}
 
 {% block content %}
 <script type="text/javascript">
@@ -20,7 +21,7 @@
 <section id="bet-details">
     <div class="astable" style="position: relative; background: #7D3A18;">
         {% if event.small_image %}
-        
+
         <div style="
             background-image: url({{ event.small_image.url }});
             width: 100%;
@@ -63,7 +64,7 @@
             <div class="voted">{{ bet_social.no_count }}</div>
         </div>
         <div id="makeabet" class="collapsible{% if bet.extension.has_any %} morebets{% endif %}" >
-            <div class="change{% if event.price_change > 0 %} changeYES{% elif event.price_change < 0 %} changeNO{% endif %}{% if bet.extension.has_any %} hidden{% endif %}">{{ event.price_change }}</div>
+            <div class="change{% if event.price_change > 0 %} changeYES{% elif event.price_change < 0 %} changeNO{% endif %}{% if bet.extension.has_any %} hidden{% endif %}">{{ event.price_change|formatted:"True" }}</div>
             {% if bet %}
             {% render_bet event bet.extension True %}
             {% endif %}

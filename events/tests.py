@@ -12,7 +12,6 @@ from django.utils.timezone import datetime
 from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
     CruzEventFactory, BetFactory, TransactionFactory
 from .models import Event
-from .templatetags.format import formatted
 from politikon.templatetags.path import startswith
 
 
@@ -149,24 +148,6 @@ class EventsTemplatetagsTestCase(TestCase):
     """
     events/templatetags
     """
-    def test_formatted(self):
-        """
-        Formatted templatetag
-        """
-        value = formatted(1000, True)
-        self.assertEqual("+1 000", value)
-
-        value = formatted(1000)
-        self.assertEqual("1 000", value)
-
-        value = formatted(-1000)
-        self.assertEqual("-1 000", value)
-
-        value = formatted(-100)
-        self.assertEqual("-100", value)
-
-        value = formatted(" ")
-        self.assertEqual(" ", value)
 
 
 class PolitikonEventTemplatetagsTestCase(TestCase):
