@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load humanize %}
 {% load format %}
 
 {% block content %}
@@ -44,7 +45,19 @@
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
-        <div class="chart-container" style="position: relative; z-index:999"><canvas id="chart-details" height="70"></canvas></div>
+        <div style="
+            display: block;
+            z-index: 10000;
+            position: absolute;
+            color: rgba(255,255,255,0.6);
+            top: 10px;
+            left: 31%;
+            text-shadow: 0 2px 10px black;">
+            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+        </div>
+        <div class="chart-container" style="position: relative; z-index:999">
+            <canvas id="chart-details" height="70"></canvas>
+        </div>
     </div>
     <div class="bet-social">
         <div class="peopleYES lewa">

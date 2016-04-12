@@ -166,6 +166,8 @@ $(function() {
             var makebets = $('body').find('[data-event_id="'+event_id+'"]').parent();
             var word_yes = 'TAK';    // TODO: resolve multi-language problem
             var word_no = 'NIE';    // TODO: resolve multi-language problem
+            var word_bet_yes = 'Jesteś na TAK';    // TODO: resolve multi-language problem
+            var word_bet_no = 'Jesteś na NIE';    // TODO: resolve multi-language problem
             var word_eng_yes = 'YES';    // TODO: resolve multi-language problem
             var word_eng_no = 'NO';    // TODO: resolve multi-language problem
             var word_true = 'True';
@@ -195,7 +197,7 @@ $(function() {
 
                             if (bet.outcome == true) {
                                 // You have YES bets for the event
-                                bets_type = word_yes;
+                                bets_type = word_bet_yes;
                                 $(this).addClass('morebets');
                                 $(this).children('.a_betYES').data('price', event.buy_for_price);
                                 $(this).children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
@@ -211,7 +213,7 @@ $(function() {
                                 .html(bets_type);
                             } else {    // bet.outcome = false
                                 // You have NO bets for the event
-                                bets_type = word_no;
+                                bets_type = word_bet_no;
                                 $(this).addClass('morebets');
                                 $(this).children('.a_betYES').data('price', event.sell_against_price);
                                 $(this).children('.a_betYES').data('outcome', word_eng_no);
