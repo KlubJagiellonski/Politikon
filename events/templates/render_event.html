@@ -1,5 +1,6 @@
 {% load display %}
 {% load format %}
+{% load humanize %}
 <div class="bet">
     <figure>
         {% if event.small_image %}
@@ -7,6 +8,7 @@
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
+        {{ event.estimated_end_date|naturaltime }}
         <figcaption>
             <a href="{{ event.get_relative_url }}"><div class="details-chart"><canvas class="bet-{{ event.id }}-canvas" height="70"></canvas></div></a>
         <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change|formatted:"True" }}</div>
