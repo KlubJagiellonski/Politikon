@@ -260,8 +260,8 @@ class Event(models.Model):
                     else self.current_sell_against_price,
                     'priceNO': self.current_sell_for_price if bet.outcome
                     else self.current_buy_against_price,
-                    'textYES': "+" if bet.outcome else "-",
-                    'textNO': "-" if bet.outcome else "+",
+                    'textYES': "dokup na „TAK“" if bet.outcome else "sprzedaj zakład",
+                    'textNO': "sprzedaj zakład" if bet.outcome else "dokup na „NIE“",
                     'has': bet.has,
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",

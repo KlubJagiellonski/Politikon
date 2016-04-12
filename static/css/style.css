@@ -330,7 +330,7 @@ footer ul a, footer .socialmedia div,
 #makeabet .currentbet p:last-of-type {color: #999; font-size: 1em; font-weight: 700;}
 .reputy-small {display: inline-block; width: 20px; height: 20px; background: url(../img/02reputysmall.png) center no-repeat; margin-bottom: -4px;}
 
-#makebet.morebets .txt {
+#makeabet.morebets .txt {
   font-size: 12px !important;
   line-height: 1em;
   padding-top: 1em;
