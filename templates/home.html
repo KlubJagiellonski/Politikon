@@ -26,31 +26,30 @@
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}
-            <div style="
-                display: block;
-                z-index: 10000;
-                position: absolute;
-                color: rgba(255,255,255,0.8);
-                top: 10px;
-                left: 10px;">
-                Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
-            </div>
-            
             <figcaption>
-            <a href="{{ front_event.get_relative_url }}">
-                <div class="details">
-                    <div>
-                        <canvas id="featured-canvas" height="70"></canvas>
+                <a href="{{ front_event.get_relative_url }}">
+                    <div class="details">
+                        <div style="
+                            display: block;
+                            z-index: 10000;
+                            position: absolute;
+                            color: rgba(255,255,255,0.8);
+                            top: 10px;
+                            left: 10px;">
+                            Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
+                        </div>
+                        <div>
+                            <canvas id="featured-canvas" height="70"></canvas>
+                        </div>
+                    </div>
+                </a>
+                <div class="opis">
+                    <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
+                    <div id="makeabet" class="prawa collapsible{% if front_event_bet.extension.has_any %} morebets{% endif %}">
+                        <div class="change{% if front_event.price_change > 0 %} changeYES{% elif front_event.price_change < 0 %} changeNO{% endif %}{% if front_event_bet.extension.has_any %} hidden{% endif %}">{{ front_event.price_change|formatted:"True" }}</div>
+                        {% render_bet front_event front_event_bet.extension True %}
                     </div>
                 </div>
-            </a>
-            <div class="opis">
-                <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
-                <div id="makeabet" class="prawa collapsible{% if front_event_bet.extension.has_any %} morebets{% endif %}">
-                    <div class="change{% if front_event.price_change > 0 %} changeYES{% elif front_event.price_change < 0 %} changeNO{% endif %}{% if front_event_bet.extension.has_any %} hidden{% endif %}">{{ front_event.price_change|formatted:"True" }}</div>
-                    {% render_bet front_event front_event_bet.extension True %}
-                </div>
-            </div>
             </figcaption>
         </figure>
     </section>
