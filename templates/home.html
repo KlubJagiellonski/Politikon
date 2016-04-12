@@ -2,6 +2,7 @@
 
 {% load display %}
 {% load format %}
+{% load humanize %}
 {% load user %}
 
 {% block content %}
@@ -25,6 +26,7 @@
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}
+            {{ front_event.estimated_end_date|naturaltime }}
             <figcaption>
             <a href="{{ front_event.get_relative_url }}">
                 <div class="details">
