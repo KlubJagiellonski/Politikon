@@ -15,21 +15,21 @@
     <div class="zakladki-content">
         <article id="7dni">
             {% for user in best_weekly %}
-            {% user_rank user user.weekly_result %}
+                {% user_rank user user.weekly_result forloop.counter %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="miesiac">
             {% for user in best_monthly %}
-            {% user_rank user user.monthly_result %}
+                {% user_rank user user.monthly_result forloop.counter %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="calosc">
             {% for user in object_list %}
-            {% user_rank user %}
+                {% user_rank user None forloop.counter %}
             {% endfor %}
             {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
