@@ -15,7 +15,7 @@
             color: rgba(255,255,255,0.8);
             top: 10px;
             left: 10px;">
-            {{ event.estimated_end_date|naturaltime }}
+            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
         </div>
         <figcaption>
             <a href="{{ event.get_relative_url }}"><div class="details-chart"><canvas class="bet-{{ event.id }}-canvas" height="70"></canvas></div></a>
