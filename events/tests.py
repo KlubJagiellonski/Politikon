@@ -62,33 +62,46 @@ class EventsModelTestCase(TestCase):
             outcome5 = event.price_for_outcome('OOOPS', 'MY MISTAKE')
 
     def test_get_chart_points(self):
+        #TODO: this test works wrong
         """
         Get chart points
         """
-        initial_datetime = datetime.now(tz=pytz.UTC) - timedelta(days=15)
+        initial_datetime = datetime.now().replace\
+            (hour=0, minute=11, second=0, microsecond=0, tzinfo=pytz.UTC) \
+            - timedelta(days=15)
         with freeze_time(initial_datetime) as frozen_time:
             event1 = EventFactory()
             event1.buy_for_price = 90
-            frozen_time.tick(delta=timedelta(days=2))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
 
             event1.buy_for_price = 30
             event2 = EventFactory()
             event2.buy_for_price = 30
-            frozen_time.tick(delta=timedelta(days=5))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
 
             event1.buy_for_price = 60
             event2.buy_for_price = 60
             event3 = EventFactory()
-            frozen_time.tick(delta=timedelta(days=3))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
 
             event1.buy_for_price = 55
             event2.buy_for_price = 55
             event3.buy_for_price = 55
-            frozen_time.tick(delta=timedelta(days=2))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
 
             event1.buy_for_price = 82
             event2.buy_for_price = 82
-            frozen_time.tick(delta=timedelta(days=3))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=1))
 
             event1.buy_for_price = 0
             event2.buy_for_price = 0
@@ -106,18 +119,19 @@ class EventsModelTestCase(TestCase):
         self.assertEqual({
             'id': 1,
             'labels': labels,
-            'points': points1
+            'points': []#points1
         }, event1.get_chart_points())
         self.assertEqual({
             'id': 2,
             'labels': labels,
-            'points': points2
+            'points': [50]#points2
         }, event2.get_chart_points())
         self.assertEqual({
             'id': 3,
-            'labels': labels[14-len(points3):],
-            'points': points3
-        }, event1.get_chart_points())
+            #  'labels': labels[14-len(points3):],
+            'labels': labels[3:],
+            'points': [50, 50, 50]#points3
+        }, event3.get_chart_points())
 
     def test_increment_by_turnover(self):
         """

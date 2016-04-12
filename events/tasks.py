@@ -40,33 +40,16 @@ def calculate_price_change():
     """
     logger.debug("'events:tasks:calculate_price_change' worker up")
     yesterday = now() - timedelta(days=1)
-    tch = Transaction.TRANSACTION_TYPE_CHOICES
-    for event in Event.objects.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
-        # for in progress events get last transaction from day before yesterday
-        transactions = Transaction.objects.filter(
-            event=event,
-            date__range=(yesterday - timedelta(days=1), yesterday),
-            type__in=Transaction.BUY_SELL_TYPES,
-        ).order_by('-date')[:1]
-
-        if transactions.exists():
-            # if transaction exist calculate price change
-            transaction = transactions[0]
-            if transaction.type == tch.BUY_NO:
-                event.price_change = event.current_buy_against_price - abs(transaction.price)
-            elif transaction.type == tch.SELL_NO:
-                event.price_change = event.current_sell_against_price - transaction.price
-            elif transaction.type == tch.BUY_YES:
-                event.price_change = event.current_buy_for_price - abs(transaction.price)
-            elif transaction.type == tch.SELL_YES:
-                event.price_change = event.current_sell_for_price - transaction.price
-            event.absolute_price_change = abs(event.price_change)
-            logger.debug(
-                "'events:tasks:calculate_price_change' changing price_change of event "
-                "<%s> to %s" % (unicode(event.pk), event.price_change)
-            )
+    for event in Event.objects.ongoing_only_queryset():
+        snapshots = event.snapshots.filter(
+            snapshot_of_id=event.id,
+            created_at__lte=yesterday,
+        ).order_by('-created_at')[:1]
+        if snapshots.exists():
+            last_price = snapshots[0].current_buy_for_price
         else:
-            # price didn't change
-            event.price_change = 0
-            event.absolute_price_change = 0
+            last_price = 50
+
+        event.price_change = last_price - event.current_buy_for_price
+        event.absolute_price_change = abs(event.price_change)
         event.save()

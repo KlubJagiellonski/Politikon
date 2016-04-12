@@ -221,7 +221,7 @@ class Event(models.Model):
             snapshots = self.snapshots.filter(
                 snapshot_of_id=self.id,
                 created_at__lte=step_date,
-            ).order_by('created_at')[:1]
+            ).order_by('-created_at')[:1]
             if snapshots.exists():
                 snapshot = snapshots[0]
                 points.append(snapshot.current_buy_for_price)

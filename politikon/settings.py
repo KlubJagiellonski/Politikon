@@ -65,7 +65,6 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_IMPORTS = ("accounts.tasks", "events.tasks")
 
 CELERYBEAT_SCHEDULE = {
-    # TODO: co to jest?
     'update_portfolio_values': {
         'task': 'accounts.tasks.update_portfolio_value',
         'schedule': timedelta(minutes=1)
