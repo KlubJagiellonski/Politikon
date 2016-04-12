@@ -14,6 +14,7 @@ from .exceptions import UnknownOutcome
 from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
     CruzEventFactory, BetFactory, TransactionFactory
 from .models import Event, _MONTHS
+from .tasks import create_open_events_snapshot
 from politikon.templatetags.path import startswith
 
 
@@ -62,49 +63,78 @@ class EventsModelTestCase(TestCase):
             outcome5 = event.price_for_outcome('OOOPS', 'MY MISTAKE')
 
     def test_get_chart_points(self):
-        #TODO: this test works wrong
         """
         Get chart points
         """
         initial_datetime = datetime.now().replace\
-            (hour=0, minute=11, second=0, microsecond=0, tzinfo=pytz.UTC) \
+            (hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)\
             - timedelta(days=15)
         with freeze_time(initial_datetime) as frozen_time:
             event1 = EventFactory()
-            event1.buy_for_price = 90
+            event1.current_buy_for_price = 90
+            event1.save()
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
 
-            event1.buy_for_price = 30
+            event1.current_buy_for_price = 30
+            event1.save()
             event2 = EventFactory()
-            event2.buy_for_price = 30
+            event2.current_buy_for_price = 30
+            event2.save()
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
 
-            event1.buy_for_price = 60
-            event2.buy_for_price = 60
+            event1.current_buy_for_price = 60
+            event1.save()
+            event2.current_buy_for_price = 60
+            event2.save()
             event3 = EventFactory()
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
-            frozen_time.tick(delta=timedelta(days=1))
-
-            event1.buy_for_price = 55
-            event2.buy_for_price = 55
-            event3.buy_for_price = 55
-            frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
 
-            event1.buy_for_price = 82
-            event2.buy_for_price = 82
+            event1.current_buy_for_price = 55
+            event1.save()
+            event2.current_buy_for_price = 55
+            event2.save()
+            event3.current_buy_for_price = 55
+            event3.save()
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
-            frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
 
-            event1.buy_for_price = 0
-            event2.buy_for_price = 0
+            event1.current_buy_for_price = 82
+            event1.save()
+            event2.current_buy_for_price = 82
+            event2.save()
+            event3.current_buy_for_price = 82
+            event3.save()
+            create_open_events_snapshot()
+            frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
+            frozen_time.tick(delta=timedelta(days=1))
+            create_open_events_snapshot()
+            frozen_time.tick(delta=timedelta(days=1))
+
+            event1.current_buy_for_price = 0
+            event1.save()
+            event2.current_buy_for_price = 0
+            event2.save()
+            create_open_events_snapshot()
 
         first_date = datetime.now() - timedelta(days=14)
         days = [first_date + timedelta(n) for n in range(14)]
@@ -113,24 +143,23 @@ class EventsModelTestCase(TestCase):
         points1 = [90, 30, 30, 30, 30, 30, 60, 60, 60, 55, 55, 82, 82, 82]
         points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 60, 55, 55,
                    82, 82, 82]
-        points3 = ([Event.BEGIN_PRICE] * Event.CHART_MARGIN).\
-            append([Event.BEGIN_PRICE, Event.BEGIN_PRICE, Event.BEGIN_PRICE,
-                    55, 55, 82, 82, 82])
+        points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
+        points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE, Event.BEGIN_PRICE,
+                    55, 55, 82, 82, 82]
         self.assertEqual({
             'id': 1,
             'labels': labels,
-            'points': []#points1
+            'points': points1
         }, event1.get_chart_points())
         self.assertEqual({
             'id': 2,
             'labels': labels,
-            'points': [50]#points2
+            'points': points2
         }, event2.get_chart_points())
         self.assertEqual({
             'id': 3,
-            #  'labels': labels[14-len(points3):],
-            'labels': labels[3:],
-            'points': [50, 50, 50]#points3
+            'labels': labels[14-len(points3):],
+            'points': points3
         }, event3.get_chart_points())
 
     def test_increment_by_turnover(self):
