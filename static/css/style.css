@@ -293,7 +293,7 @@ footer ul a, footer .socialmedia div,
 .betresult .status-change p span:last-of-type, #userinfo .detailed-status span:last-of-type {margin-right: 0px;}
 
 
-#makeabet {width: 100%; height: 50px; z-index: 4000; color: #fff;}
+#makeabet {width: 100%; height: 47px; z-index: 4000; color: #fff;}
 #makeabet .betYES {width: 49.5%; height: 100%; line-height: 45px; float: left; background: #a0b918; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
 #makeabet .betYES .value {color: #d1e567;}
 #makeabet .betNO {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
@@ -323,7 +323,7 @@ footer ul a, footer .socialmedia div,
 .morebets {background: #f5f5f5;}
 .morebets .betYES, .morebets .betNO {width: 33.4% !important;}
 .morebets .value {width: 40% !important;}
-.morebets .txt {width: 57% !important; font-size: 1.2em !important; margin-top: -3px;}
+.morebets .txt {width: 59% !important; font-size: 1.2em !important; margin-top: -3px;}
 
 #makeabet .currentbet {text-align: center;}
 #makeabet .currentbet p:first-of-type {padding-top: 3px; font-size: 1em; line-height: 1.3em; font-weight: 700;}
@@ -333,7 +333,7 @@ footer ul a, footer .socialmedia div,
 #makeabet.morebets .txt {
   font-size: 12px !important;
   line-height: 1em;
-  padding-top: 1em;
+  padding-top: 1.1em;
   display: block;
   float: left;
 }
