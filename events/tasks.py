@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 @task
 def create_open_events_snapshot():
     """
-    ???
+    Create snapshot of events for time charts
     """
     logger.debug("'events:tasks:create_open_events_snapshot' worker up")
 
