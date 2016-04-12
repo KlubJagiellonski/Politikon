@@ -37,12 +37,12 @@ def save_profile(strategy, user, response, details, is_new=False,
     :type is_new: bool
     :param is_new: is it new account
     """
-    print(is_new)
-    print(user)
-    print(details)
-    print(response)
-    print(strategy)
-    # uid = kwargs['uid']
+    #  print(is_new)
+    #  print(user)
+    #  print(details)
+    #  print(response)
+    #  print(strategy)
+    #  uid = kwargs['uid']
 
     backend = kwargs['backend']
 

@@ -353,3 +353,6 @@ class UserUtilsTestCase(TestCase):
         """
         username = process_username(u"zażółćgęśląjaźń")
         self.assertEqual('zazolcgeslajazn', username)
+        user = UserFactory(username='zazolcgeslajazn')
+        username2 = process_username(u"zażółćgęśląjaźń")
+        self.assertNotEqual('zazolcgeslajazn', username2)
