@@ -55,7 +55,7 @@ class Event(models.Model):
     }
 
     BEGIN_PRICE = 50
-    DAYS_BEFORE_START = 3
+    CHART_MARGIN = 3
     PRIZE_FOR_WINNING = 100
 
     objects = EventManager()
@@ -72,8 +72,8 @@ class Event(models.Model):
     title = models.TextField(u'tytuł wydarzenia')
     short_title = models.TextField(u'tytuł promocyjny wydarzenia')
 
-    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB')
-    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB')
+    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', default='')
+    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', default='')
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
@@ -205,33 +205,27 @@ class Event(models.Model):
         points = []
 
         if step_date < self.created_date - relativedelta\
-                (days=Event.DAYS_BEFORE_START):
+                (days=Event.CHART_MARGIN):
             step_date = self.created_date - relativedelta\
-                (days=Event.DAYS_BEFORE_START)
+                (days=Event.CHART_MARGIN)
 
         while self.created_date.replace\
                 (hour=0, minute=0, second=0, microsecond=0,
                  tzinfo=pytz.UTC) > step_date:
-            labels.append(str(step_date.day) + ' %s' % _MONTHS[step_date.month])
+            labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
             step_date += relativedelta(days=1)
             points.append(Event.BEGIN_PRICE)
 
         while step_date < last_date:
-            labels.append(str(step_date.day) + ' %s' % _MONTHS[step_date.month])
+            labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
+            snapshots = self.snapshots.filter(
+                snapshot_of_id=self.id,
+                created_at__lte=step_date,
+            ).order_by('-created_at')[:1]
+            if snapshots.exists():
+                snapshot = snapshots[0]
+                points.append(snapshot.current_buy_for_price)
             step_date += relativedelta(days=1)
-            ts = Transaction.objects.filter(event=self,
-                                            date__lte=step_date,
-                                            type__in=Transaction.BUY_SELL_TYPES,
-                                            ).order_by('-date')[:1]
-            if ts.exists():
-                t = ts[0]
-                if t.type == Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO \
-                        or t.type == Transaction.\
-                        TRANSACTION_TYPE_CHOICES.SELL_NO:
-                    last_price = 100 - abs(t.price)
-                else:
-                    last_price = abs(t.price)
-            points.append(last_price)
 
         return {
             'id': self.id,

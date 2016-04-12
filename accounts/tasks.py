@@ -35,7 +35,7 @@ def update_portfolio_value():
     logger.debug("'accounts:tasks:update_portfolio_value' worker up")
 
     for user in UserProfile.objects.get_users().iterator():
-        portfolio_value = user.current_portfolio_value()
+        portfolio_value = user.current_portfolio_value
         if user.portfolio_value != portfolio_value:
             user.portfolio_value = portfolio_value
             user.save()

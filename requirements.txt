@@ -12,6 +12,7 @@ ipython
 gunicorn==19.3.0
 
 # tests
+freezegun
 factory_boy
 coveralls
 flake8
