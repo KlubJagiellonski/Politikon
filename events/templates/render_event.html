@@ -8,7 +8,15 @@
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
-        {{ event.estimated_end_date|naturaltime }}
+        <div style="
+            display: block;
+            z-index: 10000;
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            top: 10px;
+            left: 10px;">
+            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+        </div>
         <figcaption>
             <a href="{{ event.get_relative_url }}"><div class="details-chart"><canvas class="bet-{{ event.id }}-canvas" height="70"></canvas></div></a>
         <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change|formatted:"True" }}</div>

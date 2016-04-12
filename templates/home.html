@@ -26,7 +26,16 @@
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}
-            {{ front_event.estimated_end_date|naturaltime }}
+            <div style="
+                display: block;
+                z-index: 10000;
+                position: absolute;
+                color: rgba(255,255,255,0.8);
+                top: 10px;
+                left: 10px;">
+                Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
+            </div>
+            
             <figcaption>
             <a href="{{ front_event.get_relative_url }}">
                 <div class="details">
