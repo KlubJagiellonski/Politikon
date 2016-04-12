@@ -1,5 +1,7 @@
 {% load path %}
 {% load i18n %}
+{% url 'accounts:rank' as rank_url %}
+{% url 'events:events' as events_url %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -95,8 +97,8 @@
             <ul class="mainmenu">
                 <div class="arrowup"></div>
                 <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
-                <a href="/events/"><li {% if request.path|startswith:"/events/" %} class="active"{% endif %}>Wydarzenia</li></a>
-                <a href="{% url 'accounts:rank' %}"><li>Rankingi</li></a>
+                <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
+                <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
             </ul>
         </nav>
 

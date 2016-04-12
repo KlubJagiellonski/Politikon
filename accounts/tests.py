@@ -4,6 +4,7 @@ Test accounts module
 """
 from decimal import Decimal
 
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.test import TestCase
 
@@ -11,9 +12,12 @@ from .factories import UserFactory, BaBroracusFactory, BroHardFactory, \
     AdminFactory
 from .managers import UserProfileManager
 from .models import UserProfile, get_image_path
+from .pipeline import save_profile
+from .templatetags.user import user_home, user_rank
 from .utils import process_username
 from constance import config
-from events.templatetags.format import formatted
+from politikon.templatetags.format import formatted
+from politikon.templatetags.path import startswith
 
 
 class UserProfileModelTestCase(TestCase):
@@ -283,6 +287,62 @@ class UserProfileManagerTestCase(TestCase):
         }, UserProfile.objects.get_user_positions(user4))
 
 
+#  class UserPipelineTestCase(TestCase):
+    #  """
+    #  accounts/pipeline
+    #  """
+    #  def test_save_profile(self):
+        #  """
+        #  Save profile
+        #  """
+        #  user = UserFactory()
+        #  save_profile(user,
+
+
+class UserTemplatetagsTestCase(TestCase):
+    """
+    accounts/templatetags
+    """
+    def test_user_home(self):
+        """
+        User home
+        """
+        user = UserFactory()
+        user_templatetag = user_home(user)
+        self.assertEqual({
+            'user': user,
+        }, user_templatetag)
+
+    def test_user_rank(self):
+        """
+        User rank
+        """
+        user = UserFactory()
+        user_templatetag = user_rank(user)
+        self.assertEqual({
+            'profit': None,
+            'user': user,
+        }, user_templatetag)
+        user_templatetag_with_profit = user_rank(user, 10)
+        self.assertEqual({
+            'profit': 10,
+            'user': user,
+        }, user_templatetag_with_profit)
+
+
+class PolitikonUserTemplatetagsTestCase(TestCase):
+    """
+    politikon/templatetags
+    """
+    def test_startswith(self):
+        """
+        Startswith
+        """
+        start_path = reverse('accounts:rank')
+        path = reverse('accounts:rank')
+        self.assertTrue(startswith(path, start_path))
+
+
 class UserUtilsTestCase(TestCase):
     """
     accounts/utils
@@ -293,3 +353,6 @@ class UserUtilsTestCase(TestCase):
         """
         username = process_username(u"zażółćgęśląjaźń")
         self.assertEqual('zazolcgeslajazn', username)
+        user = UserFactory(username='zazolcgeslajazn')
+        username2 = process_username(u"zażółćgęśląjaźń")
+        self.assertNotEqual('zazolcgeslajazn', username2)

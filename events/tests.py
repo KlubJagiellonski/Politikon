@@ -5,13 +5,14 @@ Test events module
 from datetime import timedelta
 import pytz
 
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.timezone import datetime
 
 from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
     CruzEventFactory, BetFactory, TransactionFactory
 from .models import Event
-from .templatetags.format import formatted
+from politikon.templatetags.path import startswith
 
 
 class EventsModelTestCase(TestCase):
@@ -147,21 +148,24 @@ class EventsTemplatetagsTestCase(TestCase):
     """
     events/templatetags
     """
-    def test_formatted(self):
+
+
+class PolitikonEventTemplatetagsTestCase(TestCase):
+    """
+    politikon/templatetags
+    """
+    def test_startswith(self):
         """
-        Formatted templatetag
+        Startswith
         """
-        value = formatted(1000, True)
-        self.assertEqual("+1 000", value)
-
-        value = formatted(1000)
-        self.assertEqual("1 000", value)
-
-        value = formatted(-1000)
-        self.assertEqual("-1 000", value)
-
-        value = formatted(-100)
-        self.assertEqual("-100", value)
-
-        value = formatted(" ")
-        self.assertEqual(" ", value)
+        start_path = reverse('events:events')
+        path = reverse('events:events')
+        path2 = reverse('events:events', kwargs={'mode':'popular'})
+        path3 = reverse('events:events', kwargs={'mode':'latest'})
+        path4 = reverse('events:events', kwargs={'mode':'changed'})
+        path5 = reverse('events:events', kwargs={'mode':'finished'})
+        self.assertTrue(startswith(path, start_path))
+        self.assertTrue(startswith(path2, start_path))
+        self.assertTrue(startswith(path3, start_path))
+        self.assertTrue(startswith(path4, start_path))
+        self.assertTrue(startswith(path5, start_path))
