@@ -322,11 +322,13 @@ class UserTemplatetagsTestCase(TestCase):
         self.assertEqual({
             'profit': None,
             'user': user,
+            'counter': 1,
         }, user_templatetag)
         user_templatetag_with_profit = user_rank(user, 10)
         self.assertEqual({
             'profit': 10,
             'user': user,
+            'counter': 1,
         }, user_templatetag_with_profit)
 
 
