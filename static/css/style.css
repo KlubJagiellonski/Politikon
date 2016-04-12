@@ -321,14 +321,22 @@ footer ul a, footer .socialmedia div,
 .changeNO {color: #a72e0e;}
 
 .morebets {background: #f5f5f5;}
-.morebets .betYES, .morebets .betNO {width: 29.4% !important;}
-.morebets .value {width: 55% !important;}
-.morebets .txt {width: 45% !important; font-size: 1.2em !important; margin-top: -3px;}
+.morebets .betYES, .morebets .betNO {width: 33.4% !important;}
+.morebets .value {width: 40% !important;}
+.morebets .txt {width: 57% !important; font-size: 1.2em !important; margin-top: -3px;}
 
 #makeabet .currentbet {text-align: center;}
-#makeabet .currentbet p:first-of-type {padding-top: 3px; font-size: 1.25em; font-weight: 700;}
+#makeabet .currentbet p:first-of-type {padding-top: 3px; font-size: 1em; line-height: 1.3em; font-weight: 700;}
 #makeabet .currentbet p:last-of-type {color: #999; font-size: 1em; font-weight: 700;}
 .reputy-small {display: inline-block; width: 20px; height: 20px; background: url(../img/02reputysmall.png) center no-repeat; margin-bottom: -4px;}
+
+#makeabet.morebets .txt {
+  font-size: 12px !important;
+  line-height: 1em;
+  padding-top: 1em;
+  display: block;
+  float: left;
+}
 
 .orangeheader {display: table; padding: 22px 23px 22px; font-size: 1.55em; font-weight: 700; color: #fff; text-transform: uppercase; background: #ea6a2a;}
 .goupheader {margin-top: -32px; margin-bottom: 30px;}

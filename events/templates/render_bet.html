@@ -11,7 +11,7 @@
 </a>
 <div class="currentbet centrum" {% if not bet.has_any or not render_current %}hidden{% endif %}>
     <p class="change{{ bet.classOutcome }}">
-        {{ bet.textOutcome }}
+        Jesteś na {{ bet.textOutcome }}
     </p>
     <p>
         <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
