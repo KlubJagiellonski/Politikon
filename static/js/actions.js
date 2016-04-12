@@ -199,12 +199,12 @@ $(function() {
                                 $(this).addClass('morebets');
                                 $(this).children('.a_betYES').data('price', event.buy_for_price);
                                 $(this).children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
-                                $(this).children('.a_betYES').children('.betYES').children('.txt').html('+');
+                                $(this).children('.a_betYES').children('.betYES').children('.txt').html('dokup na „TAK“');
                                 $(this).children('.a_betNO').data('price', event.sell_for_price);
                                 $(this).children('.a_betNO').data('outcome', word_eng_yes);
                                 $(this).children('.a_betNO').data('buy', word_false);
                                 $(this).children('.a_betNO').children('.betNO').children('.value').html(event.sell_for_price);
-                                $(this).children('.a_betNO').children('.betNO').children('.txt').html('-');
+                                $(this).children('.a_betNO').children('.betNO').children('.txt').html('sprzedaj zakład');
                                 $(this).children('.currentbet').children().first()
                                 .removeClass('change')
                                 .addClass('changeYES')
@@ -217,10 +217,10 @@ $(function() {
                                 $(this).children('.a_betYES').data('outcome', word_eng_no);
                                 $(this).children('.a_betYES').data('buy', word_false);
                                 $(this).children('.a_betYES').children('.betYES').children('.value').html(event.sell_against_price);
-                                $(this).children('.a_betYES').children('.betYES').children('.txt').html('-');
+                                $(this).children('.a_betYES').children('.betYES').children('.txt').html('sprzedaj zakład');
                                 $(this).children('.a_betNO').data('price', event.buy_against_price);
                                 $(this).children('.a_betNO').children('.betNO').children('.value').html(event.buy_against_price);
-                                $(this).children('.a_betNO').children('.betNO').children('.txt').html('+');
+                                $(this).children('.a_betNO').children('.betNO').children('.txt').html('dokup na „NIE“');
                                 $(this).children('.currentbet').children().first()
                                 .removeClass('change')
                                 .addClass('changeNO')
