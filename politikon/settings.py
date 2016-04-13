@@ -33,7 +33,6 @@ LOCALE_PATHS = [
 
 LANGUAGES = [
     ('pl', _('Polish')),
-    ('en', _('English')),
 ]
 
 SITE_ID = 1
