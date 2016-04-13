@@ -191,14 +191,13 @@ class Event(models.Model):
             # for finished event last date point is end_date
             last_date = self.end_date
         else:
-            # for event in progress last date point is yesterday
-            last_date = datetime.now().replace\
-                (hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)
+            # for event in progress last date point is now
+            last_date = datetime.now(tz=pytz.UTC)
 
-        first_date = (last_date - relativedelta(weeks=2)).\
-            replace(hour=0, minute=0, second=0, microsecond=0)
+        # start from 2 weeks ago
+        first_date = last_date - relativedelta(weeks=2)
 
-        # Default is start price: 50
+        # default is start price: 50
         last_price = Event.BEGIN_PRICE
         step_date = first_date
         labels = []
@@ -206,26 +205,25 @@ class Event(models.Model):
 
         if step_date < self.created_date - relativedelta\
                 (days=Event.CHART_MARGIN):
+            # if 2 weeks ago + margin the event wasn't created
+            # then give start when created + margin
             step_date = self.created_date - relativedelta\
                 (days=Event.CHART_MARGIN)
 
-        while self.created_date.replace\
-                (hour=0, minute=0, second=0, microsecond=0,
-                 tzinfo=pytz.UTC) > step_date:
-            labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
-            step_date += relativedelta(days=1)
-            points.append(Event.BEGIN_PRICE)
-
-        while step_date < last_date:
-            labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
-            snapshots = self.snapshots.filter(
-                snapshot_of_id=self.id,
-                created_at__lte=step_date,
-            ).order_by('-created_at')[:1]
-            if snapshots.exists():
-                snapshot = snapshots[0]
-                points.append(snapshot.current_buy_for_price)
-            step_date += relativedelta(days=1)
+        while step_date <= last_date:
+            # display only midnight prices
+            # TODO: get this if from settings
+            if step_date.hour == 1:
+                labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
+                snapshots = self.snapshots.filter(
+                    snapshot_of_id=self.id,
+                    created_at__lte=step_date,
+                ).order_by('-created_at')[:1]
+                if snapshots.exists():
+                    snapshot = snapshots[0]
+                    last_price = snapshot.current_buy_for_price
+                points.append(last_price)
+            step_date += relativedelta(hours=1)
 
         return {
             'id': self.id,

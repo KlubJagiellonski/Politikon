@@ -73,38 +73,27 @@ class EventsModelTestCase(TestCase):
             event1 = EventFactory()
             event1.current_buy_for_price = 90
             event1.save()
+
             create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=3))
 
             event1.current_buy_for_price = 30
             event1.save()
             event2 = EventFactory()
             event2.current_buy_for_price = 30
             event2.save()
+
             create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=5))
 
             event1.current_buy_for_price = 60
             event1.save()
             event2.current_buy_for_price = 60
             event2.save()
             event3 = EventFactory()
+
             create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=2))
 
             event1.current_buy_for_price = 55
             event1.save()
@@ -112,10 +101,9 @@ class EventsModelTestCase(TestCase):
             event2.save()
             event3.current_buy_for_price = 55
             event3.save()
+
             create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=2))
 
             event1.current_buy_for_price = 82
             event1.save()
@@ -123,29 +111,29 @@ class EventsModelTestCase(TestCase):
             event2.save()
             event3.current_buy_for_price = 82
             event3.save()
+
             create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
-            create_open_events_snapshot()
-            frozen_time.tick(delta=timedelta(days=1))
+            frozen_time.tick(delta=timedelta(days=3))
 
             event1.current_buy_for_price = 0
             event1.save()
             event2.current_buy_for_price = 0
             event2.save()
+
+
             create_open_events_snapshot()
 
-        first_date = datetime.now() - timedelta(days=14)
+        first_date = datetime.now() - timedelta(days=13)
         days = [first_date + timedelta(n) for n in range(14)]
-        labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
+        labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) \
+                  for step_date in days]
 
-        points1 = [90, 30, 30, 30, 30, 30, 60, 60, 60, 55, 55, 82, 82, 82]
-        points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 60, 55, 55,
-                   82, 82, 82]
+        points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
+        points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,
+                   82, 82, 82, 0]
         points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
-        points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE, Event.BEGIN_PRICE,
-                    55, 55, 82, 82, 82]
+        points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE,
+                    55, 55, 82, 82, 82, 82]
         self.assertEqual({
             'id': 1,
             'labels': labels,
@@ -161,6 +149,33 @@ class EventsModelTestCase(TestCase):
             'labels': labels[14-len(points3):],
             'points': points3
         }, event3.get_chart_points())
+
+    def test_increment_quantity(self):
+        """
+        Increment quantity
+        """
+        event = EventFactory()
+        start_event_dict = event.event_dict
+        self.assertEqual(0, event.Q_for)
+        self.assertEqual(0, event.Q_against)
+
+        amount = 1
+        outcome_yes = 'YES'
+        event.increment_quantity(outcome_yes, amount)
+        self.assertEqual(amount, event.Q_for)
+        self.assertEqual(0, event.Q_against)
+        # TODO: repair
+        #  self.assertNotEqual(start_event_dict, event.event_dict)
+
+        outcome_no = 'NO'
+        event.increment_quantity(outcome_no, amount)
+        self.assertEqual(amount, event.Q_for)
+        self.assertEqual(amount, event.Q_against)
+        self.assertEqual(start_event_dict, event.event_dict)
+
+        bad_outcome = 'OOOPS'
+        with self.assertRaises(UnknownOutcome):
+            event.increment_quantity(bad_outcome, amount)
 
     def test_increment_by_turnover(self):
         """

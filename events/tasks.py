@@ -50,6 +50,6 @@ def calculate_price_change():
         else:
             last_price = 50
 
-        event.price_change = last_price - event.current_buy_for_price
+        event.price_change = event.current_buy_for - last_price
         event.absolute_price_change = abs(event.price_change)
         event.save()
