@@ -371,7 +371,7 @@ class Event(models.Model):
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             return False
         self.outcome = outcome
-        self.end_date = datetime.now()
+        self.end_date = datetime.now(tz=pytz.UTC)
         self.save()
         return True
 

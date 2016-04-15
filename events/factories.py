@@ -4,7 +4,7 @@ import pytz
 
 from django.utils.timezone import datetime
 
-from .models import Event, Bet, Transaction
+from .models import Event, RelatedEvent, Bet, Transaction
 
 
 class EventFactory(factory.django.DjangoModelFactory):
@@ -57,9 +57,18 @@ class CruzEventFactory(factory.django.DjangoModelFactory):
         u'partii republikańskiej w Wisconsin 5 kwietnia 2016 r.'
 
 
+class RelatedEventFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RelatedEvent
+
+
 class BetFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Bet
+
+    has = 1
+    bought = 1
+    outcome = Bet.BET_OUTCOME_CHOICES.YES
 
 
 class TransactionFactory(factory.django.DjangoModelFactory):

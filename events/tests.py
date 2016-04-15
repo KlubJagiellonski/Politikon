@@ -6,15 +6,18 @@ from datetime import timedelta
 from freezegun import freeze_time
 import pytz
 
+from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
 from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
-    CruzEventFactory, BetFactory, TransactionFactory
+    CruzEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
 from .models import Event, _MONTHS
 from .tasks import create_open_events_snapshot
+
+from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
 
 
@@ -119,7 +122,8 @@ class EventsModelTestCase(TestCase):
             event1.save()
             event2.current_buy_for_price = 0
             event2.save()
-
+            event3.finish_yes()
+            event3.save()
 
             create_open_events_snapshot()
 
@@ -133,7 +137,7 @@ class EventsModelTestCase(TestCase):
                    82, 82, 82, 0]
         points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
         points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE,
-                    55, 55, 82, 82, 82, 82]
+                    55, 55, 82, 82, 82]
         self.assertEqual({
             'id': 1,
             'labels': labels,
@@ -146,7 +150,8 @@ class EventsModelTestCase(TestCase):
         }, event2.get_chart_points())
         self.assertEqual({
             'id': 3,
-            'labels': labels[14-len(points3):],
+            # labels 3 ends one day earlier
+            'labels': labels[13-len(points3):13],
             'points': points3
         }, event3.get_chart_points())
 
@@ -189,6 +194,29 @@ class EventsModelTestCase(TestCase):
 
         event.increment_turnover(-5)
         self.assertEqual(5, event.turnover)
+
+    def test_get_related(self):
+        """
+        Get related
+        """
+        user = UserFactory()
+
+        event1 = EventFactory()
+        event2 = RefugeesEventFactory()
+        event3 = CruzEventFactory()
+        bet = BetFactory(user=user, event=event2)
+
+        RelatedEventFactory(event=event1, related=event2)
+        RelatedEventFactory(event=event1, related=event3)
+        RelatedEventFactory(event=event2, related=event3)
+        RelatedEventFactory(event=event3, related=event2)
+
+        related1 = event1.get_related(user)
+        related2 = event2.get_related(AnonymousUser())
+        related3 = event3.get_related(AnonymousUser())
+        self.assertEqual([event2, event3], related1)
+        self.assertEqual([event3], related2)
+        self.assertEqual([event2], related3)
 
 
 class EventsManagerTestCase(TestCase):
