@@ -12,10 +12,12 @@ from django.test import TestCase
 from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
-from .factories import EventFactory, ShortEventFactory, RefugeesEventFactory, \
-    CruzEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
-from .models import Event, _MONTHS
+from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, \
+    BetFactory, TransactionFactory
+from .models import Bet, Event, _MONTHS
 from .tasks import create_open_events_snapshot
+from .templatetags.display import render_bet, render_event, render_events, \
+    render_featured_event, render_featured_events, render_bet_status
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -155,6 +157,22 @@ class EventsModelTestCase(TestCase):
             'points': points3
         }, event3.get_chart_points())
 
+    def test_get_bet_social(self):
+        """
+        Get bet social
+        """
+        event = EventFactory()
+        users_yes = UserFactory.create_batch(10)
+        users_no = UserFactory.create_batch(10)
+        bets_yes = [BetFactory(user=u, event=event) for u in users_yes]
+        bets_no = [BetFactory(user=u, event=event, outcome=Bet.BET_OUTCOME_CHOICES.NO) for u in users_no]
+        self.maxDiff = None
+        social = event.get_bet_social()
+        self.assertEqual(10, social['yes_count'])
+        self.assertEqual(bets_yes[:6], list(social['yes_bets']))
+        self.assertEqual(10, social['no_count'])
+        self.assertEqual(bets_no[:6], list(social['no_bets']))
+
     def test_increment_quantity(self):
         """
         Increment quantity
@@ -169,7 +187,7 @@ class EventsModelTestCase(TestCase):
         event.increment_quantity(outcome_yes, amount)
         self.assertEqual(amount, event.Q_for)
         self.assertEqual(0, event.Q_against)
-        # TODO: repair
+        # FIXME
         #  self.assertNotEqual(start_event_dict, event.event_dict)
 
         outcome_no = 'NO'
@@ -202,8 +220,8 @@ class EventsModelTestCase(TestCase):
         user = UserFactory()
 
         event1 = EventFactory()
-        event2 = RefugeesEventFactory()
-        event3 = CruzEventFactory()
+        event2 = EventFactory()
+        event3 = EventFactory()
         bet = BetFactory(user=user, event=event2)
 
         RelatedEventFactory(event=event1, related=event2)
@@ -231,12 +249,12 @@ class EventsManagerTestCase(TestCase):
             (turnover=1,
              absolute_price_change=1000,
              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
-        event2 = RefugeesEventFactory\
+        event2 = EventFactory\
             (outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
              turnover=3,
              absolute_price_change=3000,
              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=1))
-        event3 = CruzEventFactory\
+        event3 = EventFactory\
             (turnover=2,
              absolute_price_change=2000,
              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=4))
@@ -244,7 +262,7 @@ class EventsManagerTestCase(TestCase):
             (outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
              absolute_price_change=5000,
              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
-        event5 = CruzEventFactory\
+        event5 = EventFactory\
             (outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
         ongoing_events = Event.objects.ongoing_only_queryset()
@@ -305,6 +323,68 @@ class EventsTemplatetagsTestCase(TestCase):
     """
     events/templatetags
     """
+    def test_render_bet(self):
+        """
+        Render bet
+        """
+        event = EventFactory()
+        user = UserFactory()
+        bet = BetFactory(event=event, user=user)
+        self.assertEqual({
+            'event': event,
+            'bet': bet,
+            'render_current': True,
+        }, render_bet(event, bet, True))
+
+    def test_render_event(self):
+        """
+        Render event
+        """
+        event = EventFactory()
+        user = UserFactory()
+        bet = BetFactory(event=event, user=user)
+        self.assertEqual({
+            'event': event,
+            'bet': bet,
+        }, render_event(event, bet))
+
+    def test_render_events(self):
+        """
+        Render events
+        """
+        events = EventFactory.create_batch(10)
+        self.assertEqual({
+            'events': events
+        }, render_events(events))
+
+    def test_render_featured_event(self):
+        """
+        Render events
+        """
+        event = EventFactory()
+        self.assertEqual({
+            'event': event
+        }, render_featured_event(event))
+
+    def test_render_featured_events(self):
+        """
+        Render events
+        """
+        events = EventFactory.create_batch(10)
+        self.assertEqual({
+            'events': events
+        }, render_featured_events(events))
+
+    def test_render_bet_status(self):
+        """
+        Render event
+        """
+        event = EventFactory()
+        user = UserFactory()
+        bet = BetFactory(event=event, user=user)
+        self.assertEqual({
+            'bet': bet,
+        }, render_bet_status(bet))
 
 
 class PolitikonEventTemplatetagsTestCase(TestCase):

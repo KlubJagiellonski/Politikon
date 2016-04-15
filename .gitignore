@@ -2,6 +2,7 @@
 .coverage
 .idea/
 .pycharm_helpers/*
+avatars/*
 src/*
 src/smartsettings
 static_build/uploads/*

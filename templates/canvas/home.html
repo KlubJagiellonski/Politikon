@@ -4,8 +4,8 @@
 
 {% block content %}
     <h2>{% trans %}Featured events{% endtrans %}</h2>
-    {% render_featured_events featured_events people %}
+    {% render_featured_events featured_events %}
 
     <h2>{% trans %}Latest events{% endtrans %}</h2>
-    {% render_events latest_events people %}
+    {% render_events latest_events %}
 {% endblock %}

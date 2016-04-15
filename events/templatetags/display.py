@@ -12,35 +12,31 @@ def render_bet(event, bet, render_current):
 
 
 @register.inclusion_tag('render_event.html')
-def render_event(event, bet, people):
+def render_event(event, bet):
     return {
         'event': event,
         'bet': bet,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_events.html')
-def render_events(events, people):
+def render_events(events):
     return {
         'events': events,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_featured_event.html')
-def render_featured_event(event, people):
+def render_featured_event(event):
     return {
         'event': event,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_featured_events.html')
-def render_featured_events(events, people):
+def render_featured_events(events):
     return {
         'events': events,
-        'people': people
     }
 
 
