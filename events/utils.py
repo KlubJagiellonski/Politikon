@@ -6,7 +6,7 @@ def create_bets_dict(user, events):
     # DEPRECATED use event.get_user_bet(user)
     bets = dict()
     if user is not None:
-        bets = Bet.objects.get_users_bets_for_events(user, events)
+        bets = Bet.objects.get_user_bets_for_events(user, events)
         bets = dict((bet.event_id, bet) for bet in bets)
 
     all_bets = dict()

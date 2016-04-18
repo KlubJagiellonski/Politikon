@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from .models import Event
 
@@ -24,4 +24,4 @@ class EventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.action = None
         super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['estimated_end_date'].initial = datetime.now() + relativedelta(months=1)
+        self.fields['estimated_end_date'].initial = timezone.now() + relativedelta(months=1)

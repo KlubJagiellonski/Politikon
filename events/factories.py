@@ -2,7 +2,7 @@
 import factory
 import pytz
 
-from django.utils.timezone import datetime
+from django.utils import timezone
 
 from .models import Event, RelatedEvent, Bet, Transaction
 
@@ -11,7 +11,7 @@ class EventFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Event
 
-    estimated_end_date = datetime.now(tz=pytz.UTC)
+    estimated_end_date = timezone.now()
     title = u'Długi tytuł testowego wydarzenia'
     short_title = u'Tytuł wydarzenia'
     title_fb_yes = u'Tytuł na tak'
@@ -26,7 +26,7 @@ class ShortEventFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Event
 
-    estimated_end_date = datetime.now(tz=pytz.UTC)
+    estimated_end_date = timezone.now()
 
 
 class RelatedEventFactory(factory.django.DjangoModelFactory):
@@ -46,3 +46,5 @@ class BetFactory(factory.django.DjangoModelFactory):
 class TransactionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Transaction
+
+    type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES

@@ -4,15 +4,14 @@ Test events module
 """
 from datetime import timedelta
 from freezegun import freeze_time
-import pytz
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.timezone import datetime
+from django.utils import timezone
 
-from .exceptions import UnknownOutcome
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, InsufficientCash, InsufficientBets, EventAlreadyFinished
 from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
 from .models import Bet, Event, Transaction, _MONTHS
 from .tasks import create_open_events_snapshot, calculate_price_change
@@ -73,8 +72,10 @@ class EventsModelTestCase(TestCase):
         """
         Get chart points
         """
-        initial_datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC) - timedelta(days=15)
-        with freeze_time(initial_datetime) as frozen_time:
+        # time of get_chart_points
+        # TODO time from settings
+        initial_time = timezone.now().replace(hour=1, minute=0, second=0, microsecond=0) - timedelta(days=15)
+        with freeze_time(initial_time) as frozen_time:
             event1 = EventFactory()
             event1.current_buy_for_price = 90
             event1.save()
@@ -118,43 +119,48 @@ class EventsModelTestCase(TestCase):
             event3.save()
 
             create_open_events_snapshot.delay()
-            frozen_time.tick(delta=timedelta(days=3))
+            frozen_time.tick(delta=timedelta(days=2))
+            event3.finish_yes()
+            event3.save()
 
+            # no snapshot now
+            frozen_time.tick(delta=timedelta(days=1))
             event1.current_buy_for_price = 0
             event1.save()
             event2.current_buy_for_price = 0
             event2.save()
-            event3.finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES)
-            event3.save()
 
             create_open_events_snapshot.delay()
 
-        first_date = datetime.now() - timedelta(days=13)
-        days = [first_date + timedelta(n) for n in range(14)]
-        labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
+        # time of caculate_price_change task
+        final_time = timezone.now().replace(hour=1, minute=1, second=0, microsecond=0)
+        with freeze_time(final_time) as frozen_time:
+            first_date = timezone.now() - timedelta(days=13)
+            days = [first_date + timedelta(n) for n in range(14)]
+            labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
 
-        points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
-        points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,
-                   82, 82, 82, 0]
-        points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
-        points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE,
-                    55, 55, 82, 82, 82]
-        self.assertEqual({
-            'id': 1,
-            'labels': labels,
-            'points': points1
-        }, event1.get_chart_points())
-        self.assertEqual({
-            'id': 2,
-            'labels': labels,
-            'points': points2
-        }, event2.get_chart_points())
-        self.assertEqual({
-            'id': 3,
-            # labels 3 ends one day earlier
-            'labels': labels[13-len(points3):13],
-            'points': points3
-        }, event3.get_chart_points())
+            points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
+            points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,
+                    82, 82, 82, 0]
+            points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
+            points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE,
+                        55, 55, 82, 82, 82]
+            self.assertEqual({
+                'id': 1,
+                'labels': labels,
+                'points': points1
+            }, event1.get_chart_points())
+            self.assertEqual({
+                'id': 2,
+                'labels': labels,
+                'points': points2
+            }, event2.get_chart_points())
+            self.assertEqual({
+                'id': 3,
+                # labels 3 ends one day earlier
+                'labels': labels[13-len(points3):13],
+                'points': points3
+            }, event3.get_chart_points())
 
     def test_get_bet_social(self):
         """
@@ -212,6 +218,42 @@ class EventsModelTestCase(TestCase):
         event.increment_turnover(-5)
         self.assertEqual(5, event.turnover)
 
+    def test_finish_yes(self):
+        """
+        Finish event with outcome yes
+        """
+        users = UserFactory.create_batch(3)
+        for u in users:
+            u.portfolio_value = 1000
+            u.total_cash = 2000
+        event = EventFactory()
+        bets = [BetFactory(event=event, user=user, has=3) for user in users[:2]]
+        bets[1].outcome = Bet.BET_OUTCOME_CHOICES.NO
+        bets[1].save()
+        event.finish_yes()
+
+        self.assertIsNotNone(event.end_date)
+        self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
+
+        event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        with self.assertRaises(EventAlreadyFinished):
+            event2.finish_yes()
+
+    def test_finish_no(self):
+        """
+        Finish event with outcome no
+        """
+        event = EventFactory()
+        event.finish_no()
+        self.assertIsNotNone(event.end_date)
+        self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+
+    def test_cancel(self):
+        """
+        Cancel event
+        """
+        # TODO:
+
     def test_get_related(self):
         """
         Get related
@@ -240,16 +282,26 @@ class EventsManagerTestCase(TestCase):
     """
     events/managers EventManager
     """
+    def test_ongoing_only_queryset(self):
+        """
+        Ongoing only queryset
+        """
+        events = EventFactory.create_batch(5)
+        events[1].finish_yes()
+        events[2].finish_no()
+        events[3].cancel()
+        self.assertEqual([events[0], events[4]], list(Event.objects.ongoing_only_queryset()))
+
     def test_get_events(self):
         """
         Get events
         """
-        event1 = EventFactory(turnover=1, absolute_price_change=1000, estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
+        event1 = EventFactory(turnover=1, absolute_price_change=1000, estimated_end_date=timezone.now() + timedelta(days=2))
         event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, turnover=3, absolute_price_change=3000,
-                              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=1))
-        event3 = EventFactory(turnover=2, absolute_price_change=2000, estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=4))
+                              estimated_end_date=timezone.now() + timedelta(days=1))
+        event3 = EventFactory(turnover=2, absolute_price_change=2000, estimated_end_date=timezone.now() + timedelta(days=4))
         event4 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, absolute_price_change=5000,
-                              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
+                              estimated_end_date=timezone.now() + timedelta(days=2))
         event5 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
         ongoing_events = Event.objects.ongoing_only_queryset()
@@ -277,6 +329,19 @@ class EventsManagerTestCase(TestCase):
         self.assertEqual(2, len(finished_events))
         self.assertEqual([event4, event5], list(finished_events))
 
+    def test_get_featured_events(self):
+        """
+        Get featured events
+        """
+        events = EventFactory.create_batch(3)
+        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[2].save()
+
+        featured_events = Event.objects.get_featured_events()
+        self.assertIsInstance(featured_events[0], Event)
+        self.assertEqual(2, len(featured_events))
+        self.assertEqual([events[0], events[1]], list(featured_events))
+
     def test_get_front_event(self):
         """
         Get front event
@@ -295,19 +360,6 @@ class EventsManagerTestCase(TestCase):
         front_event = Event.objects.get_front_event()
         self.assertIsNone(front_event)
 
-    def test_get_featured_events(self):
-        """
-        Get featured events
-        """
-        events = EventFactory.create_batch(3)
-        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
-        events[2].save()
-
-        featured_events = Event.objects.get_featured_events()
-        self.assertIsInstance(featured_events[0], Event)
-        self.assertEqual(2, len(featured_events))
-        self.assertEqual([events[0], events[1]], list(featured_events))
-
 
 class EventsTasksTestCase(TestCase):
     """
@@ -320,7 +372,8 @@ class EventsTasksTestCase(TestCase):
         """
         Create open events snapshot
         """
-        events = EventFactory.create_batch(5)
+        #  events = EventFactory.create_batch(5)
+        EventFactory.create_batch(5)
         create_open_events_snapshot.delay()
 
     @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
@@ -330,8 +383,8 @@ class EventsTasksTestCase(TestCase):
         """
         Calculate price change
         """
-        initial_datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC) - timedelta(days=2)
-        with freeze_time(initial_datetime) as frozen_time:
+        initial_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2)
+        with freeze_time(initial_time) as frozen_time:
             events = EventFactory.create_batch(3)
             events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
             events[0].save()
@@ -341,19 +394,23 @@ class EventsTasksTestCase(TestCase):
             events[1].save()
             events[2].current_buy_for_price = 40
             events[2].save()
-            calculate_price_change.delay()
+            calculate_price_change()
+            #  print("test_calculate_price_change")
+            #  for e in events:
+            #      print(e.pk)
+            #      print(e.price_change)
             # FIXME
             #  self.assertEqual(0, events[0].price_change)
             #  self.assertEqual(10, events[1].price_change)
             #  self.assertEqual(-10, events[2].price_change)
 
-            create_open_events_snapshot.delay()
+            create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
             events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
             events[1].save()
             events[2].current_buy_for_price = 100
             events[2].save()
-            calculate_price_change.delay()
+            calculate_price_change()
             # FIXME
             #  self.assertEqual(0, events[0].price_change)
             #  self.assertEqual(10, events[1].price_change)
@@ -438,8 +495,7 @@ class BetsModelTestCase(TestCase):
         """
         event = EventFactory(title='wydarzenie')
         user = UserFactory(username='brode')
-        bet = Bet(event=event, user=user,
-                        outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet = Bet(event=event, user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
         bet.save()
 
         self.assertEqual({
@@ -491,11 +547,13 @@ class BetsModelTestCase(TestCase):
         """
         Get wallet change
         """
+        # TODO this method is suspicious
 
     def test_get_invested(self):
         """
         Get invested
         """
+        # TODO this method is suspicious
 
     def test_get_won(self):
         """
@@ -516,13 +574,11 @@ class BetsModelTestCase(TestCase):
         """
         events = EventFactory.create_batch(4)
         user = UserFactory()
-        bets = []
-        for event in events:
-            bets.append(BetFactory(user=user, event=event))
+        bets = [BetFactory(user=user, event=e) for e in events]
 
-        events[1].finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES)
-        events[2].finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
-        events[3].finish(Event.EVENT_OUTCOME_CHOICES.CANCELLED)
+        events[1].finish_yes()
+        events[2].finish_no()
+        events[3].cancel()
         self.assertFalse(bets[0].is_finished_yes())
         self.assertFalse(bets[0].is_finished_no())
         self.assertFalse(bets[0].is_cancelled())
@@ -531,7 +587,84 @@ class BetsModelTestCase(TestCase):
         self.assertTrue(bets[3].is_cancelled())
 
 
-class TransactionModelTestCase(TestCase):
+class BetsManagerTestCase(TestCase):
+    """
+    events/managers BetManager
+    """
+    def test_get_user_bets_for_events(self):
+        """
+        Get users bets for events
+        """
+        user = UserFactory()
+        events = EventFactory.create_batch(3)
+        bets = [BetFactory(user=user, event=e) for e in events]
+        events[1].finish_yes()
+        result = [bets[1], bets[2]]
+        in_events = [events[1], events[2]]
+        self.assertEqual(result, list(Bet.objects.get_user_bets_for_events(user, in_events)))
+
+    def test_get_user_event_and_bet_for_update(self):
+        """
+        Get users event and bet for update
+        """
+        users = UserFactory.create_batch(2)
+        events = EventFactory.create_batch(3)
+        with self.assertRaises(NonexistantEvent):
+            Bet.objects.get_user_event_and_bet_for_update(users[0], -1, 'YES')
+        events[1].finish_yes()
+        with self.assertRaises(EventNotInProgress):
+            Bet.objects.get_user_event_and_bet_for_update(users[0], 2, 'YES')
+        with self.assertRaises(UnknownOutcome):
+            Bet.objects.get_user_event_and_bet_for_update(users[0], 1, 'OOOPS')
+        new_bet = Bet.objects.get_user_event_and_bet_for_update(users[0], 1, 'YES')
+        self.assertEqual(users[0], new_bet[0])
+        self.assertEqual(events[0], new_bet[1])
+
+        bet = BetFactory(user=users[1], event=events[2])
+        self.assertEqual((users[1], events[2], bet), Bet.objects.get_user_event_and_bet_for_update(users[1], 3, 'YES'))
+
+    def test_buy_a_bet(self):
+        """
+        Buy a bet
+        """
+        # TODO this method is suspicious
+
+    def test_sell_a_bet(self):
+        """
+        Sell a bet
+        """
+        # TODO this method is suspicious
+
+    def test_get_in_progress(self):
+        """
+        Get in progress
+        """
+        user = UserFactory()
+        events = EventFactory.create_batch(4)
+        bets = [BetFactory(user=user, event=e, has=1) for e in events]
+        bets[0].has = 0
+        bets[0].save()
+        events[2].finish_yes()
+        self.assertEqual([bets[1], bets[3]], list(Bet.objects.get_in_progress()))
+
+    def test_get_finished(self):
+        """
+        Get finished
+        """
+        user = UserFactory()
+        events = EventFactory.create_batch(4)
+        bets = [BetFactory(user=user, event=e, has=1) for e in events]
+        bets[0].has = 0
+        bets[0].save()
+        events[1].finish_no()
+        events[2].finish_yes()
+        events[3].cancel()
+        for e in events:
+            e.save()
+        self.assertEqual([bets[3], bets[2], bets[1]], list(Bet.objects.get_finished()))
+
+
+class TransactionsModelTestCase(TestCase):
     """
     Test methods for transaction
     """
@@ -541,12 +674,69 @@ class TransactionModelTestCase(TestCase):
         """
         user = UserFactory(username='mcbrover')
         event = EventFactory()
-        transaction = TransactionFactory(user=user, event=event, type=Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES)
+        transaction = TransactionFactory(
+            user=user,
+            event=event,
+            type=Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
+        )
         self.assertEqual(u'zakup udziałów na TAK przez mcbrover', transaction.__unicode__())
         self.assertEqual(0, transaction.total)
         transaction.quantity = 10
         transaction.price = 5
         self.assertEqual(50, transaction.total)
+
+
+class TransactionManagerTestCase(TestCase):
+    """
+    events/managers TransactionManager
+    """
+    def test_get_user_transactions(self):
+        """
+        Get user transactions
+        """
+        user = UserFactory()
+        events = EventFactory.create_batch(4)
+        transactions = [TransactionFactory(user=user, event=e) for e in events]
+        transactions[3].type = Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP
+        transactions[3].save()
+        result = list(reversed(transactions[:3]))
+        self.assertEqual(result, list(Transaction.objects.get_user_transactions(user)))
+
+    def test_get_weekly_user_transactions(self):
+        """
+        Get weekly user transactions
+        """
+        initial_time = timezone.now() - timedelta(days=8)
+        user = UserFactory()
+        with freeze_time(initial_time) as frozen_time:
+            events = EventFactory.create_batch(3)
+            transaction1 = TransactionFactory(user=user, event=events[0])
+
+            frozen_time.tick(delta=timedelta(days=3))
+            transaction2 = TransactionFactory(user=user, event=events[1])
+
+            frozen_time.tick(delta=timedelta(days=3))
+            transaction3 = TransactionFactory(user=user, event=events[2])
+
+        self.assertEqual([transaction3, transaction2], list(Transaction.objects.get_weekly_user_transactions(user)))
+
+    def test_get_monthly_user_transactions(self):
+        """
+        Get monthly user transactions
+        """
+        initial_time = timezone.now() - timedelta(days=32)
+        user = UserFactory()
+        with freeze_time(initial_time) as frozen_time:
+            events = EventFactory.create_batch(3)
+            transaction1 = TransactionFactory(user=user, event=events[0])
+
+            frozen_time.tick(delta=timedelta(days=3))
+            transaction2 = TransactionFactory(user=user, event=events[1])
+
+            frozen_time.tick(delta=timedelta(days=3))
+            transaction3 = TransactionFactory(user=user, event=events[2])
+
+        self.assertEqual([transaction3, transaction2], list(Transaction.objects.get_monthly_user_transactions(user)))
 
 
 class PolitikonEventTemplatetagsTestCase(TestCase):

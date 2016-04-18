@@ -3,15 +3,14 @@ from dateutil.relativedelta import relativedelta
 import logging
 from math import exp
 from unidecode import unidecode
-import pytz
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.template.defaultfilters import slugify
-from django.utils.timezone import datetime
+from django.utils import timezone
 
-from .exceptions import UnknownOutcome
+from .exceptions import UnknownOutcome, EventAlreadyFinished
 from .managers import EventManager, BetManager, TransactionManager
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
@@ -169,15 +168,15 @@ class Event(models.Model):
         :return: chart points
         :rtype: {int, [], []}
         """
-        if self.end_date and self.end_date < datetime.now(tz=pytz.UTC):
+        if self.end_date and self.end_date < timezone.now():
             # for finished event last date point is end_date
             last_date = self.end_date
         else:
             # for event in progress last date point is now
-            last_date = datetime.now(tz=pytz.UTC)
+            last_date = timezone.now()
 
         # start from 2 weeks ago
-        first_date = last_date - relativedelta(weeks=2)
+        first_date = last_date - relativedelta(weeks=2, days=-1)
 
         # default is start price: 50
         last_price = Event.BEGIN_PRICE
@@ -193,6 +192,7 @@ class Event(models.Model):
         while step_date <= last_date:
             # display only midnight prices
             # TODO: get this if from settings
+            # TODO: because of this our day starts from 1 AM, not 12 PM
             if step_date.hour == 1:
                 labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
                 snapshots = self.snapshots.filter(
@@ -216,8 +216,8 @@ class Event(models.Model):
         get bet summary for user; user maybe anonymous.
         """
         if user.pk:
-            # TODO: resolve problem with bets > 1.   Which bet choose?
-            # comment: mayby condition has__gt=0 resolve this problem.
+            # TODO: resolve problem with bets > 1. Which bet choose?
+            # comment: maybe condition has__gt=0 resolves this problem.
             bets = self.bets.filter(user=user, has__gt=0).order_by('-id')
             if bets.exists():
                 bet = bets[0]
@@ -340,37 +340,30 @@ class Event(models.Model):
         self.current_sell_against_price = round(factor * sell_against_price, 0)
 
     @transaction.atomic
-    def finish(self, outcome):
+    def __finish(self, outcome):
         """
         Set Event finish status
-        :param outcome: outcome status; True if YES
-        :type outcome: bool
-        :return: True if event is finished
-        :rtype: bool
+        :param outcome: outcome status; EVENT_OUTCOME_CHOICES
+        :type outcome: Choices
         """
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
-            return False
+            raise EventAlreadyFinished
         self.outcome = outcome
-        self.end_date = datetime.now(tz=pytz.UTC)
+        self.end_date = timezone.now()
         self.save()
-        return True
 
     @transaction.atomic
-    def finish_with_outcome(self, outcome):
+    def __finish_with_outcome(self, outcome):
         """
         main finish status
-        :param outcome: outcome status; True if YES
-        :type outcome: bool
-        :return: True if event is finished
-        :rtype: bool
+        :param outcome: outcome status; EVENT_OUTCOME_CHOICES
+        :type outcome: Choices
         """
-        if not self.finish(outcome):
-            return False
+        self.__finish(outcome)
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
-                bet.rewarded_total += self.PRIZE_FOR_WINNING * bet.has
+                bet.rewarded_total = self.PRIZE_FOR_WINNING * bet.has
                 bet.user.total_cash += bet.rewarded_total
-                bet.user.save()
                 Transaction.objects.create(
                     user=bet.user,
                     event=self,
@@ -378,38 +371,33 @@ class Event(models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
+            # TODO: tutaj wallet change
+            #  bet.user.portfolio_value -= bet.has
+            bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
             bet.save()
-        return True
 
     @transaction.atomic
     def finish_yes(self):
         """
         if event is finished on YES then prizes calculate
-        :return: True if event is finished
-        :rtype: bool
         """
-        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_YES)
+        self.__finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_YES)
 
     @transaction.atomic
     def finish_no(self):
         """
         if event is finished on NO then prizes calculate
-        :return: True if event is finished
-        :rtype: bool
         """
-        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        self.__finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
     @transaction.atomic
     def cancel(self):
         """
         refund for users on cancel event.
-        :return: True if event is finished
-        :rtype: bool
         """
-        if not self.finish(self.EVENT_OUTCOME_CHOICES.CANCELLED):
-            return False
+        self.__finish(self.EVENT_OUTCOME_CHOICES.CANCELLED)
         users = {}
         for t in Transaction.objects.filter(event=self).order_by('user'):
             if t.user not in users:
@@ -435,7 +423,6 @@ class Event(models.Model):
                 type=transaction_type,
                 price=abs(refund)
             )
-        return True
 
     def get_related(self, user, number=9):
         """
@@ -499,6 +486,7 @@ class Bet(models.Model):
     sold = models.PositiveIntegerField(u'sprzedane zakłady', default=0, null=False)
     bought_avg_price = models.FloatField(u'kupione po średniej cenie', default=0, null=False)
     sold_avg_price = models.FloatField(u'sprzedane po średniej cenie', default=0, null=False)
+    # this field is probably for the biggest rewards
     rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
     # this is used to show event in my wallet.
     is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte', default=False, null=False)
@@ -558,6 +546,7 @@ class Bet(models.Model):
         :return: more or less than zero
         :rtype: int
         """
+        # TODO: NAPRAWDE NIE WIEM
         if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             return self.get_won() - self.get_invested()
         else:
@@ -569,7 +558,7 @@ class Bet(models.Model):
         :return: price above zero
         :rtype: float
         """
-        # NO NIE WEIM
+        # TODO: NO NIE WIEM
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
         return round(self.has * self.bought_avg_price, 0)

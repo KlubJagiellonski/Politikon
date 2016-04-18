@@ -10,6 +10,7 @@ from django.test import TestCase
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
 from .models import UserProfile, get_image_path
+from .pipeline import save_profile
 from .templatetags.user import user_home, user_rank
 from .utils import process_username
 
@@ -333,15 +334,15 @@ class UserProfileManagerTestCase(TestCase):
         }, UserProfile.objects.get_user_positions(user4))
 
 
-#  class UserPipelineTestCase(TestCase):
-    #  """
-    #  accounts/pipeline
-    #  """
-    #  def test_save_profile(self):
-        #  """
-        #  Save profile
-        #  """
-        #  user = UserFactory()
+class UserPipelineTestCase(TestCase):
+    """
+    accounts/pipeline
+    """
+    def test_save_profile(self):
+        """
+        Save profile
+        """
+        user = UserFactory()
         #  save_profile(user,
 
 
@@ -376,6 +377,30 @@ class UserTemplatetagsTestCase(TestCase):
             'user': user,
             'counter': 1,
         }, user_templatetag_with_profit)
+
+    def test_get_reputation_history(self):
+        """
+        Get reputation history
+        """
+        # TODO
+
+    def test_get_reputation_change(self):
+        """
+        Get reputation change
+        """
+        # TODO
+
+    def test_last_week_reputation_change(self):
+        """
+        Get last week reputation change
+        """
+        # TODO
+
+    def test_last_month_reputation_change(self):
+        """
+        Get last month reputation change
+        """
+        # TODO
 
 
 class PolitikonUserTemplatetagsTestCase(TestCase):

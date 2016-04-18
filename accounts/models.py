@@ -218,10 +218,10 @@ class UserProfile(AbstractBaseUser):
         else:
             return Decimal(portfolio_value + total_cash) / Decimal(total_given_cash) * 100
 
-    @property
-    def profile_photo(self):
-        if self.facebook_user:
-            return self.facebook_user.profile_photo
+    #  @property
+    #  def profile_photo(self):
+        #  if self.facebook_user:
+            #  return self.facebook_user.profile_photo
 
     def topup_cash(self, amount):
         self.total_cash += amount
@@ -229,7 +229,12 @@ class UserProfile(AbstractBaseUser):
 
         from events.models import Transaction
 
-        Transaction.objects.create(user=self, type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP, quantity=1, price=amount)
+        Transaction.objects.create(
+            user=self,
+            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP,
+            quantity=1,
+            price=amount
+        )
 
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(self, transaction)

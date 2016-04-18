@@ -1,4 +1,3 @@
-from collections import defaultdict
 from datetime import timedelta
 
 from django.contrib import auth
@@ -23,12 +22,10 @@ BET_OUTCOMES_INV_DICT = {
 
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
-        from events.models import Event
-        allowed_outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+        allowed_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
         return self.filter(outcome=allowed_outcome)
 
     def get_events(self, mode):
-        from events.models import Event
         if mode == 'popular':
             return self.ongoing_only_queryset().order_by('-turnover')
         elif mode == 'latest':
@@ -36,7 +33,7 @@ class EventManager(models.Manager):
         elif mode == 'changed':
             return self.ongoing_only_queryset().order_by('-absolute_price_change')
         elif mode == 'finished':
-            excluded_outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+            excluded_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
@@ -49,29 +46,30 @@ class EventManager(models.Manager):
         else:
             return None
 
-    def associate_people_with_events(self, user, events_list):
-        from events.models import Bet
+    # TODO: what is this?
+    #  def associate_people_with_events(self, user, events_list):
+        #  from events.models import Bet
 
-        event_ids = set([e.id for e in events_list])
-        # friends = user.friends.all()
-        bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
+        #  event_ids = set([e.id for e in events_list])
+        #  # friends = user.friends.all()
+        #  bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
 
-        result = {
-            event_id: defaultdict(list)
-            # { outcome: defaultdict(list) for
-            # outcome in BET_OUTCOMES_DICT.keys() }
-            for event_id in event_ids
-        }
+        #  result = {
+            #  event_id: defaultdict(list)
+            #  # { outcome: defaultdict(list) for
+            #  # outcome in BET_OUTCOMES_DICT.keys() }
+            #  for event_id in event_ids
+        #  }
 
-        for bet in bets:
-            outcome = BET_OUTCOMES_INV_DICT[bet.outcome]
-            result[bet.event_id][outcome].append(bet.user)
+        #  for bet in bets:
+            #  outcome = BET_OUTCOMES_INV_DICT[bet.outcome]
+            #  result[bet.event_id][outcome].append(bet.user)
 
-        return result
+        #  return result
 
 
 class BetManager(models.Manager):
-    def get_users_bets_for_events(self, user, events):
+    def get_user_bets_for_events(self, user, events):
         return self.filter(user__id=user.id, event__in=events)
 
     def get_user_event_and_bet_for_update(self, user, event_id, for_outcome):
@@ -123,7 +121,7 @@ class BetManager(models.Manager):
             user_id=user.id,
             event_id=event.id,
             type=transaction_type,
-            quantity=quantity, 
+            quantity=quantity,
             price=current_tx_price * -1
         )
 
@@ -264,9 +262,6 @@ class TransactionManager(models.Manager):
         super(TransactionManager, self).__init__()
 
     def get_user_transactions(self, user):
-        # TODO: Gdzie umiescic import aby dzialal?
-        from events.models import Transaction
-        self.model = Transaction
         return self.model.objects.filter(user=user).exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
     def get_weekly_user_transactions(self, user):
