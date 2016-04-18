@@ -3,7 +3,6 @@ from django import forms
 from django.contrib.auth.admin import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
 
 from .models import UserProfile
 
@@ -12,8 +11,7 @@ class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password',
-                                widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -89,10 +87,8 @@ class UserProfileEmailForm(forms.ModelForm):
     A form for updating user data, part 2. Includes passwords and emails
     fields.
     """
-    email = forms.CharField(label='Twój adres e-mail',
-                            widget=forms.EmailInput, required=False)
-    checkemail = forms.CharField(label='wpisz ponownie adres e-mail',
-                             widget=forms.EmailInput, required=False)
+    email = forms.CharField(label='Twój adres e-mail', widget=forms.EmailInput, required=False)
+    checkemail = forms.CharField(label='wpisz ponownie adres e-mail', widget=forms.EmailInput, required=False)
 
     class Meta:
         model = UserProfile
@@ -100,8 +96,7 @@ class UserProfileEmailForm(forms.ModelForm):
 
     def clean(self):
         super(UserProfileEmailForm, self).clean()
-        if self.cleaned_data.get('email') != \
-                self.cleaned_data.get('checkemail'):
+        if self.cleaned_data.get('email') != self.cleaned_data.get('checkemail'):
             self._errors['checkemail'] = 'Email addresses do not match.'
             # raise ValidationError('Email addresses do not match.')
         return self.cleaned_data

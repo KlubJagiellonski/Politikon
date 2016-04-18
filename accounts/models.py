@@ -4,7 +4,6 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 import logging
 import os
-import pytz
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models, transaction
@@ -61,26 +60,18 @@ class UserProfile(AbstractBaseUser):
     friends = models.ManyToManyField('self', related_name='friend_of')
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
-    total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w \
-                                           historii", default=0.)
-    reputation = models.DecimalField(u"reputation", default=100, max_digits=12,
-                                     decimal_places=2, null=True)
+    total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
+    reputation = models.DecimalField(u"reputation", default=100, max_digits=12, decimal_places=2, null=True)
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
-    weekly_result = models.IntegerField(u"wynik tygodniowy", null=True,
-                                        blank=True)
-    monthly_result = models.IntegerField(u"wynik miesięczny", null=True,
-                                        blank=True)
+    weekly_result = models.IntegerField(u"wynik tygodniowy", null=True, blank=True)
+    monthly_result = models.IntegerField(u"wynik miesięczny", null=True, blank=True)
 
     web_site = models.URLField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
-    facebook_user_id = models.BigIntegerField(u"facebook ID", default=None,
-                                              blank=True, null=True)
-    facebook_user = models.CharField(u"facebook URL", max_length=255,
-                                     default=None, blank=True, null=True)
-    twitter_user_id = models.BigIntegerField(u"twitter ID", default=None,
-                                             blank=True, null=True)
-    twitter_user = models.CharField(u"twitter URL", max_length=255,
-                                    default=None, blank=True, null=True)
+    facebook_user_id = models.BigIntegerField(u"facebook ID", default=None, blank=True, null=True)
+    facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
+    twitter_user_id = models.BigIntegerField(u"twitter ID", default=None, blank=True, null=True)
+    twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -100,46 +91,42 @@ class UserProfile(AbstractBaseUser):
 
         super(UserProfile, self).save(**kwargs)
 
-    @transaction.atomic
-    def synchronize_facebook_friends(self):
-        # Get friends
-        facebook_friends_ids = self.facebook_user.friends_using_our_app
-        if facebook_friends_ids is None:
-            return
+    # TODO what is this?
+    #  @transaction.atomic
+    #  def synchronize_facebook_friends(self):
+        #  # Get friends
+        #  facebook_friends_ids = self.facebook_user.friends_using_our_app
+        #  if facebook_friends_ids is None:
+            #  return
 
-        # django_friends_ids = FacebookUser.objects.\
-            # django_users_for_ids(facebook_friends_ids).\
-            # values_list('id', flat=True)
-        # django_friends_ids_set = set(django_friends_ids)
+        #  django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
+        #  django_friends_ids_set = set(django_friends_ids)
 
-        friends_through_model = self.friends.through
-        friends_manager = friends_through_model.objects
+        #  friends_through_model = self.friends.through
+        #  friends_manager = friends_through_model.objects
 
-        # Get current relations
-        current_friends_ids_set = self.friends_ids_set
+        #  # Get current relations
+        #  current_friends_ids_set = self.friends_ids_set
 
-        # Add new
-        new_friends_ids = list(django_friends_ids_set -
-                               current_friends_ids_set)
-        logger.debug("'User::synchronize_facebook_friends' adding %d new \
-                     friends." % len(new_friends_ids))
+        #  # Add new
+        #  new_friends_ids = list(django_friends_ids_set -
+                               #  current_friends_ids_set)
+        #  logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % len(new_friends_ids))
 
-        if new_friends_ids:
-            new_friends_through = [friends_through_model(from_user=self,
-                                                         to_user_id=friend_id)
-                                   for friend_id in new_friends_ids]
-            friends_manager.bulk_create(new_friends_through)
+        #  if new_friends_ids:
+            #  new_friends_through = [friends_through_model(from_user=self,
+                                                         #  to_user_id=friend_id)
+                                   #  for friend_id in new_friends_ids]
+            #  friends_manager.bulk_create(new_friends_through)
 
-        # Remove stale
-        stale_friends_ids = list(current_friends_ids_set -
-                                 django_friends_ids_set)
-        logger.debug("'User::synchronize_facebook_friends' removing %d stale \
-                     friends." % len(stale_friends_ids))
+        #  # Remove stale
+        #  stale_friends_ids = list(current_friends_ids_set - django_friends_ids_set)
+        #  logger.debug("'User::synchronize_facebook_friends' removing %d stale friends." % len(stale_friends_ids))
 
-        if stale_friends_ids:
-            first_way_qs = Q(from_user=self, to_user__in=stale_friends_ids)
-            second_way_qs = Q(to_user=self, from_user__in=stale_friends_ids)
-            friends_manager.filter(first_way_qs | second_way_qs).delete()
+        #  if stale_friends_ids:
+            #  first_way_qs = Q(from_user=self, to_user__in=stale_friends_ids)
+            #  second_way_qs = Q(to_user=self, from_user__in=stale_friends_ids)
+            #  friends_manager.filter(first_way_qs | second_way_qs).delete()
 
     @property
     def statistics_dict(self):
@@ -154,23 +141,22 @@ class UserProfile(AbstractBaseUser):
             'reputation': reputation
         }
 
-    @property
-    def friends_ids_set(self):
-        friends_through_model = self.friends.through
-        friends_manager = friends_through_model.objects
+    # TODO what is this?
+    #  @property
+    #  def friends_ids_set(self):
+        #  friends_through_model = self.friends.through
+        #  friends_manager = friends_through_model.objects
 
-        current_friends_ids = friends_manager.\
-            filter(Q(from_user=self) | Q(to_user=self)).\
-            values_list('from_user_id', 'to_user_id')
+        #  current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id', 'to_user_id')
 
-        current_friends_ids_set = set()
-        for from_id, to_id in current_friends_ids:
-            if from_id != self.id:
-                current_friends_ids_set.add(from_id)
-            if to_id != self.id:
-                current_friends_ids_set.add(to_id)
+        #  current_friends_ids_set = set()
+        #  for from_id, to_id in current_friends_ids:
+            #  if from_id != self.id:
+                #  current_friends_ids_set.add(from_id)
+            #  if to_id != self.id:
+                #  current_friends_ids_set.add(to_id)
 
-        return current_friends_ids_set
+        #  return current_friends_ids_set
 
     def get_full_name(self):
         return "%s (%s)" % (self.name, self.username)
@@ -196,11 +182,7 @@ class UserProfile(AbstractBaseUser):
         :rtype: int
         """
         portfolio_value = 0
-        user_bets = Bet.objects \
-            .select_related('event') \
-            .filter(user=self,
-                    event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
-                    has__gt=0)
+        user_bets = Bet.objects.select_related('event').filter(user=self, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, has__gt=0)
 
         for bet in user_bets.iterator():
             price_field = "current_sell_for_price"
@@ -234,8 +216,7 @@ class UserProfile(AbstractBaseUser):
         if total_given_cash == 0:
             return None
         else:
-            return Decimal(portfolio_value + total_cash) / \
-                Decimal(total_given_cash) * 100
+            return Decimal(portfolio_value + total_cash) / Decimal(total_given_cash) * 100
 
     @property
     def profile_photo(self):
@@ -248,10 +229,7 @@ class UserProfile(AbstractBaseUser):
 
         from events.models import Transaction
 
-        Transaction.objects.create(
-            user=self,
-            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP,
-            quantity=1, price=amount)
+        Transaction.objects.create(user=self, type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP, quantity=1, price=amount)
 
         # from canvas.models import ActivityLog
         # ActivityLog.objects.register_transaction_activity(self, transaction)
@@ -356,12 +334,9 @@ class UserProfile(AbstractBaseUser):
         points = []
         for snapshot in snapshots:
             labels.append(
-                '{0} {1}'.format(snapshot.created_at.day,
-                                 _MONTHS[snapshot.created_at.month])
+                '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
             )
-            reputation = self.reputation_formula(snapshot.portfolio_value,
-                                                 snapshot.total_cash,
-                                                 snapshot.total_given_cash)
+            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash, snapshot.total_given_cash)
             points.append(str(int(reputation)))
 
         return {
@@ -381,9 +356,7 @@ class UserProfile(AbstractBaseUser):
             created_at__gte=date,
         ).order_by('created_at')
         if len(snapshots):
-            old_reputation = self.reputation_formula\
-                (snapshots[0].portfolio_value, snapshots[0].total_cash,
-                 snapshots[0].total_given_cash)
+            old_reputation = self.reputation_formula(snapshots[0].portfolio_value, snapshots[0].total_cash, snapshots[0].total_given_cash)
             return int(self.reputation - old_reputation)
         else:
             return int(self.reputation) - 100

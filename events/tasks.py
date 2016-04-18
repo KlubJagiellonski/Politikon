@@ -4,7 +4,7 @@ import logging
 from celery import task
 from django.utils.timezone import now
 
-from .models import Event, Transaction
+from .models import Event
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ def create_open_events_snapshot():
     """
     logger.debug("'events:tasks:create_open_events_snapshot' worker up")
 
-    for event in Event.objects.filter(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
+    for event in Event.objects.ongoing_only_queryset():
         try:
             logger.debug(
                 "'events:tasks:create_open_events_snapshot' snapshotting event"
@@ -50,6 +50,6 @@ def calculate_price_change():
         else:
             last_price = 50
 
-        event.price_change = event.current_buy_for - last_price
+        event.price_change = event.current_buy_for_price - last_price
         event.absolute_price_change = abs(event.price_change)
         event.save()

@@ -53,8 +53,7 @@ def save_profile(strategy, user, response, details, is_new=False,
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
-                    user = UserProfile.objects.\
-                        get('twitter_user_id', twitter.id)
+                    user = UserProfile.objects.get('twitter_user_id', twitter.id)
                 except:
                     pass
                 else:
@@ -94,16 +93,14 @@ def save_profile(strategy, user, response, details, is_new=False,
                 except HTTPError:
                     pass
                 else:
-                    user.avatar.save('{0}_social.jpg'.format(user.username),
-                                    ContentFile(response.content))
+                    user.avatar.save('{0}_social.jpg'.format(user.username), ContentFile(response.content))
 
     if backend.name == 'facebook':
         if is_new or not user.is_active:
             playing_friends_count = 0
             for friend in response['friends']['data']:
                 try:
-                    user = UserProfile.objects.\
-                        get('facebook_user_id', friend['id'])
+                    user = UserProfile.objects.get('facebook_user_id', friend['id'])
                 except:
                     pass
                 else:
@@ -141,5 +138,4 @@ def save_profile(strategy, user, response, details, is_new=False,
             except HTTPError:
                 pass
             else:
-                user.avatar.save('{0}_social.jpg'.format(user.username),
-                                ContentFile(response.content))
+                user.avatar.save('{0}_social.jpg'.format(user.username), ContentFile(response.content))

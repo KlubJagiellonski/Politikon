@@ -90,8 +90,8 @@ CELERYBEAT_SCHEDULE = {
     # },
     #  No daily topup
     #  'topup_accounts_task': {
-        #  'task': 'accounts.tasks.topup_accounts_task',
-        #  'schedule': crontab(hour=0, minute=0)
+    #      'task': 'accounts.tasks.topup_accounts_task',
+    #      'schedule': crontab(hour=0, minute=0)
     #  },
     'calculate_price_change': {
         'task': 'events.tasks.calculate_price_change',

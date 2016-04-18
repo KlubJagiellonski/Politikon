@@ -77,45 +77,30 @@ class Event(models.Model):
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.\
-        ImageField(u'mały obrazek 340x250', upload_to='events_small',
-                   null=True)
-    big_image = models.\
-        ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
+    small_image = models.ImageField(u'mały obrazek 340x250', upload_to='events_small', null=True)
+    big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
-    outcome = models.\
-        PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
-                             default=1)
-    outcome_reason = models.\
-        TextField(u'uzazadnienie wyniku', default='', blank=True)
+    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
+    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
-    estimated_end_date = models.\
-        DateTimeField(u'przewidywana data rozstrzygnięcia')
+    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
-    current_buy_for_price = models.\
-        IntegerField(u'cena nabycia akcji zdarzenia', default=BEGIN_PRICE)
-    current_buy_against_price = models.\
-        IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
-    current_sell_for_price = models.\
-        IntegerField(u'cena sprzedaży akcji zdarzenia', default=BEGIN_PRICE)
-    current_sell_against_price = models.\
-        IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego',
-                     default=BEGIN_PRICE)
+    current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia', default=BEGIN_PRICE)
+    current_buy_against_price = models.IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
+    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia', default=BEGIN_PRICE)
+    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
 
-    last_transaction_date = models.\
-        DateTimeField(u'data ostatniej transakcji', null=True)
+    last_transaction_date = models.DateTimeField(u'data ostatniej transakcji', null=True)
 
     Q_for = models.IntegerField(u'zakładów na TAK', default=0)
     Q_against = models.IntegerField(u'zakładów na NIE', default=0)
     turnover = models.IntegerField(u'obrót', default=0, db_index=True)
 
-    absolute_price_change = models.\
-        IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True,
-                     default=0)
+    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True, default=0)
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     # constant for calculating event change
@@ -144,15 +129,12 @@ class Event(models.Model):
         return reverse('events:event_detail', kwargs={'pk': self.pk})
 
     def get_relative_url(self):
-        return '/event/%(id)d-%(title)s' % {'id': self.id,
-                                            'title': slugify(unidecode
-                                                             (self.title))}
+        return '/event/%(id)d-%(title)s' % {'id': self.id, 'title': slugify(unidecode(self.title))}
 
     def get_absolute_facebook_object_url(self):
         return 'http://%(domain)s%(url)s' % {
             'domain': current_domain(),
-            'url': reverse('events:event_facebook_object_detail',
-                           kwargs={'event_id': self.id})
+            'url': reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
         }
 
     @property
@@ -203,12 +185,10 @@ class Event(models.Model):
         labels = []
         points = []
 
-        if step_date < self.created_date - relativedelta\
-                (days=Event.CHART_MARGIN):
+        if step_date < self.created_date - relativedelta(days=Event.CHART_MARGIN):
             # if 2 weeks ago + margin the event wasn't created
             # then give start when created + margin
-            step_date = self.created_date - relativedelta\
-                (days=Event.CHART_MARGIN)
+            step_date = self.created_date - relativedelta(days=Event.CHART_MARGIN)
 
         while step_date <= last_date:
             # display only midnight prices
@@ -290,17 +270,17 @@ class Event(models.Model):
         """
         response = {}
         bet_social_yes = Bet.objects.filter(
-                event=self,
-                outcome=True,  # bought YES
-                has__gt=0,
+            event=self,
+            outcome=True,  # bought YES
+            has__gt=0,
         )
         response['yes_count'] = bet_social_yes.count()
         response['yes_bets'] = bet_social_yes[:6]
 
         bet_social_no = Bet.objects.filter(
-                event=self,
-                outcome=False,  # bought NO
-                has__gt=0,
+            event=self,
+            outcome=False,  # bought NO
+            has__gt=0,
         )
         response['no_count'] = bet_social_no.count()
         response['no_bets'] = bet_social_no[:6]
@@ -410,8 +390,7 @@ class Event(models.Model):
         :return: True if event is finished
         :rtype: bool
         """
-        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.
-                                        FINISHED_YES)
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_YES)
 
     @transaction.atomic
     def finish_no(self):
@@ -420,8 +399,7 @@ class Event(models.Model):
         :return: True if event is finished
         :rtype: bool
         """
-        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.
-                                        FINISHED_NO)
+        return self.finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
     @transaction.atomic
     def cancel(self):
@@ -438,9 +416,7 @@ class Event(models.Model):
                 users.update({
                     t.user: 0
                 })
-            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or \
+            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
                     t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
                 # for transaction type BUY the price is below 0
                 users[t.user] += t.quantity * t.price
@@ -450,11 +426,9 @@ class Event(models.Model):
             user.total_cash += refund
             user.save()
             if refund > 0:
-                transaction_type = t.TRANSACTION_TYPE_CHOICES.\
-                    EVENT_CANCELLED_REFUND
+                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
             else:
-                transaction_type = t.TRANSACTION_TYPE_CHOICES.\
-                    EVENT_CANCELLED_DEBIT
+                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_DEBIT
             Transaction.objects.create(
                 user=user,
                 event=self,
@@ -488,10 +462,8 @@ class RelatedEvent(models.Model):
     means that "related" event is on the list "Powiązane Wydarzenia" "event".
     Other side relation need another element.
     """
-    event = models.ForeignKey(Event, null=True, related_name='these_events',
-                              related_query_name='this_event')
-    related = models.ForeignKey(Event, null=True, related_name='relates',
-                                related_query_name='related')
+    event = models.ForeignKey(Event, null=True, related_name='these_events', related_query_name='this_event')
+    related = models.ForeignKey(Event, null=True, related_name='relates', related_query_name='related')
 
 
 class Bet(models.Model):
@@ -518,28 +490,18 @@ class Bet(models.Model):
 
     objects = BetManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False,
-                             related_name='bets', related_query_name='bet')
-    event = models.ForeignKey(Event, null=False, related_name='bets',
-                              related_query_name='bet')
-    outcome = models.BooleanField(u'zakład na TAK',
-                                  choices=BET_OUTCOME_CHOICES)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet')
+    event = models.ForeignKey(Event, null=False, related_name='bets', related_query_name='bet')
+    outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     # most important param: how many bets user has.
-    has = models.PositiveIntegerField(u'posiadane zakłady', default=0,
-                                      null=False)
-    bought = models.PositiveIntegerField(u'kupione zakłady', default=0,
-                                         null=False)
-    sold = models.PositiveIntegerField(u'sprzedane zakłady', default=0,
-                                       null=False)
-    bought_avg_price = models.FloatField(u'kupione po średniej cenie',
-                                         default=0, null=False)
-    sold_avg_price = models.FloatField(u'sprzedane po średniej cenie',
-                                       default=0, null=False)
-    rewarded_total = models.IntegerField(u'nagroda za wynik', default=0,
-                                         null=False)
+    has = models.PositiveIntegerField(u'posiadane zakłady', default=0, null=False)
+    bought = models.PositiveIntegerField(u'kupione zakłady', default=0, null=False)
+    sold = models.PositiveIntegerField(u'sprzedane zakłady', default=0, null=False)
+    bought_avg_price = models.FloatField(u'kupione po średniej cenie', default=0, null=False)
+    sold_avg_price = models.FloatField(u'sprzedane po średniej cenie', default=0, null=False)
+    rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
     # this is used to show event in my wallet.
-    is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte',
-                                          default=False, null=False)
+    is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte', default=False, null=False)
 
     @property
     def bet_dict(self):
@@ -583,11 +545,9 @@ class Bet(models.Model):
         :return: True if won
         :rtype: bool
         """
-        if self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
-                FINISHED_YES:
+        if self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
             return True
-        elif not self.outcome and self.event.outcome == Event.\
-                EVENT_OUTCOME_CHOICES.FINISHED_NO:
+        elif not self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
             return True
         return False
 
@@ -598,8 +558,7 @@ class Bet(models.Model):
         :return: more or less than zero
         :rtype: int
         """
-        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
-                IN_PROGRESS:
+        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             return self.get_won() - self.get_invested()
         else:
             return -self.get_invested()
@@ -610,6 +569,7 @@ class Bet(models.Model):
         :return: price above zero
         :rtype: float
         """
+        # NO NIE WEIM
         if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
             return 0
         return round(self.has * self.bought_avg_price, 0)
@@ -620,8 +580,7 @@ class Bet(models.Model):
         :return: price
         :rtype: int
         """
-        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.\
-                IN_PROGRESS:
+        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
             return self.has * Event.PRIZE_FOR_WINNING
         else:
             return 0
@@ -678,14 +637,9 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False,
-                             related_name='transactions',
-                             related_query_name='transaction')
-    event = models.ForeignKey(Event, null=True, related_name='transactions',
-                              related_query_name='transaction')
-    type = models.PositiveIntegerField("rodzaj transakcji",
-                                       choices=TRANSACTION_TYPE_CHOICES,
-                                       default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions', related_query_name='transaction')
+    event = models.ForeignKey(Event, null=True, related_name='transactions', related_query_name='transaction')
+    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
     date = models.DateTimeField('data', auto_now_add=True)
     quantity = models.PositiveIntegerField(u'ilość', default=1)
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)

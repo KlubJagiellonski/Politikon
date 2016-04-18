@@ -9,15 +9,14 @@ import pytz
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.utils.timezone import datetime
 
 from .exceptions import UnknownOutcome
-from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, \
-    BetFactory, TransactionFactory
-from .models import Bet, Event, _MONTHS
-from .tasks import create_open_events_snapshot
-from .templatetags.display import render_bet, render_event, render_events, \
-    render_featured_event, render_featured_events, render_bet_status
+from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
+from .models import Bet, Event, Transaction, _MONTHS
+from .tasks import create_open_events_snapshot, calculate_price_change
+from .templatetags.display import render_bet, render_event, render_events, render_featured_event, render_featured_events, render_bet_status
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -25,7 +24,7 @@ from politikon.templatetags.path import startswith
 
 class EventsModelTestCase(TestCase):
     """
-    Test method for event
+    Test methods for event
     """
     def test_event_creation(self):
         """
@@ -65,21 +64,22 @@ class EventsModelTestCase(TestCase):
         outcome4 = event.price_for_outcome('NO', 'SELL')
         self.assertEqual(event.current_sell_against_price, outcome4)
         with self.assertRaises(UnknownOutcome):
-            outcome5 = event.price_for_outcome('OOOPS', 'MY MISTAKE')
+            event.price_for_outcome('OOOPS', 'MY MISTAKE')
 
+    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+                       CELERY_ALWAYS_EAGER=True,
+                       BROKER_BACKEND='memory')
     def test_get_chart_points(self):
         """
         Get chart points
         """
-        initial_datetime = datetime.now().replace\
-            (hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC)\
-            - timedelta(days=15)
+        initial_datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC) - timedelta(days=15)
         with freeze_time(initial_datetime) as frozen_time:
             event1 = EventFactory()
             event1.current_buy_for_price = 90
             event1.save()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
             frozen_time.tick(delta=timedelta(days=3))
 
             event1.current_buy_for_price = 30
@@ -88,7 +88,7 @@ class EventsModelTestCase(TestCase):
             event2.current_buy_for_price = 30
             event2.save()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
             frozen_time.tick(delta=timedelta(days=5))
 
             event1.current_buy_for_price = 60
@@ -97,7 +97,7 @@ class EventsModelTestCase(TestCase):
             event2.save()
             event3 = EventFactory()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
             frozen_time.tick(delta=timedelta(days=2))
 
             event1.current_buy_for_price = 55
@@ -107,7 +107,7 @@ class EventsModelTestCase(TestCase):
             event3.current_buy_for_price = 55
             event3.save()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
             frozen_time.tick(delta=timedelta(days=2))
 
             event1.current_buy_for_price = 82
@@ -117,22 +117,21 @@ class EventsModelTestCase(TestCase):
             event3.current_buy_for_price = 82
             event3.save()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
             frozen_time.tick(delta=timedelta(days=3))
 
             event1.current_buy_for_price = 0
             event1.save()
             event2.current_buy_for_price = 0
             event2.save()
-            event3.finish_yes()
+            event3.finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES)
             event3.save()
 
-            create_open_events_snapshot()
+            create_open_events_snapshot.delay()
 
         first_date = datetime.now() - timedelta(days=13)
         days = [first_date + timedelta(n) for n in range(14)]
-        labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) \
-                  for step_date in days]
+        labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
 
         points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
         points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,
@@ -222,7 +221,7 @@ class EventsModelTestCase(TestCase):
         event1 = EventFactory()
         event2 = EventFactory()
         event3 = EventFactory()
-        bet = BetFactory(user=user, event=event2)
+        BetFactory(user=user, event=event2)
 
         RelatedEventFactory(event=event1, related=event2)
         RelatedEventFactory(event=event1, related=event3)
@@ -245,25 +244,13 @@ class EventsManagerTestCase(TestCase):
         """
         Get events
         """
-        event1 = EventFactory\
-            (turnover=1,
-             absolute_price_change=1000,
-             estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
-        event2 = EventFactory\
-            (outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
-             turnover=3,
-             absolute_price_change=3000,
-             estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=1))
-        event3 = EventFactory\
-            (turnover=2,
-             absolute_price_change=2000,
-             estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=4))
-        event4 = EventFactory\
-            (outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
-             absolute_price_change=5000,
-             estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
-        event5 = EventFactory\
-            (outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        event1 = EventFactory(turnover=1, absolute_price_change=1000, estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
+        event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, turnover=3, absolute_price_change=3000,
+                              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=1))
+        event3 = EventFactory(turnover=2, absolute_price_change=2000, estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=4))
+        event4 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, absolute_price_change=5000,
+                              estimated_end_date=datetime.now(tz=pytz.UTC) + timedelta(days=2))
+        event5 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
         ongoing_events = Event.objects.ongoing_only_queryset()
         self.assertIsInstance(ongoing_events[0], Event)
@@ -297,26 +284,80 @@ class EventsManagerTestCase(TestCase):
         front_event = Event.objects.get_front_event()
         self.assertIsNone(front_event)
 
-        event1 = EventFactory()
-        event2 = EventFactory()
-        event3 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.CANCELLED)
+        events = EventFactory.create_batch(2)
+        EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.CANCELLED)
 
         front_event = Event.objects.get_front_event()
         self.assertIsInstance(front_event, Event)
-        self.assertEqual(event2, front_event)
+
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[1].save()
+        front_event = Event.objects.get_front_event()
+        self.assertIsNone(front_event)
 
     def test_get_featured_events(self):
         """
         Get featured events
         """
-        event1 = EventFactory()
-        event2 = EventFactory()
-        event3 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.CANCELLED)
+        events = EventFactory.create_batch(3)
+        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[2].save()
 
         featured_events = Event.objects.get_featured_events()
         self.assertIsInstance(featured_events[0], Event)
         self.assertEqual(2, len(featured_events))
-        self.assertEqual([event1, event2], list(featured_events))
+        self.assertEqual([events[0], events[1]], list(featured_events))
+
+
+class EventsTasksTestCase(TestCase):
+    """
+    events/tasks
+    """
+    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+                       CELERY_ALWAYS_EAGER=True,
+                       BROKER_BACKEND='memory')
+    def test_create_open_events_snapshot(self):
+        """
+        Create open events snapshot
+        """
+        events = EventFactory.create_batch(5)
+        create_open_events_snapshot.delay()
+
+    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+                       CELERY_ALWAYS_EAGER=True,
+                       BROKER_BACKEND='memory')
+    def test_calculate_price_change(self):
+        """
+        Calculate price change
+        """
+        initial_datetime = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=pytz.UTC) - timedelta(days=2)
+        with freeze_time(initial_datetime) as frozen_time:
+            events = EventFactory.create_batch(3)
+            events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+            events[0].save()
+
+            frozen_time.tick(delta=timedelta(days=1))
+            events[1].current_buy_for_price = 60
+            events[1].save()
+            events[2].current_buy_for_price = 40
+            events[2].save()
+            calculate_price_change.delay()
+            # FIXME
+            #  self.assertEqual(0, events[0].price_change)
+            #  self.assertEqual(10, events[1].price_change)
+            #  self.assertEqual(-10, events[2].price_change)
+
+            create_open_events_snapshot.delay()
+            frozen_time.tick(delta=timedelta(days=1))
+            events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+            events[1].save()
+            events[2].current_buy_for_price = 100
+            events[2].save()
+            calculate_price_change.delay()
+            # FIXME
+            #  self.assertEqual(0, events[0].price_change)
+            #  self.assertEqual(10, events[1].price_change)
+            #  self.assertEqual(60, events[2].price_change)
 
 
 class EventsTemplatetagsTestCase(TestCase):
@@ -387,6 +428,127 @@ class EventsTemplatetagsTestCase(TestCase):
         }, render_bet_status(bet))
 
 
+class BetsModelTestCase(TestCase):
+    """
+    Test methods for bet
+    """
+    def test_bet_creation(self):
+        """
+        Create a bet
+        """
+        event = EventFactory(title='wydarzenie')
+        user = UserFactory(username='brode')
+        bet = Bet(event=event, user=user,
+                        outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet.save()
+
+        self.assertEqual({
+            'bet_id': 1,
+            'event_id': 1,
+            'user_id': 1,
+            'outcome': Bet.BET_OUTCOME_CHOICES.YES,
+            'has': 0,
+            'bought': 0,
+            'sold': 0,
+            'bought_avg_price': 0,
+            'sold_avg_price': 0,
+            'rewarded_total': 0
+        }, bet.bet_dict)
+        self.assertEqual(u'zakłady brode na wydarzenie', bet.__unicode__())
+
+    def test_current_event_price(self):
+        """
+        Current event price
+        """
+        event = EventFactory()
+        users = UserFactory.create_batch(2)
+        bet1 = BetFactory(event=event, user=users[0], outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet2 = BetFactory(event=event, user=users[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
+        event.current_buy_for_price = 55
+        event.current_buy_against_price = 45
+        self.assertEqual(55, bet1.current_event_price())
+        self.assertEqual(45, bet2.current_event_price())
+
+    def test_is_won(self):
+        """
+        Is won
+        """
+        events = EventFactory.create_batch(3)
+        user = UserFactory()
+        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet3 = BetFactory(event=events[2], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet4 = BetFactory(event=events[2], user=user, outcome=Bet.BET_OUTCOME_CHOICES.NO)
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        self.assertTrue(bet1.is_won())
+        self.assertFalse(bet2.is_won())
+        self.assertFalse(bet3.is_won())
+        self.assertTrue(bet4.is_won())
+
+    def test_get_wallet_change(self):
+        """
+        Get wallet change
+        """
+
+    def test_get_invested(self):
+        """
+        Get invested
+        """
+
+    def test_get_won(self):
+        """
+        Get won
+        """
+        events = EventFactory.create_batch(2)
+        user = UserFactory()
+        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES, has=5)
+        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES, has=5)
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        self.assertEqual(500, bet1.get_won())
+        self.assertEqual(0, bet2.get_won())
+
+    def test_event_outcomes(self):
+        """
+        Is finished yes / no / cancelled
+        """
+        events = EventFactory.create_batch(4)
+        user = UserFactory()
+        bets = []
+        for event in events:
+            bets.append(BetFactory(user=user, event=event))
+
+        events[1].finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES)
+        events[2].finish(Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        events[3].finish(Event.EVENT_OUTCOME_CHOICES.CANCELLED)
+        self.assertFalse(bets[0].is_finished_yes())
+        self.assertFalse(bets[0].is_finished_no())
+        self.assertFalse(bets[0].is_cancelled())
+        self.assertTrue(bets[1].is_finished_yes())
+        self.assertTrue(bets[2].is_finished_no())
+        self.assertTrue(bets[3].is_cancelled())
+
+
+class TransactionModelTestCase(TestCase):
+    """
+    Test methods for transaction
+    """
+    def test_transaction_creation(self):
+        """
+        Create a transaction
+        """
+        user = UserFactory(username='mcbrover')
+        event = EventFactory()
+        transaction = TransactionFactory(user=user, event=event, type=Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES)
+        self.assertEqual(u'zakup udziałów na TAK przez mcbrover', transaction.__unicode__())
+        self.assertEqual(0, transaction.total)
+        transaction.quantity = 10
+        transaction.price = 5
+        self.assertEqual(50, transaction.total)
+
+
 class PolitikonEventTemplatetagsTestCase(TestCase):
     """
     politikon/templatetags
@@ -398,11 +560,11 @@ class PolitikonEventTemplatetagsTestCase(TestCase):
         start_path = reverse('events:events')
         path1 = reverse('events:events')
         self.assertTrue(startswith(path1, start_path))
-        path2 = reverse('events:events', kwargs={'mode':'popular'})
+        path2 = reverse('events:events', kwargs={'mode': 'popular'})
         self.assertTrue(startswith(path2, start_path))
-        path3 = reverse('events:events', kwargs={'mode':'latest'})
+        path3 = reverse('events:events', kwargs={'mode': 'latest'})
         self.assertTrue(startswith(path3, start_path))
-        path4 = reverse('events:events', kwargs={'mode':'changed'})
+        path4 = reverse('events:events', kwargs={'mode': 'changed'})
         self.assertTrue(startswith(path4, start_path))
-        path5 = reverse('events:events', kwargs={'mode':'finished'})
+        path5 = reverse('events:events', kwargs={'mode': 'finished'})
         self.assertTrue(startswith(path5, start_path))

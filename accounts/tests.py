@@ -4,15 +4,12 @@ Test accounts module
 """
 from decimal import Decimal
 
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.test import TestCase
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
-from .managers import UserProfileManager
 from .models import UserProfile, get_image_path
-from .pipeline import save_profile
 from .templatetags.user import user_home, user_rank
 from .utils import process_username
 
@@ -25,7 +22,7 @@ from politikon.templatetags.path import startswith
 
 class UserProfileModelTestCase(TestCase):
     """
-    Test method for user object
+    Test methods for user object
     """
     def test_user_creation(self):
         """
@@ -127,7 +124,7 @@ class UserProfileModelTestCase(TestCase):
         """
         users = UserFactory.create_batch(2)
         events = EventFactory.create_batch(5)
-        bet1 = BetFactory(user=users[0], event=events[0])
+        BetFactory(user=users[0], event=events[0])
         bet2 = BetFactory(user=users[0], event=events[1])
         bet3 = BetFactory(user=users[0], event=events[2])
         bet4 = BetFactory(user=users[0], event=events[3])
@@ -148,8 +145,7 @@ class UserProfileModelTestCase(TestCase):
         bet4.save()
         bet5.is_new_resolved = True
         bet5.save()
-        self.assertEqual([bet2, bet3, bet4],
-                         list(users[0].get_newest_results()))
+        self.assertEqual([bet2, bet3, bet4], list(users[0].get_newest_results()))
         self.assertEqual([bet5], list(users[1].get_newest_results()))
 
 
@@ -242,8 +238,8 @@ class UserProfileManagerTestCase(TestCase):
         Get users
         """
         user1 = UserFactory()
-        user2 = UserFactory(is_deleted=True)
-        user3 = UserFactory(is_active=False)
+        UserFactory(is_deleted=True)
+        UserFactory(is_active=False)
 
         users = UserProfile.objects.get_users()
         self.assertIsInstance(users[0], UserProfile)
@@ -254,9 +250,9 @@ class UserProfileManagerTestCase(TestCase):
         """
         Get admins
         """
-        user1 = UserFactory()
-        user2 = UserFactory(is_admin=True)
-        user3 = UserFactory(is_staff=True)
+        UserFactory()
+        UserFactory(is_admin=True)
+        UserFactory(is_staff=True)
         user4 = AdminFactory()
 
         admins = UserProfile.objects.get_admins()
@@ -270,8 +266,8 @@ class UserProfileManagerTestCase(TestCase):
         """
         user1 = UserFactory(weekly_result=100)
         user2 = UserFactory(weekly_result=300)
-        user3 = UserFactory()
-        user4 = AdminFactory()
+        UserFactory()
+        AdminFactory()
 
         users = UserProfile.objects.get_best_weekly()
         self.assertIsInstance(users[0], UserProfile)
@@ -282,9 +278,9 @@ class UserProfileManagerTestCase(TestCase):
         """
         Get best monthly
         """
-        user1 = UserFactory()
+        UserFactory()
         user2 = UserFactory(monthly_result=300)
-        user3 = AdminFactory()
+        AdminFactory()
         user4 = UserFactory(monthly_result=100)
 
         users = UserProfile.objects.get_best_monthly()
@@ -298,7 +294,7 @@ class UserProfileManagerTestCase(TestCase):
         """
         user1 = UserFactory()
         user2 = UserFactory(reputation=Decimal(300))
-        user3 = AdminFactory()
+        AdminFactory()
         user4 = UserFactory(reputation=Decimal(50))
 
         users = UserProfile.objects.get_best_overall()
@@ -311,8 +307,7 @@ class UserProfileManagerTestCase(TestCase):
         Get user positions
         """
         user1 = UserFactory(weekly_result=100)
-        user2 = UserFactory(weekly_result=300, monthly_result=300,
-                                  reputation=Decimal(300))
+        user2 = UserFactory(weekly_result=300, monthly_result=300, reputation=Decimal(300))
         user3 = AdminFactory()
         user4 = UserFactory(monthly_result=100, reputation=Decimal(50))
 
@@ -406,6 +401,6 @@ class UserUtilsTestCase(TestCase):
         """
         username = process_username(u"zażółćgęśląjaźń")
         self.assertEqual('zazolcgeslajazn', username)
-        user = UserFactory(username='zazolcgeslajazn')
+        UserFactory(username='zazolcgeslajazn')
         username2 = process_username(u"zażółćgęśląjaźń")
         self.assertNotEqual('zazolcgeslajazn', username2)

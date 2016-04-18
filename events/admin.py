@@ -28,10 +28,8 @@ class EventAdmin(admin.ModelAdmin):
         'price_change',
     ]
 
-    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date',
-                    'estimated_end_date', 'end_date', 'current_buy_for_price',
-                    'current_buy_against_price', 'Q_for', 'Q_against',
-                    'turnover', 'absolute_price_change', 'price_change']
+    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date', 'estimated_end_date', 'end_date', 'current_buy_for_price',
+                    'current_buy_against_price', 'Q_for', 'Q_against', 'turnover', 'absolute_price_change', 'price_change']
 
     inlines = [RelatedEventInline, ]
 
@@ -48,8 +46,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class BetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold',
-                    'bought_avg_price', 'sold_avg_price', 'rewarded_total']
+    list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold', 'bought_avg_price', 'sold_avg_price', 'rewarded_total']
 
 
 class TransactionAdmin(admin.ModelAdmin):

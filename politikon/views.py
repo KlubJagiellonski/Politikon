@@ -74,5 +74,4 @@ def acme_challenge(request):
     response = '44jmcY27vf0Xqc44v7-kQx0O1ANUx5OeHysmzhxe_cc.gH-uL0atBurquAoT' \
                'yPdNCmWNE4OqrHNOWrVMMu94hrU'
 
-
     return HttpResponse(response)
