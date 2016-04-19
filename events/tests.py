@@ -11,11 +11,14 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 
-from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, InsufficientCash, InsufficientBets, EventAlreadyFinished
-from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, \
+    InsufficientCash, InsufficientBets, EventAlreadyFinished
+from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, \
+    TransactionFactory
 from .models import Bet, Event, Transaction, _MONTHS
 from .tasks import create_open_events_snapshot, calculate_price_change
-from .templatetags.display import render_bet, render_event, render_events, render_featured_event, render_featured_events, render_bet_status, outcome
+from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
+    render_featured_events, render_bet_status, outcome
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -73,8 +76,8 @@ class EventsModelTestCase(TestCase):
         Get chart points
         """
         # time of get_chart_points
-        # TODO time from settings
-        initial_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=15)
+        initial_time = timezone.now().\
+            replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=15)
         with freeze_time(initial_time) as frozen_time:
             event1 = EventFactory()
             event1.current_buy_for_price = 90
@@ -193,7 +196,8 @@ class EventsModelTestCase(TestCase):
         users_yes = UserFactory.create_batch(10)
         users_no = UserFactory.create_batch(10)
         bets_yes = [BetFactory(user=u, event=event) for u in users_yes]
-        bets_no = [BetFactory(user=u, event=event, outcome=Bet.BET_OUTCOME_CHOICES.NO) for u in users_no]
+        bets_no = [BetFactory(user=u, event=event, outcome=Bet.BET_OUTCOME_CHOICES.NO) \
+                   for u in users_no]
         self.maxDiff = None
         social = event.get_bet_social()
         self.assertEqual(10, social['yes_count'])
@@ -319,12 +323,27 @@ class EventsManagerTestCase(TestCase):
         """
         Get events
         """
-        event1 = EventFactory(turnover=1, absolute_price_change=1000, estimated_end_date=timezone.now() + timedelta(days=2))
-        event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, turnover=3, absolute_price_change=3000,
-                              estimated_end_date=timezone.now() + timedelta(days=1))
-        event3 = EventFactory(turnover=2, absolute_price_change=2000, estimated_end_date=timezone.now() + timedelta(days=4))
-        event4 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, absolute_price_change=5000,
-                              estimated_end_date=timezone.now() + timedelta(days=2))
+        event1 = EventFactory(
+            turnover=1,
+            absolute_price_change=1000,
+            estimated_end_date=timezone.now() + timedelta(days=2)
+        )
+        event2 = EventFactory(
+            outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+            turnover=3,
+            absolute_price_change=3000,
+            estimated_end_date=timezone.now() + timedelta(days=1)
+        )
+        event3 = EventFactory(
+            turnover=2,
+            absolute_price_change=2000,
+            estimated_end_date=timezone.now() + timedelta(days=4)
+        )
+        event4 = EventFactory(
+            outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
+            absolute_price_change=5000,
+            estimated_end_date=timezone.now() + timedelta(days=2)
+        )
         event5 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
 
         ongoing_events = Event.objects.ongoing_only_queryset()
@@ -406,7 +425,8 @@ class EventsTasksTestCase(TestCase):
         """
         Calculate price change
         """
-        initial_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2)
+        initial_time = timezone.now().\
+            replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2)
         with freeze_time(initial_time) as frozen_time:
             events = EventFactory.create_batch(3)
             events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
@@ -657,7 +677,10 @@ class BetsManagerTestCase(TestCase):
         self.assertEqual(events[0], new_bet[1])
 
         bet = BetFactory(user=users[1], event=events[2])
-        self.assertEqual((users[1], events[2], bet), Bet.objects.get_user_event_and_bet_for_update(users[1], 3, 'YES'))
+        self.assertEqual(
+            (users[1], events[2], bet),
+            Bet.objects.get_user_event_and_bet_for_update(users[1], 3, 'YES')
+        )
 
     def test_buy_a_bet(self):
         """
@@ -754,7 +777,10 @@ class TransactionManagerTestCase(TestCase):
             frozen_time.tick(delta=timedelta(days=3))
             transaction3 = TransactionFactory(user=user, event=events[2])
 
-        self.assertEqual([transaction3, transaction2], list(Transaction.objects.get_weekly_user_transactions(user)))
+        self.assertEqual(
+            [transaction3, transaction2],
+            list(Transaction.objects.get_weekly_user_transactions(user))
+        )
 
     def test_get_monthly_user_transactions(self):
         """
@@ -772,7 +798,10 @@ class TransactionManagerTestCase(TestCase):
             frozen_time.tick(delta=timedelta(days=3))
             transaction3 = TransactionFactory(user=user, event=events[2])
 
-        self.assertEqual([transaction3, transaction2], list(Transaction.objects.get_monthly_user_transactions(user)))
+        self.assertEqual(
+            [transaction3, transaction2],
+            list(Transaction.objects.get_monthly_user_transactions(user))
+        )
 
 
 class PolitikonEventTemplatetagsTestCase(TestCase):

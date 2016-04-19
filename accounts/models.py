@@ -27,10 +27,12 @@ def get_image_path(instance, filename):
 
 
 class UserProfile(AbstractBaseUser):
+    class Meta:
+        verbose_name = u'użytkownik'
+        verbose_name_plural = u'użytkownicy'
 
     objects = UserProfileManager()
     # przeliczane rankingi: ranking, miesiąc, tydzień
-    # TODO: czy to potrzebne?
     snapshots = SnapshotAddon(fields=[
         'total_cash',
         'total_given_cash',
@@ -61,7 +63,8 @@ class UserProfile(AbstractBaseUser):
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
-    reputation = models.DecimalField(u"reputation", default=100, max_digits=12, decimal_places=2, null=True)
+    reputation = models.DecimalField(u"reputation", default=100, max_digits=12, decimal_places=2,
+                                     null=True)
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
     weekly_result = models.IntegerField(u"wynik tygodniowy", null=True, blank=True)
     monthly_result = models.IntegerField(u"wynik miesięczny", null=True, blank=True)
@@ -69,9 +72,11 @@ class UserProfile(AbstractBaseUser):
     web_site = models.URLField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
     facebook_user_id = models.BigIntegerField(u"facebook ID", default=None, blank=True, null=True)
-    facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True, null=True)
+    facebook_user = models.CharField(u"facebook URL", max_length=255, default=None, blank=True,
+                                     null=True)
     twitter_user_id = models.BigIntegerField(u"twitter ID", default=None, blank=True, null=True)
-    twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True, null=True)
+    twitter_user = models.CharField(u"twitter URL", max_length=255, default=None, blank=True,
+                                    null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -99,7 +104,8 @@ class UserProfile(AbstractBaseUser):
         #  if facebook_friends_ids is None:
             #  return
 
-        #  django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).values_list('id', flat=True)
+        #  django_friends_ids = FacebookUser.objects.django_users_for_ids(facebook_friends_ids).\
+            #  values_list('id', flat=True)
         #  django_friends_ids_set = set(django_friends_ids)
 
         #  friends_through_model = self.friends.through
@@ -111,7 +117,8 @@ class UserProfile(AbstractBaseUser):
         #  # Add new
         #  new_friends_ids = list(django_friends_ids_set -
                                #  current_friends_ids_set)
-        #  logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % len(new_friends_ids))
+        #  logger.debug("'User::synchronize_facebook_friends' adding %d new friends." % \
+            #  len(new_friends_ids))
 
         #  if new_friends_ids:
             #  new_friends_through = [friends_through_model(from_user=self,
@@ -121,7 +128,8 @@ class UserProfile(AbstractBaseUser):
 
         #  # Remove stale
         #  stale_friends_ids = list(current_friends_ids_set - django_friends_ids_set)
-        #  logger.debug("'User::synchronize_facebook_friends' removing %d stale friends." % len(stale_friends_ids))
+        #  logger.debug("'User::synchronize_facebook_friends' removing %d stale friends." % \
+            #  len(stale_friends_ids))
 
         #  if stale_friends_ids:
             #  first_way_qs = Q(from_user=self, to_user__in=stale_friends_ids)
@@ -147,7 +155,8 @@ class UserProfile(AbstractBaseUser):
         #  friends_through_model = self.friends.through
         #  friends_manager = friends_through_model.objects
 
-        #  current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).values_list('from_user_id', 'to_user_id')
+        #  current_friends_ids = friends_manager.filter(Q(from_user=self) | Q(to_user=self)).\
+            #  values_list('from_user_id', 'to_user_id')
 
         #  current_friends_ids_set = set()
         #  for from_id, to_id in current_friends_ids:
@@ -182,7 +191,8 @@ class UserProfile(AbstractBaseUser):
         :rtype: int
         """
         portfolio_value = 0
-        user_bets = Bet.objects.select_related('event').filter(user=self, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, has__gt=0)
+        user_bets = Bet.objects.select_related('event').\
+            filter(user=self, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, has__gt=0)
 
         for bet in user_bets.iterator():
             price_field = "current_sell_for_price"
@@ -341,7 +351,8 @@ class UserProfile(AbstractBaseUser):
             labels.append(
                 '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
             )
-            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash, snapshot.total_given_cash)
+            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
+                                                 snapshot.total_given_cash)
             points.append(str(int(reputation)))
 
         return {
@@ -361,7 +372,9 @@ class UserProfile(AbstractBaseUser):
             created_at__gte=date,
         ).order_by('created_at')
         if len(snapshots):
-            old_reputation = self.reputation_formula(snapshots[0].portfolio_value, snapshots[0].total_cash, snapshots[0].total_given_cash)
+            old_reputation = self.reputation_formula(snapshots[0].portfolio_value,
+                                                     snapshots[0].total_cash,
+                                                     snapshots[0].total_given_cash)
             return int(self.reputation - old_reputation)
         else:
             return int(self.reputation) - 100

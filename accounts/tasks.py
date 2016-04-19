@@ -5,7 +5,6 @@ from constance import config
 from django.db import transaction
 
 from accounts.models import UserProfile
-from events.models import Event, Transaction
 
 
 logger = logging.getLogger(__name__)

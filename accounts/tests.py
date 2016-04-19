@@ -167,7 +167,7 @@ class UserProfileManagerTestCase(TestCase):
         self.assertTrue(user.check_password('password9'))
 
         with self.assertRaises(ValueError):
-            user2 = UserProfile.objects.return_new_user_object(
+            UserProfile.objects.return_new_user_object(
                 username=None,
             )
 
