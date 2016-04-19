@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.contrib import admin
+from django.contrib import admin, messages
 
-from .models import Bet, Event, Transaction, RelatedEvent
+from .exceptions import EventAlreadyFinished
 from .forms import EventForm
+from .models import Bet, Event, Transaction, RelatedEvent
 
 
 class RelatedEventInline(admin.TabularInline):
@@ -34,15 +35,19 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [RelatedEventInline, ]
 
     def save_model(self, request, obj, form, change):
+        # TODO: to jest najgorsze
         if request.method == 'POST':
             if request.POST['solve_event']:
-                if request.POST['solve_event'] == 'TAK':
-                    obj.finish_yes()
-                elif request.POST['solve_event'] == 'NIE':
-                    obj.finish_no()
-                elif request.POST['solve_event'] == 'ANULUJ':
-                    obj.cancel()
-        obj.save()
+                try:
+                    if request.POST['solve_event'] == 'TAK':
+                        obj.finish_yes()
+                    elif request.POST['solve_event'] == 'NIE':
+                        obj.finish_no()
+                    elif request.POST['solve_event'] == 'ANULUJ':
+                        obj.cancel()
+                    obj.save()
+                except EventAlreadyFinished as e:
+                    messages.error(request, e.message)
 
 
 class BetAdmin(admin.ModelAdmin):

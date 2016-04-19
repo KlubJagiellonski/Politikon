@@ -369,7 +369,7 @@ class Event(models.Model):
         :type outcome: Choices
         """
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
-            raise EventAlreadyFinished
+            raise EventAlreadyFinished("Wydarzenie zostało już rozwiązane.")
         self.outcome = outcome
         self.end_date = timezone.now()
         self.save()
