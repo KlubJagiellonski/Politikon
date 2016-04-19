@@ -36,6 +36,7 @@ LANGUAGES = [
 ]
 
 SITE_ID = 1
+SITE_URL = 'https://www.politikon.org.pl/'
 
 USE_I18N = True
 USE_L10N = True

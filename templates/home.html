@@ -5,6 +5,11 @@
 {% load humanize %}
 {% load user %}
 
+{% block facebook_properties %}
+{{ block.super }}
+<meta property="og:image" content="{{ front_event.big_image.url }}" />
+{% endblock %}
+
 {% block content %}
 
     <script type="text/javascript">
