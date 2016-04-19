@@ -1,7 +1,7 @@
 {% load display %}
 {% load format %}
 {% load humanize %}
-<div class="bet">
+<div class="bet{{ event|outcome }}">
     <figure>
         {% if event.small_image %}
         <div style="background: url({{ event.small_image.url }}); background-size: cover; min-height: 250px;"></div>
