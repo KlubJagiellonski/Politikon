@@ -73,6 +73,7 @@ class EventDetailView(DetailView):
         user = self.request.user
         event_bet = event.get_user_bet(user)
         bet_social = event.get_bet_social()
+        # TODO: jsonify in temlate
         json_data = json.dumps(event.get_event_big_chart())
         context.update({
             'event': event,
