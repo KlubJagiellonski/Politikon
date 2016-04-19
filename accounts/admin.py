@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
@@ -14,9 +13,7 @@ class MyUserAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active',
-                    'is_vip', 'is_staff', 'is_deleted', 'facebook_user',
-                    'twitter_user')
+    list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active', 'is_vip', 'is_staff', 'is_deleted', 'facebook_user', 'twitter_user')
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )
@@ -28,17 +25,21 @@ class MyUserAdmin(UserAdmin):
         (None, {'fields': ('username', 'password', 'email')}),
         (None, {'fields': ('name', )}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff',
-                                       'is_vip')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff', 'is_vip')}),
         (_('Important dates'), {'fields': ('last_login', )}), )
 
     add_fieldsets = (
         (None, {
             'fields': ('username', 'password1', 'password2', 'email'),
             'classes': ('wide', )
-        }), (None, {'fields': ('name', )}),
-        (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff',
-                                       'is_vip')}))
+        }),
+        (None, {
+            'fields': ('name', )
+        }),
+        (_('Permissions'), {
+            'fields': ('is_active', 'is_admin', 'is_staff', 'is_vip')
+        })
+    )
 
     class Topup:
         def __call__(self, modeladmin, request, queryset):

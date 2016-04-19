@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 
 from .views import EventDetailView, EventFacebookObjectDetailView, EventsListView
 
+
 urlpatterns = patterns('',
     url(r'^fbobjects/event/(?P<pk>\d+)/$', EventFacebookObjectDetailView.as_view(), name="event_facebook_object_detail"),
     url(r'^event/(?P<pk>\d+)-[a-zA-Z0-9\-]+$', EventDetailView.as_view(), name="event_detail"),

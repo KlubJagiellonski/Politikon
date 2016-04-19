@@ -7,27 +7,19 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
-    username = 'johnsmith'
-    name = 'John Smith'
+    username = factory.Sequence(lambda n: 'johnsmith%d' % n)
+    name = factory.Sequence(lambda n: 'John Smith %d' % n)
     is_active = True
 
 
-class BaBroracusFactory(factory.django.DjangoModelFactory):
+class UserWithAvatarFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
-    username = 'babroracus'
-    name = 'Ba Broracus'
+    username = factory.Sequence(lambda n: 'johnrambro%d' % n)
+    name = factory.Sequence(lambda n: 'John Rambro %d' % n)
     is_active = True
-
-
-class BroHardFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = UserProfile
-
-    username = 'brohard'
-    name = 'Bro Hard'
-    is_active = True
+    avatar = factory.django.ImageField()
 
 
 class AdminFactory(factory.django.DjangoModelFactory):

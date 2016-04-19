@@ -8,27 +8,28 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.test import TestCase
 
-from .factories import UserFactory, BaBroracusFactory, BroHardFactory, \
-    AdminFactory
-from .managers import UserProfileManager
+from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
 from .models import UserProfile, get_image_path
 from .pipeline import save_profile
 from .templatetags.user import user_home, user_rank
 from .utils import process_username
+
 from constance import config
+from events.factories import EventFactory, BetFactory
+from events.models import Event, Bet
 from politikon.templatetags.format import formatted
 from politikon.templatetags.path import startswith
 
 
 class UserProfileModelTestCase(TestCase):
     """
-    Test method for user object
+    Test methods for user object
     """
     def test_user_creation(self):
         """
         Create user and check his attributes
         """
-        user = UserFactory()
+        user = UserFactory(username='johnsmith', name='John Smith')
 
         self.assertEqual('johnsmith', user.__unicode__())
         self.assertEqual('John Smith', user.name)
@@ -51,7 +52,7 @@ class UserProfileModelTestCase(TestCase):
         """
         Get image path
         """
-        user = UserFactory()
+        user = UserFactory(username='johnsmith')
 
         path = get_image_path(user, 'my-avatar.png')
         self.assertEqual('avatars/johnsmith.png', path)
@@ -95,11 +96,58 @@ class UserProfileModelTestCase(TestCase):
         url = user.get_twitter_url()
         self.assertEqual('https://twitter.com/jsmith', url)
 
-    def test_playing_user(self):
+    def test_current_portfolio_value(self):
         """
-        Create user and play
+        Current portfolio value
         """
         user = UserFactory()
+        self.assertEqual(0, user.current_portfolio_value)
+        event = EventFactory()
+        bet = BetFactory(user=user, event=event)
+        self.assertEqual(50, user.current_portfolio_value)
+        bet.outcome = Bet.BET_OUTCOME_CHOICES.NO
+        bet.has = 2
+        bet.save()
+        self.assertEqual(100, user.current_portfolio_value)
+
+    def test_get_avatar_url(self):
+        """
+        Get avatar URL
+        """
+        user = UserFactory()
+        self.assertEqual('/static/img/blank-avatar.jpg', user.get_avatar_url())
+        user2 = UserWithAvatarFactory(username='johnrambro')
+        self.assertEqual('avatars/johnrambro.jpg', user2.get_avatar_url())
+
+    def test_get_newest_results(self):
+        """
+        Get newest results
+        """
+        users = UserFactory.create_batch(2)
+        events = EventFactory.create_batch(5)
+        BetFactory(user=users[0], event=events[0])
+        bet2 = BetFactory(user=users[0], event=events[1])
+        bet3 = BetFactory(user=users[0], event=events[2])
+        bet4 = BetFactory(user=users[0], event=events[3])
+        bet5 = BetFactory(user=users[1], event=events[4])
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[1].save()
+        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[2].save()
+        events[3].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        events[3].save()
+        events[4].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[4].save()
+        bet2.is_new_resolved = True
+        bet2.save()
+        bet3.is_new_resolved = True
+        bet3.save()
+        bet4.is_new_resolved = True
+        bet4.save()
+        bet5.is_new_resolved = True
+        bet5.save()
+        self.assertEqual([bet2, bet3, bet4], list(users[0].get_newest_results()))
+        self.assertEqual([bet5], list(users[1].get_newest_results()))
 
 
 class UserProfileManagerTestCase(TestCase):
@@ -191,8 +239,8 @@ class UserProfileManagerTestCase(TestCase):
         Get users
         """
         user1 = UserFactory()
-        user2 = BaBroracusFactory(is_deleted=True)
-        user3 = BroHardFactory(is_active=False)
+        UserFactory(is_deleted=True)
+        UserFactory(is_active=False)
 
         users = UserProfile.objects.get_users()
         self.assertIsInstance(users[0], UserProfile)
@@ -203,9 +251,9 @@ class UserProfileManagerTestCase(TestCase):
         """
         Get admins
         """
-        user1 = UserFactory()
-        user2 = BaBroracusFactory(is_admin=True)
-        user3 = BroHardFactory(is_staff=True)
+        UserFactory()
+        UserFactory(is_admin=True)
+        UserFactory(is_staff=True)
         user4 = AdminFactory()
 
         admins = UserProfile.objects.get_admins()
@@ -218,9 +266,9 @@ class UserProfileManagerTestCase(TestCase):
         Get best weekly
         """
         user1 = UserFactory(weekly_result=100)
-        user2 = BaBroracusFactory(weekly_result=300)
-        user3 = BroHardFactory()
-        user4 = AdminFactory()
+        user2 = UserFactory(weekly_result=300)
+        UserFactory()
+        AdminFactory()
 
         users = UserProfile.objects.get_best_weekly()
         self.assertIsInstance(users[0], UserProfile)
@@ -231,10 +279,10 @@ class UserProfileManagerTestCase(TestCase):
         """
         Get best monthly
         """
-        user1 = UserFactory()
-        user2 = BaBroracusFactory(monthly_result=300)
-        user3 = AdminFactory()
-        user4 = BroHardFactory(monthly_result=100)
+        UserFactory()
+        user2 = UserFactory(monthly_result=300)
+        AdminFactory()
+        user4 = UserFactory(monthly_result=100)
 
         users = UserProfile.objects.get_best_monthly()
         self.assertIsInstance(users[0], UserProfile)
@@ -246,9 +294,9 @@ class UserProfileManagerTestCase(TestCase):
         Get best overall
         """
         user1 = UserFactory()
-        user2 = BaBroracusFactory(reputation=Decimal(300))
-        user3 = AdminFactory()
-        user4 = BroHardFactory(reputation=Decimal(50))
+        user2 = UserFactory(reputation=Decimal(300))
+        AdminFactory()
+        user4 = UserFactory(reputation=Decimal(50))
 
         users = UserProfile.objects.get_best_overall()
         self.assertIsInstance(users[0], UserProfile)
@@ -260,10 +308,9 @@ class UserProfileManagerTestCase(TestCase):
         Get user positions
         """
         user1 = UserFactory(weekly_result=100)
-        user2 = BaBroracusFactory(weekly_result=300, monthly_result=300,
-                                  reputation=Decimal(300))
+        user2 = UserFactory(weekly_result=300, monthly_result=300, reputation=Decimal(300))
         user3 = AdminFactory()
-        user4 = BroHardFactory(monthly_result=100, reputation=Decimal(50))
+        user4 = UserFactory(monthly_result=100, reputation=Decimal(50))
 
         self.assertEqual({
             'week_rank': 2,
@@ -287,15 +334,15 @@ class UserProfileManagerTestCase(TestCase):
         }, UserProfile.objects.get_user_positions(user4))
 
 
-#  class UserPipelineTestCase(TestCase):
-    #  """
-    #  accounts/pipeline
-    #  """
-    #  def test_save_profile(self):
-        #  """
-        #  Save profile
-        #  """
-        #  user = UserFactory()
+class UserPipelineTestCase(TestCase):
+    """
+    accounts/pipeline
+    """
+    def test_save_profile(self):
+        """
+        Save profile
+        """
+        user = UserFactory()
         #  save_profile(user,
 
 
@@ -331,6 +378,30 @@ class UserTemplatetagsTestCase(TestCase):
             'counter': 1,
         }, user_templatetag_with_profit)
 
+    def test_get_reputation_history(self):
+        """
+        Get reputation history
+        """
+        # TODO
+
+    def test_get_reputation_change(self):
+        """
+        Get reputation change
+        """
+        # TODO
+
+    def test_last_week_reputation_change(self):
+        """
+        Get last week reputation change
+        """
+        # TODO
+
+    def test_last_month_reputation_change(self):
+        """
+        Get last month reputation change
+        """
+        # TODO
+
 
 class PolitikonUserTemplatetagsTestCase(TestCase):
     """
@@ -355,6 +426,6 @@ class UserUtilsTestCase(TestCase):
         """
         username = process_username(u"zażółćgęśląjaźń")
         self.assertEqual('zazolcgeslajazn', username)
-        user = UserFactory(username='zazolcgeslajazn')
+        UserFactory(username='zazolcgeslajazn')
         username2 = process_username(u"zażółćgęśląjaźń")
         self.assertNotEqual('zazolcgeslajazn', username2)

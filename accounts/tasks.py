@@ -7,6 +7,7 @@ from django.db import transaction
 from accounts.models import UserProfile
 from events.models import Event, Transaction
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -51,15 +52,12 @@ def create_accounts_snapshot():
 
     for user in queryset.iterator():
         try:
-            logger.debug("'accounts:tasks:create_accounts_snapshot' \
-                         snapshotting user <%s>" % unicode(user.pk))
+            logger.debug("'accounts:tasks:create_accounts_snapshot' snapshotting user <%s>" % unicode(user.pk))
             user.snapshots.create_snapshot()
         except:
-            logger.exception("Fatal error during create_accounts_snapshot of \
-                             user #%d" % (user.id,))
+            logger.exception("Fatal error during create_accounts_snapshot of user #%d" % (user.id,))
 
-    logger.debug("'accounts:tasks:create_accounts_snapshot' finished \
-                 snapshotting Users.")
+    logger.debug("'accounts:tasks:create_accounts_snapshot' finished snapshotting Users.")
 
 
 @task
