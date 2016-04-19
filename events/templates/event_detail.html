@@ -4,6 +4,14 @@
 {% load humanize %}
 {% load format %}
 
+{% block facebook_properties %}
+<meta property="og:url" content="{{ event.get_absolute_url }}" />
+<meta property="og:title" content="{{ event.title }}" />
+<meta property="og:title_yes" content="{{ event.title_fb_yes }}" />
+<meta property="og:title_no" content="{{ event.title_fb_no }}" />
+<meta property="og:image" content="{{ event.small_image.url }}" />
+{% endblock %}
+
 {% block content %}
 <script type="text/javascript">
     $(function(){
@@ -138,13 +146,6 @@
 
 
 
-{% block facebook_properties %}
-<meta property="og:url"    content="{{ event.get_absolute_url() }}" /> 
-<meta property="og:title"  content="{{ event.title }}" /> 
-<meta property="og:title_yes"  content="{{ event.title_fb_yes }}" /> 
-<meta property="og:title_no"  content="{{ event.title_fb_no }}" /> 
-<meta property="og:image"  content="{{ event.small_image.url }}" /> 
-{% endblock %}
 
 
 
@@ -179,7 +180,7 @@ ajaxResponseParser(message);
 <h2 class="single-event-header">{{ event.title }}</h2>
 
 {% if event.big_image %}
-<img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />         
+<img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 {% endif %}
 
 <p>TODO: chart</p>
@@ -226,7 +227,7 @@ ajaxResponseParser(message);
             <p class="bets-container">
             {% trans %}You have{% endtrans %}:
             <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
-            </p>                
+            </p>
         </td>
         <td class="sell-against" style="display:none;" data-bind="visible: has_bets_for_NO() > 0">
             <p class="price-container">
@@ -238,7 +239,7 @@ ajaxResponseParser(message);
             {% trans %}You have{% endtrans %}:
             <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
             </p>
-        </td>                 
+        </td>
     </tr>
 </table>
 
