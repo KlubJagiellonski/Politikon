@@ -15,7 +15,7 @@ from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, Unk
 from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
 from .models import Bet, Event, Transaction, _MONTHS
 from .tasks import create_open_events_snapshot, calculate_price_change
-from .templatetags.display import render_bet, render_event, render_events, render_featured_event, render_featured_events, render_bet_status
+from .templatetags.display import render_bet, render_event, render_events, render_featured_event, render_featured_events, render_bet_status, outcome
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -483,6 +483,19 @@ class EventsTemplatetagsTestCase(TestCase):
         self.assertEqual({
             'bet': bet,
         }, render_bet_status(bet))
+
+    def test_outcome(self):
+        """
+        Outcome
+        """
+        events = EventFactory.create_batch(4)
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        self.assertEqual(" finished finished-yes", outcome(events[0]))
+        self.assertEqual(" finished finished-no", outcome(events[1]))
+        self.assertEqual(" finished finished-cancelled", outcome(events[2]))
+        self.assertEqual("", outcome(events[3]))
 
 
 class BetsModelTestCase(TestCase):
