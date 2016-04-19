@@ -57,6 +57,9 @@ class Event(models.Model):
     CHART_MARGIN = 3
     PRIZE_FOR_WINNING = 100
 
+    EVENT_SMALL_CHART_DAYS = 14
+    EVENT_BIG_CHART_DAYS = 28
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -161,10 +164,29 @@ class Event(models.Model):
         attr = Bet.BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
-    @transaction.atomic
-    def get_chart_points(self):
+
+    def get_event_small_chart(self):
         """
-        Get last transactions price for every day; days range is max 14
+        Get last transactions price for every day from small event range
+        :return: chart points of EVENT_SMALL_CHART_DAYS days
+        :rtype: {int, [], []}
+        """
+        return self.__get_chart_points(self.EVENT_SMALL_CHART_DAYS)
+
+    def get_event_big_chart(self):
+        """
+        Get last transactions price for every day from big event range
+        :return: chart points of EVENT_BIG_CHART_DAYS days
+        :rtype: {int, [], []}
+        """
+        return self.__get_chart_points(self.EVENT_BIG_CHART_DAYS)
+
+    @transaction.atomic
+    def __get_chart_points(self, days):
+        """
+        Get last transactions price for every day;
+        :param days: number of days in past on chart
+        :type days: int
         :return: chart points
         :rtype: {int, [], []}
         """
@@ -175,8 +197,8 @@ class Event(models.Model):
             # for event in progress last date point is now
             last_date = timezone.now()
 
-        # start from 2 weeks ago
-        first_date = last_date - relativedelta(weeks=2, days=-1)
+        # start from days days ago - 1 (for today)
+        first_date = last_date - relativedelta(days=days-1)
 
         # default is start price: 50
         last_price = Event.BEGIN_PRICE
