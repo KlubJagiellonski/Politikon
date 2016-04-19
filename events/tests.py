@@ -135,32 +135,55 @@ class EventsModelTestCase(TestCase):
         # time of caculate_price_change task
         final_time = timezone.now().replace(hour=1, minute=1, second=0, microsecond=0)
         with freeze_time(final_time) as frozen_time:
-            first_date = timezone.now() - timedelta(days=13)
-            days = [first_date + timedelta(n) for n in range(14)]
+            # TODO: do this better
+            short_range = Event.EVENT_SMALL_CHART_DAYS
+            first_date = timezone.now() - timedelta(days=short_range-1)
+            days = [first_date + timedelta(n) for n in range(short_range)]
             labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
 
-            points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
-            points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,
-                    82, 82, 82, 0]
-            points3 = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
-            points3 += [Event.BEGIN_PRICE, Event.BEGIN_PRICE,
-                        55, 55, 82, 82, 82]
+            long_range = Event.EVENT_BIG_CHART_DAYS
+            first_date2 = timezone.now() - timedelta(days=long_range-1)
+            days2 = [first_date2 + timedelta(n) for n in range(long_range)]
+            labels2 = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days2]
+
+            margin = [Event.BEGIN_PRICE] * Event.CHART_MARGIN
+            mlen = len(margin)
+            points1 = [90, 90, 90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
+            points2 = [30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
+            points3 = [Event.BEGIN_PRICE, Event.BEGIN_PRICE, 55, 55, 82, 82, 82]
             self.assertEqual({
                 'id': 1,
                 'labels': labels,
-                'points': points1
-            }, event1.get_chart_points())
+                'points': points1[2:]
+            }, event1.get_event_small_chart())
+            self.assertEqual({
+                'id': 1,
+                # labels 3 ends one day earlier
+                'labels': labels2[long_range-mlen-len(points1):],
+                'points': margin + points1
+            }, event1.get_event_big_chart())
             self.assertEqual({
                 'id': 2,
                 'labels': labels,
-                'points': points2
-            }, event2.get_chart_points())
+                'points': [Event.BEGIN_PRICE] + points2
+            }, event2.get_event_small_chart())
+            self.assertEqual({
+                'id': 2,
+                'labels': labels2[long_range-mlen-len(points2):],
+                'points': margin + points2
+            }, event2.get_event_big_chart())
             self.assertEqual({
                 'id': 3,
                 # labels 3 ends one day earlier
-                'labels': labels[13-len(points3):13],
-                'points': points3
-            }, event3.get_chart_points())
+                'labels': labels[short_range-1-mlen-len(points3):short_range-1],
+                'points': margin + points3
+            }, event3.get_event_small_chart())
+            self.assertEqual({
+                'id': 3,
+                # labels 3 ends one day earlier
+                'labels': labels2[long_range-1-mlen-len(points3):long_range-1],
+                'points': margin + points3
+            }, event3.get_event_big_chart())
 
     def test_get_bet_social(self):
         """
