@@ -74,7 +74,7 @@ class EventsModelTestCase(TestCase):
         """
         # time of get_chart_points
         # TODO time from settings
-        initial_time = timezone.now().replace(hour=1, minute=0, second=0, microsecond=0) - timedelta(days=15)
+        initial_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=15)
         with freeze_time(initial_time) as frozen_time:
             event1 = EventFactory()
             event1.current_buy_for_price = 90
@@ -133,7 +133,7 @@ class EventsModelTestCase(TestCase):
             create_open_events_snapshot.delay()
 
         # time of caculate_price_change task
-        final_time = timezone.now().replace(hour=1, minute=1, second=0, microsecond=0)
+        final_time = timezone.now().replace(hour=0, minute=1, second=0, microsecond=0)
         with freeze_time(final_time) as frozen_time:
             # TODO: do this better
             short_range = Event.EVENT_SMALL_CHART_DAYS

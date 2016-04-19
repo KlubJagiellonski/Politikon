@@ -214,8 +214,7 @@ class Event(models.Model):
         while step_date <= last_date:
             # display only midnight prices
             # TODO: get this if from settings
-            # TODO: because of this our day starts from 1 AM, not 12 PM
-            if step_date.hour == 1:
+            if step_date.hour == 0:
                 labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
                 snapshots = self.snapshots.filter(
                     snapshot_of_id=self.id,
