@@ -53,6 +53,7 @@ class UserProfile(AbstractBaseUser):
     is_vip = models.BooleanField(u"VIP", default=False)
 
     created_date = models.DateTimeField(auto_now_add=True)
+    last_visit = models.DateTimeField(null=True, blank=True)
 
     # TODO: czy to potrzebne?
     # Every new network relations also has to have 'related_name="django_user"'
