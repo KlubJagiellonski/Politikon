@@ -18,7 +18,11 @@
                         color: rgba(255,255,255,0.8);
                         top: 10px;
                         left: 10px;">
+                        {% if event.is_in_progress %}
                         Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+                        {% else %}
+                        Zakończony {{ event.end_date|naturaltime }}
+                        {% endif %}
                     </div>
                     <canvas class="bet-{{ event.id }}-canvas" height="70"></canvas>
                 </div>
