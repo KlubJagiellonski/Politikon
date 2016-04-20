@@ -206,8 +206,9 @@ class Event(models.Model):
             # for event in progress last date point is now
             last_date = timezone.now()
 
-        # start from days days ago - 1 (for today)
-        first_date = last_date - relativedelta(days=days-1)
+        first_date = last_date - relativedelta(days=days)
+        if last_date.hour == 0:
+            first_date += relativedelta(days=1)
 
         # default is start price: 50
         last_price = Event.BEGIN_PRICE
