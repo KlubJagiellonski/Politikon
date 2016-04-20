@@ -46,9 +46,9 @@ class EventAdmin(admin.ModelAdmin):
                         obj.finish_no()
                     elif request.POST['solve_event'] == 'ANULUJ':
                         obj.cancel()
-                    obj.save()
                 except EventAlreadyFinished as e:
                     messages.error(request, e.message)
+        obj.save()
 
 
 class BetAdmin(admin.ModelAdmin):
