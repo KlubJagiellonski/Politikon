@@ -3,6 +3,7 @@
 Test accounts module
 """
 from decimal import Decimal
+import os
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
@@ -118,6 +119,7 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual('/static/img/blank-avatar.jpg', user.get_avatar_url())
         user2 = UserWithAvatarFactory(username='johnrambro')
         self.assertEqual('avatars/johnrambro.jpg', user2.get_avatar_url())
+        os.remove('avatars/johnrambro.jpg')
 
     def test_get_newest_results(self):
         """

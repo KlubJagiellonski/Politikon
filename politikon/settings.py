@@ -220,6 +220,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 
 MIDDLEWARE_CLASSES = (
+    # last visit
+    'politikon.middleware.SetLastVisitMiddleware',
     # forcing one hostname on production
     'politikon.middleware.HostnameRedirectMiddleware',
     # forcing SSL using https://github.com/rdegges/django-sslify.
@@ -227,8 +229,6 @@ MIDDLEWARE_CLASSES = (
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
     # 'politikon.middleware.BasicAuthMiddleware',
-    # last visit
-    'politikon.middleware.SetLastVisitMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
