@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^events/(?P<mode>popular|latest|changed|finished)$', EventsListView.as_view(), name="events"),
     url(r'^event/(?P<event_id>\d+)/transaction/create/$', 'events.views.create_transaction', name="create_transaction"),
     url(r'^bets/viewed/$', 'events.views.bets_viewed', name='bets_viewed'),
+    url(r'^transactions/(?P<nr_from>\d+)/$', 'events.views.transactions', name='transactions'),
 )

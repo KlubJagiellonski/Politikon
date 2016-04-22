@@ -10,10 +10,11 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, InsufficientCash, InsufficientBets, EventAlreadyFinished
 from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, TransactionFactory
-from .models import Bet, Event, Transaction, _MONTHS
+from .models import Bet, Event, Transaction
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, render_featured_events, render_bet_status
 
@@ -137,7 +138,9 @@ class EventsModelTestCase(TestCase):
         with freeze_time(final_time) as frozen_time:
             first_date = timezone.now() - timedelta(days=13)
             days = [first_date + timedelta(n) for n in range(14)]
-            labels = ['%s %s' % (step_date.day, _MONTHS[step_date.month]) for step_date in days]
+            labels = [
+                u'{0} {1}'.format(step_date.day, _(step_date.strftime('%B'))) for step_date in days
+            ]
 
             points1 = [90, 30, 30, 30, 30, 30, 60, 60, 55, 55, 82, 82, 82, 0]
             points2 = [Event.BEGIN_PRICE, 30, 30, 30, 30, 30, 60, 60, 55, 55,

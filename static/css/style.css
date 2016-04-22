@@ -473,6 +473,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #loadmore:hover .prawa {margin-top: 20px;}
 #loadmore:hover .lewa {margin-top: 27px;}
 #loadmore:hover .centrum {margin-top: 35px;}
+#loadmore {cursor: pointer;}
 
 
 /*Szczegóły wydarzenia*/

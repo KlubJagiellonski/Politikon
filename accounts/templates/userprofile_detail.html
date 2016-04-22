@@ -110,18 +110,21 @@
         </article>
 
         <article id="historiatransakcji">
-            {% for transaction in object.transactions.all %}
-            <div class="history-event">
-                <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
-                <div class="prawa">
-                    <span class="history-action">{{ transaction.get_type_display|upper }}</span>
-                    <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total|formatted:"True" }}</span>
-                    <span class="event-date">{{ transaction.date }}</span>
+            <div id="transactions-list">
+                {% for transaction in object.transactions.all|slice:":50" %}
+                <div class="history-event">
+                    <span class="skroc lewa">{{ transaction.event.title }}</span>
+                    <div class="prawa">
+                        <span class="history-action">{{ transaction.get_type_display|upper }}</span>
+                        <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total|formatted:"True" }}</span>
+                        <span class="event-date">{{ transaction.date }}</span>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-
-            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż starsze transakcje</div></a>#}
+            {% if object.transactions.all.count > 50 %}
+                <a id="loadmore"><div class="btn astable">Pokaż starsze transakcje</div></a>
+            {% endif %}
         </article>
     </div>
 </section>
