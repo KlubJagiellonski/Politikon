@@ -5,7 +5,8 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
-from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, InsufficientCash, InsufficientBets
+from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, \
+    InsufficientCash, InsufficientBets
 # from vendor.Pubnub import Pubnub as PubNub
 
 
@@ -40,7 +41,8 @@ class EventManager(models.Manager):
         return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
 
     def get_front_event(self):
-        front_events = self.ongoing_only_queryset().filter(is_front=True).order_by('estimated_end_date')
+        front_events = self.ongoing_only_queryset().filter(is_front=True).\
+            order_by('estimated_end_date')
         if front_events.exists():
             return front_events[0]
         else:
@@ -52,7 +54,8 @@ class EventManager(models.Manager):
 
         #  event_ids = set([e.id for e in events_list])
         #  # friends = user.friends.all()
-        #  bets = Bet.objects.select_related('user__facebook_user__profile_photo').filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
+        #  bets = Bet.objects.select_related('user__facebook_user__profile_photo').\
+            #  filter(user__in=user.friends_ids_set, event__in=event_ids, has__gt=0)
 
         #  result = {
             #  event_id: defaultdict(list)
@@ -262,7 +265,8 @@ class TransactionManager(models.Manager):
         super(TransactionManager, self).__init__()
 
     def get_user_transactions(self, user):
-        return self.model.objects.filter(user=user).exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
+        return self.model.objects.filter(user=user).\
+            exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
 
     def get_weekly_user_transactions(self, user):
         last_week = now() - timedelta(days=7)

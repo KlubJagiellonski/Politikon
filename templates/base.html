@@ -14,6 +14,13 @@
 <meta name="author" content="Klub Jagielloński" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
+{% block facebook_properties %}
+<meta property="og:title" content="POLITIKON - Stawiamy na politykę!" />
+<meta property="og:description" content="Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego spojrzenia na politykę, a także wyłonienia osób, które potrafią przewidywać wydarzenia społeczno-polityczne. Projekt ma pokazać, że polityka to nie tylko cyniczna, losowa gra, ale także miejsce ścierania się idei, pomysłów, miejscem gdzie przyczyny powodują określone skutki. Serwis jest grą internetową, której uczestnicy będą mogli zakładać się o wyniki różnych wydarzeń społeczno-politycznych. Giełdowy charakter gry (rynek przewidywań) pozwala pokazać prawdopodobieństwo wystąpienia określonych wydarzeń, co sprawia, że serwis jest interesującą alternatywą dla sondaży." />
+{% endblock %}
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:site_name" content="Politikon" />
+<meta property="og:app_id" content="{{ FACEBOOK_APPLICATION_ID }}" />
 
 <link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
 <meta name="viewport" content="width=device-width">
@@ -68,6 +75,8 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jscrollpane.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/scroll-startstop.events.jquery.js"></script>
 {% endif %}
+
+
 </head>
 
 

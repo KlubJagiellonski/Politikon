@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import factory
-import pytz
 
 from django.utils import timezone
 

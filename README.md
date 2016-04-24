@@ -10,7 +10,7 @@ Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego
 
 ## Status projektu
 
-Projekt jest rozwijany. Planowany start to jesień 2015.
+Projekt jest rozwijany. Planowany start to maj 2016.
 
 ## Politikon lokalnie (po angielsku)
 

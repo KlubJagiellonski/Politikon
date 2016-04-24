@@ -18,7 +18,8 @@ class EventForm(forms.ModelForm):
     def clean_solve_event(self):
         solve_event = self.cleaned_data['solve_event']
         if solve_event not in ('', 'TAK', 'NIE', 'ANULUJ'):
-            raise ValidationError(u'Błędne rozstrzygnięcie wydarzenia. Wpisz jedno z: TAK / NIE / ANULUJ')
+            raise ValidationError(u'Błędne rozstrzygnięcie wydarzenia. Wpisz jedno ' +
+                                  'z: TAK / NIE / ANULUJ')
         return solve_event
 
     def __init__(self, *args, **kwargs):

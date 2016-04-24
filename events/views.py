@@ -45,7 +45,7 @@ class EventsListView(ListView):
     def makeFeaturedEventsBetfeedData(self, events):
         data = []
         for ev in events:
-            data.append(ev.get_chart_points())
+            data.append(ev.get_event_small_chart())
         return json.dumps(data)
 
 
@@ -73,7 +73,8 @@ class EventDetailView(DetailView):
         user = self.request.user
         event_bet = event.get_user_bet(user)
         bet_social = event.get_bet_social()
-        json_data = json.dumps(event.get_chart_points())
+        # TODO: jsonify in temlate
+        json_data = json.dumps(event.get_event_big_chart())
         context.update({
             'event': event,
             'bet': event_bet,

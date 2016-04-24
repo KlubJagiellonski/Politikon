@@ -88,7 +88,8 @@ class UserProfileEmailForm(forms.ModelForm):
     fields.
     """
     email = forms.CharField(label='Twój adres e-mail', widget=forms.EmailInput, required=False)
-    checkemail = forms.CharField(label='wpisz ponownie adres e-mail', widget=forms.EmailInput, required=False)
+    checkemail = forms.CharField(label='wpisz ponownie adres e-mail', widget=forms.EmailInput,
+                                 required=False)
 
     class Meta:
         model = UserProfile

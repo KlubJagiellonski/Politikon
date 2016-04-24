@@ -66,6 +66,7 @@
 <section id="userinfo" class="hotbets prefooter-margin">
     <ul class="tabs lewa">
         <li class="active"><a href="#zawartoscportfela">Zawartość portfela</a></li>
+        <li><a href="#powiadomieniaowynikach">Powiadomienia o wynikach</a></li>
         <li><a href="#historiatransakcji">Historia transakcji</a></li>
     </ul>
     <div class="clr"></div>
@@ -82,6 +83,28 @@
                     </div>
                 </a>
             </div>
+            {% endfor %}
+        </article>
+
+        <article id="powiadomieniaowynikach">
+            {% for bet in object.bets.get_finished %}
+            <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
+                    {% if bet.event.small_image %}
+                    <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                    {% else %}
+                    <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                    {% endif %}
+                    {% render_bet_status bet %}
+                    <div class="status-explanation">
+                        <span>skrócone uzasadnienie wyniku:</span>
+                        {{ bet.event.outcome_reason }}
+                    </div>
+                    <div class="status-change">
+                        zysk/strata:
+                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
+                        <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
+                    </div>
+            </a></div>
             {% endfor %}
         </article>
 

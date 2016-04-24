@@ -25,6 +25,9 @@ class Event(models.Model):
     """
     Event model represents exactly real question which you can answer YES or NO.
     """
+    class Meta:
+        verbose_name = 'wydarzenie'
+        verbose_name_plural = 'wydarzenia'
 
     EVENT_OUTCOME_CHOICES = Choices(
         ('IN_PROGRESS', 1, u'w trakcie'),
@@ -39,8 +42,12 @@ class Event(models.Model):
     }
 
     BEGIN_PRICE = 50
-    CHART_MARGIN = 3
+    FACTOR_B = 5
     PRIZE_FOR_WINNING = 100
+
+    CHART_MARGIN = 3
+    EVENT_SMALL_CHART_DAYS = 14
+    EVENT_BIG_CHART_DAYS = 28
 
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -66,17 +73,22 @@ class Event(models.Model):
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
-    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
+    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
+                                          default=1)
     outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
 
-    current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia', default=BEGIN_PRICE)
-    current_buy_against_price = models.IntegerField(u'cena nabycia akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
-    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia', default=BEGIN_PRICE)
-    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego', default=BEGIN_PRICE)
+    current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
+                                                default=BEGIN_PRICE)
+    current_buy_against_price = models.IntegerField(u'cena nabycia akcji zdarzenia przeciwnego',
+                                                    default=BEGIN_PRICE)
+    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia',
+                                                 default=BEGIN_PRICE)
+    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego',
+                                                     default=BEGIN_PRICE)
 
     last_transaction_date = models.DateTimeField(u'data ostatniej transakcji', null=True)
 
@@ -84,11 +96,12 @@ class Event(models.Model):
     Q_against = models.IntegerField(u'zakładów na NIE', default=0)
     turnover = models.IntegerField(u'obrót', default=0, db_index=True)
 
-    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True, default=0)
+    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True,
+                                                default=0)
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     # constant for calculating event change
-    B = models.FloatField(u'stała B', default=5)
+    B = models.FloatField(u'stała B', default=FACTOR_B)
 
     def __unicode__(self):
         return self.title
@@ -146,10 +159,28 @@ class Event(models.Model):
         attr = Bet.BET_OUTCOMES_TO_PRICE_ATTR[(direction, outcome)]
         return getattr(self, attr)
 
-    @transaction.atomic
-    def get_chart_points(self):
+    def get_event_small_chart(self):
         """
-        Get last transactions price for every day; days range is max 14
+        Get last transactions price for every day from small event range
+        :return: chart points of EVENT_SMALL_CHART_DAYS days
+        :rtype: {int, [], []}
+        """
+        return self.__get_chart_points(self.EVENT_SMALL_CHART_DAYS)
+
+    def get_event_big_chart(self):
+        """
+        Get last transactions price for every day from big event range
+        :return: chart points of EVENT_BIG_CHART_DAYS days
+        :rtype: {int, [], []}
+        """
+        return self.__get_chart_points(self.EVENT_BIG_CHART_DAYS)
+
+    @transaction.atomic
+    def __get_chart_points(self, days):
+        """
+        Get last transactions price for every day;
+        :param days: number of days in past on chart
+        :type days: int
         :return: chart points
         :rtype: {int, [], []}
         """
@@ -160,8 +191,9 @@ class Event(models.Model):
             # for event in progress last date point is now
             last_date = timezone.now()
 
-        # start from 2 weeks ago
-        first_date = last_date - relativedelta(weeks=2, days=-1)
+        first_date = last_date - relativedelta(days=days)
+        if last_date.hour == 0:
+            first_date += relativedelta(days=1)
 
         # default is start price: 50
         last_price = Event.BEGIN_PRICE
@@ -177,8 +209,7 @@ class Event(models.Model):
         while step_date <= last_date:
             # display only midnight prices
             # TODO: get this if from settings
-            # TODO: because of this our day starts from 1 AM, not 12 PM
-            if step_date.hour == 1:
+            if step_date.hour == 0:
                 labels.append(u'{0} {1}'.format(step_date.day, _(step_date.strftime('%B'))))
                 snapshots = self.snapshots.filter(
                     snapshot_of_id=self.id,
@@ -332,7 +363,7 @@ class Event(models.Model):
         :type outcome: Choices
         """
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
-            raise EventAlreadyFinished
+            raise EventAlreadyFinished("Wydarzenie zostało już rozwiązane.")
         self.outcome = outcome
         self.end_date = timezone.now()
         self.save()
@@ -389,7 +420,10 @@ class Event(models.Model):
                 users.update({
                     t.user: 0
                 })
-            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
+            # TODO WTF?
+            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
+                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
                     t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
                 # for transaction type BUY the price is below 0
                 users[t.user] += t.quantity * t.price
@@ -434,14 +468,22 @@ class RelatedEvent(models.Model):
     means that "related" event is on the list "Powiązane Wydarzenia" "event".
     Other side relation need another element.
     """
-    event = models.ForeignKey(Event, null=True, related_name='these_events', related_query_name='this_event')
-    related = models.ForeignKey(Event, null=True, related_name='relates', related_query_name='related')
+    class Meta:
+        verbose_name = 'powiązane wydarzenie'
+        verbose_name_plural = 'powiązane wydarzenia'
+    event = models.ForeignKey(Event, null=True, related_name='these_events',
+                              related_query_name='this_event')
+    related = models.ForeignKey(Event, null=True, related_name='relates',
+                                related_query_name='related')
 
 
 class Bet(models.Model):
     """
     Created when user choose YES or NO for event.
     """
+    class Meta:
+        verbose_name = 'zakład'
+        verbose_name_plural = 'zakłady'
 
     BET_OUTCOME_CHOICES = Choices(
         ('YES', True, u'udziały na TAK'),
@@ -462,7 +504,8 @@ class Bet(models.Model):
 
     objects = BetManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets',
+                             related_query_name='bet')
     event = models.ForeignKey(Event, null=False, related_name='bets', related_query_name='bet')
     outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     # most important param: how many bets user has.
@@ -588,6 +631,10 @@ class Transaction(models.Model):
     """
     Operation buy or sell or other for user and event
     """
+    class Meta:
+        ordering = ['-date']
+        verbose_name = 'transakcja'
+        verbose_name_plural = 'transakcje'
 
     TRANSACTION_TYPE_CHOICES = Choices(
         ('BUY_YES', 1, u'zakup udziałów na TAK'),
@@ -611,9 +658,12 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions', related_query_name='transaction')
-    event = models.ForeignKey(Event, null=True, related_name='transactions', related_query_name='transaction')
-    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions',
+                             related_query_name='transaction')
+    event = models.ForeignKey(Event, null=True, related_name='transactions',
+                              related_query_name='transaction')
+    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES,
+                                       default=1)
     date = models.DateTimeField('data', auto_now_add=True)
     quantity = models.PositiveIntegerField(u'ilość', default=1)
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
@@ -630,6 +680,3 @@ class Transaction(models.Model):
         :rtype: int
         """
         return self.quantity * self.price
-
-    class Meta:
-        ordering = ['-date']
