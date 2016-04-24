@@ -32,8 +32,7 @@ def save_profile(strategy, user, response, details, is_new=False,
     :type response: dict
     :param response: response from social service
     :type details: dict
-    :param details: details from social service (username, fullname, last_name,
-    email, first_name)
+    :param details: details from social service (username, fullname, last_name, email, first_name)
     :type is_new: bool
     :param is_new: is it new account
     """
@@ -53,8 +52,7 @@ def save_profile(strategy, user, response, details, is_new=False,
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
-                    user = UserProfile.objects.\
-                        get('twitter_user_id', twitter.id)
+                    user = UserProfile.objects.get('twitter_user_id', tuser.id)
                 except:
                     pass
                 else:
@@ -63,7 +61,8 @@ def save_profile(strategy, user, response, details, is_new=False,
 
             if playing_followers_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
-                messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
+                messages.warning(strategy.request,
+                                 _('Your account is inactive. Wait for administrator approval.'))
                 if is_new:
                     recipent_list = []
                     for admin in UserProfile.objects.get_admins():
@@ -71,7 +70,8 @@ def save_profile(strategy, user, response, details, is_new=False,
                             recipent_list.append(admin.email)
                     if len(recipent_list) > 0:
                         subject = u'Politikon - nowy użytkownik'
-                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
+                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod ' + \
+                            'adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         try:
                             from_email = settings.DEFAULT_EMAIL_FROM
                             send_mail(subject, message, from_email, recipent_list)
@@ -95,15 +95,14 @@ def save_profile(strategy, user, response, details, is_new=False,
                     pass
                 else:
                     user.avatar.save('{0}_social.jpg'.format(user.username),
-                                    ContentFile(response.content))
+                                     ContentFile(response.content))
 
     if backend.name == 'facebook':
         if is_new or not user.is_active:
             playing_friends_count = 0
             for friend in response['friends']['data']:
                 try:
-                    user = UserProfile.objects.\
-                        get('facebook_user_id', friend['id'])
+                    user = UserProfile.objects.get('facebook_user_id', friend['id'])
                 except:
                     pass
                 else:
@@ -112,7 +111,8 @@ def save_profile(strategy, user, response, details, is_new=False,
 
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
                 user.is_active = False
-                messages.warning(strategy.request, _('Your account is inactive. Wait for administrator approval.'))
+                messages.warning(strategy.request,
+                                 _('Your account is inactive. Wait for administrator approval.'))
                 if is_new:
                     recipent_list = []
                     for admin in UserProfile.objects.get_admins():
@@ -120,7 +120,8 @@ def save_profile(strategy, user, response, details, is_new=False,
                             recipent_list.append(admin.email)
                     if len(recipent_list) > 0:
                         subject = u'Politikon - nowy użytkownik'
-                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
+                        message = u'Użytkownik czeka na akceptację. Aktywuj go pod ' + \
+                            'adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         try:
                             from_email = settings.DEFAULT_EMAIL_FROM
                             send_mail(subject, message, from_email, recipent_list)
@@ -142,4 +143,4 @@ def save_profile(strategy, user, response, details, is_new=False,
                 pass
             else:
                 user.avatar.save('{0}_social.jpg'.format(user.username),
-                                ContentFile(response.content))
+                                 ContentFile(response.content))

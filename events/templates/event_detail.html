@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load humanize %}
 {% load format %}
+
+{% block facebook_properties %}
+<meta property="og:title" content="{{ event.title }}" />
+<meta property="og:title_yes" content="{{ event.title_fb_yes }}" />
+<meta property="og:title_no" content="{{ event.title_fb_no }}" />
+<meta property="og:description" content="{{ event.description }}" />
+<meta property="og:image" content="{{ event.small_image.url }}" />
+{% endblock %}
 
 {% block content %}
 <script type="text/javascript">
@@ -44,7 +53,19 @@
         {% else %}
         <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
         {% endif %}
-        <div class="chart-container" style="position: relative; z-index:999"><canvas id="chart-details" height="70"></canvas></div>
+        <div style="
+            display: block;
+            z-index: 10000;
+            position: absolute;
+            color: rgba(255,255,255,0.6);
+            top: 10px;
+            left: 31%;
+            text-shadow: 0 2px 10px black;">
+            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+        </div>
+        <div class="chart-container" style="position: relative; z-index:999">
+            <canvas id="chart-details" height="70"></canvas>
+        </div>
     </div>
     <div class="bet-social">
         <div class="peopleYES lewa">
@@ -108,7 +129,7 @@
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
     <div>
-        {% render_events related_events people %}
+        {% render_events related_events %}
     </div>
 </section>
 {% endif %}
@@ -125,13 +146,6 @@
 
 
 
-{% block facebook_properties %}
-<meta property="og:url"    content="{{ event.get_absolute_url() }}" /> 
-<meta property="og:title"  content="{{ event.title }}" /> 
-<meta property="og:title_yes"  content="{{ event.title_fb_yes }}" /> 
-<meta property="og:title_no"  content="{{ event.title_fb_no }}" /> 
-<meta property="og:image"  content="{{ event.small_image.url }}" /> 
-{% endblock %}
 
 
 
@@ -166,7 +180,7 @@ ajaxResponseParser(message);
 <h2 class="single-event-header">{{ event.title }}</h2>
 
 {% if event.big_image %}
-<img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />         
+<img src="{{ event.big_image.url }}" width={{ config.BIG_EVENT_IMAGE_WIDTH }} height={{ config.BIG_EVENT_IMAGE_HEIGHT }} />
 {% endif %}
 
 <p>TODO: chart</p>
@@ -213,7 +227,7 @@ ajaxResponseParser(message);
             <p class="bets-container">
             {% trans %}You have{% endtrans %}:
             <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_YES"></span>
-            </p>                
+            </p>
         </td>
         <td class="sell-against" style="display:none;" data-bind="visible: has_bets_for_NO() > 0">
             <p class="price-container">
@@ -225,7 +239,7 @@ ajaxResponseParser(message);
             {% trans %}You have{% endtrans %}:
             <span id="has_bets_quantity" class="money" data-bind="flashText: has_bets_for_NO"></span>
             </p>
-        </td>                 
+        </td>
     </tr>
 </table>
 

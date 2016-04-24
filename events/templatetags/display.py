@@ -1,4 +1,8 @@
 from django import template
+
+from events.models import Event
+
+
 register = template.Library()
 
 
@@ -12,35 +16,31 @@ def render_bet(event, bet, render_current):
 
 
 @register.inclusion_tag('render_event.html')
-def render_event(event, bet, people):
+def render_event(event, bet):
     return {
         'event': event,
         'bet': bet,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_events.html')
-def render_events(events, people):
+def render_events(events):
     return {
         'events': events,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_featured_event.html')
-def render_featured_event(event, people):
+def render_featured_event(event):
     return {
         'event': event,
-        'people': people
     }
 
 
 @register.inclusion_tag('render_featured_events.html')
-def render_featured_events(events, people):
+def render_featured_events(events):
     return {
         'events': events,
-        'people': people
     }
 
 
@@ -49,3 +49,16 @@ def render_bet_status(bet):
     return {
         'bet': bet,
     }
+
+
+@register.filter
+def outcome(event):
+    """Usage, {{ event|get_outcome_class }}"""
+    if event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+        return " finished finished-yes"
+    elif event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+        return " finished finished-no"
+    elif event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
+        return " finished finished-cancelled"
+    else:
+        return ""

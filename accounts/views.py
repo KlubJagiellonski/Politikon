@@ -3,8 +3,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.translation import ugettext as _
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 
 from politikon.decorators import class_view_decorator
@@ -29,8 +28,7 @@ class UserUpdateView(MultiFormsView):
     success_url = reverse_lazy('accounts:user_settings')
 
     def get_object(self):
-        return get_object_or_404(UserProfile,
-                                 pk=self.request.session['_auth_user_id'])
+        return get_object_or_404(UserProfile, pk=self.request.session['_auth_user_id'])
 
     def main_form_valid(self, form):
         user = self.get_object()

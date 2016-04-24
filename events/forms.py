@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from .models import Event
 
 
 class EventForm(forms.ModelForm):
-    solve_event = forms.CharField(
-        label=u"Rozstrzygnij event. TAK / NIE / ANULUJ",
-        required=False,
-    )
+    solve_event = forms.CharField(label="Rozstrzygnij event. TAK / NIE / ANULUJ", required=False)
     download_small_image = forms.CharField(
         label=u"Pobierz mały obrazek",
         required=False,
@@ -33,12 +30,11 @@ class EventForm(forms.ModelForm):
     def clean_solve_event(self):
         solve_event = self.cleaned_data['solve_event']
         if solve_event not in ('', 'TAK', 'NIE', 'ANULUJ'):
-            raise ValidationError(u'Błędne rozstrzygnięcie wydarzenia. \
-                                  Wpisz jedno z: TAK / NIE / ANULUJ')
+            raise ValidationError(u'Błędne rozstrzygnięcie wydarzenia. Wpisz jedno ' +
+                                  'z: TAK / NIE / ANULUJ')
         return solve_event
 
     def __init__(self, *args, **kwargs):
         self.action = None
         super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['estimated_end_date'].initial = datetime.now() + \
-            relativedelta(months=1)
+        self.fields['estimated_end_date'].initial = timezone.now() + relativedelta(months=1)

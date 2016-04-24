@@ -103,12 +103,10 @@ class UserProfileManager(BaseUserManager):
         return self.get_queryset().filter(is_staff=True, is_admin=True)
 
     def get_best_weekly(self):
-        return self.get_users().filter(weekly_result__isnull=False).\
-            order_by('-weekly_result')
+        return self.get_users().filter(weekly_result__isnull=False).order_by('-weekly_result')
 
     def get_best_monthly(self):
-        return self.get_users().filter(monthly_result__isnull=False).\
-            order_by('-monthly_result')
+        return self.get_users().filter(monthly_result__isnull=False).order_by('-monthly_result')
 
     def get_best_overall(self):
         """

@@ -28,7 +28,7 @@ class HomeView(TemplateView):
                 'front_event_bet': front_event.get_user_bet(user),
             })
             json_data['front_event'] = json.\
-                dumps(front_event.get_chart_points())
+                dumps(front_event.get_event_big_chart())
         else:
             json_data['front_event'] = 'null'
 
@@ -56,7 +56,7 @@ class HomeView(TemplateView):
     def makeFeaturedEventsBetfeedData(self, events):
         data = []
         for ev in events:
-            data.append(ev.get_chart_points())
+            data.append(ev.get_event_small_chart())
         return json.dumps(data)
 
 
@@ -73,6 +73,5 @@ def acme_challenge(request):
     """
     response = '44jmcY27vf0Xqc44v7-kQx0O1ANUx5OeHysmzhxe_cc.gH-uL0atBurquAoT' \
                'yPdNCmWNE4OqrHNOWrVMMu94hrU'
-
 
     return HttpResponse(response)

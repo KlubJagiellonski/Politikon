@@ -10,8 +10,9 @@ def user_home(user):
 
 
 @register.inclusion_tag('user_rank.html')
-def user_rank(user, profit=None):
+def user_rank(user, profit=None, counter=1):
     return {
         'user': user,
-        'profit': profit
+        'profit': profit,
+        'counter': counter,
     }

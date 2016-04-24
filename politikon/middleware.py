@@ -1,6 +1,26 @@
-from django.http import HttpResponse
+import logging
+
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponsePermanentRedirect
+from django.utils.timezone import now
+
+from accounts.models import UserProfile
+
+
+logger = logging.getLogger(__name__)
+
+
+class SetLastVisitMiddleware(object):
+    def process_response(self, request, response):
+        try:
+            if request.user.is_authenticated():
+                # Update last visit time after request finished processing.
+                UserProfile.objects.filter(pk=request.user.pk).update(last_visit=now())
+        except AttributeError as e:
+            logger.exception(
+                "Fatal error saving user last visit: %s" % e
+            )
+        return response
 
 
 class BasicAuthMiddleware(object):

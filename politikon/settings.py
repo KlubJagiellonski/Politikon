@@ -33,14 +33,14 @@ LOCALE_PATHS = [
 
 LANGUAGES = [
     ('pl', _('Polish')),
-    ('en', _('English')),
 ]
 
 SITE_ID = 1
+SITE_URL = 'https://www.politikon.org.pl/'
 
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 ASSETS_MANIFEST = "file:"
 
@@ -65,7 +65,6 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_IMPORTS = ("accounts.tasks", "events.tasks")
 
 CELERYBEAT_SCHEDULE = {
-    # TODO: co to jest?
     'update_portfolio_values': {
         'task': 'accounts.tasks.update_portfolio_value',
         'schedule': timedelta(minutes=1)
@@ -90,10 +89,11 @@ CELERYBEAT_SCHEDULE = {
     #     'task': 'canvas.tasks.consume_publish_activities_tasks',
     #     'schedule': timedelta(minutes=5)
     # },
-    'topup_accounts_task': {
-        'task': 'accounts.tasks.topup_accounts_task',
-        'schedule': crontab(hour=0, minute=0)
-    },
+    #  No daily topup
+    #  'topup_accounts_task': {
+    #      'task': 'accounts.tasks.topup_accounts_task',
+    #      'schedule': crontab(hour=0, minute=0)
+    #  },
     'calculate_price_change': {
         'task': 'events.tasks.calculate_price_change',
         'schedule': crontab(hour=0, minute=0)
@@ -220,13 +220,15 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 
 MIDDLEWARE_CLASSES = (
+    # last visit
+    'politikon.middleware.SetLastVisitMiddleware',
     # forcing one hostname on production
-    'politikon.modules.HostnameRedirectMiddleware',
+    'politikon.middleware.HostnameRedirectMiddleware',
     # forcing SSL using https://github.com/rdegges/django-sslify.
     # This need to be the first middleware
     'sslify.middleware.SSLifyMiddleware',
     # adding basic auth
-    # 'politikon.modules.BasicAuthMiddleware',
+    # 'politikon.middleware.BasicAuthMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
