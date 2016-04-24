@@ -2,6 +2,8 @@
 from dateutil.relativedelta import relativedelta
 import logging
 from math import exp
+import os
+import requests
 from unidecode import unidecode
 import pytz
 
@@ -70,18 +72,25 @@ class Event(models.Model):
     ])
 
     title = models.TextField(u'tytuł wydarzenia')
-    short_title = models.TextField(u'tytuł promocyjny wydarzenia')
+    short_title = models.TextField(u'tytuł promocyjny wydarzenia', null=True, blank=True)
 
-    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB')
-    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB')
+    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', null=True, blank=True)
+    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', null=True, blank=True)
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.\
-        ImageField(u'mały obrazek 340x250', upload_to='events_small',
-                   null=True)
-    big_image = models.\
-        ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
+    small_image = models.ImageField(
+        u'mały obrazek 340x250',
+        upload_to='events_small',
+        null=True,
+        blank=True,
+    )
+    big_image = models.ImageField(
+        u'duży obrazek 1250x510',
+        upload_to='events_big',
+        null=True,
+        blank=True,
+    )
 
     is_featured = models.BooleanField(u'featured', default=False)
     is_front = models.BooleanField(u'front', default=False)
@@ -488,6 +497,39 @@ class Event(models.Model):
             event.my_bet = event.get_user_bet(user)
             events.append(event)
         return events
+
+    def download_image(self, url, event_type):
+        """
+        Download image from Internet and set in image files
+        :param url: source url for image to download
+        :type url: str or unicode
+        :param event_type: Event image type may by small or big:
+        :type event_type: str
+        """
+        if event_type == 'small':
+            path = u'/app/static/uploads/events_small'
+            image = self.small_image
+        elif event_type == 'big':
+            path = u'/app/static/uploads/events_big'
+            image = self.big_image
+        else:
+            raise Exception('Unsupported event image type. ')
+
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            file_name = slugify(unidecode(self.title))
+            ext = url.split('.')[-1]
+            if len(ext) < 6:
+                file_name = '{0}.{1}'.format(file_name, ext)
+            path = os.path.join(path, file_name)
+            with open(path, 'wb') as f:  # open file for writing
+                r.raw.decode_content = True
+                f.write(r.raw.data)
+
+            with open(path, 'r') as f:  # open file for reading
+                i = models.ImageField()
+                name = i.storage.save(path, f)
+                image.name = os.path.join(*name.split('/')[-2:])
 
 
 class RelatedEvent(models.Model):

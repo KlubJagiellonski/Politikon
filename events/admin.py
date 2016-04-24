@@ -36,6 +36,17 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [RelatedEventInline, ]
 
     def save_model(self, request, obj, form, change):
+        """
+        Save event model from admin form
+        :param request:
+        :type request: HTTPRequest
+        :param obj:
+        :type obj: Event
+        :param form:
+        :type form: EventForm
+        :param change:
+        :type change:
+        """
         if request.method == 'POST':
             if request.POST['solve_event']:
                 if request.POST['solve_event'] == 'TAK':
@@ -44,6 +55,12 @@ class EventAdmin(admin.ModelAdmin):
                     obj.finish_no()
                 elif request.POST['solve_event'] == 'ANULUJ':
                     obj.cancel()
+            small_img_url = request.POST.get('download_small_image')
+            if small_img_url:
+                obj.download_image(small_img_url, 'small')
+            big_img_url = request.POST.get('download_big_image')
+            if big_img_url:
+                obj.download_image(big_img_url, 'big')
         obj.save()
 
 
