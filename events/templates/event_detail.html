@@ -60,6 +60,7 @@
             color: rgba(255,255,255,0.6);
             top: 10px;
             left: 31%;
+            z-index: 100;
             text-shadow: 0 2px 10px black;">
             {% render_finish_date event %}
         </div>
@@ -211,7 +212,7 @@ ajaxResponseParser(message);
             <p class="price-container">
             {% trans %}Price{% endtrans %}:
             <span id="buy_against_price" class="money" data-bind="flashText: buy_against_price"></span>
-            </p>                
+            </p>
             <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Buying...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_buy_NO, click: buy_NO">{% trans %}Buy for NO{% endtrans %}</button>
             <p class="bets-container">
             {% trans %}You have{% endtrans %}:
@@ -231,7 +232,7 @@ ajaxResponseParser(message);
         </td>
         <td class="sell-against" style="display:none;" data-bind="visible: has_bets_for_NO() > 0">
             <p class="price-container">
-            {% trans %}Price{% endtrans %}: 
+            {% trans %}Price{% endtrans %}:
             <span id="sell_against_price" class="money" data-bind="flashText: sell_against_price"></span>
             </p>
             <button type="button" class="btn-danger btn btn-large btn-primary" data-loading-text="{% trans %}Selling...{% endtrans %}" data-bind="bootstrapButtonLoading: loading_sell_NO, click: sell_NO">{% trans %}Sell for NO{% endtrans %}</button>
