@@ -86,7 +86,9 @@
             <div class="voted">{{ bet_social.no_count }}</div>
         </div>
         <div id="makeabet" class="collapsible{% if bet.extension.has_any %} morebets{% endif %}" >
+            {% if event.is_in_progress %}
             <div class="change{% if event.price_change > 0 %} changeYES{% elif event.price_change < 0 %} changeNO{% endif %}{% if bet.extension.has_any %} hidden{% endif %}">{{ event.price_change|formatted:"True" }}</div>
+            {% endif %}
             {% if bet %}
             {% render_bet event bet.extension True %}
             {% endif %}
