@@ -167,6 +167,17 @@ class Event(models.Model):
             'sell_against_price': self.current_sell_against_price,
         }
 
+    def finish_date(self):
+        """
+        If event is not finished then estimated_end_date, else end_date
+        :return: finish date
+        :rtype: datetime
+        """
+        if self.is_in_progress:
+            return self.estimated_end_date
+        else:
+            return self.end_date
+
     def price_for_outcome(self, outcome, direction='BUY'):
         if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:
             raise UnknownOutcome()

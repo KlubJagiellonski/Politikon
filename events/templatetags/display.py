@@ -62,3 +62,10 @@ def outcome(event):
         return " finished finished-cancelled"
     else:
         return ""
+
+
+@register.inclusion_tag('finish_date.html')
+def render_finish_date(event):
+    return {
+        'event': event,
+    }

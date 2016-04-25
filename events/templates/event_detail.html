@@ -61,7 +61,7 @@
             top: 10px;
             left: 31%;
             text-shadow: 0 2px 10px black;">
-            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+            {% render_finish_date event %}
         </div>
         <div class="chart-container" style="position: relative; z-index:999">
             <canvas id="chart-details" height="70"></canvas>
