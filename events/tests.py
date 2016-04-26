@@ -2,6 +2,7 @@
 """
 Test events module
 """
+import base64
 from datetime import timedelta
 from freezegun import freeze_time
 
@@ -303,6 +304,22 @@ class EventsModelTestCase(TestCase):
         self.assertEqual([event2, event3], related1)
         self.assertEqual([event3], related2)
         self.assertEqual([event2], related3)
+
+    def test_download_image(self):
+        """
+        Test download image and put them as small_img_event and big_img_event
+        """
+        event = EventFactory()
+        # image.png 2x1 pixels white blue
+        img = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAIAAAB7QOjdAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA\nB3R' \
+              'JTUUH4AQaFgsc/+r6XwAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAP\nSURBVA' \
+              'jXY/j//3+Q2X8AEVkEhYzVy00AAAAASUVORK5CYII=\n'
+
+        bin_img = base64.decodestring(obr)
+        event.download_image('http://fake.url/image.png', 'small')
+        # TODO: mock requests.get and finish it
+        event.download_image('http://fake.url/image.png', 'big')
+        # TODO: finish it
 
 
 class EventsManagerTestCase(TestCase):
