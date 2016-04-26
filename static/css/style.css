@@ -388,7 +388,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 
 /* strona główna */
-#featured {margin-bottom: 65px;}
+#featured {margin-bottom: 28px;}
 #featured figcaption {
         width: 93%;
         height: 100%;
@@ -406,16 +406,34 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #featured .details {position: absolute; top: 0px; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5);  opacity: 0; padding: 5%;}
 #featured-canvas { width: 90%; height: 90%; z-index: 4500;}
 
-#featured #makeabet {width: 370px !important; margin-top: 10px;}
+#featured #makeabet {width: 380px !important; margin-top: 10px;}
 
 /* betfeed */
-#betfeed {display: table; margin-bottom: 30px;}
-#betfeed .bet {display: block; width: 29.05%; height: 320px; overflow: hidden; float: left; background: #fff; border: 1px solid #d6d6d6; margin-right: 6%; margin-bottom: 50px;}
+#betfeed {        display: table;
+    margin-bottom: 30px;
+    width: 97.17%;
+    padding-left: 1.42%;
+    padding-right: 1.42%;
+    margin: 0 auto;}
+
+#betfeed .bet {
+    display: block;
+    width: 32.6%;
+    height: 320px;
+    overflow: hidden;
+    float: left;
+    background: #fff;
+    margin-right: 1%;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 11px -4px;}
 #betfeed .bet:nth-child(3n) {margin-right: 0px !important;}
 #betfeed figure {position: relative;}
 #betfeed figure img {height: 250px;} /*zmiana wysokosci dla RWD*/
 #betfeed figure figcaption {position: absolute; top: 0; height: 100%; width:100%;}
 #betfeed figure figcaption h2 {width: 88%; padding: 12px 6%; height: 50px; margin-top: 250px; line-height: 1.3em; font-size: 1.125em; font-weight: 500; color: #333; background: #fff; position: relative; z-index: 2000;}
+#betfeed.padding-bottom {
+    padding-bottom: 40px;
+}
 
 #betfeed .changepreview {position: absolute; margin-left: 45%; margin-right: 45%; margin-top: 225px; z-index: 2500;}
 
