@@ -277,6 +277,8 @@ class Event(models.Model):
                     'textYES': "dokup na „TAK“" if bet.outcome else "sprzedaj zakład",
                     'textNO': "sprzedaj zakład" if bet.outcome else "dokup na „NIE“",
                     'has': bet.has,
+                    # TODO cancelled classOutcome
+                    # TODO ask @jglodek
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",
                     'avgPrice': bet.bought_avg_price,
@@ -695,8 +697,7 @@ class Transaction(models.Model):
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
 
     def __unicode__(self):
-        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
-                                 label, self.user)
+        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
 
     @property
     def total(self):

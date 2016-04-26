@@ -1,2 +1,2 @@
 {% load humanize %}
-{% if event.is_in_progress %}Rozwiązanie{% else %}Zakończony{% endif %} {{ event.finish_date|naturaltime }}
+{% if is_in_progress %}Rozwiązanie{% else %}Zakończony{% endif %} {{ date|naturaltime }}
