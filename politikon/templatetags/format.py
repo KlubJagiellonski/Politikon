@@ -17,3 +17,9 @@ def formatted(value, plusminus=False):
         return s
     except:
         return value
+
+
+@register.filter
+def toLower(text):
+    """Usage, {{ text|toLower }}"""
+    return text[:1].lower() + text[1:] if text else ""

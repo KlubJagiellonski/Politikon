@@ -18,7 +18,7 @@ from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, Bet
 from .models import Bet, Event, Transaction, _MONTHS
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
-    render_featured_events, render_bet_status, outcome
+    render_featured_events, render_bet_status, outcome, render_finish_date, og_title
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -539,6 +539,48 @@ class EventsTemplatetagsTestCase(TestCase):
         self.assertEqual(" finished finished-no", outcome(events[1]))
         self.assertEqual(" finished finished-cancelled", outcome(events[2]))
         self.assertEqual("", outcome(events[3]))
+
+    def test_render_finish_date(self):
+        """
+        Render finish date
+        """
+        events = EventFactory.create_batch(2)
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        finish_time = timezone.now()
+        events[0].end_date = finish_time
+        future_time = timezone.now() + timedelta(days=8)
+        events[1].estimated_end_date = future_time
+        self.assertEqual({
+            'date': finish_time,
+            'is_in_progress': False
+        }, render_finish_date(events[0]))
+        self.assertEqual({
+            'date': future_time,
+            'is_in_progress': True
+        }, render_finish_date(events[1]))
+
+    def test_og_title(self):
+        """
+        OG title
+        """
+        user = UserFactory()
+        events = EventFactory.create_batch(3)
+        events[0].title_fb_yes = u"Będzie TAK"
+        events[0].title_fb_no = u"Nie będzie TAK"
+        events[1].title_fb_yes = u"będzie TAK"
+        events[1].title_fb_no = u"Nie będzie TAK"
+        events[2].title = u"Czy będzie TAK?"
+        BetFactory(user=user, event=events[0])
+        BetFactory(user=user, event=events[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
+        self.assertEqual({
+            'title': u'Moim zdaniem będzie TAK'
+        }, og_title(events[0], user))
+        self.assertEqual({
+            'title': u'Moim zdaniem nie będzie TAK'
+        }, og_title(events[1], user))
+        self.assertEqual({
+            'title': u'Czy będzie TAK?'
+        }, og_title(events[2], user))
 
 
 class BetsModelTestCase(TestCase):
