@@ -1,6 +1,8 @@
 from django import template
 
-from events.models import Event
+from events.models import Event, Bet
+
+from politikon.templatetags.format import toLower
 
 
 register = template.Library()
@@ -62,3 +64,26 @@ def outcome(event):
         return " finished finished-cancelled"
     else:
         return ""
+
+
+@register.inclusion_tag('finish_date.html')
+def render_finish_date(event):
+    return {
+        'date': event.finish_date(),
+        'is_in_progress': event.is_in_progress
+    }
+
+
+@register.inclusion_tag('og_title.html')
+def og_title(event, user):
+    bet = event.get_user_bet(user)
+    if bet.has == 0:
+        title = event.title
+    else:
+        if bet.outcome == Bet.BET_OUTCOME_CHOICES.YES:
+            title = 'Moim zdaniem ' + toLower(event.title_fb_yes)
+        else:
+            title = 'Moim zdaniem ' + toLower(event.title_fb_no)
+    return {
+        'title': title
+    }

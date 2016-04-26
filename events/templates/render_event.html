@@ -18,20 +18,41 @@
                         color: rgba(255,255,255,0.8);
                         top: 10px;
                         left: 10px;">
-                        {% if event.is_in_progress %}
-                        Rozwiązanie {{ event.estimated_end_date|naturaltime }}
-                        {% else %}
-                        Zakończony {{ event.end_date|naturaltime }}
-                        {% endif %}
+                        {% render_finish_date event %}
                     </div>
                     <canvas class="bet-{{ event.id }}-canvas" height="70"></canvas>
                 </div>
             </a>
-            <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change|formatted:"True" }}</div>
-            <a href="{{ event.get_relative_url }}"><h2 class="skroc">{{ event.title }}</h2></a>
-            <div id="makeabet" {% if bet.has_any %} class="morebets" {% endif %} >
-                {% render_bet event bet True %}
-            </div>
+            {% if event.is_in_progress %}
+                <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change|formatted:"True" }}</div>
+                <a href="{{ event.get_relative_url }}"><h2 class="skroc">{{ event.title }}</h2></a>
+            {% else %}
+                {% if event.outcome == 2 %}
+                    <a href="{{ event.get_relative_url }}">
+                        <h3>Anulowane</h3>
+                        <h2 class="skroc">
+                            {{ event.title }}
+                        </h2>
+                    </a>
+                {% elif event.outcome == 3 %}
+                    <a href="{{ event.get_relative_url }}">
+                        <h3>Wydarzyło się</h3>
+                        <h2 class="skroc">
+                            {{ event.title }}
+                        </h2>
+                    </a>
+                {% elif event.outcome == 4 %}
+                    <a href="{{ event.get_relative_url }}">
+                        <h3>Nie wydarzyło się</h3>
+                        <h2 class="skroc">
+                            {{ event.title }}
+                        </h2>
+                    </a>
+                {% endif %}
+            {% endif %}
+                <div id="makeabet" {% if bet.has_any %} class="morebets" {% endif %} >
+                    {% render_bet event bet True %}
+                </div>
         </figcaption>
     </figure>
 </div>

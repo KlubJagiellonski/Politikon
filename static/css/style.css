@@ -30,7 +30,7 @@ b {font-weight: 700;}
 .overlay, .betresult, #wallet-not .container,
 #login div, #login aside, #login, #login .przycisk,
 #featured .details,
-.betYES, .betNO,
+.betYES, .betNO, .betCANCELED
 #betfeed .changepreview, #betfeed h2, #betfeed .details-chart,
 #ranking-short .userrank,
 #loadmore .more,
@@ -270,7 +270,7 @@ footer ul a, footer .socialmedia div,
 .betresult .status h3 {height: 40px; font-size: 1.125em; color: #333; margin-top: 5px; margin-bottom: 8px;}
 .betresult .status p {font-size: 1em; color: #333; margin-bottom: 4px;}
 .betresult .status p .betdetails {width: 70px; display: inline-block;}
-.betresult .status p .changeYES, .betresult .status p .changeNO {font-weight: 700; margin-right: 10px;}
+.betresult .status p .changeYES,.betresult .status p .changeCANCELED, .betresult .status p .changeNO {font-weight: 700; margin-right: 10px;}
 .betresult .status .why {color: #999; font-size: .75em; font-weight: 300;}
 .betresult .status .why:hover {border-bottom: 1px solid #ddd;}
 .betresult .status-change {height: 100px; padding: 5px 0; background: #fafafa; width: 22%; float: right; text-align: center; font-size: .875em; color: 5a5a5a;}
@@ -298,11 +298,14 @@ footer ul a, footer .socialmedia div,
 #makeabet .betYES .value {color: #d1e567;}
 #makeabet .betNO {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
 #makeabet .betNO .value {color: #ffb8a5;}
+#makeabet .betCANCELED {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
+#makeabet .betCANCELED .value {color: #ffb8a5;}
 #makeabet .value {width: 30%; height: 100%; text-align: center; background: rgba(0,0,0,0.2); font-size: .75em !important; font-weight: 400;}
 #makeabet .txt {width: 70%; float: right; height: 100%; text-align: center;}
 
 #makeabet .betYES:hover {background: #c7df42;}
 #makeabet .betNO:hover {background: #f34f23;}
+#makeabet .betCANCELED:hover {background: #f34f23;}
 
 #makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px; color:#333;}
 .change {width: 36px; height: 36px; border: 2px solid #fff; font-size: 0.875em; line-height: 36px; text-align: center; border-radius: 50%; background: #fff; margin: 0 auto;
@@ -317,11 +320,14 @@ footer ul a, footer .socialmedia div,
 }
 #makeabet .change.changeYES {color: #809413;}
 #makeabet .change.changeNO {color: #a72e0e;}
+#makeabet .change.changeCANCELED {color: #a72e0e;}
 .changeYES {color: #809413;}
 .changeNO {color: #a72e0e;}
+.changeCANCELED {color: #a72e0e;}
 
 .morebets {background: #f5f5f5;}
-.morebets .betYES, .morebets .betNO {width: 33.4% !important;}
+.morebets .betYES, .morebets .betNO{width: 33.4% !important;}
+.morebets .betCANCELED {width: 50% !important;}
 .morebets .value {width: 40% !important;}
 .morebets .txt {width: 59% !important; font-size: 1.2em !important; margin-top: -3px;}
 
@@ -337,6 +343,7 @@ footer ul a, footer .socialmedia div,
   display: block;
   float: left;
 }
+#makeabet.morebets .betCANCELED .txt {line-height: 2em;}
 
 .orangeheader {display: table; padding: 22px 23px 22px; font-size: 1.55em; font-weight: 700; color: #fff; text-transform: uppercase; background: #ea6a2a;}
 .goupheader {margin-top: -32px; margin-bottom: 30px;}
@@ -381,7 +388,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 
 /* strona główna */
-#featured {margin-bottom: 65px;}
+#featured {margin-bottom: 28px;}
 #featured figcaption {
         width: 93%;
         height: 100%;
@@ -399,16 +406,34 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #featured .details {position: absolute; top: 0px; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5);  opacity: 0; padding: 5%;}
 #featured-canvas { width: 90%; height: 90%; z-index: 4500;}
 
-#featured #makeabet {width: 370px !important; margin-top: 10px;}
+#featured #makeabet {width: 380px !important; margin-top: 10px;}
 
 /* betfeed */
-#betfeed {display: table; margin-bottom: 30px;}
-#betfeed .bet {display: block; width: 29.05%; height: 320px; overflow: hidden; float: left; background: #fff; border: 1px solid #d6d6d6; margin-right: 6%; margin-bottom: 50px;}
+#betfeed {        display: table;
+    margin-bottom: 30px;
+    width: 97.17%;
+    padding-left: 1.42%;
+    padding-right: 1.42%;
+    margin: 0 auto;}
+
+#betfeed .bet {
+    display: block;
+    width: 32.6%;
+    height: 320px;
+    overflow: hidden;
+    float: left;
+    background: #fff;
+    margin-right: 1%;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 11px -4px;}
 #betfeed .bet:nth-child(3n) {margin-right: 0px !important;}
 #betfeed figure {position: relative;}
 #betfeed figure img {height: 250px;} /*zmiana wysokosci dla RWD*/
 #betfeed figure figcaption {position: absolute; top: 0; height: 100%; width:100%;}
 #betfeed figure figcaption h2 {width: 88%; padding: 12px 6%; height: 50px; margin-top: 250px; line-height: 1.3em; font-size: 1.125em; font-weight: 500; color: #333; background: #fff; position: relative; z-index: 2000;}
+#betfeed.padding-bottom {
+    padding-bottom: 40px;
+}
 
 #betfeed .changepreview {position: absolute; margin-left: 45%; margin-right: 45%; margin-top: 225px; z-index: 2500;}
 
@@ -563,7 +588,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .history-event span .reputy-small {margin-right: 10px;}
 #userinfo .history-event .reputy-change {width: 21%;}
 #userinfo .history-event .event-date {background: url(../img/time.png) left no-repeat; height: 21px; padding-left: 40px; padding-top: 9px; margin-top: -7px; font-size: .875em; font-weight: 300; color: #b4b4b4;}
-#userinfo .history-event .changeNO, #userinfo .history-event .changeYES {font-weight: 700}
+#userinfo .history-event .changeNO, #userinfo .history-event .changeYES, #userinfo .history-event .changeCANCELED {font-weight: 700}
 
 #userinfo #loadmore .btn {margin-top: 40px;}
 
@@ -659,3 +684,20 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 .hidden {display:none;}
 .small {color: #999; font-size: .75em; font-weight: 300;}
+
+.bet figcaption h3 {
+    position: absolute;
+    bottom: 0.5em;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 0 10px black,0 0 20px black;
+    color: white;
+}
+
+.finished #makeabet .txt {
+    font-size: 70% !important;
+}
+.finished #makeabet.morebets .txt {
+    padding-top: 0.6em;
+}
+
