@@ -78,7 +78,7 @@ class Event(models.Model):
     ])
 
     title = models.TextField(u'tytuł wydarzenia')
-    short_title = models.TextField(u'tytuł promocyjny wydarzenia', default='', blank=True)
+    short_title = models.TextField(u'tytuł promocyjny wydarzenia')
 
     title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', default='', blank=True)
     title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', default='', blank=True)

@@ -38,11 +38,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='event',
-            name='short_title',
-            field=models.TextField(default=b'', verbose_name='tytu\u0142 promocyjny wydarzenia', blank=True),
-        ),
-        migrations.AlterField(
-            model_name='event',
             name='small_image',
             field=models.ImageField(upload_to=b'events_small', null=True, verbose_name='ma\u0142y obrazek 340x250', blank=True),
         ),
