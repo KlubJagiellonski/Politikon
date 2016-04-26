@@ -209,24 +209,33 @@ class EventsModelTestCase(TestCase):
         """
         Increment quantity
         """
-        event = EventFactory()
+        amount = 2
+        event = EventFactory(B=amount)
         start_event_dict = event.event_dict
         self.assertEqual(0, event.Q_for)
         self.assertEqual(0, event.Q_against)
 
-        amount = 1
         outcome_yes = 'YES'
+        outcome_no = 'NO'
+
+        # TODO check this on paper
         event.increment_quantity(outcome_yes, amount)
         self.assertEqual(amount, event.Q_for)
         self.assertEqual(0, event.Q_against)
-        # FIXME
-        #  self.assertNotEqual(start_event_dict, event.event_dict)
+        self.assertNotEqual(start_event_dict, event.event_dict)
+        self.assertNotEqual(start_event_dict['buy_against_price'], event.event_dict['buy_against_price'])
+        self.assertNotEqual(start_event_dict['buy_for_price'], event.event_dict['buy_for_price'])
+        self.assertNotEqual(start_event_dict['buy_against_price'], event.event_dict['buy_against_price'])
+        self.assertEqual(start_event_dict['sell_for_price'], event.event_dict['sell_for_price'])
 
-        outcome_no = 'NO'
         event.increment_quantity(outcome_no, amount)
         self.assertEqual(amount, event.Q_for)
         self.assertEqual(amount, event.Q_against)
-        self.assertEqual(start_event_dict, event.event_dict)
+        self.assertNotEqual(start_event_dict, event.event_dict)
+        self.assertEqual(start_event_dict['buy_against_price'], event.event_dict['buy_against_price'])
+        self.assertEqual(start_event_dict['buy_for_price'], event.event_dict['buy_for_price'])
+        self.assertNotEqual(start_event_dict['sell_against_price'], event.event_dict['sell_against_price'])
+        self.assertNotEqual(start_event_dict['sell_for_price'], event.event_dict['sell_for_price'])
 
         bad_outcome = 'OOOPS'
         with self.assertRaises(UnknownOutcome):
