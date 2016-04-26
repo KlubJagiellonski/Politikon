@@ -116,6 +116,7 @@ class Event(models.Model):
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     # constant for calculating event change
+    # probably: how you need to increment quantity, to change price
     B = models.FloatField(u'stała B', default=FACTOR_B)
 
     def __unicode__(self):
