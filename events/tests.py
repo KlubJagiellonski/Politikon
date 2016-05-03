@@ -384,14 +384,14 @@ class EventsManagerTestCase(TestCase):
         """
         Get featured events
         """
-        events = EventFactory.create_batch(3)
+        events = EventFactory.create_batch(7)
         events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
         events[2].save()
 
         featured_events = Event.objects.get_featured_events()
         self.assertIsInstance(featured_events[0], Event)
-        self.assertEqual(2, len(featured_events))
-        self.assertEqual([events[0], events[1]], list(featured_events))
+        self.assertEqual(3, len(featured_events))
+        self.assertEqual([events[0], events[1], events[3]], list(featured_events))
 
     def test_get_front_event(self):
         """
