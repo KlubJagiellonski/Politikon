@@ -98,15 +98,12 @@ def create_transaction(request, event_id):
         outcome = data['outcome']     # tak nie
         for_price = data['for_price']  # cena
     except:
-        return HttpResponseBadRequest(_("Something went wrong, try again in a \
-                                        few seconds."))
+        return HttpResponseBadRequest(_("Something went wrong, try again in a few seconds."))
     try:
         if buy:
-            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id,
-                                                     outcome, for_price)
+            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id, outcome, for_price)
         else:
-            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id,
-                                                      outcome, for_price)
+            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
     except NonexistantEvent:
         raise Http404
     except PriceMismatch as e:

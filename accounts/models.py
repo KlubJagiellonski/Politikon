@@ -252,6 +252,54 @@ class UserProfile(AbstractBaseUser):
 
         self.save()
 
+    #  def buy_a_bet(self, bet, event
+    def buy_a_bet(self, user, event_id, for_outcome, price):
+        user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
+
+        if for_outcome == 'YES':
+            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
+        else:
+            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO
+
+        requested_price = price
+        current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
+        if requested_price != current_tx_price:
+            raise PriceMismatch(_("Price has changed."), event)
+
+        quantity = 1
+        bought_for_total = current_tx_price * quantity
+
+        if (user.total_cash < bought_for_total):
+            raise InsufficientCash(_("You don't have enough cash."), user)
+
+        Transaction.objects.create(
+            user_id=user.id,
+            event_id=event.id,
+            type=transaction_type,
+            quantity=quantity,
+            price=current_tx_price * -1
+        )
+
+        event_total_bought_price = (bet.bought_avg_price * bet.bought)
+        after_bought_quantity = bet.bought + quantity
+
+        bet.bought_avg_price = (event_total_bought_price +
+                                bought_for_total) / after_bought_quantity
+        bet.has += quantity
+        bet.bought += quantity
+        bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
+
+        user.total_cash -= bought_for_total
+        user.portfolio_value += bought_for_total
+        user.save()
+
+        event.increment_quantity(for_outcome, by_amount=quantity)
+        """ Increment turnover only for buying bets """
+        event.increment_turnover(quantity)
+        event.save(force_update=True)
+
+        return user, event, bet
+
     @property
     def is_superuser(self):
         return self.is_admin
