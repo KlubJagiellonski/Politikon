@@ -29,6 +29,8 @@ class EventManager(models.Manager):
     def get_events(self, mode):
         if mode == 'popular':
             return self.ongoing_only_queryset().order_by('-turnover')
+        elif mode == 'last-minute':
+            return self.ongoing_only_queryset().order_by('estimated_end_date')
         elif mode == 'latest':
             return self.ongoing_only_queryset().order_by('-created_date')
         elif mode == 'changed':

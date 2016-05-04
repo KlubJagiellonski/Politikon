@@ -18,9 +18,9 @@
     <h2>Wydarzenia</h2>
     <ul class="tabs prawa">
         <li {% if active == "popular" %} class="active"{% endif %}><a href="/events/">Najpopularniejsze</a></li>
+        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="/events/last-minute">Ostatnia szansa</a></li>
         <li {% if active == "changed" %} class="active"{% endif %}><a href="/events/changed">Największe zmiany</a></li>
         <li {% if active == "latest" %} class="active"{% endif %}><a href="/events/latest">Najnowsze</a></li>
-        <li {% if active == "finished" %} class="active"{% endif %}><a href="/events/finished">Zakończone</a></li>
     </ul>
 </section>
 
