@@ -95,6 +95,8 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
+    resolved_by = models.ForeignKey('accounts.UserProfile', null=True, blank=True,
+                                    verbose_name=u'rozstrzygnięte przez')
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
                                                 default=BEGIN_PRICE)
