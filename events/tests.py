@@ -365,6 +365,11 @@ class EventsManagerTestCase(TestCase):
         self.assertEqual(3, len(popular_events))
         self.assertEqual([event2, event3, event1], list(popular_events))
 
+        last_minute_events = Event.objects.get_events('last-minute')
+        self.assertIsInstance(popular_events[0], Event)
+        self.assertEqual(3, len(popular_events))
+        self.assertEqual([event2, event1, event3], list(last_minute_events))
+
         latest_events = Event.objects.get_events('latest')
         self.assertIsInstance(latest_events[0], Event)
         self.assertEqual(3, len(latest_events))
