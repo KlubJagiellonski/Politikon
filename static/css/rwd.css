@@ -87,7 +87,6 @@ section, footer {width: 96%; padding: 0 2%;}
 #betfeed .bet {height: 375px;}
 #betfeed figure figcaption h2 {font-size: 1em;}
 #betfeed .bet:hover figcaption h2 {margin-top: 250px !important;}
-#betfeed .bet:hover .changepreview {opacity: 1;}
 
 footer .lewa {width: 100%; }
 
