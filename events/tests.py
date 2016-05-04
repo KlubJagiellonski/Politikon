@@ -365,6 +365,11 @@ class EventsManagerTestCase(TestCase):
         self.assertEqual(3, len(popular_events))
         self.assertEqual([event2, event3, event1], list(popular_events))
 
+        last_minute_events = Event.objects.get_events('last-minute')
+        self.assertIsInstance(popular_events[0], Event)
+        self.assertEqual(3, len(popular_events))
+        self.assertEqual([event2, event1, event3], list(last_minute_events))
+
         latest_events = Event.objects.get_events('latest')
         self.assertIsInstance(latest_events[0], Event)
         self.assertEqual(3, len(latest_events))
@@ -384,14 +389,14 @@ class EventsManagerTestCase(TestCase):
         """
         Get featured events
         """
-        events = EventFactory.create_batch(3)
+        events = EventFactory.create_batch(7)
         events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
         events[2].save()
 
         featured_events = Event.objects.get_featured_events()
         self.assertIsInstance(featured_events[0], Event)
-        self.assertEqual(2, len(featured_events))
-        self.assertEqual([events[0], events[1]], list(featured_events))
+        self.assertEqual(3, len(featured_events))
+        self.assertEqual([events[0], events[1], events[3]], list(featured_events))
 
     def test_get_front_event(self):
         """
