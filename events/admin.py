@@ -10,6 +10,10 @@ class RelatedEventInline(admin.TabularInline):
     model = RelatedEvent
     fk_name = 'event'
     extra = 1
+    raw_id_fields = ('related',)
+    autocomplete_lookup_fields = {
+        'fk': ['related'],
+    }
 
 
 class EventAdmin(admin.ModelAdmin):

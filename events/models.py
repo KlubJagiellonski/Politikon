@@ -170,6 +170,10 @@ class Event(models.Model):
             'sell_against_price': self.current_sell_against_price,
         }
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "title__icontains", "short_title__icontains")
+
     def finish_date(self):
         """
         If event is not finished then estimated_end_date, else end_date
