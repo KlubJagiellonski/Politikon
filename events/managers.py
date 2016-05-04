@@ -40,8 +40,8 @@ class EventManager(models.Manager):
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
-        changes = self.get_events('changed').values('id')[:3]
-        return self.ongoing_only_queryset().filter(is_featured=True).exclude(id__in=changes)\
+        excluded = self.get_events('last-minute').values('id')[:3]
+        return self.ongoing_only_queryset().filter(is_featured=True).exclude(id__in=excluded)\
             .order_by('estimated_end_date')
 
     def get_front_event(self):

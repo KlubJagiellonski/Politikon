@@ -396,7 +396,7 @@ class EventsManagerTestCase(TestCase):
         featured_events = Event.objects.get_featured_events()
         self.assertIsInstance(featured_events[0], Event)
         self.assertEqual(3, len(featured_events))
-        self.assertEqual([events[0], events[1], events[3]], list(featured_events))
+        self.assertEqual([events[4], events[5], events[6]], list(featured_events))
 
     def test_get_front_event(self):
         """
