@@ -877,5 +877,5 @@ class PolitikonEventTemplatetagsTestCase(TestCase):
         self.assertTrue(startswith(path3, start_path))
         path4 = reverse('events:events', kwargs={'mode': 'changed'})
         self.assertTrue(startswith(path4, start_path))
-        path5 = reverse('events:events', kwargs={'mode': 'finished'})
+        path5 = reverse('events:events', kwargs={'mode': 'last-minute'})
         self.assertTrue(startswith(path5, start_path))
