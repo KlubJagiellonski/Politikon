@@ -213,7 +213,7 @@ class UserProfileManagerTestCase(TestCase):
         self.assertTrue(user.check_password('password9'))
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_admin)
-        self.assertFalse(user.is_active)
+        self.assertTrue(user.is_active)
         self.assertEqual({
             'user_id': 1,
             'total_cash': formatted(0),
