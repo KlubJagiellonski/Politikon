@@ -13,13 +13,13 @@ logger = logging.getLogger(__name__)
 @task
 def topup_accounts_task():
     """
-    ???
+    Daily topup accounts task
     """
     logger.debug("'politikon:tasks:topup_accounts_task' worker up")
     topup_amount = config.DAILY_TOPUP
 
     with transaction.atomic():
-        for user in UserProfile.objects.all().iterator():
+        for user in UserProfile.objects.get_users().iterator():
             try:
                 user.topup_cash(topup_amount)
             except:
