@@ -76,6 +76,7 @@ def render_finish_date(event):
 
 @register.inclusion_tag('og_title.html')
 def og_title(event, vote=None, user=None):
+    title = event.title
     if user:
         bet = event.get_user_bet(user)
         if bet.has == 0:
@@ -91,7 +92,7 @@ def og_title(event, vote=None, user=None):
                 verb = u'nie ma racji że'
 
             if bet.outcome == bet.BET_OUTCOME_CHOICES.YES:
-                title = u'%s %s %s ' % (user.name, verb, toLower(event.title_fb_yes))
+                title = u'%s %s %s' % (user.name, verb, toLower(event.title_fb_yes))
             else:
                 title = u'%s %s %s' % (user.name, verb, toLower(event.title_fb_no))
     elif vote is not None:
@@ -110,8 +111,6 @@ def og_title(event, vote=None, user=None):
             title = u'%s %s' % (verb, toLower(event.title_fb_yes))
         elif vote == Bet.BET_OUTCOME_CHOICES.NO:
             title = u'%s %s' % (verb, toLower(event.title_fb_no))
-    else:
-        title = event.title
 
     return {
         'title': title
