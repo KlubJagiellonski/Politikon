@@ -577,7 +577,7 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         OG title
         """
-        user = UserFactory()
+        user = UserFactory(name="Bromando")
         events = EventFactory.create_batch(3)
         events[0].title_fb_yes = u"Będzie TAK"
         events[0].title_fb_no = u"Nie będzie TAK"
@@ -587,14 +587,47 @@ class EventsTemplatetagsTestCase(TestCase):
         BetFactory(user=user, event=events[0])
         BetFactory(user=user, event=events[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
         self.assertEqual({
+            'title': u'Bromando uważa że będzie TAK'
+        }, og_title(events[0], user=user))
+        self.assertEqual({
+            'title': u'Bromando uważa że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
             'title': u'Moim zdaniem będzie TAK'
-        }, og_title(events[0], user))
+        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
         self.assertEqual({
             'title': u'Moim zdaniem nie będzie TAK'
-        }, og_title(events[1], user))
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
         self.assertEqual({
             'title': u'Czy będzie TAK?'
-        }, og_title(events[2], user))
+        }, og_title(events[2]))
+        self.assertEqual({
+            'title': u'Czy będzie TAK?'
+        }, og_title(events[2], user=user))
+
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        self.assertEqual({
+            'title': u'Bromando ma rację że będzie TAK'
+        }, og_title(events[0], user=user))
+        self.assertEqual({
+            'title': u'Mam rację że będzie TAK'
+        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
+
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        self.assertEqual({
+            'title': u'Bromando ma rację że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
+            'title': u'Mam rację że nie będzie TAK'
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
+
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        self.assertEqual({
+            'title': u'Bromando nie ma racji że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
+            'title': u'Nie mam racji że nie będzie TAK'
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
 
 
 class BetsModelTestCase(TestCase):

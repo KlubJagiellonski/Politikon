@@ -19,6 +19,7 @@ class RelatedEventInline(admin.TabularInline):
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
+        'resolved_by',
         'end_date',
         'outcome',
         'current_buy_for_price',
