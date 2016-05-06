@@ -36,10 +36,11 @@ def save_profile(strategy, user, response, details, is_new=False,
     :type is_new: bool
     :param is_new: is it new account
     """
-    #  print(is_new)
+    #  print(strategy.storage)
     #  print(user)
-    #  print(details)
     #  print(response)
+    #  print(details)
+    #  print(is_new)
     #  print(strategy)
     #  uid = kwargs['uid']
 
@@ -77,7 +78,7 @@ def save_profile(strategy, user, response, details, is_new=False,
                             send_mail(subject, message, from_email, recipent_list)
                         except:
                             # TODO: handle error
-                            print("Error: couldn't send emails")
+                            logger.exception("Error: couldn't send emails")
                     else:
                         user.is_active = True
 
@@ -127,7 +128,7 @@ def save_profile(strategy, user, response, details, is_new=False,
                             send_mail(subject, message, from_email, recipent_list)
                         except:
                             # TODO: handle error
-                            print("Error: couldn't send emails")
+                            logger.exception("Error: couldn't send emails")
                     else:
                         user.is_active = True
 

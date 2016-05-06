@@ -6,5 +6,4 @@ branches:
         - master
 script: coverage run --source=politikon,events,accounts manage.py test
 after_success:
-    - coverage report --omit=*/migrations/*
     - coveralls

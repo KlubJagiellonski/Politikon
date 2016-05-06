@@ -19,6 +19,7 @@ from .templatetags.user import user_home, user_rank
 from .utils import process_username
 
 from constance import config
+
 from events.factories import EventFactory, BetFactory
 from events.models import Event, Bet
 from politikon.templatetags.format import formatted
