@@ -451,7 +451,7 @@ class EventsTasksTestCase(TestCase):
             events[1].save()
             events[2].current_buy_for_price = 40
             events[2].save()
-            calculate_price_change()
+            calculate_price_change.delay()
             #  print("test_calculate_price_change")
             #  for e in events:
             #      print(e.pk)
@@ -467,7 +467,7 @@ class EventsTasksTestCase(TestCase):
             events[1].save()
             events[2].current_buy_for_price = 100
             events[2].save()
-            calculate_price_change()
+            calculate_price_change.delay()
             # FIXME
             #  self.assertEqual(0, events[0].price_change)
             #  self.assertEqual(10, events[1].price_change)
@@ -742,13 +742,66 @@ class BetsManagerTestCase(TestCase):
         """
         Buy a bet
         """
-        # TODO this method is suspicious
+        event = EventFactory()
+        user = UserFactory(total_cash=event.current_buy_for_price)
+        old_price = event.current_buy_for_price
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+                                                         event.current_buy_for_price)
+        self.assertEqual(user, bet_user)
+        self.assertEqual(event, bet_event)
+        self.assertEqual(event.current_buy_for_price, bet.bought_avg_price)
+        self.assertEqual(1, bet.has)
+        self.assertEqual(1, bet.bought)
+        self.assertEqual(0, bet_user.total_cash)
+        self.assertEqual(old_price, bet_user.portfolio_value)
+        self.assertNotEqual(old_price, bet_event.current_buy_for_price)
+        self.assertEqual(1, bet_event.turnover)
+
+        with self.assertRaises(PriceMismatch):
+            Bet.objects.buy_a_bet(user, event.id, 'YES', old_price)
+
+        with self.assertRaises(InsufficientCash):
+            Bet.objects.buy_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+
+        user.total_cash = bet_event.current_buy_against_price
+        user.save()
+        # TODO should throw exception
+        Bet.objects.buy_a_bet(user, event.id, 'NO', bet_event.current_buy_against_price)
 
     def test_sell_a_bet(self):
         """
         Sell a bet
         """
-        # TODO this method is suspicious
+        event = EventFactory()
+        user = UserFactory(total_cash=event.current_buy_for_price)
+        old_price = event.current_sell_for_price
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+                                                         event.current_buy_for_price)
+        avg_price = bet_event.current_sell_for_price
+
+        with self.assertRaises(PriceMismatch):
+            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'YES',
+                                                          bet_event.current_sell_for_price)
+        self.assertEqual(user, bet_user)
+        self.assertEqual(event, bet_event)
+        self.assertEqual(avg_price, bet.sold_avg_price)
+        self.assertEqual(0, bet.has)
+        self.assertEqual(1, bet.sold)
+        self.assertEqual(old_price, bet_user.total_cash)
+        self.assertEqual(0, bet_user.portfolio_value)
+        self.assertEqual(old_price, bet_event.current_buy_for_price)
+        self.assertEqual(2, bet_event.turnover)
+
+        with self.assertRaises(InsufficientBets):
+            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_sell_for_price)
+
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'NO',
+                                                         event.current_buy_for_price)
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'NO',
+                                                          bet_event.current_sell_against_price)
+
 
     def test_get_in_progress(self):
         """
