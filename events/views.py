@@ -68,13 +68,12 @@ class EventDetailView(DetailView):
         return get_object_or_404(Event, id=self.kwargs['pk'])
 
     def get_context_data(self, *args, **kwargs):
-        context = super(EventDetailView, self).get_context_data(*args,
-                                                                **kwargs)
+        context = super(EventDetailView, self).get_context_data(*args, **kwargs)
         event = self.get_event()
         user = self.request.user
         bet = event.get_user_bet(user)
         if bet:
-            share_url = u'%s?vote=%s' % (event.get_absolute_url(), bet.outcome)
+            share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
         else:
             share_url = event.get_absolute_url()
         context.update({
