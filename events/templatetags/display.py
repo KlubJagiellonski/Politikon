@@ -1,7 +1,7 @@
+#-*- coding: utf-8 -*-
 from django import template
 
 from events.models import Event, Bet
-
 from politikon.templatetags.format import toLower
 
 
@@ -56,11 +56,11 @@ def render_bet_status(bet):
 @register.filter
 def outcome(event):
     """Usage, {{ event|get_outcome_class }}"""
-    if event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+    if event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
         return " finished finished-yes"
-    elif event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+    elif event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
         return " finished finished-no"
-    elif event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
+    elif event.outcome == event.EVENT_OUTCOME_CHOICES.CANCELLED:
         return " finished finished-cancelled"
     else:
         return ""
@@ -75,15 +75,44 @@ def render_finish_date(event):
 
 
 @register.inclusion_tag('og_title.html')
-def og_title(event, user):
-    bet = event.get_user_bet(user)
-    if bet.has == 0:
-        title = event.title
-    else:
-        if bet.outcome == Bet.BET_OUTCOME_CHOICES.YES:
-            title = 'Moim zdaniem ' + toLower(event.title_fb_yes)
+def og_title(event, vote=None, user=None):
+    if user:
+        bet = event.get_user_bet(user)
+        if bet.has == 0:
+            title = event.title
         else:
-            title = 'Moim zdaniem ' + toLower(event.title_fb_no)
+            if event.is_in_progress:
+                verb = u'uważa że'
+            elif bet.outcome and event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+                verb = u'ma rację że'
+            elif not bet.outcome and event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+                verb = u'ma rację że'
+            else:
+                verb = u'nie ma racji że'
+
+            if bet.outcome == bet.BET_OUTCOME_CHOICES.YES:
+                title = u'%s %s %s ' % (user.name, verb, toLower(event.title_fb_yes))
+            else:
+                title = u'%s %s %s' % (user.name, verb, toLower(event.title_fb_no))
+    elif vote is not None:
+        if event.is_in_progress:
+            verb = u'Moim zdaniem'
+        elif vote == Bet.BET_OUTCOME_CHOICES.YES and \
+            event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+            verb = u'Mam rację że'
+        elif vote == Bet.BET_OUTCOME_CHOICES.NO and \
+            event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+            verb = u'Mam rację że'
+        else:
+            verb = u'Nie mam racji że'
+
+        if vote == Bet.BET_OUTCOME_CHOICES.YES:
+            title = u'%s %s' % (verb, toLower(event.title_fb_yes))
+        elif vote == Bet.BET_OUTCOME_CHOICES.NO:
+            title = u'%s %s' % (verb, toLower(event.title_fb_no))
+    else:
+        title = event.title
+
     return {
         'title': title
     }
