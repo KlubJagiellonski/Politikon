@@ -421,6 +421,12 @@ class EventsTasksTestCase(TestCase):
     """
     events/tasks
     """
+    # TODO should this helper function be here ?
+    @staticmethod
+    def _refresh_objects(objects):
+        for obj in objects:
+            obj.refresh_from_db()
+
     @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
                        CELERY_ALWAYS_EAGER=True,
                        BROKER_BACKEND='memory')
@@ -447,19 +453,15 @@ class EventsTasksTestCase(TestCase):
             events[0].save()
 
             frozen_time.tick(delta=timedelta(days=1))
-            events[1].current_buy_for_price = 60
+            events[1].current_buy_for_price = 60.0
             events[1].save()
-            events[2].current_buy_for_price = 40
+            events[2].current_buy_for_price = 40.0
             events[2].save()
-            calculate_price_change.delay()
-            #  print("test_calculate_price_change")
-            #  for e in events:
-            #      print(e.pk)
-            #      print(e.price_change)
-            # FIXME
-            #  self.assertEqual(0, events[0].price_change)
-            #  self.assertEqual(10, events[1].price_change)
-            #  self.assertEqual(-10, events[2].price_change)
+            calculate_price_change()
+            self._refresh_objects(events)
+            self.assertEqual(0, events[0].price_change)
+            self.assertEqual(10, events[1].price_change)
+            self.assertEqual(-10, events[2].price_change)
 
             create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
@@ -467,11 +469,11 @@ class EventsTasksTestCase(TestCase):
             events[1].save()
             events[2].current_buy_for_price = 100
             events[2].save()
-            calculate_price_change.delay()
-            # FIXME
-            #  self.assertEqual(0, events[0].price_change)
-            #  self.assertEqual(10, events[1].price_change)
-            #  self.assertEqual(60, events[2].price_change)
+            calculate_price_change()
+            self._refresh_objects(events)
+            self.assertEqual(0, events[0].price_change)
+            self.assertEqual(10, events[1].price_change)
+            self.assertEqual(60, events[2].price_change)
 
 
 class EventsTemplatetagsTestCase(TestCase):
