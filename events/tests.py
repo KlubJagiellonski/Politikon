@@ -421,7 +421,6 @@ class EventsTasksTestCase(TestCase):
     """
     events/tasks
     """
-    # TODO should this helper function be here ?
     @staticmethod
     def _refresh_objects(objects):
         for obj in objects:

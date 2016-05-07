@@ -8,11 +8,9 @@ import os
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
 from .models import UserProfile, get_image_path
-from .pipeline import save_profile
 from .tasks import topup_accounts_task, update_portfolio_value, create_accounts_snapshot, \
     update_users_classification
 from .templatetags.user import user_home, user_rank
@@ -356,21 +354,17 @@ class UserTasksTestCase(TestCase):
     """
     accounts/tasks
     """
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+
     def test_topup_accounts_task(self):
         """
         Topup
         """
         user = UserFactory()
-        topup_accounts_task.delay()
-        # FIXME
-        #  self.assertEqual(config.DAILY_TOPUP, user.total_cash)
+        topup_accounts_task()
+        user.refresh_from_db()
+        self.assertEqual(config.DAILY_TOPUP, user.total_cash)
+        # TODO mock and test exception
 
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
     def test_update_portfolio_value(self):
         """
         Update portfolio_value
@@ -378,25 +372,22 @@ class UserTasksTestCase(TestCase):
         price = 90
         user = UserFactory()
         event = EventFactory(current_sell_for_price=price)
-        bet = BetFactory(user=user, event=event, has=1, outcome=True)
+        BetFactory(user=user, event=event, has=1, outcome=True)
 
         self.assertEqual(0, user.portfolio_value)
-        update_portfolio_value.delay()
-        # FIXME
-        #  self.assertEqual(price, user.portfolio_value)
-        #  update_portfolio_value.delay()
-        #  self.assertEqual(price, user.portfolio_value)
+        update_portfolio_value()
+        user.refresh_from_db()
+        self.assertEqual(price, user.portfolio_value)
 
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
     def test_create_accounts_snapshot(self):
         user = UserFactory()
-        create_accounts_snapshot.delay()
+        create_accounts_snapshot()
+        # TODO mock logger and create_snapshot()
 
     def test_update_users_classification(self):
-        user = UserFactory.create_batch(6)
+        users = UserFactory.create_batch(6)
         update_users_classification()
+        # TODO: mock reputation changes
 
 class UserTemplatetagsTestCase(TestCase):
     """
