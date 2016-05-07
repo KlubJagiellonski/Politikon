@@ -121,7 +121,7 @@ class BetManager(models.Manager):
         quantity = 1
         bought_for_total = current_tx_price * quantity
 
-        if (user.total_cash < bought_for_total):
+        if user.total_cash < bought_for_total:
             raise InsufficientCash(_("You don't have enough cash."), user)
 
         Transaction.objects.create(
