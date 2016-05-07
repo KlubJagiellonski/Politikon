@@ -421,7 +421,6 @@ class EventsTasksTestCase(TestCase):
     """
     events/tasks
     """
-    # TODO should this helper function be here ?
     @staticmethod
     def _refresh_objects(objects):
         for obj in objects:
@@ -934,7 +933,7 @@ class TransactionManagerTestCase(TestCase):
         user = UserFactory()
         with freeze_time(initial_time) as frozen_time:
             events = EventFactory.create_batch(3)
-            transaction1 = TransactionFactory(user=user, event=events[0])
+            TransactionFactory(user=user, event=events[0])
 
             frozen_time.tick(delta=timedelta(days=3))
             transaction2 = TransactionFactory(user=user, event=events[1])
