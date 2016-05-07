@@ -12,6 +12,7 @@ ipython
 gunicorn==19.3.0
 
 # tests
+mock
 freezegun
 factory_boy
 coveralls
