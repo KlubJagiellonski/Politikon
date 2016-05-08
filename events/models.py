@@ -411,6 +411,7 @@ class Event(models.Model):
         :type outcome: Choices
         """
         self.__finish(outcome)
+        # if won ++ total_cash
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total = self.PRIZE_FOR_WINNING * bet.has
@@ -422,12 +423,14 @@ class Event(models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
-            # TODO: tutaj wallet change
-            #  bet.user.portfolio_value -= bet.has
             bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
             bet.save()
+        # always -- portfolio_value
+        for transaction in Transaction.objects.filter(event=self):
+            transaction.user.portfolio_value -= transaction.quantity * transaction.price
+            transaction.user.save()
 
     @transaction.atomic
     def finish_yes(self):
