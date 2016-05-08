@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from .exceptions import UnknownOutcome, EventAlreadyFinished
 from .managers import EventManager, BetManager, TransactionManager
+
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
@@ -428,9 +429,10 @@ class Event(models.Model):
             bet.is_new_resolved = True
             bet.save()
         # always -- portfolio_value
-        for transaction in Transaction.objects.filter(event=self):
-            transaction.user.portfolio_value -= transaction.quantity * transaction.price
-            transaction.user.save()
+        from accounts.models import UserProfile
+        for user in UserProfile.objects.filter(transaction__event=self):
+            user.portfolio_value = user.current_portfolio_value
+            user.save()
 
     @transaction.atomic
     def finish_yes(self):
@@ -459,6 +461,7 @@ class Event(models.Model):
                     t.user: 0
                 })
             # TODO WTF?
+            #  if t.type in BUY_SELL_TYPES:
             if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
                     t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
                     t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
