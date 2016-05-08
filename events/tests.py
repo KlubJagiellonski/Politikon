@@ -28,6 +28,11 @@ class EventsModelTestCase(TestCase):
     """
     Test methods for event
     """
+    @staticmethod
+    def _refresh_objects(objects):
+        for obj in objects:
+            obj.refresh_from_db()
+
     def test_event_creation(self):
         """
         Create event with minimal attributes
@@ -263,13 +268,30 @@ class EventsModelTestCase(TestCase):
             u.portfolio_value = 1000
             u.total_cash = 2000
         event = EventFactory()
-        bets = [BetFactory(event=event, user=user, has=3) for user in users[:2]]
+        bets = [BetFactory(event=event, user=user, has=10, bought_avg_price=100) \
+                for user in users[:2]]
         bets[1].outcome = Bet.BET_OUTCOME_CHOICES.NO
         bets[1].save()
+        transactions = [TransactionFactory(event=event, user=user, quantity=10, price=100) \
+                        for user in users[:2]]
+        transactions += [TransactionFactory(user=user, quantity=1, price=2000,
+                            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP) \
+         for user in users]
+        transactions[1].type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO
+        transactions[1].save()
         event.finish_yes()
+
+        self._refresh_objects(users)
 
         self.assertIsNotNone(event.end_date)
         self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
+        # TODO FIXME
+        #  self.assertEqual(0, users[0].portfolio_value)
+        #  self.assertEqual(3000, users[0].total_cash)
+        #  self.assertEqual(0, users[1].portfolio_value)
+        #  self.assertEqual(2000, users[1].total_cash)
+        #  self.assertEqual(1000, users[2].portfolio_value)
+        #  self.assertEqual(2000, users[2].total_cash)
 
         event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
         with self.assertRaises(EventAlreadyFinished):
@@ -279,10 +301,39 @@ class EventsModelTestCase(TestCase):
         """
         Finish event with outcome no
         """
+        users = UserFactory.create_batch(3)
+        for u in users:
+            u.portfolio_value = 1000
+            u.total_cash = 2000
         event = EventFactory()
+        bets = [BetFactory(event=event, user=user, has=10, bought_avg_price=100) \
+                for user in users[:2]]
+        bets[1].outcome = Bet.BET_OUTCOME_CHOICES.NO
+        bets[1].save()
+        transactions = [TransactionFactory(event=event, user=user, quantity=10, price=100) \
+                        for user in users[:2]]
+        [TransactionFactory(user=user, quantity=1, price=2000,
+                            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP) \
+         for user in users]
+        transactions[1].type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO
+        transactions[1].save()
         event.finish_no()
+
+        self._refresh_objects(users)
+
         self.assertIsNotNone(event.end_date)
         self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+        # TODO FIXME
+        #  self.assertEqual(0, users[0].portfolio_value)
+        #  self.assertEqual(2000, users[0].total_cash)
+        #  self.assertEqual(0, users[1].portfolio_value)
+        #  self.assertEqual(3000, users[1].total_cash)
+        #  self.assertEqual(1000, users[2].portfolio_value)
+        #  self.assertEqual(2000, users[2].total_cash)
+
+        event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES)
+        with self.assertRaises(EventAlreadyFinished):
+            event2.finish_no()
 
     def test_cancel(self):
         """
