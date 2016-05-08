@@ -29,6 +29,8 @@ class EventManager(models.Manager):
     def get_events(self, mode):
         if mode == 'popular':
             return self.ongoing_only_queryset().order_by('-turnover')
+        elif mode == 'last-minute':
+            return self.ongoing_only_queryset().order_by('estimated_end_date')
         elif mode == 'latest':
             return self.ongoing_only_queryset().order_by('-created_date')
         elif mode == 'changed':
@@ -38,7 +40,9 @@ class EventManager(models.Manager):
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
-        return self.ongoing_only_queryset().filter(is_featured=True).order_by('estimated_end_date')
+        excluded = self.get_events('last-minute').values('id')[:3]
+        return self.ongoing_only_queryset().filter(is_featured=True).exclude(id__in=excluded)\
+            .order_by('estimated_end_date')
 
     def get_front_event(self):
         front_events = self.ongoing_only_queryset().filter(is_front=True).\
@@ -117,7 +121,7 @@ class BetManager(models.Manager):
         quantity = 1
         bought_for_total = current_tx_price * quantity
 
-        if (user.total_cash < bought_for_total):
+        if user.total_cash < bought_for_total:
             raise InsufficientCash(_("You don't have enough cash."), user)
 
         Transaction.objects.create(

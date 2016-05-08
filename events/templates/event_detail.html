@@ -3,9 +3,10 @@
 {% load display %}
 {% load humanize %}
 {% load format %}
+{% load social_share %}
 
 {% block facebook_properties %}
-    {% og_title event request.user %}
+    {% og_title event og_vote og_user %}
     <meta property="og:description" content="{{ event.description }}" />
     <meta property="og:image" content="{{ event.small_image.url }}" />
 {% endblock %}
@@ -53,7 +54,7 @@
         {% endif %}
         <div style="
             display: block;
-            z-index: 10000;
+            z-index: 1000;
             position: absolute;
             color: rgba(255,255,255,0.6);
             top: 10px;
@@ -92,7 +93,8 @@
 </section>
 <section id="bet-desc" class="astable">
     <div class="lewa">
-{#        <div class="astable share-zone">TODO -- tutaj widżety social media --</div>#}
+        <div class="astable share-zone">{% post_to_facebook share_url %}<div>
+        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date }}</p>
         <p>{{ event.description }}</p>
     </div>
     {% comment %}

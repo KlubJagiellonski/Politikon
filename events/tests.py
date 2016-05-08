@@ -365,6 +365,11 @@ class EventsManagerTestCase(TestCase):
         self.assertEqual(3, len(popular_events))
         self.assertEqual([event2, event3, event1], list(popular_events))
 
+        last_minute_events = Event.objects.get_events('last-minute')
+        self.assertIsInstance(popular_events[0], Event)
+        self.assertEqual(3, len(popular_events))
+        self.assertEqual([event2, event1, event3], list(last_minute_events))
+
         latest_events = Event.objects.get_events('latest')
         self.assertIsInstance(latest_events[0], Event)
         self.assertEqual(3, len(latest_events))
@@ -384,14 +389,14 @@ class EventsManagerTestCase(TestCase):
         """
         Get featured events
         """
-        events = EventFactory.create_batch(3)
+        events = EventFactory.create_batch(7)
         events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
         events[2].save()
 
         featured_events = Event.objects.get_featured_events()
         self.assertIsInstance(featured_events[0], Event)
-        self.assertEqual(2, len(featured_events))
-        self.assertEqual([events[0], events[1]], list(featured_events))
+        self.assertEqual(3, len(featured_events))
+        self.assertEqual([events[4], events[5], events[6]], list(featured_events))
 
     def test_get_front_event(self):
         """
@@ -416,6 +421,11 @@ class EventsTasksTestCase(TestCase):
     """
     events/tasks
     """
+    @staticmethod
+    def _refresh_objects(objects):
+        for obj in objects:
+            obj.refresh_from_db()
+
     @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
                        CELERY_ALWAYS_EAGER=True,
                        BROKER_BACKEND='memory')
@@ -442,19 +452,15 @@ class EventsTasksTestCase(TestCase):
             events[0].save()
 
             frozen_time.tick(delta=timedelta(days=1))
-            events[1].current_buy_for_price = 60
+            events[1].current_buy_for_price = 60.0
             events[1].save()
-            events[2].current_buy_for_price = 40
+            events[2].current_buy_for_price = 40.0
             events[2].save()
             calculate_price_change()
-            #  print("test_calculate_price_change")
-            #  for e in events:
-            #      print(e.pk)
-            #      print(e.price_change)
-            # FIXME
-            #  self.assertEqual(0, events[0].price_change)
-            #  self.assertEqual(10, events[1].price_change)
-            #  self.assertEqual(-10, events[2].price_change)
+            self._refresh_objects(events)
+            self.assertEqual(0, events[0].price_change)
+            self.assertEqual(10, events[1].price_change)
+            self.assertEqual(-10, events[2].price_change)
 
             create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
@@ -463,10 +469,10 @@ class EventsTasksTestCase(TestCase):
             events[2].current_buy_for_price = 100
             events[2].save()
             calculate_price_change()
-            # FIXME
-            #  self.assertEqual(0, events[0].price_change)
-            #  self.assertEqual(10, events[1].price_change)
-            #  self.assertEqual(60, events[2].price_change)
+            self._refresh_objects(events)
+            self.assertEqual(0, events[0].price_change)
+            self.assertEqual(10, events[1].price_change)
+            self.assertEqual(60, events[2].price_change)
 
 
 class EventsTemplatetagsTestCase(TestCase):
@@ -572,7 +578,7 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         OG title
         """
-        user = UserFactory()
+        user = UserFactory(name="Bromando")
         events = EventFactory.create_batch(3)
         events[0].title_fb_yes = u"Będzie TAK"
         events[0].title_fb_no = u"Nie będzie TAK"
@@ -582,14 +588,47 @@ class EventsTemplatetagsTestCase(TestCase):
         BetFactory(user=user, event=events[0])
         BetFactory(user=user, event=events[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
         self.assertEqual({
+            'title': u'Bromando uważa że będzie TAK'
+        }, og_title(events[0], user=user))
+        self.assertEqual({
+            'title': u'Bromando uważa że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
             'title': u'Moim zdaniem będzie TAK'
-        }, og_title(events[0], user))
+        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
         self.assertEqual({
             'title': u'Moim zdaniem nie będzie TAK'
-        }, og_title(events[1], user))
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
         self.assertEqual({
             'title': u'Czy będzie TAK?'
-        }, og_title(events[2], user))
+        }, og_title(events[2]))
+        self.assertEqual({
+            'title': u'Czy będzie TAK?'
+        }, og_title(events[2], user=user))
+
+        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        self.assertEqual({
+            'title': u'Bromando ma rację że będzie TAK'
+        }, og_title(events[0], user=user))
+        self.assertEqual({
+            'title': u'Mam rację że będzie TAK'
+        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
+
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        self.assertEqual({
+            'title': u'Bromando ma rację że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
+            'title': u'Mam rację że nie będzie TAK'
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
+
+        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        self.assertEqual({
+            'title': u'Bromando nie ma racji że nie będzie TAK'
+        }, og_title(events[1], user=user))
+        self.assertEqual({
+            'title': u'Nie mam racji że nie będzie TAK'
+        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
 
 
 class BetsModelTestCase(TestCase):
@@ -737,13 +776,66 @@ class BetsManagerTestCase(TestCase):
         """
         Buy a bet
         """
-        # TODO this method is suspicious
+        event = EventFactory()
+        user = UserFactory(total_cash=event.current_buy_for_price)
+        old_price = event.current_buy_for_price
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+                                                         event.current_buy_for_price)
+        self.assertEqual(user, bet_user)
+        self.assertEqual(event, bet_event)
+        self.assertEqual(event.current_buy_for_price, bet.bought_avg_price)
+        self.assertEqual(1, bet.has)
+        self.assertEqual(1, bet.bought)
+        self.assertEqual(0, bet_user.total_cash)
+        self.assertEqual(old_price, bet_user.portfolio_value)
+        self.assertNotEqual(old_price, bet_event.current_buy_for_price)
+        self.assertEqual(1, bet_event.turnover)
+
+        with self.assertRaises(PriceMismatch):
+            Bet.objects.buy_a_bet(user, event.id, 'YES', old_price)
+
+        with self.assertRaises(InsufficientCash):
+            Bet.objects.buy_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+
+        user.total_cash = bet_event.current_buy_against_price
+        user.save()
+        # TODO should throw exception
+        Bet.objects.buy_a_bet(user, event.id, 'NO', bet_event.current_buy_against_price)
 
     def test_sell_a_bet(self):
         """
         Sell a bet
         """
-        # TODO this method is suspicious
+        event = EventFactory()
+        user = UserFactory(total_cash=event.current_buy_for_price)
+        old_price = event.current_sell_for_price
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+                                                         event.current_buy_for_price)
+        avg_price = bet_event.current_sell_for_price
+
+        with self.assertRaises(PriceMismatch):
+            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'YES',
+                                                          bet_event.current_sell_for_price)
+        self.assertEqual(user, bet_user)
+        self.assertEqual(event, bet_event)
+        self.assertEqual(avg_price, bet.sold_avg_price)
+        self.assertEqual(0, bet.has)
+        self.assertEqual(1, bet.sold)
+        self.assertEqual(old_price, bet_user.total_cash)
+        self.assertEqual(0, bet_user.portfolio_value)
+        self.assertEqual(old_price, bet_event.current_buy_for_price)
+        self.assertEqual(2, bet_event.turnover)
+
+        with self.assertRaises(InsufficientBets):
+            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_sell_for_price)
+
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'NO',
+                                                         event.current_buy_for_price)
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'NO',
+                                                          bet_event.current_sell_against_price)
+
 
     def test_get_in_progress(self):
         """
@@ -841,7 +933,7 @@ class TransactionManagerTestCase(TestCase):
         user = UserFactory()
         with freeze_time(initial_time) as frozen_time:
             events = EventFactory.create_batch(3)
-            transaction1 = TransactionFactory(user=user, event=events[0])
+            TransactionFactory(user=user, event=events[0])
 
             frozen_time.tick(delta=timedelta(days=3))
             transaction2 = TransactionFactory(user=user, event=events[1])
@@ -872,5 +964,5 @@ class PolitikonEventTemplatetagsTestCase(TestCase):
         self.assertTrue(startswith(path3, start_path))
         path4 = reverse('events:events', kwargs={'mode': 'changed'})
         self.assertTrue(startswith(path4, start_path))
-        path5 = reverse('events:events', kwargs={'mode': 'finished'})
+        path5 = reverse('events:events', kwargs={'mode': 'last-minute'})
         self.assertTrue(startswith(path5, start_path))

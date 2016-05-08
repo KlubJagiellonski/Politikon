@@ -265,6 +265,7 @@ INSTALLED_APPS = (
     'm2m_history',
     'taggit',
     'twitter_api',
+    'django_social_share',
 
     'constance',
     'constance.backends.database',

@@ -10,11 +10,16 @@ class RelatedEventInline(admin.TabularInline):
     model = RelatedEvent
     fk_name = 'event'
     extra = 1
+    raw_id_fields = ('related',)
+    autocomplete_lookup_fields = {
+        'fk': ['related'],
+    }
 
 
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
+        'resolved_by',
         'end_date',
         'outcome',
         'current_buy_for_price',
@@ -30,8 +35,9 @@ class EventAdmin(admin.ModelAdmin):
     ]
 
     list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date', 'estimated_end_date',
-                    'end_date', 'current_buy_for_price', 'current_buy_against_price', 'Q_for',
-                    'Q_against', 'turnover', 'absolute_price_change', 'price_change']
+                    'resolved_by', 'end_date', 'current_buy_for_price',
+                    'current_buy_against_price', 'Q_for', 'Q_against', 'turnover',
+                    'absolute_price_change', 'price_change']
 
     inlines = [RelatedEventInline, ]
 
@@ -46,6 +52,7 @@ class EventAdmin(admin.ModelAdmin):
                         obj.finish_no()
                     elif request.POST['solve_event'] == 'ANULUJ':
                         obj.cancel()
+                    obj.resolved_by = request.user
                 except EventAlreadyFinished as e:
                     messages.error(request, e.message)
         obj.save()

@@ -41,9 +41,9 @@
     <div class="currentbet centrum" >
         <p class="change{{bet.classOutcome}}">
             {% if bet.classOutcome != 'YES' and bet.classOutcome != 'NO' %}
-                Byłeś na {{ bet.textOutcome }}
-            {% else %}
                 Nie brałeś udziału.
+            {% else %}
+                Byłeś na {{ bet.textOutcome }}
             {% endif %}
         </p>
         <p {% if not bet.has_any or not render_current %}hidden{% endif %}>

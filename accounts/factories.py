@@ -12,21 +12,15 @@ class UserFactory(factory.django.DjangoModelFactory):
     is_active = True
 
 
-class UserWithAvatarFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = UserProfile
-
+class UserWithAvatarFactory(UserFactory):
     username = factory.Sequence(lambda n: 'johnrambro%d' % n)
     name = factory.Sequence(lambda n: 'John Rambro %d' % n)
-    is_active = True
     avatar = factory.django.ImageField()
 
 
-class AdminFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = UserProfile
-
+class AdminFactory(UserFactory):
     username = 'thomasshelby'
     name = 'Thomas Shelby'
+    is_active = False
     is_staff = True
     is_admin = True

@@ -95,6 +95,8 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
+    resolved_by = models.ForeignKey('accounts.UserProfile', null=True, blank=True,
+                                    verbose_name=u'rozstrzygnięte przez')
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
                                                 default=BEGIN_PRICE)
@@ -167,6 +169,10 @@ class Event(models.Model):
             'sell_for_price': self.current_sell_for_price,
             'sell_against_price': self.current_sell_against_price,
         }
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "title__icontains", "short_title__icontains")
 
     def finish_date(self):
         """
