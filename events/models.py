@@ -460,18 +460,14 @@ class Event(models.Model):
                 users.update({
                     t.user: 0
                 })
-            # TODO WTF?
-            #  if t.type in BUY_SELL_TYPES:
-            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
+            if t.type in t.BUY_SELL_TYPES:
                 # for transaction type BUY the price is below 0
                 users[t.user] += t.quantity * t.price
         for user, refund in users.iteritems():
             if refund == 0:
                 continue
             user.total_cash += refund
+            user.portfolio_value -= refund
             user.save()
             if refund > 0:
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
