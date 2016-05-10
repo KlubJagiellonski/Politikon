@@ -95,8 +95,8 @@
 <section id="bet-desc" class="astable">
     <div class="lewa">
         <div class="astable share-zone">{% post_to_facebook share_url %}<div>
-        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date }}</p>
         <p>{{ event.description }}</p>
+        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"d E Y" }}</p>
     </div>
     {% comment %}
     <div class="prawa rss-related">
