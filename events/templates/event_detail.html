@@ -3,7 +3,6 @@
 {% load display %}
 {% load humanize %}
 {% load format %}
-{% load social_share %}
 
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
@@ -94,7 +93,17 @@
 </section>
 <section id="bet-desc" class="astable">
     <div class="lewa">
-        <div class="astable share-zone">{% post_to_facebook share_url %}<div>
+        <div class="astable share-zone">
+            <input type="button" onclick="share_prompt()" value="Share" />
+            <script>
+                function share_prompt() {
+                    FB.ui({
+                        method: 'share',
+                        href: '{{ share_url }}'
+                    }, function(response){});
+                }
+            </script>
+        </div>
         <p>{{ event.description }}</p>
         <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"d E Y" }}</p>
     </div>

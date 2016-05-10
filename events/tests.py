@@ -46,7 +46,8 @@ class EventsModelTestCase(TestCase):
                          event.__unicode__())
         self.assertEqual('/event/1-dlugi-tytul-testowego-wydarzenia',
                          event.get_relative_url())
-        self.assertEqual('/event/1-a', event.get_absolute_url())
+        # TODO rename to politikon.org.pl
+        self.assertEqual('http://example.com/event/1-a', event.get_absolute_url())
         self.assertTrue(event.is_in_progress)
         self.assertEqual('event_1', event.publish_channel)
         self.assertEqual({
@@ -580,10 +581,10 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         user = UserFactory(name="Bromando")
         events = EventFactory.create_batch(3)
-        events[0].title_fb_yes = u"Będzie TAK"
-        events[0].title_fb_no = u"Nie będzie TAK"
+        events[0].title_fb_yes = u"będzie TAK"
+        events[0].title_fb_no = u"nie będzie TAK"
         events[1].title_fb_yes = u"będzie TAK"
-        events[1].title_fb_no = u"Nie będzie TAK"
+        events[1].title_fb_no = u"nie będzie TAK"
         events[2].title = u"Czy będzie TAK?"
         BetFactory(user=user, event=events[0])
         BetFactory(user=user, event=events[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)

@@ -53,6 +53,25 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
 <!--<script src="static/js/skrypty.js"></script>-->
 
+<!-- Facebook script for sharing -->
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ facebook_app_id }}',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.dotdotdot.min.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
 
@@ -88,7 +107,7 @@
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=208090085996947";
+    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId={{ facebook_app_id }}";
     fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 <div class="overlay"></div>
@@ -140,6 +159,9 @@
                 <li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
             </ul>
             <ul>
+                <li></li>
+                <li></li>
+                <li></li>
                 <!-- <li><a href="#">Regulamin</a></li> -->
                 <!-- <li><a href="#">Reklama</a></li> -->
                 <!-- <li><a href="#">Kontakt</a></li> -->
@@ -159,6 +181,7 @@
             </div>
             <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
         </div>
+    </footer>
 <div style="
     position: fixed;
     top: 36px;
