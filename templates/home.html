@@ -81,17 +81,17 @@
         <div id="userrank_content" class="zakladki-content">
             <article id="tydzien">
                 {% for user in best_weekly %}
-                {% user_home user %}
+                {% user_home user user.weekly_result True %}
                 {% endfor %}
             </article>
             <article id="miesiac">
                 {% for user in best_monthly %}
-                {% user_home user %}
+                {% user_home user user.monthly_result True %}
                 {% endfor %}
             </article>
             <article id="calosc">
                 {% for user in best_overall %}
-                {% user_home user %}
+                {% user_home user user.reputation %}
                 {% endfor %}
             </article>
         </div>

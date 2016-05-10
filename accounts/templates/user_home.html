@@ -2,7 +2,7 @@
 <div class="userrank{% if user.is_vip %} uservip{% endif %}">
     <a href="{{ user.get_absolute_url }}">
         <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
-        <div class="wolnereputy"><span class="astable">{{ user.reputation|formatted }} %</span></div>
+        <div class="wolnereputy"><span class="astable">{{ reputation_change|formatted:is_formatted }} %</span></div>
         <div class="username">{{ user.name }}</div>
     </a>
 </div>
