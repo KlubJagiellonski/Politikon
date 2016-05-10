@@ -14,6 +14,35 @@ class RelatedEventInline(admin.TabularInline):
 
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
+    fields = (
+        'title',
+        'short_title',
+        'title_fb_yes',
+        'title_fb_no',
+        'description',
+        'small_image',
+        'download_small_image',
+        'big_image',
+        'download_big_image',
+        'is_featured',
+        'is_front',
+        'outcome_reason',
+        'estimated_end_date',
+        'B',
+        'solve_event',
+        'end_date',
+        'outcome',
+        'current_buy_for_price',
+        'current_buy_against_price',
+        'current_sell_for_price',
+        'current_sell_against_price',
+        'last_transaction_date',
+        'Q_for',
+        'Q_against',
+        'turnover',
+        'absolute_price_change',
+        'price_change',
+    )
     readonly_fields = [
         'end_date',
         'outcome',
