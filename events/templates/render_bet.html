@@ -1,19 +1,53 @@
 {% load format %}
-<a href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES" data-event_id="{{ event.id }}" data-buy="{{ bet.buyYES }}" data-outcome="{{ bet.outcomeYES }}" data-price="{{ bet.priceYES }}">
-    <div class="betYES">
-        <span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{{ bet.textYES }}</span>
+{% if event.is_in_progress %}
+    <a href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES" data-event_id="{{ event.id }}" data-buy="{{ bet.buyYES }}" data-outcome="{{ bet.outcomeYES }}" data-price="{{ bet.priceYES }}">
+        <div class="betYES">
+            <span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{{ bet.textYES }}</span>
+        </div>
+    </a>
+    <a href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betNO" data-event_id="{{ event.id }}" data-buy="{{ bet.buyNO }}" data-outcome="{{ bet.outcomeNO }}" data-price="{{ bet.priceNO }}">
+        <div class="betNO">
+            <span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{{ bet.textNO }}</span>
+        </div>
+    </a>
+    <div class="currentbet centrum" {% if not bet.has_any or not render_current %}hidden{% endif %}>
+        <p class="change{{ bet.classOutcome }}">
+            Jesteś na {{ bet.textOutcome }}
+        </p>
+        <p>
+            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
+        </p>
     </div>
-</a>
-<a href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betNO" data-event_id="{{ event.id }}" data-buy="{{ bet.buyNO }}" data-outcome="{{ bet.outcomeNO }}" data-price="{{ bet.priceNO }}">
-    <div class="betNO">
-        <span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{{ bet.textNO }}</span>
+{% else %}
+    {% if event.outcome == 2 %}
+        <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES">
+            <div class="betCANCELED">
+                <span class="value lewa">0</span><span class="txt prawa">Anulowane</span>
+            </div>
+        </div>
+    {% elif event.outcome == 3 %}
+        <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES">
+            <div class="betYES">
+                <span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">Było TAK</span>
+            </div>
+        </div>
+    {% elif event.outcome == 4 %}
+        <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betNO">
+            <div class="betNO">
+                <span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">Było NIE</span>
+            </div>
+        </div>
+    {% endif %}
+    <div class="currentbet centrum" >
+        <p class="change{{bet.classOutcome}}">
+            {% if bet.classOutcome != 'YES' and bet.classOutcome != 'NO' %}
+                Nie brałeś udziału.
+            {% else %}
+                Byłeś na {{ bet.textOutcome }}
+            {% endif %}
+        </p>
+        <p {% if not bet.has_any or not render_current %}hidden{% endif %}>
+            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
+        </p>
     </div>
-</a>
-<div class="currentbet centrum" {% if not bet.has_any or not render_current %}hidden{% endif %}>
-    <p class="change{{ bet.classOutcome }}">
-        Jesteś na {{ bet.textOutcome }}
-    </p>
-    <p>
-        <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
-    </p>
-</div>
+{% endif %}

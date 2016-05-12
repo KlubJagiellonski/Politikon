@@ -15,6 +15,7 @@ from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
 from .models import Event, Bet
 from .utils import create_bets_dict
+from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
 
 
@@ -67,22 +68,26 @@ class EventDetailView(DetailView):
         return get_object_or_404(Event, id=self.kwargs['pk'])
 
     def get_context_data(self, *args, **kwargs):
-        context = super(EventDetailView, self).get_context_data(*args,
-                                                                **kwargs)
+        context = super(EventDetailView, self).get_context_data(*args, **kwargs)
         event = self.get_event()
         user = self.request.user
-        event_bet = event.get_user_bet(user)
-        bet_social = event.get_bet_social()
-        # TODO: jsonify in temlate
-        json_data = json.dumps(event.get_event_big_chart())
+        bet = event.get_user_bet(user)
+        if bet:
+            share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
+        else:
+            share_url = event.get_absolute_url()
         context.update({
             'event': event,
-            'bet': event_bet,
+            'bet': event.get_user_bet(user),
             'active': 1,
             'event_dict': event.event_dict,
-            'bet_social': bet_social,
+            'bet_social': event.get_bet_social(),
             'related_events': event.get_related(user),
-            'json_data': json_data
+            # TODO: jsonify in temlate
+            'json_data': json.dumps(event.get_event_big_chart()),
+            'og_user': UserProfile.objects.filter(username=self.request.GET.get('user')).first(),
+            'og_vote': self.request.GET.get('vote'),
+            'share_url': share_url
         })
         return context
 

@@ -1,4 +1,4 @@
 web: python manage.py runserver 0.0.0.0:7000
 web_ssl: export HTTPS=1; python manage.py runserver 0.0.0.0:7002
 stunnel: stunnel stunnel.conf
-worker: python manage.py celery beat --loglevel=INFO & python manage.py celery worker --loglevel=INFO --concurrency=1
+worker: python manage.py celery beat --loglevel=INFO & python manage.py celery worker --loglevel=INFO --concurrency=1 --without-mingle --without-gossip

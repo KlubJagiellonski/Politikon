@@ -4,7 +4,7 @@ Test accounts module
 """
 from django.test import TestCase
 
-from .templatetags.format import formatted
+from .templatetags.format import formatted, toLower
 
 
 class UserTemplatetagTestCase(TestCase):
@@ -13,7 +13,7 @@ class UserTemplatetagTestCase(TestCase):
     """
     def test_formatted(self):
         """
-        Formatted templatetag
+        formatted templatetag
         """
         value = formatted(1000, True)
         self.assertEqual("+1 000", value)
@@ -29,3 +29,16 @@ class UserTemplatetagTestCase(TestCase):
 
         value = formatted(" ")
         self.assertEqual(" ", value)
+
+    def test_toLower(self):
+        """
+        toLower
+        """
+        text = "LOREM IPSUM"
+        self.assertEqual("lOREM IPSUM", toLower(text))
+
+        text = "lorem ipsum"
+        self.assertEqual("lorem ipsum", toLower(text))
+
+        text = ""
+        self.assertEqual("", toLower(text))

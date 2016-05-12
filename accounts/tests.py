@@ -2,8 +2,9 @@
 """
 Test accounts module
 """
-from decimal import Decimal
 import os
+from decimal import Decimal
+from mock import patch
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden
@@ -11,11 +12,13 @@ from django.test import TestCase
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
 from .models import UserProfile, get_image_path
-from .pipeline import save_profile
+from .tasks import topup_accounts_task, update_portfolio_value, create_accounts_snapshot, \
+    update_users_classification
 from .templatetags.user import user_home, user_rank
 from .utils import process_username
 
 from constance import config
+
 from events.factories import EventFactory, BetFactory
 from events.models import Event, Bet
 from politikon.templatetags.format import formatted
@@ -213,7 +216,7 @@ class UserProfileManagerTestCase(TestCase):
         self.assertTrue(user.check_password('password9'))
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_admin)
-        self.assertFalse(user.is_active)
+        self.assertTrue(user.is_active)
         self.assertEqual({
             'user_id': 1,
             'total_cash': formatted(0),
@@ -347,6 +350,54 @@ class UserPipelineTestCase(TestCase):
         user = UserFactory()
         #  save_profile(user,
 
+
+class UserTasksTestCase(TestCase):
+    """
+    accounts/tasks
+    """
+    def test_topup_accounts_task(self):
+        """
+        Topup
+        """
+        user = UserFactory()
+        topup_accounts_task()
+        user.refresh_from_db()
+        self.assertEqual(config.DAILY_TOPUP, user.total_cash)
+        # TODO mock and test exception
+
+    @patch.object(UserProfile, 'topup_cash')
+    @patch('accounts.tasks.logger')
+    def test_topup_accounts_task_error(self, logger, topup_cash):
+        UserFactory()
+        topup_cash.side_effect = Exception()
+        topup_accounts_task()
+        logger.exception.assert_called_once()
+
+
+    def test_update_portfolio_value(self):
+        """
+        Update portfolio_value
+        """
+        price = 90
+        user = UserFactory()
+        event = EventFactory(current_sell_for_price=price)
+        BetFactory(user=user, event=event, has=1, outcome=True)
+
+        self.assertEqual(0, user.portfolio_value)
+        update_portfolio_value()
+        user.refresh_from_db()
+        # TODO FIXME
+        # self.assertEqual(price, user.portfolio_value)
+
+    def test_create_accounts_snapshot(self):
+        user = UserFactory()
+        create_accounts_snapshot()
+        # TODO mock logger and create_snapshot()
+
+    def test_update_users_classification(self):
+        users = UserFactory.create_batch(6)
+        update_users_classification()
+        # TODO: mock reputation changes
 
 class UserTemplatetagsTestCase(TestCase):
     """

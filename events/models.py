@@ -107,6 +107,8 @@ class Event(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
+    resolved_by = models.ForeignKey('accounts.UserProfile', null=True, blank=True,
+                                    verbose_name=u'rozstrzygnięte przez')
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
                                                 default=BEGIN_PRICE)
@@ -128,6 +130,7 @@ class Event(models.Model):
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     # constant for calculating event change
+    # probably: how you need to increment quantity, to change price
     B = models.FloatField(u'stała B', default=FACTOR_B)
 
     def __unicode__(self):
@@ -178,6 +181,21 @@ class Event(models.Model):
             'sell_for_price': self.current_sell_for_price,
             'sell_against_price': self.current_sell_against_price,
         }
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "title__icontains", "short_title__icontains")
+
+    def finish_date(self):
+        """
+        If event is not finished then estimated_end_date, else end_date
+        :return: finish date
+        :rtype: datetime
+        """
+        if self.is_in_progress:
+            return self.estimated_end_date
+        else:
+            return self.end_date
 
     def price_for_outcome(self, outcome, direction='BUY'):
         if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:
@@ -278,6 +296,8 @@ class Event(models.Model):
                     'textYES': "dokup na „TAK“" if bet.outcome else "sprzedaj zakład",
                     'textNO': "sprzedaj zakład" if bet.outcome else "dokup na „NIE“",
                     'has': bet.has,
+                    # TODO cancelled classOutcome
+                    # TODO ask @jglodek
                     'classOutcome': "YES" if bet.outcome else "NO",
                     'textOutcome': "TAK" if bet.outcome else "NIE",
                     'avgPrice': bet.bought_avg_price,
@@ -729,8 +749,7 @@ class Transaction(models.Model):
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
 
     def __unicode__(self):
-        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].
-                                 label, self.user)
+        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
 
     @property
     def total(self):

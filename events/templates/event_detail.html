@@ -3,13 +3,12 @@
 {% load display %}
 {% load humanize %}
 {% load format %}
+{% load social_share %}
 
 {% block facebook_properties %}
-<meta property="og:title" content="{{ event.title }}" />
-<meta property="og:title_yes" content="{{ event.title_fb_yes }}" />
-<meta property="og:title_no" content="{{ event.title_fb_no }}" />
-<meta property="og:description" content="{{ event.description }}" />
-<meta property="og:image" content="{{ event.small_image.url }}" />
+    {% og_title event og_vote og_user %}
+    <meta property="og:description" content="{{ event.description }}" />
+    <meta property="og:image" content="{{ event.small_image.url }}" />
 {% endblock %}
 
 {% block content %}
@@ -32,7 +31,8 @@
         {% if event.small_image %}
 
         <div style="
-            background-image: url({{ event.small_image.url }});
+            background-image: url({{ event.big_image.url }});
+            background-position: center center;
             width: 100%;
             height: 100%;
             float: left;
@@ -55,13 +55,13 @@
         {% endif %}
         <div style="
             display: block;
-            z-index: 10000;
+            z-index: 1000;
             position: absolute;
             color: rgba(255,255,255,0.6);
             top: 10px;
             left: 31%;
             text-shadow: 0 2px 10px black;">
-            Rozwiązanie {{ event.estimated_end_date|naturaltime }}
+            {% render_finish_date event %}
         </div>
         <div class="chart-container" style="position: relative; z-index:999">
             <canvas id="chart-details" height="70"></canvas>
@@ -94,8 +94,9 @@
 </section>
 <section id="bet-desc" class="astable">
     <div class="lewa">
-{#        <div class="astable share-zone">TODO -- tutaj widżety social media --</div>#}
+        <div class="astable share-zone">{% post_to_facebook share_url %}<div>
         <p>{{ event.description }}</p>
+        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"d E Y" }}</p>
     </div>
     {% comment %}
     <div class="prawa rss-related">

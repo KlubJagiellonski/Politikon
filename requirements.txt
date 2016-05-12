@@ -12,6 +12,7 @@ ipython
 gunicorn==19.3.0
 
 # tests
+mock
 freezegun
 factory_boy
 coveralls
@@ -57,9 +58,8 @@ hiredis
 
 # dates
 python-dateutil==1.5
-pytz
 
-Pillow==2.9.0
+Pillow==3.2.0
 requests==2.0.0
 jsonfield
 
@@ -69,6 +69,7 @@ django-sslify>=0.2
 
 # connecting with FB, TT
 python-social-auth
+django-social-share
 
 # for twitter api -> getting user's followers
 git+https://github.com/ppeczek/django-m2m-history.git

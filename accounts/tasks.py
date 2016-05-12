@@ -13,19 +13,18 @@ logger = logging.getLogger(__name__)
 @task
 def topup_accounts_task():
     """
-    ???
+    Daily topup accounts task
     """
     logger.debug("'politikon:tasks:topup_accounts_task' worker up")
     topup_amount = config.DAILY_TOPUP
 
-    with transaction.atomic():
-        for user in UserProfile.objects.all().iterator():
-            try:
+    for user in UserProfile.objects.get_users().iterator():
+        try:
+            with transaction.atomic():
                 user.topup_cash(topup_amount)
-            except:
-                logger.exception("Fatal error during topping up of user \
-                                 #%d <%s>" % (user.id, user))
-
+        except:
+            logger.exception("Fatal error during topping up of user \
+                             #%d <%s>" % (user.id, user))
 
 @task
 def update_portfolio_value():
