@@ -408,9 +408,17 @@ class UserTemplatetagsTestCase(TestCase):
         User home
         """
         user = UserFactory()
-        user_templatetag = user_home(user)
+        user_templatetag = user_home(user, 1000, True)
         self.assertEqual({
             'user': user,
+            'reputation_change': 1000,
+            'is_formatted': True
+        }, user_templatetag)
+        user_templatetag = user_home(user, -100)
+        self.assertEqual({
+            'user': user,
+            'reputation_change': -100,
+            'is_formatted': False
         }, user_templatetag)
 
     def test_user_rank(self):
