@@ -125,9 +125,9 @@
             <div class="burger"></div>
             <ul class="mainmenu">
                 <div class="arrowup"></div>
-                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
                 <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
                 <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
             </ul>
         </nav>
 
@@ -154,9 +154,9 @@
 
             <ul>
                 <h5>Politikon</h5>
-                <li><a href="javascript:void(0);" onclick="startIntro();">Jak grać?</a></li>
                 <li><a href="{% url 'events:events' %}">Wydarzenia</a></li>
                 <li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
+                <li><a href="javascript:void(0);" onclick="startIntro();">Jak grać?</a></li>
             </ul>
             <ul>
                 <li></li>
@@ -182,30 +182,32 @@
             <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
         </div>
     </footer>
-<div style="
-    position: fixed;
-    top: 36px;
-    left: -145px;
-    background: white;
-    padding: 1em 0.5em;
-    z-index: 99999;
-    min-width: 400px;
-    text-align: center;
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    -moz-transfrom: rotate(-45deg);
-    font-size: 98%;
-">Wersja beta <span style="
-    display: block;
-    font-size: 80%;
-">Po publikacji stracisz reputy :-o</span></div>
+    <div style="
+        position: fixed;
+        top: 36px;
+        left: -145px;
+        background: white;
+        padding: 1em 0.5em;
+        z-index: 99999;
+        min-width: 400px;
+        text-align: center;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        -moz-transfrom: rotate(-45deg);
+        font-size: 98%;
+    ">Wersja beta <span style="
+        display: block;
+        font-size: 80%;
+    ">Po publikacji stracisz reputy :-o</span>
+    </div>
 </div>
 
 <script src='//s3-eu-west-1.amazonaws.com/app1.sugester.com/8155/widget.js' type='text/javascript'></script>
 
 <!--jak grac-->
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/intro.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>
+
+{% block introjs %}<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>{% endblock %}
 
 {% if messages %}
 <script type="text/javascript">

@@ -10,6 +10,15 @@
 <meta property="og:image" content="{{ front_event.big_image.url }}" />
 {% endblock %}
 
+{% block introjs %}
+{% if not user.is_authenticated %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>
+{% else %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-user.js"></script>
+{% endif %}
+{% endblock %}
+
+
 {% block content %}
 
     <script type="text/javascript">

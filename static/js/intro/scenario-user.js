@@ -1,39 +1,39 @@
 function startIntro(){
-        var intro = introJs();
-          intro.setOptions({
-        showBullets: false,
-            showStepNumbers: false,
-            steps: [
-              {
+    var intro = introJs();
+    intro.setOptions({
+        showBullets: true,
+        showStepNumbers: false,
+        steps: [
+            {
                 intro: "<b>Witamy w POLITIKONIE - pierwszych w Polsce zakładach politycznych!</b><br/><br/>W tym samouczku poznasz podstawowe elementy gry."
-              },
-              {
+            },
+            {
                 intro: "Jesteś zalogowany, więc na początek przyjrzymy się Twojemu panelowi użytkownika."
-              },
-              {
+            },
+            {
                 element: '.userdata',
                 intro: "<b>Panel użytkownika.</b> <br/><br/> Tutaj sprawdzisz swoje wyniki. Poznasz wartość swojego portfela, stan posiadania i reputację w grze.",
                 position: 'bottom'
-              },
-              {
+            },
+            {
                 element: '.userdata .wallet',
                 intro: "<b>Powiadomienia o wynikach.</b> <br/><br/> Gdy wydarzenia, które obstawiłeś zostają rozstrzygnięte, informacja o tym pojawi się w tym miejscu. Wystarczy kliknąć, by przejrzeć szczegóły.",
                 position: 'bottom'
-              },
-              {
+            },
+            {
                 element: '.graj',
                 intro: "<b>Twoje konto.</b> <br/><br/> Po kliknięciu w avatar, możesz zarządzać swoim profilem. Zmienić swoje zdjęcie, dodać konta społecznościowe i uzupełnić informacje o sobie.",
                 position: 'left'
-              },
-              {
+            },
+            {
                 intro: "W porządku, ale pewnie zastanawiasz się, jak właściwie grać w POLITIKON? Rzućmy okiem na wydarzenia!"
-              },
-              {
+            },
+            {
                 element: '#featured',
                 intro: '<b>Oto wyróżnione wydarzenie.</b> <br/><br/>Przyjrzyjmy mu się dokładnie.',
                 position: 'bottom'
-              },
-              {
+            },
+            {
                 element: '#featured h1',
                 intro: "<b>Tytuł wydarzenia</b> <br/><br/>Zawsze ma formę pytania zamkniętego. Trafna odpowiedź na to pytanie jest kluczem do sukcesu w POLITIKONIE!",
                 position: 'bottom'

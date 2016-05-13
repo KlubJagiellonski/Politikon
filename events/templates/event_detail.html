@@ -10,6 +10,10 @@
     <meta property="og:image" content="{{ event.small_image.url }}" />
 {% endblock %}
 
+{% block introjs %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-details.js"></script>
+{% endblock %}
+
 {% block content %}
 <script type="text/javascript">
     $(function(){

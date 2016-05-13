@@ -273,7 +273,7 @@ footer ul a, footer .socialmedia div,
 .betresult .status p .changeYES,.betresult .status p .changeCANCELED, .betresult .status p .changeNO {font-weight: 700; margin-right: 10px;}
 .betresult .status .why {color: #999; font-size: .75em; font-weight: 300;}
 .betresult .status .why:hover {border-bottom: 1px solid #ddd;}
-.betresult .status-change {height: 100px; padding: 5px 0; background: #fafafa; width: 22%; float: right; text-align: center; font-size: .875em; color: 5a5a5a;}
+.betresult .status-change {height: 100px; padding: 5px 0; background: #fafafa; width: 22%; float: right; text-align: center; font-size: .875em; color: #5a5a5a;}
 .betresult .status-change div {font-size: 2.5em; font-weight: 700; margin: 15px 0;}
 .new {background: #fff !important; border: 1px solid #fff;}
 .jp-container{
@@ -349,7 +349,7 @@ footer ul a, footer .socialmedia div,
 .goupheader {margin-top: -32px; margin-bottom: 30px;}
 .orangetxt {color: #e7692a; font-size: 1.55em; font-weight: 700; text-transform: uppercase;}
 
-.vip-smallborder {border: 1px solid #}
+.vip-smallborder {border: 1px solid;}
 
 .btn {padding-bottom: 20px; padding-top: 20px; font-size: 1.375em; color: #fff; text-transform: uppercase; font-weight: 700; border-radius: 5px;}
 
@@ -697,3 +697,25 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
     padding-top: 0.6em;
 }
 
+.introjs-tooltip {
+    max-width: 600px !important;
+    min-width: 600px !important;
+}
+
+.introjs-tooltiptext {
+    text-align: center;
+    font-size: 1.25em;
+}
+
+.introjs-tooltiptext h2 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.orange {
+    color: #ea6a2a;
+}
+
+.green {
+    color: #809413;
+}

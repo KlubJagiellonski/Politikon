@@ -1,7 +1,7 @@
 function startIntro(){
         var intro = introJs();
           intro.setOptions({
-            showBullets: false,
+            showBullets: true,
             showStepNumbers: false,
             steps: [
               {
