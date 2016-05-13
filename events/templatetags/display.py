@@ -92,9 +92,9 @@ def og_title(event, vote=None, user=None):
                 verb = u'nie ma racji że'
 
             if bet.outcome == bet.BET_OUTCOME_CHOICES.YES:
-                title = u'%s %s %s' % (user.name, verb, toLower(event.title_fb_yes))
+                title = u'%s %s %s' % (user.name, verb, event.title_fb_yes)
             else:
-                title = u'%s %s %s' % (user.name, verb, toLower(event.title_fb_no))
+                title = u'%s %s %s' % (user.name, verb, event.title_fb_no)
     elif vote is not None:
         if event.is_in_progress:
             verb = u'Moim zdaniem'
@@ -108,9 +108,9 @@ def og_title(event, vote=None, user=None):
             verb = u'Nie mam racji że'
 
         if vote == Bet.BET_OUTCOME_CHOICES.YES:
-            title = u'%s %s' % (verb, toLower(event.title_fb_yes))
+            title = u'%s %s' % (verb, event.title_fb_yes)
         elif vote == Bet.BET_OUTCOME_CHOICES.NO:
-            title = u'%s %s' % (verb, toLower(event.title_fb_no))
+            title = u'%s %s' % (verb, event.title_fb_no)
 
     return {
         'title': title

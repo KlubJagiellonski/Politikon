@@ -141,7 +141,10 @@ class Event(models.Model):
         super(Event, self).save(**kwargs)
 
     def get_absolute_url(self):
-        return reverse('events:event_detail', kwargs={'pk': self.pk})
+        return 'http://%(domain)s%(url)s' % {
+            'domain': current_domain(),
+            'url': reverse('events:event_detail', kwargs={'pk': self.pk})
+        }
 
     def get_relative_url(self):
         return '/event/%(id)d-%(title)s' % {'id': self.id, 'title': slugify(unidecode(self.title))}

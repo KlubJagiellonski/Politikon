@@ -176,8 +176,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                # social auth
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
+                # custom context processor
+                'politikon.context_processors.politikon_settings'
             ],
         },
     },
@@ -265,7 +268,6 @@ INSTALLED_APPS = (
     'm2m_history',
     'taggit',
     'twitter_api',
-    'django_social_share',
 
     'constance',
     'constance.backends.database',
