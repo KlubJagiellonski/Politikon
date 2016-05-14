@@ -1,72 +1,57 @@
-function startIntro(){
-        var intro = introJs();
-          intro.setOptions({
-        showBullets: false,
-            showStepNumbers: false,
-            steps: [
-              {
-                intro: "<b>Witamy w POLITIKONIE - pierwszych w Polsce zakładach politycznych!</b><br/><br/>W tym samouczku zaprezentujemy podstawowe elementy gry, dostępne dla niezalogowanego gracza."
-              },
-              {
+function startIntro() {
+    var intro = introJs();
+    intro.setOptions({
+        showBullets: true,
+        showStepNumbers: false,
+        steps: [
+            {
+                intro: '<h2>Witamy w <span class="orange">POLITIKONIE</span><br/>pierwszych w Polsce zakładach politycznych!</h2><p>W tym samouczku zaprezentujemy <span class="orange">podstawowe elementy</span> gry, dostępne dla <span class="orange">niezalogowanego gracza.</span></p>'
+            },
+            {
                 element: '.graj',
-                intro: "<b>By grać w POLITIKON, musisz się zalogować.</b> <br/><br/> Jeśli chcesz poznać grę przed rejestracją, kliknij w OK.",
+                intro: '<h2>By grać w <span class="orange">POLITIKON</span>, musisz się zalogować.</h2><p>Jeśli chcesz poznać grę <span class="green">przed rejestracją,</span> kliknij w <span class="orange">OK.</span></p>',
                 position: 'left'
-              },
-              {
+            },
+            {
                 element: '#featured',
-                intro: '<b>Oto wyróżnione wydarzenie.</b> <br/><br/>Przyjrzyjmy mu się dokładnie.',
+                intro: '<h2>Oto <span class="orange">wyróżnione</span> wydarzenie.</h2><p>Przyjrzyjmy mu się dokładnie.</p>',
                 position: 'bottom'
-              },
-              {
+            },
+            {
                 element: '#featured h1',
-                intro: "<b>Tytuł wydarzenia</b> <br/><br/>Zawsze ma formę pytania zamkniętego. Trafna odpowiedź na to pytanie jest kluczem do sukcesu w POLITIKONIE!",
+                intro: '<h2>Tytuł wydarzenia</h2><p>Zawsze ma formę <span class="orange">pytania zamkniętego.</span> <span class="green">Trafna odpowiedź</span> na to pytanie jest kluczem do <span class="green">sukcesu</span> w <span class="orange">POLITIKONIE!</span></p>',
                 position: 'bottom'
-              },
-              {
+            },
+            {
                 element: '#featured #makeabet',
-                intro: '<b>Wybierz swoją odpowiedź</b> <br/><br/>Na pytanie z tytułu odpowiadasz tutaj. Możesz kupić zakłady na TAK lub na NIE.<br/><br/> Za zakłady płacisz w REPUTACH - walucie POLITIKONU.',
-        position: 'bottom'
-              },
-              {
+                intro: '<h2>Wybierz swoją odpowiedź</h2><p>Na pytanie z tytułu odpowiadasz tutaj. Możesz <span class="green">kupić zakłady</span> na <span class="orange">TAK</span> lub na <span class="orange">NIE.</span></p><p>Za zakłady <span class="green">płacisz</span> w <span class="orange">REPUTACH</span> - walucie <span class="orange">POLITIKONU.</span></p>',
+                position: 'bottom'
+            },
+            {
                 element: '#featured #makeabet .betYES .value',
-                intro: 'Cena za zakład na TAK widoczna jest tutaj.',
-        position: 'right'
-              },
-              {
+                intro: '<p>Cena za zakład na <span class="orange">TAK</span> widoczna jest tutaj.</p>',
+                position: 'top'
+            },
+            {
                 element: '#featured #makeabet .betNO .value',
-                intro: 'Cena za zakład na NIE jest natomiast tutaj.',
-        position: 'left'
-              },
-          {
+                intro: '<p>Cena za zakład na <span class="orange">NIE</span> jest natomiast tutaj.</p>',
+                position: 'left'
+            },
+            {
                 element: '#featured #makeabet',
-                intro: 'Za każdy wygrany zakład otrzymasz 100 reputów.<br/><br/>Jeśli kupiłeś zakład za 60 reputów, na wygranej zyskasz dodatkowe 40 reputów.<br/><br/><span style="font-style: italic; font-size: .7em;">(wygrana 100rp - cena za zakład 60rp = zysk 40rp)</span>',
-        position: 'bottom'
-              },
-          {
-                element: '#featured #makeabet .change',
-                intro: '<b>Wskaźnik zmiany kursu</b> <br/><br/>Kurs zakładów zależy od zainteresowania społeczności POLITIKONU.',
-        position: 'bottom'
-              },
-          {
-                element: '#featured #makeabet .change',
-                intro: 'Kurs rośnie, gdy gracze wykupują zakłady na TAK i spada, gdy kupują zakłady na NIE.',
-        position: 'bottom'
-              },
-          {
-                element: '#featured #makeabet .change',
-                intro: 'To ważne, bo w każdej chwili możesz sprzedać kupione wcześniej zakłady. Staraj się kupować taniej i sprzedawać drożej.',
-        position: 'bottom'
-              },
-              {
+                intro: '<p>Za każdy wygrany zakład otrzymasz <span class="orange">100</span> reputów.</p><p>Jeśli kupiłeś zakład za <span class="orange">60</span> reputów, na wygranej zyskasz dodatkowe <span class="green">40</span> reputów.</p><p class="comment">Zysk <span class="green">40rp</span> = wygrana <span class="orange">100rp</span> - cena za zakład <span class="orange">60rp</span></p>',
+                position: 'bottom'
+            },
+            {
                 element: '#betfeed',
-                intro: 'W przypadku innych wydarzeń, wszystko działa tak samo! :).',
-        position: 'top'
-              },
-              {
-                intro: "<b>Dołącz do gry!</b><br/><br/>Jesteś już gotowy do gry. Zarejestruj się i zacznij stawiać na politkę!"
-              }
-            ]
-          });
+                intro: '<p>W przypadku innych wydarzeń, <span class="orange">wszystko</span> działa tak samo!</p>',
+                position: 'top'
+            },
+            {
+                intro: '<h2>DOŁĄCZ DO GRY!</h2><p>Jesteś gotowy? <span class="green">Zarejestruj się</span> i zacznij <span class="green">stawiać na</span> <span class="orange">politkę!</span></p>'
+            }
+        ]
+    });
 
-          intro.start();
-      }
+    intro.start();
+}

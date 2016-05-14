@@ -1,50 +1,50 @@
-function startIntro(){
-        var intro = introJs();
-          intro.setOptions({
-            showBullets: false,
-            showStepNumbers: false,
-            steps: [
-              {
-                intro: '<b>Witamy na stronie Rankingu.</b><br/><br/>W tym samouczku pokażemy Ci, jak zapoznać się z wynikami rywalizacji na POLITIKONIE. Dowiesz się m.in. kto najlepiej zna się na politce.<br/><br/> <span style="font-style: italic; font-size: .7em;">Jeśli chcesz dowiedzieć się więcej o samej grze, przedź na stronę główną i wybierz opcję "JAK GRAĆ".</span>',
-              },
-              {
+function startIntro() {
+    var intro = introJs();
+    intro.setOptions({
+        showBullets: true,
+        showStepNumbers: false,
+        steps: [
+            {
+                intro: '<h2>Witamy na stronie <span class="orange">Rankingu.</span></h2><p>W tym samouczku pokażemy Ci, jak <span class="green">zapoznać się</span> z <span class="orange">wynikami rywalizacji</span> na <span class="orange">POLITIKONIE.</span> Dowiesz się m.in. kto najlepiej zna się na politce.</p><p class="comment">Jeśli chcesz <span class="green">dowiedzieć</span> się więcej o samej <span class="orange">grze,</span><br/>przedź na stronę główną i <span class="green">wybierz</span> opcję <span class="orange">„JAK GRAĆ“.</span></p>',
+            },
+            {
                 element: '#userinfo .zakladki-content',
-                intro: '<b>Pełne zestawienie.</b><br/><br/>Miejsca poszczególnych graczy możesz sprawdzić tutaj. Jeśli chcesz dowiedzieć się o nich więcej - po prostu kliknij w wybranego gracza, by wyświetlić jego profil.',
-        position: 'left',
-              },
-              {
+                intro: '<h2>Pełne zestawienie.</h2><p><span class="orange">Miejsca</span> poszczególnych graczy możesz <span class="green">sprawdzić</span> tutaj. Jeśli chcesz <span class="green">dowiedzieć się</span> o nich <span class="orange">więcej</span> - po prostu <span class="green">kliknij</span> w wybranego <span class="orange">gracza,</span> by wyświetlić jego <span class="orange">profil.</span></p>',
+                position: 'top',
+            },
+            {
                 element: '#userinfo .tabs',
-                intro: 'Możesz zmieniać wyświetlane rankingi za pomocą tych przycisków.<br/><br/><b>Przełącz widok na ranking 7-dniowy</b> zanim przejdziemy dalej!',
-        position: 'bottom',
-              },
-              {
+                intro: '<p>Możesz zmieniać wyświetlane rankingi za pomocą tych przycisków.</p><p><span class="orange">Przełącz widok na ranking 7-dniowy</span> zanim przejdziemy dalej!</p>',
+                position: 'bottom',
+            },
+            {
                 element: '.ranking-event',
-                intro: '<b>Ten gracz radzi sobie wyśmienicie!</b> Jest na pierwszej pozycji!<br/><br/><b>Chcesz go pokonać?</b> Nie ma sprawy! Ale zanim zdradzimy Ci, jak to zrobić...',
-        position: 'bottom',
-              },
-              {
+                intro: '<p><span class="orange">Ten gracz radzi sobie wyśmienicie!</span> Jest na pierwszej pozycji!</p><p><span class="orange">Chcesz go pokonać?</span> Nie ma sprawy! Ale zanim zdradzimy Ci, jak to zrobić...</p>',
+                position: 'bottom',
+            },
+            {
                 element: '.graj',
-                intro: '<b>Dołącz do gry!</b><br/><br/>Zaloguj się, lub utwórz nowe konto w POLITIKONIE. Zajmie Ci to zaledwie parę sekund!.',
-        position: 'bottom',
-              }
-            ]
-          });
+                intro: '<h2>Dołącz do gry!</h2><p><span class="green">Zaloguj się,</span> lub <span class="green">utwórz nowe konto</span> w <span class="orange">POLITIKONIE.</span> Zajmie Ci to zaledwie parę sekund!.',
+                position: 'left',
+            }
+        ]
+    });
 
-          intro.start();
-      }
-      
-      
+    intro.start();
+}
+
+
 //poprawia pozycje tooltipow na podstronach
-$(document).ready(function() {
+$(document).ready(function () {
     var s = $("#maintop");
     var pagestatus = $("#POLITIKON");
-    var pos = s.position();                    
-    $(window).scroll(function() {
+    var pos = s.position();
+    $(window).scroll(function () {
         var windowpos = $(window).scrollTop();
         if (windowpos >= 30) { // wysokosc, po ktorej zaczyna sie scroll
-                pagestatus.addClass("body-scrolled-subpage");
+            pagestatus.addClass("body-scrolled-subpage");
         } else {
-                pagestatus.removeClass("body-scrolled-subpage");
+            pagestatus.removeClass("body-scrolled-subpage");
         }
     });
 });

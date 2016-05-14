@@ -3,6 +3,10 @@
 {% load display %}
 {% load user %}
 
+{% block introjs %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-rank.js"></script>
+{% endblock %}
+
 {% block content %}
 
 <section id="userinfo" class="hotbets prefooter-margin body-margin">
