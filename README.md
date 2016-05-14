@@ -4,15 +4,17 @@
 [![Build Status](https://travis-ci.org/KlubJagiellonski/Politikon.svg?branch=master)](https://travis-ci.org/KlubJagiellonski/Politikon)
 [![Coverage Status](https://coveralls.io/repos/github/KlubJagiellonski/Politikon/badge.svg?branch=master)](https://coveralls.io/github/KlubJagiellonski/Politikon?branch=master)
 
-www.politikon.org.pl
+[<img alt="Politikon" src="https://politik.s3.amazonaws.com/img/00logo-politikon.png">](https://www.politikon.org.pl)
+[<img alt="Koduj dla Polski" src="http://kodujdlapolski.pl/wp-content/themes/kdp/images/logo.png">](http://kodujdlapolski.pl/)
+[<img alt="Klub Jagielloński" src="http://kj.org.pl/wp-content/themes/klub-jagiellonski/assets/css/../img/klub-jagiellonski.png">](http://kj.org.pl/)
 
 Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego spojrzenia na politykę, a także wyłonienia osób, które potrafią przewidywać wydarzenia społeczno-polityczne. Projekt ma pokazać, że polityka to nie tylko cyniczna, losowa gra, ale także miejsce ścierania się idei, pomysłów, miejscem gdzie przyczyny powodują określone skutki. Serwis jest grą internetową, której uczestnicy będą mogli zakładać się o wyniki różnych wydarzeń społeczno-politycznych. Giełdowy charakter gry (rynek przewidywań) pozwala pokazać prawdopodobieństwo wystąpienia określonych wydarzeń, co sprawia, że serwis jest interesującą alternatywą dla sondaży.
 
 ## Status projektu
 
-Projekt jest rozwijany. Planowany start to maj 2016.
+Projekt jest rozwijany. Start beta testów odbędzie się 17 maja 2016.
 
-## Politikon lokalnie (po angielsku)
+## Instalacja lokalna projektu (po angielsku)
 
 ### Mac OS X
 
