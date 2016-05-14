@@ -707,11 +707,21 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
     font-size: 1.25em;
 }
 
+.introjs-tooltiptext p {
+    margin-top: 25px;
+}
+
+.introjs-tooltiptext p.comment {
+    font-style: italic;
+    font-size: .7em;
+}
+
 .introjs-tooltiptext h2 {
     font-size: 1.25em;
     font-weight: bold;
     margin-bottom: 25px;
 }
+
 .orange {
     color: #ea6a2a;
 }

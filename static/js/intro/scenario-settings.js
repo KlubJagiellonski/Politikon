@@ -1,49 +1,49 @@
-function startIntro(){
-        var intro = introJs();
-          intro.setOptions({
-            showBullets: true,
-            showStepNumbers: false,
-            steps: [
-              {
-                intro: '<b>Witamy w Ustawieniach</b><br/><br/>W tym samouczku pokażemy Ci, modyfikować Twój profil.<br/><br/> <span style="font-style: italic; font-size: .7em;">Jeśli chcesz dowiedzieć się więcej o samej grze, przedź na stronę główną i wybierz opcję "JAK GRAĆ".</span>',
-              },
-              {
+function startIntro() {
+    var intro = introJs();
+    intro.setOptions({
+        showBullets: true,
+        showStepNumbers: false,
+        steps: [
+            {
+                intro: '<h2>Witamy w <span class="orange">Ustawieniach</span></h2><p>W tym <span class="green">samouczku</span> pokażemy Ci, <span class="green">modyfikować</span> <span class="orange">Twój profil.</span></p><p class="comment">Jeśli chcesz <span class="green">dowiedzieć</span> się więcej o samej <span class="orange">grze,</span><br/>przedź na stronę główną i <span class="green">wybierz</span> opcję <span class="orange">„JAK GRAĆ“.</span></p>',
+            },
+            {
                 element: '#settings-profile',
-                intro: '<b>Obecne ustawienia</b><br/><br/>Tutaj znajdziesz informacje o Twoim profilu: Twoją nazwę w POLITIKONIE, avatar, login, datę dołącznie do gry i dane kontaktowe.',
-        position: 'top',
-              },
-              {
+                intro: '<h2>Obecne ustawienia</h2><p>Tutaj znajdziesz informacje o <span class="orange">Twoim profilu:</span> Twoją <span class="green">nazwę</span> w <span class="orange">POLITIKONIE,</span> <span class="green">avatar, login, datę dołączenia</span> do gry i <span class="green">dane kontaktowe.</span>',
+                position: 'bottom',
+            },
+            {
                 element: '#settings-profile .profile-avatar',
-                intro: 'By zmienić swoje zdjęcie, po prostu kliknij na aktualny avatar i wybierz nową fotografię.',
-        position: 'right'
-              },
-              {
+                intro: '<p>By <span class="green">zmienić</span> swoje <span class="orange">zdjęcie,</span> po prostu <span class="green">kliknij</span> na aktualny <span class="orange">avatar</span> i <span class="green">wybierz</span> nową <span class="orange">fotografię.</span></p>',
+                position: 'right'
+            },
+            {
                 element: '#userinfo .tabs',
-                intro: 'Ustawienia zostały podzielone na dwie sekcje.<br/><br/>Pierwsza zawiera ustawienia związane z Twoim profilem w grze, druga - ustawienia pozwalające uzyskać dostęp do Twojego konta.',
-        position: 'right'
-              },
-              {
+                intro: '<p>Ustawienia zostały <span class="orange">podzielone</span> na <span class="green">dwie sekcje.</span></p><p><span class="green">Pierwsza</span> zawiera ustawienia związane z <span class="orange">Twoim profilem</span> w grze, <span class="green">druga</span> - ustawienia pozwalające uzyskać dostęp do <span class="orange">Twojego konta.</span></p>',
+                position: 'right'
+            },
+            {
                 element: '#loadmore .btn',
-                intro: 'Po wprowadzeniu zmian, zapisz je klikając w ten przycisk.',
-        position: 'top'
-              }
-            ]
-          });
+                intro: '<p>Po wprowadzeniu zmian, <span class="green">zapisz</span> je klikając w ten <span class="orange">przycisk.</span></p>',
+                position: 'top'
+            }
+        ]
+    });
 
-          intro.start();
-      } 
+    intro.start();
+}
 
 //poprawia pozycje tooltipow na podstronach
-$(document).ready(function() {
+$(document).ready(function () {
     var s = $("#maintop");
     var pagestatus = $("#POLITIKON");
-    var pos = s.position();                    
-    $(window).scroll(function() {
+    var pos = s.position();
+    $(window).scroll(function () {
         var windowpos = $(window).scrollTop();
         if (windowpos >= 30) { // wysokosc, po ktorej zaczyna sie scroll
-                pagestatus.addClass("body-scrolled-subpage");
+            pagestatus.addClass("body-scrolled-subpage");
         } else {
-                pagestatus.removeClass("body-scrolled-subpage");
+            pagestatus.removeClass("body-scrolled-subpage");
         }
     });
 });
