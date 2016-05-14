@@ -10,6 +10,14 @@ $(function() {
             $('.details').css({'opacity': '0'});
         });
 
+        //featured - hover
+        $('#betfeed .bet').hover(function () {
+            $(this).find('figcaption').find('h2').animate({marginTop: "196px"}, 100);
+        },
+        function () {
+            $(this).find('figcaption').find('h2').animate({marginTop: "250px"}, 100);
+        });
+
         //ukrywa menu z hamburgera po odpaleniu intro
         $('.intro-start').on('click',function(){
             $('#maintop .mainmenu').removeClass("opacity");

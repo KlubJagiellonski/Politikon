@@ -24,7 +24,6 @@
                 </div>
             </a>
             {% if event.is_in_progress %}
-            <div class="change changepreview {% if event.price_change > 0 %}changeYES{% elif event.price_change < 0 %}changeNO{% endif %}">{{ event.price_change|formatted:"True" }}</div>
             <a href="{{ event.get_relative_url }}"><h2 class="skroc">{{ event.title }}</h2></a>
             {% else %}
                 {% if event.outcome == 2 %}
