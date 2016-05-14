@@ -93,15 +93,10 @@
 <section id="bet-desc" class="astable">
     <div class="lewa">
         <div class="astable share-zone">
-            <input type="button" onclick="share_prompt()" value="Share" />
-            <script>
-                function share_prompt() {
-                    FB.ui({
-                        method: 'share',
-                        href: '{{ share_url }}'
-                    }, function(response){});
-                }
-            </script>
+            <span class='st_fblike_hcount' displayText='Facebook Like'></span>
+            <span class='st_facebook_hcount' displayText='Facebook'></span>
+            <span class='st_twitter_hcount' displayText='Tweet'></span>
+            <span class='st__hcount' displayText=''></span>
         </div>
         <p>{{ event.description }}</p>
         <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"j E Y" }}</p>
