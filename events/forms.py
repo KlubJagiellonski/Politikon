@@ -10,6 +10,18 @@ from .models import Event
 
 class EventForm(forms.ModelForm):
     solve_event = forms.CharField(label="Rozstrzygnij event. TAK / NIE / ANULUJ", required=False)
+    download_small_image = forms.CharField(
+        label=u"Pobierz mały obrazek",
+        required=False,
+        help_text=u"Podaj url obrazka, który ma być pobrany jako *mały* obrazek",
+        widget=forms.TextInput(attrs={'style': 'width: 600px;'})
+    )
+    download_big_image = forms.CharField(
+        label=u"Pobierz duży obrazek",
+        required=False,
+        help_text=u"Podaj url obrazka, który ma być pobrany jako *duży* obrazek",
+        widget=forms.TextInput(attrs={'style': 'width: 600px;'})
+    )
 
     class Meta:
         model = Event

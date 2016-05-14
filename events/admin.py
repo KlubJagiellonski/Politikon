@@ -18,6 +18,35 @@ class RelatedEventInline(admin.TabularInline):
 
 class EventAdmin(admin.ModelAdmin):
     form = EventForm
+    fields = (
+        'title',
+        'short_title',
+        'title_fb_yes',
+        'title_fb_no',
+        'description',
+        'small_image',
+        'download_small_image',
+        'big_image',
+        'download_big_image',
+        'is_featured',
+        'is_front',
+        'outcome_reason',
+        'estimated_end_date',
+        'B',
+        'solve_event',
+        'end_date',
+        'outcome',
+        'current_buy_for_price',
+        'current_buy_against_price',
+        'current_sell_for_price',
+        'current_sell_against_price',
+        'last_transaction_date',
+        'Q_for',
+        'Q_against',
+        'turnover',
+        'absolute_price_change',
+        'price_change',
+    )
     readonly_fields = [
         'resolved_by',
         'end_date',
@@ -42,6 +71,17 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [RelatedEventInline, ]
 
     def save_model(self, request, obj, form, change):
+        """
+        Save event model from admin form
+        :param request:
+        :type request: HTTPRequest
+        :param obj:
+        :type obj: Event
+        :param form:
+        :type form: EventForm
+        :param change:
+        :type change:
+        """
         # TODO: to jest najgorsze
         if request.method == 'POST':
             if request.POST['solve_event']:
@@ -55,6 +95,12 @@ class EventAdmin(admin.ModelAdmin):
                     obj.resolved_by = request.user
                 except EventAlreadyFinished as e:
                     messages.error(request, e.message)
+            small_img_url = request.POST.get('download_small_image')
+            if small_img_url:
+                obj.download_image(small_img_url, 'small')
+            big_img_url = request.POST.get('download_big_image')
+            if big_img_url:
+                obj.download_image(big_img_url, 'big')
         obj.save()
 
 

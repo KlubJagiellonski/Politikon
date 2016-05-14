@@ -2,8 +2,10 @@
 """
 Test events module
 """
+import base64
 from datetime import timedelta
 from freezegun import freeze_time
+from mock import Mock, patch, mock_open, MagicMock
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
@@ -23,6 +25,7 @@ from .templatetags.display import render_bet, render_event, render_events, rende
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
 
+m = Mock()
 
 class EventsModelTestCase(TestCase):
     """
@@ -313,6 +316,31 @@ class EventsModelTestCase(TestCase):
         self.assertEqual([event2, event3], related1)
         self.assertEqual([event3], related2)
         self.assertEqual([event2], related3)
+
+    def test_download_image(self):
+        """
+        Test download image and put them as small_img_event and big_img_event
+        """
+        event = EventFactory()
+        # image.png 2x1 pixels white blue
+        img = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAIAAAB7QOjdAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA\nB3R' \
+              'JTUUH4AQaFgsc/+r6XwAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAP\nSURBVA' \
+              'jXY/j//3+Q2X8AEVkEhYzVy00AAAAASUVORK5CYII=\n'
+
+        # Mocking download image
+        response = Mock()
+        response.status_code = 200
+        response.raw.data = base64.decodestring(img)
+        get = Mock()
+        get.return_value = response
+
+        with patch('requests.get', get):
+            m = mock_open()
+            with patch('events.models.open', m, create=False):
+                event.download_image('http://fake.url/image1.png', 'small')
+                event.download_image('http://fake.url/image2.png', 'big')
+        print m.mock_calls
+#        m.assert_called_once_with('')
 
 
 class EventsManagerTestCase(TestCase):
