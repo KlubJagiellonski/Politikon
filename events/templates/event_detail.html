@@ -105,7 +105,7 @@
             </script>
         </div>
         <p>{{ event.description }}</p>
-        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"d E Y" }}</p>
+        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"j E Y" }}</p>
     </div>
     {% comment %}
     <div class="prawa rss-related">
