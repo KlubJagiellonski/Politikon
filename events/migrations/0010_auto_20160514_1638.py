@@ -7,30 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0008_auto_20160330_1315'),
+        ('events', '0009_auto_20160504_0205'),
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='bet',
-            options={'verbose_name': 'zak\u0142ad', 'verbose_name_plural': 'zak\u0142ady'},
-        ),
-        migrations.AlterModelOptions(
-            name='event',
-            options={'verbose_name': 'wydarzenie', 'verbose_name_plural': 'wydarzenia'},
-        ),
-        migrations.AlterModelOptions(
-            name='eventsnapshot',
-            options={'ordering': ['-created_at'], 'verbose_name': 'wydarzenie - snapshot', 'verbose_name_plural': 'wydarzenie - snapshoty'},
-        ),
-        migrations.AlterModelOptions(
-            name='relatedevent',
-            options={'verbose_name': 'powi\u0105zane wydarzenie', 'verbose_name_plural': 'powi\u0105zane wydarzenia'},
-        ),
-        migrations.AlterModelOptions(
-            name='transaction',
-            options={'ordering': ['-date'], 'verbose_name': 'transakcja', 'verbose_name_plural': 'transakcje'},
-        ),
         migrations.AlterField(
             model_name='event',
             name='big_image',
