@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^event/(?P<event_id>\d+)/transaction/create/$', 'events.views.create_transaction',
         name="create_transaction"),
     url(r'^bets/viewed/$', 'events.views.bets_viewed', name='bets_viewed'),
-    url(r'^transactions/(?P<nr_from>\d+)/$', 'events.views.transactions', name='transactions'),
+    url(r'^transactions/(?P<user_id>\d+)/(?P<nr_from>\d+)/$', 'events.views.transactions',
+        name='transactions'),
 )

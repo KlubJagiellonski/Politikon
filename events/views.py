@@ -202,7 +202,7 @@ def bets_viewed(request):
     return JSONResponse(json.dumps(bets_resolved))
 
 
-def transactions(request, nr_from):
+def transactions(request, user_id, nr_from):
     """
     Show list of user transactions
     :param request:
@@ -214,7 +214,7 @@ def transactions(request, nr_from):
     """
     nr_from = int(nr_from)
     nr_to = nr_from + 50       # 50 elemets at once
-    transactions = Transaction.objects.all()[nr_from:nr_to]
+    transactions = Transaction.objects.filter(user__id=user_id)[nr_from:nr_to]
     t_dict = []
     for transaction in transactions:
         t_dict.append({
