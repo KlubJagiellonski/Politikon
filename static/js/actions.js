@@ -278,11 +278,12 @@ $(function() {
 
         $('#loadmore').click(function(){
             var offset = $('.history-event').length;
+            var user_id = $('#profileuser').attr('data-user_id');
 
             $.ajax({
                 type: 'GET',
                 contentType: 'application/json',
-                url: '/transactions/' + offset,
+                url: '/transactions/' + user_id + '/' + offset,
                 success: function (data) {
                     for (var i=0; i<data.length; i++){
                         var row = data[i];

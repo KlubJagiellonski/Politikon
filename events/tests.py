@@ -826,3 +826,19 @@ class PolitikonEventTemplatetagsTestCase(TestCase):
         self.assertTrue(startswith(path4, start_path))
         path5 = reverse('events:events', kwargs={'mode': 'finished'})
         self.assertTrue(startswith(path5, start_path))
+
+
+class EventUrlsTestCase(TestCase):
+    """
+    Test if urls exists and working properly
+    """
+    def test_transaction_url(self):
+        """
+        Test transactions ajax url for pagination
+        """
+        user = UserFactory()
+        event = EventFactory()
+        transaction1 = TransactionFactory(user=user, event=event)
+        transaction2 = TransactionFactory(user=user, event=event)
+        path = reverse('events:transactions', kwargs={'user_id': user.id, 'nr_from': 0})
+        self.assertEqual(u'/transactions/1/0/', path)

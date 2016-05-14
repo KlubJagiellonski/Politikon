@@ -10,7 +10,7 @@
         <canvas id="profile-canvas" height="70"></canvas>
     </div>
 </section>
-<section id="profileuser">
+<section id="profileuser" data-user_id="{{ object.id }}">
     <div class="profile-avatar{% if object.is_vip %} uservip{% endif %}"><img src="{{ object.get_avatar_url }}"/></div>
     <div class="nickname"><h1>{{ object.name }}{% if object.is_vip %}<span class="nickvip">VIP</span>{% endif %}</h1></div>
 </section>
