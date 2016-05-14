@@ -445,7 +445,6 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
         -moz-box-shadow:    0px 0px 10px 0px rgba(0, 0, 0, 0.15);
         box-shadow:         0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
-#betfeed .bet:hover figcaption h2 {margin-top: 196px !important;}
 
 #betfeed .hotbet-icon {width: 45px; height: 45px; border-radius: 50%; background: rgba(0,0,0,0.35) url(../img/01hoticon.png) center no-repeat; margin-top: -11px; margin-bottom: -8px; margin-left: 10px;}
 
