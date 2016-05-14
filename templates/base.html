@@ -53,24 +53,9 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
 <!--<script src="static/js/skrypty.js"></script>-->
 
-<!-- Facebook script for sharing -->
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{{ facebook_app_id }}',
-      xfbml      : true,
-      version    : 'v2.6'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+<!-- ShareThis scripts -->
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.dotdotdot.min.js"></script>
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
