@@ -21,7 +21,6 @@ from .models import Bet, Event, Transaction
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
     render_featured_events, render_bet_status, userstats, outcome, render_finish_date, og_title
-    render_featured_events, render_bet_status, outcome, render_finish_date, og_title
 from .views import transactions as bet_transactions
 
 from accounts.factories import UserFactory
