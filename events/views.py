@@ -218,7 +218,7 @@ def transactions(request, user_id, nr_from):
     t_dict = []
     for transaction in transactions:
         t_dict.append({
-            'title': transaction.event.title,
+            'title': transaction.event.title if transaction.event else '',
             'type_display': transaction.get_type_display().upper(),
             'total': transaction.total,
             'date': u'{0.day} {1} {0.year} {0.hour}:{0.minute}'.format(

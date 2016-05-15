@@ -49,6 +49,7 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
 
+@class_view_decorator(login_required)
 class UserProfileDetailView(DetailView):
     """
     Logged user profile detail (user.id from session)
