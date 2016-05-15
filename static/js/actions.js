@@ -280,10 +280,44 @@ $(function() {
             return noty({
                 layout: 'topRight',
                 text: text,
-                type: type,
+                type: type
             });
-        };
+        }
 
+        $('#loadmore').click(function(){
+            var offset = $('.history-event').length;
+            var user_id = $('#profileuser').attr('data-user_id');
+
+            $.ajax({
+                type: 'GET',
+                contentType: 'application/json',
+                url: '/transactions/' + user_id + '/' + offset,
+                success: function (data) {
+                    for (var i=0; i<data.length; i++){
+                        var row = data[i];
+                        if (row['total'] > 0) {
+                            var change = 'changeYES';
+                        } else {
+                            var change = 'changeNO';
+                        }
+                        $('#transactions-list').append(
+                            '<div class="history-event"><span class="skroc lewa">'+ row['title'] + '</span>' +
+                            '<div class="prawa"><span class="history-action">' + row['type_display'] + '</span>' +
+                            '<span class="reputy-change ' + change + '"><span class="reputy-small"></span>' + row['total'] + '</span>' +
+                            '<span class="event-date">' + row['date'] + '</span>' +
+                            '</div></div>'
+                        );
+                        if (data.length < 50) {
+                            $('#loadmore').hide()
+                        }
+                    }
+                },
+                error: function (data) {
+                    var response = JSON.parse(data.responseText);
+                    notify(response.error, 'error');
+                }
+            })
+        })
 
     });
 });

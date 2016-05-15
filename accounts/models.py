@@ -10,10 +10,11 @@ from django.db import models, transaction
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
+from django.utils.translation import ugettext as _
 
 from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
-from events.models import Bet, Event, _MONTHS
+from events.models import Bet, Event
 from politikon.templatetags.format import formatted
 from politikon.settings import STATIC_URL
 

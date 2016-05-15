@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from .exceptions import UnknownOutcome, EventAlreadyFinished
 from .managers import EventManager, BetManager, TransactionManager
@@ -18,22 +19,6 @@ from politikon.choices import Choices
 
 
 logger = logging.getLogger(__name__)
-
-
-_MONTHS = {
-    1: 'Stycznia',
-    2: 'Lutego',
-    3: 'Marca',
-    4: 'Kwietnia',
-    5: 'Maja',
-    6: 'Czerwca',
-    7: 'Lipca',
-    8: 'Sierpnia',
-    9: 'Września',
-    10: 'Października',
-    11: 'Listopada',
-    12: 'Grudnia'
-}
 
 
 class Event(models.Model):
@@ -246,7 +231,7 @@ class Event(models.Model):
             # display only midnight prices
             # TODO: get this if from settings
             if step_date.hour == 0:
-                labels.append('%s %s' % (step_date.day, _MONTHS[step_date.month]))
+                labels.append(u'{0} {1}'.format(step_date.day, _(step_date.strftime('%B'))))
                 snapshots = self.snapshots.filter(
                     snapshot_of_id=self.id,
                     created_at__lte=step_date,
