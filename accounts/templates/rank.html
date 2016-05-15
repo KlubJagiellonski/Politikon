@@ -12,14 +12,19 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+<script type="text/javascript">
+    $(function () {
+        profileChart({{ json_data|safe }})
+    });
+</script>
 
 {% userstats user overall_rank month_rank week_rank %}
 
-{#<section id="ranking">#}
-{#    <div class="rankingchart">#}
-{#        <canvas id="ranking-canvas" height="50"></canvas>#}
-{#    </div>#}
-{#</section>#}
+<section id="ranking">
+    <div class="rankingchart">
+        <canvas id="ranking-canvas" height="50"></canvas>
+    </div>
+</section>
 {% endif %}
 
 <section id="userinfo" class="hotbets prefooter-margin body-margin">

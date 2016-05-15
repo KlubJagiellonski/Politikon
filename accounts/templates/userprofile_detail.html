@@ -9,11 +9,11 @@
 {% endblock %}
 
 {% block content %}
-    <script type="text/javascript">
-        $(function () {
-            profileChart({{ json_data|safe }});
-        });
-    </script>
+<script type="text/javascript">
+    $(function () {
+        rankingChart({{ json_data|safe }});
+    });
+</script>
 
 <section id="profile">
     <div class="profilechart">
