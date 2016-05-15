@@ -353,7 +353,7 @@ class UserProfile(AbstractBaseUser):
         for snapshot in snapshots:
             if old_created_at != snapshot.created_at.strftime('%m%d'):
                 labels.append(
-                    '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
+                    '{0} {1}'.format(snapshot.created_at.strftime('%m%d'))
                 )
                 reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
                                                      snapshot.total_given_cash)
