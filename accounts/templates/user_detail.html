@@ -3,11 +3,17 @@
 {% load display %}
 {% load format %}
 
-{% block introjs %}
+{% block js_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-profile.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/charts/profile.js"></script>
 {% endblock %}
 
 {% block content %}
+    <script type="text/javascript">
+        $(function () {
+            profileChart({{ json_data|safe }})
+        });
+    </script>
 
 <section id="profile">
     <div class="profilechart">
