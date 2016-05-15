@@ -44,8 +44,8 @@ var FRONT_CHART_STYLE = {
 
 //wykresy na wydarzenia w betfeedzie
 
-
-function makeChart(data,opts){
+    
+    function makeChart(data,opts){
 
     var id = opts.id;
     var setStyle;

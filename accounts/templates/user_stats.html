@@ -1,0 +1,24 @@
+{% load format %}
+
+<section id="userstats">
+    <div class="container profile-stats">
+        <div class="wallet">
+            <div class="icon"></div>
+            <p class="lewa"><span>wartość portfela</span><br/><span class="darkorange">{{ user.portfolio_value|formatted }}</span></p>
+        </div>
+        <div class="freereput">
+            <div class="icon"></div>
+            <p class="lewa"><span>wolne reputy</span><br/><span class="changeYES">{{ user.total_cash|formatted }}</span></p>
+        </div>
+        <div class="reputation">
+            <div class="icon"></div>
+            <p class="lewa"><span>reputacja</span><br/><span>{{ user.reputation|formatted }}%</span></p>
+        </div>
+        <div class="position">
+            <div class="icon"></div>
+            <p class="lewa"><span>ranking</span><br/><span class="grey">{{ overall_rank }}</span></p>
+            <p class="lewa"><span>miesiąc</span><br/><span class="grey">{{ month_rank }}</span></p>
+            <p class="lewa"><span>tydzień</span><br/><span class="grey">{{ week_rank }}</span></p>
+        </div>
+    </div>
+</section>

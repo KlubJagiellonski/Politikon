@@ -53,6 +53,16 @@ def render_bet_status(bet):
     }
 
 
+@register.inclusion_tag('user_stats.html')
+def userstats(user, overall_rank, month_rank, week_rank):
+    return {
+        'user': user,
+        'overall_rank': overall_rank,
+        'month_rank': month_rank,
+        'week_rank': week_rank
+    }
+
+
 @register.filter
 def outcome(event):
     """Usage, {{ event|get_outcome_class }}"""

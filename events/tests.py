@@ -18,7 +18,7 @@ from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, Bet
 from .models import Bet, Event, Transaction, _MONTHS
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
-    render_featured_events, render_bet_status, outcome, render_finish_date, og_title
+    render_featured_events, render_bet_status, userstats, outcome, render_finish_date, og_title
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -543,6 +543,21 @@ class EventsTemplatetagsTestCase(TestCase):
             'bet': bet,
         }, render_bet_status(bet))
 
+    def test_userstats(self):
+        """
+        Userstats
+        """
+        user = UserFactory()
+        overall_rank = 1
+        month_rank = 1
+        week_rank = 1
+        self.assertEqual({
+            'user': user,
+            'overall_rank': overall_rank,
+            'month_rank': month_rank,
+            'week_rank': week_rank
+        }, userstats(user, overall_rank, month_rank, week_rank))
+        
     def test_outcome(self):
         """
         Outcome
