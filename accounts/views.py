@@ -111,6 +111,7 @@ class UsersListView(ListView):
         user = self.request.user
         if user.is_authenticated:
             context.update(UserProfile.objects.get_user_positions(user))
+            context['json_data'] = json.dumps(user.get_reputation_history())
         context.update({
             'best_weekly': UserProfile.objects.get_best_weekly(),
             'best_monthly': UserProfile.objects.get_best_monthly()

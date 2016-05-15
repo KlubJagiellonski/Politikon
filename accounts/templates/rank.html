@@ -5,21 +5,26 @@
 
 {% block js_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-rank.js"></script>
-    {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/charts/ranking.js"></script>
-    {% endif %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
+<script type="text/javascript">
+    $(function () {
+        rankingChart({{ json_data|safe }})
+    });
+</script>
 
 {% userstats user overall_rank month_rank week_rank %}
 
-{#<section id="ranking">#}
-{#    <div class="rankingchart">#}
-{#        <canvas id="ranking-canvas" height="50"></canvas>#}
-{#    </div>#}
-{#</section>#}
+<section id="ranking">
+    <div class="rankingchart">
+        <canvas id="ranking-canvas" height="50"></canvas>
+    </div>
+</section>
 {% endif %}
 
 <section id="userinfo" class="hotbets prefooter-margin body-margin">

@@ -1,6 +1,6 @@
 {% load format %}
 
-<a href="{{ user.get_absolute_url }}"><div class="ranking-event">
+<a href="{{ user.get_absolute_url }}"><div class="ranking-event{% if user == request.user %} ranking-you{% endif %}">
         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
             <p class="rank">{{ counter }}</p>
             <img src="{{ user.get_avatar_url }}"/>
@@ -10,7 +10,7 @@
             <p class="rank-wallet">{{ user.portfolio_value|formatted }}</p>
             <p class="rank-freereputy">{{ user.total_cash|formatted }}</p>
             <p class="rank-reputation">{{ user.reputation|formatted }}%
-                {% if profit %}<br/><span class="small">({{ profit|formatted:"True" }}%)</span>{% endif %}
+            {% if profit %}<br/><span class="small">({{ profit|formatted:"True" }}%)</span>{% endif %}
             </p>
         </div>
 </div></a>
