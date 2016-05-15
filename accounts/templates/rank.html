@@ -5,16 +5,16 @@
 
 {% block js_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-rank.js"></script>
-    {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/charts/ranking.js"></script>
-    {% endif %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
 <script type="text/javascript">
     $(function () {
-        profileChart({{ json_data|safe }})
+        rankingChart({{ json_data|safe }})
     });
 </script>
 
