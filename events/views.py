@@ -181,8 +181,6 @@ def bets_viewed(request):
     Uncheck new finished event as read
     :param request:
     :type request: WSGIRequest
-    :param bet_id: bet.id
-    :type bet_id: int
     :return: json list with bet ids
     :rtype: JSONResponse
     """
@@ -207,6 +205,8 @@ def transactions(request, user_id, nr_from):
     Show list of user transactions
     :param request:
     :type request: WSGIRequest
+    :param user_id: User ID which transactions are showed
+    :type user_id: int
     :param nr_from: begin of limit
     :type nr_from: int
     :return: list with user transactions

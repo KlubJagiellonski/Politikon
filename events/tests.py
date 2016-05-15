@@ -4,6 +4,7 @@ Test events module
 """
 from datetime import timedelta
 from freezegun import freeze_time
+import json
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
@@ -20,6 +21,7 @@ from .models import Bet, Event, Transaction
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
     render_featured_events, render_bet_status, outcome, render_finish_date, og_title
+from .views import transactions as bet_transactions
 
 from accounts.factories import UserFactory
 from politikon.templatetags.path import startswith
@@ -974,17 +976,29 @@ class PolitikonEventTemplatetagsTestCase(TestCase):
         self.assertTrue(startswith(path5, start_path))
 
 
-class EventUrlsTestCase(TestCase):
+class EventsViewTestCase(TestCase):
     """
-    Test if urls exists and working properly
+    Tests views methods
     """
     def test_transaction_url(self):
         """
-        Test transactions ajax url for pagination
+        Test transactions ajax url and view for pagination
         """
         user = UserFactory()
         event = EventFactory()
-        transaction1 = TransactionFactory(user=user, event=event)
-        transaction2 = TransactionFactory(user=user, event=event)
+        TransactionFactory(user=user, event=event)
+        TransactionFactory(user=user, event=event)
+        TransactionFactory(user=user, event=event)
         path = reverse('events:transactions', kwargs={'user_id': user.id, 'nr_from': 0})
         self.assertEqual(u'/transactions/1/0/', path)
+
+        # get 2 of 3 transactions
+        response = bet_transactions(None, user.id, 1)
+        ts = json.loads(response.content)
+        self.assertEqual(2, len(ts))
+
+        # one transaction must have these keys:
+        expected_keys = ['date', 'title', 'total', 'type_display']
+        self.assertEqual(expected_keys, sorted(ts[0].keys()))
+        self.assertEqual(expected_keys, sorted(ts[1].keys()))
+
