@@ -49,6 +49,7 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
 
+@class_view_decorator(login_required)
 class UserProfileDetailView(DetailView):
     """
     Logged user profile detail (user.id from session)
@@ -60,7 +61,6 @@ class UserProfileDetailView(DetailView):
         return self.request.user
 
     def get_context_data(self, *args, **kwargs):
-        # TODO: redirect 'AnonymousUser' to login page
         context = super(UserProfileDetailView, self).\
             get_context_data(*args, **kwargs)
         user = self.get_object()
@@ -110,7 +110,7 @@ class UsersListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(UsersListView, self).get_context_data(*args, **kwargs)
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_authenticated():
             context.update(UserProfile.objects.get_user_positions(user))
             context['json_data'] = json.dumps(user.get_reputation_history())
         context.update({
