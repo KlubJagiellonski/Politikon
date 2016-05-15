@@ -3,12 +3,14 @@
 {% load display %}
 {% load user %}
 
-{% block introjs %}
+{% block js_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-rank.js"></script>
+    {% if user.is_authenticated %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/charts/ranking.js"></script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-
 <section id="userinfo" class="hotbets prefooter-margin body-margin">
     <ul class="tabs lewa">
         <li class="active"><a href="#7dni">Ranking 7-dniowy</a></li>

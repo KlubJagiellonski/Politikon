@@ -51,20 +51,8 @@
 <!-- ^^ wsparcie dla IE pod http://code.google.com/p/ie7-static/js/ -->
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
-<!--<script src="static/js/skrypty.js"></script>-->
-
-<!-- ShareThis scripts -->
-<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
-
 <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.dotdotdot.min.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
-
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/packaged/jquery.noty.packaged.min.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/layouts/topRight.js"></script>
-
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/actions.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/charts/betfeed_featured.js"></script>
+<!--<script src="static/js/skrypty.js"></script>-->
 
 {% if not user.is_authenticated %}
 <!--skrypty dla goscia-->
@@ -187,12 +175,27 @@
     </div>
 </div>
 
+<!-- ShareThis scripts -->
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+
+<!-- ChartJS scripts -->
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+
+<!-- Noty scripts -->
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/packaged/jquery.noty.packaged.min.js"></script>
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/layouts/topRight.js"></script>
+
+<!-- sugester scripts -->
 <script src='//s3-eu-west-1.amazonaws.com/app1.sugester.com/8155/widget.js' type='text/javascript'></script>
 
-<!--jak grac-->
+<!-- IntroJS scripts -->
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/intro.min.js"></script>
 
-{% block introjs %}<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>{% endblock %}
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/actions.js"></script>
+<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/charts/betfeed_featured.js"></script>
+
+{% block js_scripts %}<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>{% endblock %}
 
 {% if messages %}
 <script type="text/javascript">
