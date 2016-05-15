@@ -348,13 +348,16 @@ class UserProfile(AbstractBaseUser):
 
         labels = []
         points = []
+        old_created_at = ''
         for snapshot in snapshots:
-            labels.append(
-                '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
-            )
-            reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
-                                                 snapshot.total_given_cash)
-            points.append(str(int(reputation)))
+            if old_created_at != snapshot.created_at.strftime('%m%d'):
+                labels.append(
+                    '{0} {1}'.format(snapshot.created_at.day, _MONTHS[snapshot.created_at.month])
+                )
+                reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
+                                                     snapshot.total_given_cash)
+                points.append(str(int(reputation)))
+            old_created_at = snapshot.created_at.strftime('%m%d')
 
         return {
             'id': self.id,
