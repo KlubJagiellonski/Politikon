@@ -108,6 +108,9 @@ class UsersListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(UsersListView, self).get_context_data(*args, **kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            context.update(UserProfile.objects.get_user_positions(user))
         context.update({
             'best_weekly': UserProfile.objects.get_best_weekly(),
             'best_monthly': UserProfile.objects.get_best_monthly()
