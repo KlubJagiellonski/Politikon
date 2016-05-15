@@ -60,6 +60,7 @@ class UserProfileDetailView(DetailView):
         return self.request.user
 
     def get_context_data(self, *args, **kwargs):
+        # TODO: redirect 'AnonymousUser' to login page
         context = super(UserProfileDetailView, self).\
             get_context_data(*args, **kwargs)
         user = self.get_object()
