@@ -109,7 +109,7 @@ class UsersListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(UsersListView, self).get_context_data(*args, **kwargs)
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_authenticated():
             context.update(UserProfile.objects.get_user_positions(user))
             context['json_data'] = json.dumps(user.get_reputation_history())
         context.update({
