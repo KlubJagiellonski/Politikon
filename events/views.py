@@ -84,7 +84,7 @@ class EventDetailView(DetailView):
             'bet_social': event.get_bet_social(),
             'related_events': event.get_related(user),
             # TODO: jsonify in temlate
-            'json_data': json.dumps(event.get_event_big_chart()),
+            'json_data': json.dumps(event.get_event_small_chart()),
             'og_user': UserProfile.objects.filter(username=self.request.GET.get('user')).first(),
             'og_vote': self.request.GET.get('vote'),
             'share_url': share_url
