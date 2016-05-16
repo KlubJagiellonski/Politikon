@@ -3,6 +3,7 @@
 {% load display %}
 {% load humanize %}
 {% load format %}
+{% load twitter_feed_tags %}
 
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
@@ -144,6 +145,14 @@
 
 <section id="comments" class="prefooter-margin">
     <div class="fb-comments" data-href="{{ request.META.HTTP_HOST }}{{ event.get_relative_url }}" data-numposts="5"></div>
+    <div class="tweets">
+        {% for tweet in tweets %}
+        <div class="tweet">
+            <p>{{ tweet.content|linkify_twitter_status|urlize|url_target_blank }}</p>
+            <p class="date">{{ tweet.published_at|date:"F d, Y" }}</p>
+        </div>
+        {% endfor %}
+    </div>
 </section>
 
 {% endblock %}

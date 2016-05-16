@@ -13,9 +13,11 @@ from django.utils.translation import ugettext as _
 
 from .exceptions import UnknownOutcome, EventAlreadyFinished
 from .managers import EventManager, BetManager, TransactionManager
+
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
 from politikon.choices import Choices
+from taggit.managers import TaggableManager
 
 
 logger = logging.getLogger(__name__)
@@ -62,6 +64,7 @@ class Event(models.Model):
 
     title = models.TextField(u'tytuł wydarzenia')
     short_title = models.TextField(u'tytuł promocyjny wydarzenia')
+    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True)
 
     title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', default='')
     title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', default='')
@@ -105,6 +108,8 @@ class Event(models.Model):
     # constant for calculating event change
     # probably: how you need to increment quantity, to change price
     B = models.FloatField(u'stała B', default=FACTOR_B)
+
+    tags = TaggableManager()
 
     def __unicode__(self):
         return self.title

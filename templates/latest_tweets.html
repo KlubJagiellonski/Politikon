@@ -1,0 +1,8 @@
+<div class="tweets">
+{% for tweet in tweets %}
+    <div class="tweet">
+        <p>{{ tweet.content|linkify_twitter_status|urlize|url_target_blank }}</p>
+        <p class="date">{{ tweet.published_at|date:"F d, Y" }}</p>
+    </div>
+{% endfor %}
+</div>

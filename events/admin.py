@@ -5,6 +5,8 @@ from .exceptions import EventAlreadyFinished
 from .forms import EventForm
 from .models import Bet, Event, Transaction, RelatedEvent
 
+from taggit_helpers import TaggitCounter, TaggitListFilter, TaggitTabularInline
+
 
 class RelatedEventInline(admin.TabularInline):
     model = RelatedEvent
@@ -16,7 +18,7 @@ class RelatedEventInline(admin.TabularInline):
     }
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(TaggitCounter, admin.ModelAdmin):
     form = EventForm
     readonly_fields = [
         'resolved_by',
@@ -34,12 +36,12 @@ class EventAdmin(admin.ModelAdmin):
         'price_change',
     ]
 
-    list_display = ['id', 'title', 'is_featured', 'outcome', 'created_date', 'estimated_end_date',
-                    'resolved_by', 'end_date', 'current_buy_for_price',
-                    'current_buy_against_price', 'Q_for', 'Q_against', 'turnover',
-                    'absolute_price_change', 'price_change']
+    list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'taggit_counter', 'outcome',
+                    'created_date', 'estimated_end_date', 'resolved_by', 'end_date']
 
-    inlines = [RelatedEventInline, ]
+    list_filter = [TaggitListFilter, 'is_featured', 'outcome']
+
+    inlines = [RelatedEventInline]
 
     def save_model(self, request, obj, form, change):
         # TODO: to jest najgorsze
