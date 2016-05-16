@@ -359,11 +359,14 @@ footer ul a, footer .socialmedia div,
 
 footer {height: 120px; background: url(../img/footer-bg.jpg) top center repeat-x;}
 footer .logo {width: 174px; height: 129px; background: url(../img/footer-logo-politikon.png) top center no-repeat; position: absolute; margin-top: -50px; margin-left:-87px; left:50%;}
-footer .lewa, footer .prawa {width: 45%;}
+footer .lewa {width: 30%}
+footer .prawa {width: 60%;}
 footer .lewa, footer .prawa {margin-top: 20px; color: #7a7a7a; font-size: .875em;}
 
 footer .kj {background: url(../img/footer-logo-kj.png) left top no-repeat; height: 43px; padding-left: 65px; padding-top: 8px; max-width: 135px;}
 footer .kj h5 {text-transform: none !important; margin-bottom: 3px;}
+
+footer .kdp {background: url(../img/footer-logo-kdp.png) left top no-repeat; height: 77px; padding-left: 65px; padding-top: 8px; margin-left: 15px; margin-top: 15px; max-width: 135px;}
 
 footer ul {float: left; margin-right: 13%;}
 footer h5 {font-size: 1.14em; color: #e8e7e7; text-transform: uppercase; font-weight: 700; margin-bottom: 1em;}
