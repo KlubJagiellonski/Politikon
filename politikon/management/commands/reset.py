@@ -22,7 +22,7 @@ class Command(BaseCommand):
             e.recalculate_prices()
 
         for u in UserProfile.objects.get_users():
-            u.active_date = now() - timedelta(days=366)
+            u.active_date = now()
             u.weekly_result = 0
             u.monthly_result = 0
             u.total_cash = 0
