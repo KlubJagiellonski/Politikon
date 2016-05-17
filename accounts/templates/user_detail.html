@@ -34,7 +34,7 @@
     <div class="prawa user-social">
         {% if object.twitter_user %}
         <div class="sm-tt">
-            <a href="#">
+            <a href="https://twitter.com/{{ object.twitter_user }}">
                 <div class="sm-bg tt"></div>
                 <span>@{{ object.twitter_user }}</span>
             </a>
@@ -43,9 +43,9 @@
 
         {% if object.facebook_user %}
         <div class="sm-fb">
-            <a href="#">
+            <a href="https://www.facebook.com/profile.php?id={{ object.facebook_user }}">
                 <div class="sm-bg fb"></div>
-                <span>{{ object.facebook_user }}</span>
+                <span>{{ object.name }}</span>
             </a>
         </div>
         {% endif %}
