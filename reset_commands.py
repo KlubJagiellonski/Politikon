@@ -22,5 +22,7 @@ for e in Event.objects.all():
     e.price_change = 0
     e.save()
 
+# reset snapshots
+
 # execute: accounts.tasks, events.tasks
 
