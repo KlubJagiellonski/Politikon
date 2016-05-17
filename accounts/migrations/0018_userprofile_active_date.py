@@ -15,12 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userprofile',
             name='active_date',
-            field=models.DateTimeField(default=datetime.datetime(2016, 5, 17, 10, 59, 14, 617472), auto_now_add=True),
+            field=models.DateTimeField(default=datetime.datetime(2015, 1, 1, 0, 0), verbose_name='data ostatniej aktywacji', auto_now_add=True),
             preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='userprofile',
-            name='is_active',
-            field=models.BooleanField(default=True, verbose_name='is active'),
         ),
     ]

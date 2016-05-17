@@ -49,7 +49,7 @@ class UserProfile(AbstractBaseUser):
     is_deleted = models.BooleanField(u"is deleted", default=False)
 
     is_staff = models.BooleanField(u"is staff", default=False)
-    is_active = models.BooleanField(u"is active", default=True)
+    is_active = models.BooleanField(u"is active", default=False)
 
     is_vip = models.BooleanField(u"VIP", default=False)
 

@@ -1,28 +1,17 @@
+from datetime import timedelta
+from events.models import Transaction, Bet, Event
 from accounts.models import UserProfile
-from events.models import Event, Bet, Transaction
+from constance import config
 from django.utils.timezone import now
 
-us = UserProfile.objects.all()
-for u in us:
-    u.active_date = now()
-    u.total_cash = u.portfolio_value = 0
-    u.weekly_result = u.monthly_result = None
-    u.reputation = 100
-    u.total_given_cash = 1000
+
+for t in Transaction.objects.filter(event__is_in_progress=True):
+    t.delete()
+for b in Bet.objects.filter(event__is_in_progress=True):
+    b.delete()
+for e in Event.objects.ongoing_only_queryset():
+    e.recalculate_prices()
+for u in UserProfile.objects.get_users():
+    u.active_date = now() - timedelta(years=1)
     u.save()
-
-for b in Bet.objects.all():
-    b.has = b.bought = b.sold = b.bought_avg_price = b.sold_avg_price = b.rewarded_total = 0
-
-for e in Event.objects.all():
-    e.current_buy_for_price = e.current_buy_against_price = e.current_sell_for_price = e.current_sell_against_price = 50
-    e.Q_for = e.Q_against = 0
-    e.turnover = 0
-    e.absolute_price_change = 0
-    e.price_change = 0
-    e.save()
-
-# reset snapshots
-
-# execute: accounts.tasks, events.tasks
-
+    u.topup_cash(config.STARTING_CASH)
