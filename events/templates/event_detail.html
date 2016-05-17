@@ -3,7 +3,6 @@
 {% load display %}
 {% load humanize %}
 {% load format %}
-{% load twitter_feed_tags %}
 
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
@@ -13,9 +12,41 @@
 
 {% block js_scripts %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-details.js"></script>
-{% endblock %}
 
-{% block content %}
+<!-- Twitter widget.js -->
+<script>
+window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));
+</script>
+<script>
+twttr.ready(function (twttr) {
+    twttr.widgets.createTimeline(
+      '732361087341879296',
+      document.getElementById('tt-comments'),
+      {
+        width: '600',
+        height: '700',
+        related: 'twitterdev,twitterapi'
+      }).then(function (el) {
+        console.log("Embedded a timeline.")
+      });
+});
+</script>
+
 <script type="text/javascript">
     $(function(){
         var EVENT_DETAILS_DATA = {{ json_data|safe }};
@@ -25,6 +56,9 @@
     });
 </script>
 
+{% endblock %}
+
+{% block content %}
 
 <section id="header"  class="body-margin">
     <h1>{{ event.title }}</h1>
@@ -145,14 +179,8 @@
 
 <section id="comments" class="prefooter-margin">
     <div class="fb-comments" data-href="{{ request.META.HTTP_HOST }}{{ event.get_relative_url }}" data-numposts="5"></div>
-    <div class="tweets">
-        {% for tweet in tweets %}
-        <div class="tweet">
-            <p>{{ tweet.content|linkify_twitter_status|urlize|url_target_blank }}</p>
-            <p class="date">{{ tweet.published_at|date:"F d, Y" }}</p>
-        </div>
-        {% endfor %}
-    </div>
+    <div id="tt-comments"></div>
+    <div class="clr"></div>
 </section>
 
 {% endblock %}

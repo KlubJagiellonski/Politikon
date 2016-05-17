@@ -269,7 +269,6 @@ INSTALLED_APPS = (
     'taggit',
     'taggit_helpers',
     'twitter_api',
-    'twitter_feed',
 
     'constance',
     'constance.backends.database',

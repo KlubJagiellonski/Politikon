@@ -74,9 +74,6 @@ python-social-auth
 django-taggit
 django-taggit-helpers
 
-# for twitter feed -> getting feed
-git+https://github.com/ppeczek/django-twitter-feed.git
-
 # for twitter api -> getting user's followers
 git+https://github.com/ppeczek/django-m2m-history.git
 git+https://github.com/ppeczek/django-oauth-tokens.git
