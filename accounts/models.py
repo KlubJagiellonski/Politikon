@@ -53,7 +53,7 @@ class UserProfile(AbstractBaseUser):
 
     is_vip = models.BooleanField(u"VIP", default=False)
 
-    active_date = models.DateTimeField(u"data ostatniej aktywacji", auto_now_add=True)
+    reset_date = models.DateTimeField(u"data ostatniej aktywacji", auto_now_add=True)
     created_date = models.DateTimeField(auto_now_add=True)
     last_visit = models.DateTimeField(null=True, blank=True)
 
@@ -196,7 +196,7 @@ class UserProfile(AbstractBaseUser):
         portfolio_value = 0
         user_bets = Bet.objects.select_related('event').\
             filter(user=self, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, has__gt=0,
-                   event__created_date__gt=self.active_date)
+                   event__created_date__gt=self.reset_date)
 
         for bet in user_bets.iterator():
             price_field = "current_sell_for_price"
@@ -343,7 +343,7 @@ class UserProfile(AbstractBaseUser):
         :return: chart points: dates and reputation
         :rtype: {int, [], []}
         """
-        start_date = self.active_date if self.active_date > now() - timedelta(days=7) else now() - timedelta(days=7)
+        start_date = self.reset_date if self.reset_date > now() - timedelta(days=7) else now() - timedelta(days=7)
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
             created_at__gte=start_date,
@@ -375,10 +375,10 @@ class UserProfile(AbstractBaseUser):
         :return: change of reputation
         :rtype: int
         """
-        start_date = self.active_date if self.active_date > date else date
+        start_date = self.reset_date if self.reset_date > date else date
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
-            created_at__gte=start_date,
+            created_at__gte=date,
         ).order_by('created_at')
         if len(snapshots):
             old_reputation = self.reputation_formula(snapshots[0].portfolio_value,

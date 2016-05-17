@@ -932,10 +932,10 @@ class TransactionManagerTestCase(TestCase):
         Get weekly user transactions
         """
         initial_time = timezone.now() - timedelta(days=8)
-        user = UserFactory()
         with freeze_time(initial_time) as frozen_time:
+            user = UserFactory()
             events = EventFactory.create_batch(3)
-            transaction1 = TransactionFactory(user=user, event=events[0])
+            TransactionFactory(user=user, event=events[0])
 
             frozen_time.tick(delta=timedelta(days=3))
             transaction2 = TransactionFactory(user=user, event=events[1])
@@ -953,8 +953,8 @@ class TransactionManagerTestCase(TestCase):
         Get monthly user transactions
         """
         initial_time = timezone.now() - timedelta(days=32)
-        user = UserFactory()
         with freeze_time(initial_time) as frozen_time:
+            user = UserFactory()
             events = EventFactory.create_batch(3)
             TransactionFactory(user=user, event=events[0])
 

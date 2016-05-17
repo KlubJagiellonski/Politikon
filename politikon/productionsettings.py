@@ -5,17 +5,14 @@ DEBUG = False
 
 SITE_ID = 2
 
-ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl',
-                 'politikon-staging.herokuapp.com']
+ALLOWED_HOSTS = ['www.politikon.org.pl', 'politikon.org.pl', 'politikon-staging.herokuapp.com']
 CATCHALL_REDIRECT_HOSTNAME = os.environ.get("CATCHALL_REDIRECT_HOSTNAME")
 
 DATABASES = {'default': dj_database_url.config()}
 
 FACEBOOK_APPLICATION_ID = os.environ.get("FACEBOOK_APPLICATION_ID")
-FACEBOOK_APPLICATION_SECRET_KEY = os.environ.\
-    get("FACEBOOK_APPLICATION_SECRET_KEY")
-FACEBOOK_APPLICATION_NAMESPACE = os.environ.\
-    get("FACEBOOK_APPLICATION_NAMESPACE")
+FACEBOOK_APPLICATION_SECRET_KEY = os.environ.get("FACEBOOK_APPLICATION_SECRET_KEY")
+FACEBOOK_APPLICATION_NAMESPACE = os.environ.get("FACEBOOK_APPLICATION_NAMESPACE")
 
 TWITTER_CONSUMER_KEY = os.environ.get("TWITTER_CONSUMER_KEY")
 TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")

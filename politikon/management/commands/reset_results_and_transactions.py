@@ -11,6 +11,9 @@ class Command(BaseCommand):
         for t in Transaction.objects.filter(type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP):
             t.delete()
 
+        for t in Transaction.objects.filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
+            t.delete()
+
         for b in Bet.objects.filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
             b.delete()
 
@@ -21,7 +24,7 @@ class Command(BaseCommand):
             e.save()
 
         for u in UserProfile.objects.get_users():
-            u.active_date = now()
+            u.reset_date = now()
             u.weekly_result = 0
             u.monthly_result = 0
             u.total_cash = 0

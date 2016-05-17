@@ -282,9 +282,9 @@ class TransactionManager(models.Manager):
 
     def get_queryset(self):
         """
-        Get transactions younger than active_data. It is for respecting "account reset"
+        Get transactions younger than reset_date. It is for respecting "account reset"
         :return: QuerySet active transactions
         :rtype: QuerySet[Transactions]
         """
         queryset = super(TransactionManager, self).get_queryset()
-        return queryset.filter(date__gte=models.F('user__active_date'))
+        return queryset.filter(date__gte=models.F('user__reset_date'))
