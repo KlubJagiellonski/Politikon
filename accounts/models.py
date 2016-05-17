@@ -343,7 +343,7 @@ class UserProfile(AbstractBaseUser):
         :return: chart points: dates and reputation
         :rtype: {int, [], []}
         """
-        start_date = now() - timedelta(days=7)
+        start_date = self.active_date if self.active_date > now() - timedelta(days=7) else now() - timedelta(days=7)
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
             created_at__gte=start_date,
@@ -375,9 +375,10 @@ class UserProfile(AbstractBaseUser):
         :return: change of reputation
         :rtype: int
         """
+        start_date = self.active_date if self.active_date > date else date
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
-            created_at__gte=date,
+            created_at__gte=start_date,
         ).order_by('created_at')
         if len(snapshots):
             old_reputation = self.reputation_formula(snapshots[0].portfolio_value,

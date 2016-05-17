@@ -16,10 +16,15 @@ class Command(BaseCommand):
             b.delete()
 
         for e in Event.objects.ongoing_only_queryset():
+            e.quantity = 0
+            e.Q_against = e.Q_for = 0
+            e.save()
             e.recalculate_prices()
 
         for u in UserProfile.objects.get_users():
             u.active_date = now() - timedelta(days=366)
+            u.weekly_result = 0
+            u.monthly_result = 0
             u.total_cash = 0
             u.total_given_cash = 0
             u.portfolio_value = 0

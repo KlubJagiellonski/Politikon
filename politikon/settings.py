@@ -129,7 +129,7 @@ STATIC_ROOT = DJANGO_PROJECT_ROOT / 'static_build'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-# STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     DJANGO_PROJECT_ROOT / 'static',
