@@ -53,7 +53,7 @@ def save_profile(strategy, user, response, details, is_new=False,
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
-                    user = UserProfile.objects.get('twitter_user_id', tuser.id)
+                    user = UserProfile.objects.get('twitter_user_id', follower.id)
                 except:
                     pass
                 else:
