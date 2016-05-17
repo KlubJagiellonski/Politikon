@@ -39,7 +39,7 @@ function startIntro() {
             },
             {
                 element: '#featured #makeabet',
-                intro: '<p>Za każdy wygrany zakład otrzymasz <span class="orange">100</span> reputów.</p><p>Jeśli kupiłeś zakład za <span class="orange">60</span> reputów, na wygranej zyskasz dodatkowe <span class="green">40</span> reputów.</p><p class="comment">Zysk <span class="green">40rp</span> = wygrana <span class="orange">100rp</span> - cena za zakład <span class="orange">60rp</span></p>',
+                intro: '<p>Za każdy <span class="green">wygrany</span> zakład otrzymasz <span class="orange">100</span> reputów.</p><p>Jeśli kupiłeś zakład za <span class="orange">60</span> reputów, na wygranej zyskasz dodatkowe <span class="green">40</span> reputów.</p><p class="comment">Zysk <span class="green">40rp</span> = wygrana <span class="orange">100rp</span> - cena za zakład <span class="orange">60rp</span></p>',
                 position: 'bottom'
             },
             {
