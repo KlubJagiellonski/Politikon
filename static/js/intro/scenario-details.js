@@ -24,7 +24,7 @@ function startIntro() {
             },
             {
                 element: '#bet-desc .lewa',
-                intro: '<h2>Opis wydarzenia</h2><p>Tutaj znajdziesz szczegółowy <span class="green">opis</span> <span class="orange">wydarzenia</span> i <span class="green">warunki rozstrzygnięcia</span> <span class="orange">zakładów.</span><br/><br/>Po zakończeniu wydarzenia, pojawi się tutaj także <span class="green">pełne uzasadnienie</span> podjętego <span class="orange">rozstrzygnięcia.</span></p>',
+                intro: '<h2>Opis wydarzenia</h2><p>Tutaj znajdziesz szczegółowy <span class="green">opis</span> <span class="orange">wydarzenia</span> i <span class="green">warunki</span> <span class="orange">rozstrzygnięcia zakładów.</span><br/><br/>Po zakończeniu wydarzenia, pojawi się tutaj także pełne <span class="green">uzasadnienie</span> podjętego <span class="orange">rozstrzygnięcia.</span></p>',
                 position: 'top',
             },
             {
@@ -43,7 +43,7 @@ function startIntro() {
                 position: 'bottom',
             },
             {
-                intro: '<h2>Stawiaj na politykę!</h2><p>Wiesz już, jaką opcję obstawisz? Nie zwlekaj i <span class="green">kup zakłady</span> teraz, <span class="orange">zanim podrożeją!</span></p>'
+                intro: '<h2>Stawiaj na politykę!</h2><p>Wiesz już jaką opcję obstawisz? Nie zwlekaj i <span class="green">kup zakłady</span> teraz, <span class="orange">zanim podrożeją!</span></p>'
             }
         ]
     });

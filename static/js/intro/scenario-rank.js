@@ -14,12 +14,12 @@ function startIntro() {
             },
             {
                 element: '#userinfo .tabs',
-                intro: '<p>Możesz zmieniać wyświetlane rankingi za pomocą tych przycisków.</p><p><span class="orange">Przełącz widok na ranking 7-dniowy</span> zanim przejdziemy dalej!</p>',
+                intro: '<p>Możesz zmieniać <span class="green">wyświetlane rankingi</span> za pomocą tych przycisków.</p><p><span class="orange">Przełącz widok na ranking 7-dniowy</span> zanim przejdziemy dalej!</p>',
                 position: 'bottom',
             },
             {
                 element: '.ranking-event',
-                intro: '<p><span class="orange">Ten gracz radzi sobie wyśmienicie!</span> Jest na pierwszej pozycji!</p><p><span class="orange">Chcesz go pokonać?</span> Nie ma sprawy! Ale zanim zdradzimy Ci, jak to zrobić...</p>',
+                intro: '<p>Ten gracz radzi <span class="green">sobie wyśmienicie!</span> Jest na pierwszej pozycji!</p><p><span class="orange">Chcesz go pokonać?</span> Nie ma sprawy!<br/>Ale zanim zdradzimy Ci, jak to zrobić...</p>',
                 position: 'bottom',
             },
             {

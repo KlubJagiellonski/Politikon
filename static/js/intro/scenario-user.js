@@ -55,7 +55,7 @@ function startIntro() {
             },
             {
                 element: '#featured #makeabet',
-                intro: '<p>Za każdy wygrany zakład otrzymasz <span class="orange">100</span> reputów.</p><p>Jeśli kupiłeś zakład za <span class="orange">60</span> reputów, na wygranej zyskasz dodatkowe <span class="green">40</span> reputów.</p><p class="comment">Zysk <span class="green">40rp</span> = wygrana <span class="orange">100rp</span> - cena za zakład <span class="orange">60rp</span></p>',
+                intro: '<p>Za każdy <span class="green">wygrany</span> zakład otrzymasz <span class="orange">100</span> reputów.</p><p>Jeśli kupiłeś zakład za <span class="orange">60</span> reputów, na wygranej zyskasz dodatkowe <span class="green">40</span> reputów.</p><p class="comment">Zysk <span class="green">40rp</span> = wygrana <span class="orange">100rp</span> - cena za zakład <span class="orange">60rp</span></p>',
                 position: 'bottom'
             },
             {
@@ -65,11 +65,11 @@ function startIntro() {
             },
             {
                 element: '#betfeed',
-                intro: '<p>W przypadku innych wydarzeń, <span class="orange">wszystko</span> działa tak samo!</p>',
+                intro: '<p>W przypadku innych wydarzeń, <span class="orange">wszystko działa tak samo!</span></p>',
                 position: 'top'
             },
             {
-                intro: '<h2>Powodzenia!</h2><p>Jesteś już gotowy do gry. <span class="green">Obstaw</span> swoje pierwsze <span class="orange">wydarzenia</span> i <span class="green">udowodnij,</span> że jesteś <span class="orange">czarnym koniem</span> tej politycznej rozgrywki!</p>'
+                intro: '<h2>Powodzenia!</h2><p>Jesteś już gotowy do gry! <span class="green">Obstaw</span> swoje pierwsze <span class="orange">wydarzenia</span> i <span class="green">udowodnij,</span> że jesteś <span class="orange">czarnym koniem</span> tej politycznej rozgrywki!</p>'
             }
         ]
     });
