@@ -53,6 +53,7 @@ class UserProfile(AbstractBaseUser):
 
     is_vip = models.BooleanField(u"VIP", default=False)
 
+    active_date = models.DateTimeField(u"data ostatniej aktywacji", auto_now_add=True)
     created_date = models.DateTimeField(auto_now_add=True)
     last_visit = models.DateTimeField(null=True, blank=True)
 
