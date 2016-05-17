@@ -279,3 +279,12 @@ class TransactionManager(models.Manager):
     def get_monthly_user_transactions(self, user):
         last_month = now() - timedelta(days=30)
         return self.get_user_transactions(user).filter(date__gt=last_month)
+
+    def get_queryset(self):
+        """
+        Get transactions younger than active_data. It is for respecting "account reset"
+        :return: QuerySet active transactions
+        :rtype: QuerySet[Transactions]
+        """
+        queryset = super(TransactionManager, self).get_queryset()
+        return queryset.filter(date__gte=models.F('user__active_date'))
