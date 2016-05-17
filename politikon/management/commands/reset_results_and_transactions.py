@@ -1,6 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
-from datetime import timedelta
 from events.models import Transaction, Bet, Event
 from accounts.models import UserProfile
 from constance import config
@@ -18,8 +17,8 @@ class Command(BaseCommand):
         for e in Event.objects.ongoing_only_queryset():
             e.quantity = 0
             e.Q_against = e.Q_for = 0
-            e.save()
             e.recalculate_prices()
+            e.save()
 
         for u in UserProfile.objects.get_users():
             u.active_date = now()
