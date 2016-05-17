@@ -69,7 +69,10 @@ django-sslify>=0.2
 
 # connecting with FB, TT
 python-social-auth
-django-social-share
+
+# for tags
+django-taggit
+django-taggit-helpers
 
 # for twitter api -> getting user's followers
 git+https://github.com/ppeczek/django-m2m-history.git
