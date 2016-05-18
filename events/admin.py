@@ -3,19 +3,9 @@ from django.contrib import admin, messages
 
 from .exceptions import EventAlreadyFinished
 from .forms import EventForm
-from .models import Bet, Event, Transaction, RelatedEvent
+from .models import Bet, Event, Transaction
 
 from taggit_helpers import TaggitCounter, TaggitListFilter, TaggitTabularInline
-
-
-class RelatedEventInline(admin.TabularInline):
-    model = RelatedEvent
-    fk_name = 'event'
-    extra = 1
-    raw_id_fields = ('related',)
-    autocomplete_lookup_fields = {
-        'fk': ['related'],
-    }
 
 
 class EventAdmin(TaggitCounter, admin.ModelAdmin):
@@ -40,8 +30,6 @@ class EventAdmin(TaggitCounter, admin.ModelAdmin):
                     'created_date', 'estimated_end_date', 'resolved_by', 'end_date']
 
     list_filter = [TaggitListFilter, 'is_featured', 'outcome']
-
-    inlines = [RelatedEventInline]
 
     def save_model(self, request, obj, form, change):
         # TODO: to jest najgorsze

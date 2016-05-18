@@ -3,7 +3,7 @@ import factory
 
 from django.utils import timezone
 
-from .models import Event, RelatedEvent, Bet, Transaction
+from .models import Event, Bet, Transaction
 
 
 class EventFactory(factory.django.DjangoModelFactory):
@@ -26,11 +26,6 @@ class ShortEventFactory(factory.django.DjangoModelFactory):
         model = Event
 
     estimated_end_date = timezone.now()
-
-
-class RelatedEventFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = RelatedEvent
 
 
 class BetFactory(factory.django.DjangoModelFactory):

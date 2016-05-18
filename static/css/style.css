@@ -353,9 +353,23 @@ footer ul a, footer .socialmedia div,
 
 .btn {padding-bottom: 20px; padding-top: 20px; font-size: 1.375em; color: #fff; text-transform: uppercase; font-weight: 700; border-radius: 5px;}
 
-#header { display: table; margin-bottom: 55px;}
-#header h2 {float: left; color: #e7692a; font-size: 1.55em; text-transform: uppercase; font-weight: 700;}
-#header h1 {color: #58585a; font-size: 1.875em; font-weight: 700; line-height: 1.2em;}
+#header {
+    display: table;
+    margin-bottom: 55px;
+}
+#header h2 {
+    float: left;
+    color: #e7692a;
+    font-size: 1.55em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+#header h1 {
+    color: #58585a;
+    font-size: 1.875em;
+    font-weight: 700;
+    line-height: 1.2em;
+}
 
 footer {height: 120px; background: url(../img/footer-bg.jpg) top center repeat-x;}
 footer .logo {width: 174px; height: 129px; background: url(../img/footer-logo-politikon.png) top center no-repeat; position: absolute; margin-top: -50px; margin-left:-87px; left:50%;}

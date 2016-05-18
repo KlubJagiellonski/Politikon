@@ -15,8 +15,7 @@ from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, \
     InsufficientCash, InsufficientBets, EventAlreadyFinished
-from .factories import EventFactory, ShortEventFactory, RelatedEventFactory, BetFactory, \
-    TransactionFactory
+from .factories import EventFactory, ShortEventFactory, BetFactory, TransactionFactory
 from .models import Bet, Event, Transaction
 from .tasks import create_open_events_snapshot, calculate_price_change
 from .templatetags.display import render_bet, render_event, render_events, render_featured_event, \
@@ -297,29 +296,6 @@ class EventsModelTestCase(TestCase):
         Cancel event
         """
         # TODO:
-
-    def test_get_related(self):
-        """
-        Get related
-        """
-        user = UserFactory()
-
-        event1 = EventFactory()
-        event2 = EventFactory()
-        event3 = EventFactory()
-        BetFactory(user=user, event=event2)
-
-        RelatedEventFactory(event=event1, related=event2)
-        RelatedEventFactory(event=event1, related=event3)
-        RelatedEventFactory(event=event2, related=event3)
-        RelatedEventFactory(event=event3, related=event2)
-
-        related1 = event1.get_related(user)
-        related2 = event2.get_related(AnonymousUser())
-        related3 = event3.get_related(AnonymousUser())
-        self.assertEqual([event2, event3], related1)
-        self.assertEqual([event3], related2)
-        self.assertEqual([event2], related3)
 
 
 class EventsManagerTestCase(TestCase):

@@ -471,40 +471,6 @@ class Event(models.Model):
                 price=abs(refund)
             )
 
-    def get_related(self, user, number=9):
-        """
-        Get events related to this event
-        :param user: logged user if exists
-        :type user: UserProfile
-        :param number: maximal events number
-        :type number: int
-        :return: list of related events
-        :rtype:  QuerySet
-        """
-        relates = self.these_events.all().only('related')[:number]
-        events = []
-        for relation in relates:
-            event = relation.related
-            event.my_bet = event.get_user_bet(user)
-            events.append(event)
-        return events
-
-
-class RelatedEvent(models.Model):
-    """
-    Relates between events. Relates are one side: one element in this model
-    means that "related" event is on the list "Powiązane Wydarzenia" "event".
-    Other side relation need another element.
-    """
-    class Meta:
-        verbose_name = 'powiązane wydarzenie'
-        verbose_name_plural = 'powiązane wydarzenia'
-    event = models.ForeignKey(Event, null=True, related_name='these_events',
-                              related_query_name='this_event')
-    related = models.ForeignKey(Event, null=True, related_name='relates',
-                                related_query_name='related')
-
-
 class Bet(models.Model):
     """
     Created when user choose YES or NO for event.
