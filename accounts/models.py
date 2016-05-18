@@ -378,7 +378,7 @@ class UserProfile(AbstractBaseUser):
         start_date = self.reset_date if self.reset_date > date else date
         snapshots = self.snapshots.filter(
             snapshot_of_id=self.id,
-            created_at__gte=date,
+            created_at__gte=start_date,
         ).order_by('created_at')
         if len(snapshots):
             old_reputation = self.reputation_formula(snapshots[0].portfolio_value,
