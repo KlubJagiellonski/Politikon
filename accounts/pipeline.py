@@ -49,7 +49,7 @@ def save_profile(strategy, user, response, details, is_new=False,
     if backend.name == 'twitter':
         if is_new or not user.is_active:
             playing_followers_count = 0
-            tuser = User.remote.fetch(response['screen_name'])
+            tuser = User.remote.fetch(response.get('screen_name', ''))  # TODO: replace default value
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
@@ -82,13 +82,13 @@ def save_profile(strategy, user, response, details, is_new=False,
             else:
                 user.is_active = True
 
-            user.name = response['name']
+            user.name = response.get('name', '')    # TODO: replace default value
             user.twitter_user_id = response['id']
-            user.twitter_user = response['screen_name']
+            user.twitter_user = response.get('screen_name', '')  # TODO: replace default value
             user.save()
 
-            if not response['default_profile_image']:
-                url = response['profile_image_url'].replace('_normal', '')
+            if not response.get('default_profile_image'):
+                url = response.get('profile_image_url', '').replace('_normal', '')
                 try:
                     response = request('GET', url)
                     response.raise_for_status()
@@ -101,7 +101,7 @@ def save_profile(strategy, user, response, details, is_new=False,
     if backend.name == 'facebook':
         if is_new or not user.is_active:
             playing_friends_count = 0
-            for friend in response['friends']['data']:
+            for friend in response.get('friends', {}).get('data', {}):
                 try:
                     user = UserProfile.objects.get('facebook_user_id', friend['id'])
                 except:
