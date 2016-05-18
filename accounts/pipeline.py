@@ -53,11 +53,11 @@ def save_profile(strategy, user, response, details, is_new=False,
             followers = tuser.fetch_followers(all=True)
             for follower in followers:
                 try:
-                    user = UserProfile.objects.get('twitter_user_id', follower.id)
+                    follower_profile = UserProfile.objects.get('twitter_user_id', follower.id)
                 except:
                     pass
                 else:
-                    if user.is_active:
+                    if follower_profile.is_active:
                         playing_followers_count += 1
 
             if playing_followers_count < config.REQUIRED_FRIENDS_THRESHOLD:
@@ -103,11 +103,11 @@ def save_profile(strategy, user, response, details, is_new=False,
             playing_friends_count = 0
             for friend in response.get('friends', {}).get('data', {}):
                 try:
-                    user = UserProfile.objects.get('facebook_user_id', friend['id'])
+                    friend_profile = UserProfile.objects.get('facebook_user_id', friend['id'])
                 except:
                     pass
                 else:
-                    if user.is_active:
+                    if friend_profile.is_active:
                         playing_friends_count += 1
 
             if playing_friends_count < config.REQUIRED_FRIENDS_THRESHOLD:
@@ -125,7 +125,8 @@ def save_profile(strategy, user, response, details, is_new=False,
                             'adresem: https://www.politikon.org.pl/admin/accounts/userprofile/'
                         try:
                             from_email = settings.DEFAULT_EMAIL_FROM
-                            send_mail(subject, message, from_email, recipent_list)
+                            # TODO: fix it: https://trello.com/c/58h6fUgM/254-b-ad-wysy-ania-maili-na-heroku
+                            # send_mail(subject, message, from_email, recipent_list)
                         except:
                             # TODO: handle error
                             logger.exception("Error: couldn't send emails")
