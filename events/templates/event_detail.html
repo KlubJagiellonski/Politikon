@@ -62,6 +62,9 @@ twttr.ready(function (twttr) {
 
 <section id="header"  class="body-margin">
     <h1>{{ event.title }}</h1>
+    {% if event.twitter_tag %}
+    <h2>#{{ event.twitter_tag }}</h2>
+    {% endif %}
 </section>
 
 <section id="bet-details">
@@ -168,11 +171,11 @@ twttr.ready(function (twttr) {
     </div>
     {% endcomment %}
 </section>
-{% if related_events %}
+{% if event.tags.similar_objects %}
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
     <div>
-        {% render_events related_events %}
+        {% render_events event.tags.similar_objects|slice:":3" %}
     </div>
 </section>
 {% endif %}
