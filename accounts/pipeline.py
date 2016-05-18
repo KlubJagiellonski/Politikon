@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.files.base import ContentFile
 from django.core.mail import send_mail
+from django.http.response import HttpResponseForbidden
 from django.utils.translation import ugettext as _
 
 from constance import config
@@ -42,6 +43,11 @@ def save_profile(strategy, user, response, details, is_new=False, *args, **kwarg
     print(is_new)
     print(strategy)
     #  uid = kwargs['uid']
+
+    if isinstance(user, HttpResponseForbidden):
+        print('HttpResponseForbidden CONTENT:')
+        print(user.content)
+        print('END ------------ HttpResponseForbidden')
 
     backend = kwargs['backend']
 
