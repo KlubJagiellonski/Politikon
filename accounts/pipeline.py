@@ -36,18 +36,11 @@ def save_profile(strategy, user, response, details, is_new=False, *args, **kwarg
     :type is_new: bool
     :param is_new: is it new account
     """
-    #  print(strategy.storage)
-    print(user)
-    print(response)
-    print(details)
-    print(is_new)
-    print(strategy)
     #  uid = kwargs['uid']
 
-    if isinstance(user, HttpResponseForbidden):
-        print('HttpResponseForbidden CONTENT:')
-        print(user.content)
-        print('END ------------ HttpResponseForbidden')
+    if not user or isinstance(user, HttpResponseForbidden):
+        # user is unauthenticated
+        return
 
     backend = kwargs['backend']
 

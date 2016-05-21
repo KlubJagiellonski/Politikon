@@ -200,6 +200,9 @@ SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'missing.html'
 
+# set it False to allow redirect to main page after cancel facebook authentication. If this is True
+# then raise AuthCanceled (HttpError 500) - social/apps/django_app/middleware.py line 50
+RAISE_EXCEPTIONS = False
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
@@ -233,6 +236,8 @@ MIDDLEWARE_CLASSES = (
     # adding basic auth
     # 'politikon.middleware.BasicAuthMiddleware',
 
+    # cause redirection to when raise social module exceptions
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
