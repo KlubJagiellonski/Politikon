@@ -181,7 +181,7 @@ ul.tabs li a {width: 100%; display: block;}
 @media only screen and (max-width: 500px) {
     
 #maintop .userdata a, #maintop .socialmedia, #wallet-not .inside .betresult .status, #wallet-not .inside .header span, .hotbet-icon, footer ul:nth-child(3), #bet-details .chart-container,
-#userinfo .notinwallet .status, #userinfo .history-event .prawa .history-action
+#userinfo .notinwallet .status, #userinfo .history-event .prawa .history-action, .time-to-solution
 {display: none !important;}
 
 #maintop nav {min-width: 80px;}
