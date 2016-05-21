@@ -14,7 +14,7 @@
 
 <div class="userdata prawa">
     {# <!--klasa .notification dodawana przy powiadomieniach (wtedy,gdy klasa .wallet zawiera span)--> #}
-    <a href="{% if user.get_newest_results.count %}{% url 'accounts:user_profile' %}#zawartoscportfela{% else %}#{% endif %}">
+    <a href="{% if user.get_newest_results.count %}#{% else %}{% url 'accounts:user_profile' %}#zawartoscportfela{% endif %}">
         <div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
             {% if user.get_newest_results.count %}
                 <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
