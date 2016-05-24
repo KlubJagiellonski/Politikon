@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib import auth
 from django.db import models
+from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -239,7 +240,7 @@ class BetManager(models.Manager):
             has__gt=0,
         )
 
-    def get_finished(self):
+    def get_finished(self, user):
         """
         Get finished bets and attribute has > 0, that bets are on user result
         list.
@@ -255,7 +256,9 @@ class BetManager(models.Manager):
         return self.filter(
             event__outcome__in=events_finshed,
             has__gt=0,
-        ).order_by('-event__end_date')
+            user=user
+        ).filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=user.reset_date)).\
+            order_by('-event__end_date')
 
 
 class TransactionManager(models.Manager):
@@ -267,6 +270,9 @@ class TransactionManager(models.Manager):
         set model as Transaction model
         """
         super(TransactionManager, self).__init__()
+
+    def get_user_transactions_after_reset(self, user):
+        return self.model.objects.filter(user=user, date__gte=user.reset_date)
 
     def get_user_transactions(self, user):
         return self.model.objects.filter(user=user).\
