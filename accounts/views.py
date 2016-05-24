@@ -6,10 +6,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 
-from politikon.decorators import class_view_decorator
-from politikon.forms import MultiFormsView
 from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
 from .models import UserProfile
+
+from events.models import Transaction, Bet
+from politikon.decorators import class_view_decorator
+from politikon.forms import MultiFormsView
 
 
 @class_view_decorator(login_required)
@@ -89,7 +91,11 @@ class UserDetailView(DetailView):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
         user = self.get_object()
         context.update(UserProfile.objects.get_user_positions(user))
-        context['json_data'] = json.dumps(user.get_reputation_history())
+        context.update({
+            'json_data': json.dumps(user.get_reputation_history()),
+            'user_transactions': Transaction.objects.get_user_transactions_after_reset(user),
+            'user_results': Bet.objects.get_finished(user)
+        })
         return context
 
 

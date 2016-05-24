@@ -76,7 +76,7 @@
         </article>
 
         <article id="powiadomieniaowynikach">
-            {% for bet in object.bets.get_finished %}
+            {% for bet in user_results %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
                     <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
@@ -99,7 +99,7 @@
 
         <article id="historiatransakcji">
             <div id="transactions-list">
-                {% for transaction in object.transactions.all|slice:":50" %}
+                {% for transaction in user_transactions|slice:":50" %}
                 <div class="history-event">
                     <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
                     <div class="prawa">

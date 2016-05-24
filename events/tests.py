@@ -862,7 +862,7 @@ class BetsManagerTestCase(TestCase):
         events[3].cancel()
         for e in events:
             e.save()
-        self.assertEqual([bets[3], bets[2], bets[1]], list(Bet.objects.get_finished()))
+        self.assertEqual([bets[3], bets[2], bets[1]], list(Bet.objects.get_finished(user)))
 
 
 class TransactionsModelTestCase(TestCase):
