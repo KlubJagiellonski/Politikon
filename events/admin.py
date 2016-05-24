@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin, messages
+from django.db import models
+from django.forms import Textarea
 
 from .exceptions import EventAlreadyFinished
 from .forms import EventForm
@@ -10,6 +12,23 @@ from taggit_helpers import TaggitCounter, TaggitListFilter, TaggitTabularInline
 
 class EventAdmin(TaggitCounter, admin.ModelAdmin):
     form = EventForm
+
+    formfield_overrides = {
+        # models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 40})},
+    }
+
+    fieldsets = (
+        (u'Główne', {'fields': ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
+                                'is_featured', 'is_front', 'tags')}),
+        ('Social media', {'fields': ('short_title', 'title_fb_yes', 'title_fb_no', 'twitter_tag')}),
+        (u'Rozwiązanie wydarzenia', {'fields': ('solve_event', 'end_date', 'outcome', 'resolved_by')}),
+        ('Dane statystyczne', {'fields': ('B', 'current_buy_for_price', 'current_buy_against_price',
+                                          'current_sell_for_price', 'current_sell_against_price',
+                                          'last_transaction_date', 'Q_for', 'Q_against', 'turnover',
+                                          'absolute_price_change', 'price_change')})
+    )
+
     readonly_fields = [
         'resolved_by',
         'end_date',
