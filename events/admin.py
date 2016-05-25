@@ -46,11 +46,13 @@ class EventAdmin(TaggitCounter, admin.ModelAdmin):
     ]
 
     list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'taggit_counter', 'outcome',
-                    'created_date', 'estimated_end_date', 'resolved_by', 'end_date']
+                    'created_date', 'created_by', 'estimated_end_date', 'resolved_by', 'end_date']
 
     list_filter = [TaggitListFilter, 'is_featured', 'outcome']
 
     def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
         # TODO: to jest najgorsze
         if request.method == 'POST':
             if request.POST['solve_event']:
