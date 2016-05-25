@@ -76,7 +76,7 @@
         </article>
 
         <article id="powiadomieniaowynikach">
-            {% for bet in user_results %}
+            {% for bet in object.bets.get_finished %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
                     <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>

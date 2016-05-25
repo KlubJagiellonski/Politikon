@@ -61,7 +61,7 @@
     <div class="clr"></div>
     <div class="zakladki-content">
         <article id="zawartoscportfela">
-            {% for bet in user_portfolio %}
+            {% for bet in object.bets.get_in_progress %}
             <div class="betinwallet betresult new">
                 <a href="{{ bet.event.get_relative_url }}">
                     <div style="background: url({{ STATIC_URL }}{{ bet.event.small_image }}); width: 136px; background-size: cover; height: 100px; display: block; float: left; margin-right: 3.75%; margin-top: 5px;">
@@ -77,7 +77,7 @@
         </article>
 
         <article id="powiadomieniaowynikach">
-            {% for bet in user_results %}
+            {% for bet in object.bets.get_finished %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
                     <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
