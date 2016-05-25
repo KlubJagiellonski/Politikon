@@ -81,9 +81,12 @@ class Event(models.Model):
     outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey('accounts.UserProfile', verbose_name=u'utworzone przez', null=True,
+                                   related_name='created_by')
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
-    end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True)
+    end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True, blank=True)
     resolved_by = models.ForeignKey('accounts.UserProfile', null=True, blank=True,
+                                    related_name='resolved_by',
                                     verbose_name=u'rozstrzygnięte przez')
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
