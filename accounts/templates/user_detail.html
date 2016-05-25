@@ -76,7 +76,7 @@
         </article>
 
         <article id="powiadomieniaowynikach">
-            {% for bet in object.bets.get_finished %}
+            {% for bet in user_results %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
                     <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
@@ -110,7 +110,7 @@
                 </div>
                 {% endfor %}
             </div>
-            {% if object.transactions.all.count > 50 %}
+            {% if user_transactions.count > 50 %}
                 <a id="loadmore"><div class="btn astable">Pokaż starsze transakcje</div></a>
             {% endif %}
         </article>

@@ -67,7 +67,11 @@ class UserProfileDetailView(DetailView):
             get_context_data(*args, **kwargs)
         user = self.get_object()
         context.update(UserProfile.objects.get_user_positions(user))
-        context['json_data'] = json.dumps(user.get_reputation_history())
+        context.update({
+            'json_data': json.dumps(user.get_reputation_history()),
+            'user_results': Bet.objects.get_finished(user),
+            'user_transactions': Transaction.objects.get_user_transactions_after_reset(user),
+        })
         return context
 
 
@@ -93,8 +97,8 @@ class UserDetailView(DetailView):
         context.update(UserProfile.objects.get_user_positions(user))
         context.update({
             'json_data': json.dumps(user.get_reputation_history()),
+            'user_results': Bet.objects.get_finished(user),
             'user_transactions': Transaction.objects.get_user_transactions_after_reset(user),
-            'user_results': Bet.objects.get_finished(user)
         })
         return context
 
