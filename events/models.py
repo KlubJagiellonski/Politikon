@@ -80,7 +80,7 @@ class Event(models.Model):
                                           default=1)
     outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
 
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=u'data utworzenia')
     created_by = models.ForeignKey('accounts.UserProfile', verbose_name=u'utworzone przez', null=True,
                                    related_name='created_by')
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
