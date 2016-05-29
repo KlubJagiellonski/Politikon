@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin, messages
 from django.db import models
-from django.forms import Textarea
+from django.forms import Textarea, TextInput
 
 from .exceptions import EventAlreadyFinished
 from .forms import EventForm
@@ -14,7 +14,7 @@ class EventAdmin(TaggitCounter, admin.ModelAdmin):
     form = EventForm
 
     formfield_overrides = {
-        # models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
         models.TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 40})},
     }
 
