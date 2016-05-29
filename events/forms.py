@@ -9,6 +9,7 @@ from .models import Event
 
 
 class EventForm(forms.ModelForm):
+    short_title = forms.CharField(label="Tytuł promocyjny", max_length=74, help_text='maksymalnie 74 znaki')
     solve_event = forms.CharField(label="Rozstrzygnij event. TAK / NIE / ANULUJ", required=False)
 
     class Meta:

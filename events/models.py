@@ -78,7 +78,7 @@ class Event(models.Model):
     is_front = models.BooleanField(u'front', default=False)
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
                                           default=1)
-    outcome_reason = models.TextField(u'uzazadnienie wyniku', default='', blank=True)
+    outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=u'data utworzenia')
     created_by = models.ForeignKey('accounts.UserProfile', verbose_name=u'utworzone przez', null=True,
