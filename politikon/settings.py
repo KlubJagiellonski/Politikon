@@ -269,11 +269,11 @@ INSTALLED_APPS = (
     'django_assets',
     'social.apps.django_app.default',
 
-    'oauth_tokens',
-    'm2m_history',
+    # 'oauth_tokens',
+    # 'm2m_history',
     'taggit',
     'taggit_helpers',
-    'twitter_api',
+    # 'twitter_api',
 
     'constance',
     'constance.backends.database',
