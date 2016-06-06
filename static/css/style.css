@@ -147,10 +147,11 @@ footer ul a, footer .socialmedia div,
     opacity: 0;
     height: auto;
     position: absolute;
+    top: 50%;
     right: 20px;
-    background: #efefef;
     margin: 0 auto;
-    margin-top: 5px;
+    margin-top: 35px !important;
+    background: #efefef;
     -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
     -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
     box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
@@ -203,7 +204,23 @@ footer ul a, footer .socialmedia div,
 
 #maintop .graj .avatarmenu ul a:last-of-type {margin-bottom: 0px !important;}
 
-#maintop .avatar {width: 8.5% !important; text-align: right;}
+#maintop .avatar {width: 8.5% !important; position: relative;}
+#maintop .avatar .image {
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    top: 50%;
+    margin-top: -35px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background-size: cover;
+    cursor: pointer;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
 #maintop .avatar img {width: 70px; height: 70px; border-radius: 50%; border: 3px solid #fff; margin-top: 15px; cursor: pointer;
         box-sizing:border-box;
         -moz-box-sizing:border-box;

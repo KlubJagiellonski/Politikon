@@ -92,7 +92,7 @@ $(function() {
             height = $wrapper.data('preview-height') || $preview.height();
             if (src) {
                 $.when(prepareImage(src, width, height)).then(function (src) {
-                    $wrapper.find('.preview').css('background-image', 'url(' + src + ')').show();
+                    $wrapper.find('.preview').attr('src', src).show();
                     if (changeCallback) {
                         changeCallback(src);
                     }

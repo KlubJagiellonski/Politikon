@@ -17,7 +17,7 @@ $(function(){
 });
 //pokaż menu z avatara
 $(function(){
-    $('#maintop .graj img').on('click',function() {
+    $('#maintop .graj .image').on('click',function() {
         if (! $('#maintop .graj .avatarmenu ul').hasClass('display')) {
             $('#maintop .mainmenu').removeClass('display');
             $('#maintop .mainmenu').removeClass('opacity');
@@ -59,19 +59,19 @@ $(function(){
 });
 //ukryj wszystko po klieknieciu w overlay
 $(function(){
-        $('.overlay').on('click',function(){
-            $('#maintop .mainmenu').removeClass('display');
-            $('#maintop .mainmenu').removeClass('opacity');
-            $('#maintop .graj .avatarmenu ul').removeClass('display');
-            $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-            $('#maintop .userdata .wallet .arrowup').removeClass("display");
-            $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
-            $('#wallet-not').removeClass("opacity");
-            $('.overlay').removeClass("opacity");
-            setTimeout(function (){
-                $('#wallet-not').css({'margin-top' : ''});
-                $('.overlay').removeClass("display");
-            }, 150); // opoznienie
+    $('.overlay').on('click',function(){
+        $('#maintop .mainmenu').removeClass('display');
+        $('#maintop .mainmenu').removeClass('opacity');
+        $('#maintop .graj .avatarmenu ul').removeClass('display');
+        $('#maintop .graj .avatarmenu ul').removeClass('opacity');
+        $('#maintop .userdata .wallet .arrowup').removeClass("display");
+        $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+        $('#wallet-not').removeClass("opacity");
+        $('.overlay').removeClass("opacity");
+        setTimeout(function (){
+            $('#wallet-not').css({'margin-top' : ''});
+            $('.overlay').removeClass("display");
+        }, 150); // opoznienie
     });
 });
 

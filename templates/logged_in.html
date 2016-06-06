@@ -2,7 +2,7 @@
 {% load format %}
 
 <div class="graj avatar prawa">
-    <img src="{{ user.get_avatar_url }}" />
+    <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
     <nav class="avatarmenu">
         <ul>
             <li><a href="{% url 'accounts:user_profile' %}">Mój profil</a></li>
