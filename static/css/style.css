@@ -541,8 +541,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #bet-details .bet-social .peopleYES, #bet-details .bet-social .peopleNO {width: 30%;}
 #bet-details .bet-social .peopleYES {text-align: right; padding: 5px 3% 0 1%;}
 #bet-details .bet-social .peopleNO {text-align: left; padding: 5px 1% 0 3%;}
-#bet-details .bet-social ul li img {width: 40px; height: 40px; border-radius: 50%; border: 1px solid transparent;}
-#bet-details .bet-social ul li img:hover {border-color: #bfbfbf;}
+#bet-details .bet-social ul li .image {width: 40px; height: 40px; border-radius: 50%; border: 1px solid transparent; background-size: cover;}
+#bet-details .bet-social ul li .image:hover {border-color: #bfbfbf; background-size: cover;}
 #bet-details .uservip:hover {border-color: #c84d28 !important;}
 #bet-details .bet-social .peopleYES ul li {float: right; margin-left: 5px;}
 #bet-details .bet-social .peopleNO ul li {float: left; margin-right: 5px;}

@@ -70,7 +70,7 @@ twttr.ready(function (twttr) {
 
 <section id="bet-details">
     <div class="astable" style="position: relative; background: #7D3A18;">
-        {% if event.small_image %}
+        {% if event.small_image and event.big_image %}
 
         <div style="
             background-image: url({{ event.big_image.url }});
@@ -113,7 +113,7 @@ twttr.ready(function (twttr) {
         <div class="peopleYES lewa">
             <ul>
                 {% for bet in bet_social.yes_bets %}
-                <li><a href="{{ bet.user.get_absolute_url }}"><img class="{% if bet.user.is_vip %}uservip{% endif %}" src="{{ bet.user.get_avatar_url }}"/></a></li>
+                <li><a href="{{ bet.user.get_absolute_url }}"><div class="image {% if bet.user.is_vip %}uservip{% endif %}" style="background-image: url({{ bet.user.get_avatar_url }});"></div></a></li>
                 {% endfor %}
             </ul>
             <div class="voted">{{ bet_social.yes_count }}</div>
@@ -121,7 +121,7 @@ twttr.ready(function (twttr) {
         <div class="peopleNO prawa">
             <ul>
                 {% for bet in bet_social.no_bets %}
-                <li><a href="{{ bet.user.get_absolute_url }}"><img class="{% if bet.user.is_vip %}uservip{% endif %}" src="{{ bet.user.get_avatar_url }}"/></a></li>
+                <li><a href="{{ bet.user.get_absolute_url }}"><div class="image {% if bet.user.is_vip %}uservip{% endif %}" style="background-image: url({{ bet.user.get_avatar_url }});"></div></a></li>
                 {% endfor %}
             </ul>
             <div class="voted">{{ bet_social.no_count }}</div>
