@@ -265,7 +265,7 @@ footer ul a, footer .socialmedia div,
 #wallet-not .inside .header span {float: right; color: #feceb5; font-size: .8em; font-weight: 400; text-transform: none;}
 .betresult {padding: 0 2.5%; background: #f5f5f5; width: 94%; display: table; margin-bottom: 5px; height: 110px; border: 1px solid #f5f5f5;}
 .betresult:hover {border: 1px solid #d6d6d6;}
-.betresult img {float: left; margin-right: 3.75%; margin-top: 5px;}
+.betresult .image {float: left; margin-right: 3.75%; margin-top: 5px; width: 128px; height: 100px; display: block; background-size: cover; }
 .betresult .status {float: left; width: 55%; height: 100px;}
 .betresult .status h3 {height: 40px; font-size: 1.125em; color: #333; margin-top: 5px; margin-bottom: 8px;}
 .betresult .status p {font-size: 1em; color: #333; margin-bottom: 4px;}
@@ -594,7 +594,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .betinwallet:hover .detailed-status {opacity: 1;}
 
 #userinfo .notinwallet {width: 97%; padding: 0 1.5%; margin-bottom: 20px; display: table;}
-#userinfo .notinwallet img {margin-right: 2%;}
+#userinfo .notinwallet .image {margin-right: 2%; width: 128px; background-size: cover; height: 100px; display: block; float: left;}
 #userinfo .notinwallet .status {width: 36%; margin-right: 2%;}
 #userinfo .notinwallet .status-change {width: 18%;}
 #userinfo .notinwallet .status-explanation {width: 29%; margin-right: -1.5%; height: 100px; padding: 5px 1.5%; float: right; background: #eee; font-size: .875em; color: #b4b4b4; line-height: 1.3em; overflow: hidden;}
@@ -641,15 +641,16 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .ranking-event {background: #fff; width: 97%; max-height: 80px; min-height: 80px; padding: 10px 1.5%; height: 16px; border-bottom: 1px solid #d5d5d5;}
 #userinfo .ranking-event .lewa {width: 60%;}
 #userinfo .ranking-event .rank {width: 7.2%;}
-#userinfo .ranking-event .lewa img {width: 80px; height: 80px; border-radius: 50%;margin-right: 5%;}
+#userinfo .ranking-event .lewa .image {float: left; width: 80px; height: 80px; border-radius: 50%; margin-right: 5%;background-size: cover;}
 #userinfo .ranking-event .nickname {color: #58585a; font-size: 1.25em;}
 
 #userinfo .ranking-event .uservip .nickname {font-weight: 700;}
 #userinfo .ranking-event .uservip .nickname:after {content: 'VIP'; font-size: .5em; color: #fff; background: #c84d28; padding: 3px 7px; border-radius: 5px; margin-left: .7em; margin-top: 3px; position: absolute;}
-#userinfo .ranking-event .uservip img {border: 2px solid #c84d28;
-        box-sizing:border-box;
-        -moz-box-sizing:border-box;
-        -webkit-box-sizing:border-box;
+#userinfo .ranking-event .uservip .image {
+    border: 2px solid #c84d28;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
 }
 
 #userinfo .ranking-event .prawa {width: 37%;}
