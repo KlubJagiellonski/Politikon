@@ -620,6 +620,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 #profileuser {margin-bottom: 40px;}
 .profile-avatar .image {width: 160px; height: 160px; border-radius: 50%; display: table; margin: 0 auto; margin-top: -70px; position: relative; background-size: cover;}
+.profile-avatar .image.preview {margin: 0 auto;}
 #profileuser .uservip .image {border: 3px solid #c84d28;}
 #profileuser .nickname {width: 100%; text-align: center; font-size: 2.25em; font-weight: 700; color: #333; margin-top: 25px; margin-bottom: -25px;}
 #profileuser .nickname h1 {display: inline-block;}
