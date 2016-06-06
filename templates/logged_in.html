@@ -55,10 +55,10 @@
             <div id="jp-container" class="jp-container">
                 {% for bet in user.get_newest_results %}
                     <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}"><div class="betresult new">
-                        {% if bet.event.small_image %}
-                            <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                    {% if bet.event.small_image %}
+                        <div class="image" style="background-image: url({{ bet.event.small_image.url }});"></div>
                     {% else %}
-                            <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                        <div class="image" style="background-image: url({{ STATIC_URL }}img/bet-plain.jpg);"></div>
                     {% endif %}
                         {% render_bet_status bet %}
                         <div class="status-change">

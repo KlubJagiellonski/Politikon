@@ -64,7 +64,7 @@
             {% for bet in object.bets.get_in_progress %}
             <div class="betinwallet betresult new">
                 <a href="{{ bet.event.get_relative_url }}">
-                    <div style="background: url({{ STATIC_URL }}{{ bet.event.small_image }}); width: 136px; background-size: cover; height: 100px; display: block; float: left; margin-right: 3.75%; margin-top: 5px;">
+                    <div class="image" style="background-image: url({{ bet.event.small_image.url }}); width: 136px; background-size: cover; height: 100px; display: block; float: left; margin-right: 3.75%; margin-top: 5px;">
                     </div>
                     <div class="status">
                         <h3 class="skroc">{{ bet.event }}</h3>
@@ -80,9 +80,9 @@
             {% for bet in user_results %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
-                    <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                    <div class="image" style="background-image: url({{ bet.event.small_image.url }});"></div>
                     {% else %}
-                    <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                    <div class="image" style="background-image: url({{ STATIC_URL }}img/bet-plain.jpg);"></div>
                     {% endif %}
                     {% render_bet_status bet %}
                     <div class="status-explanation">
