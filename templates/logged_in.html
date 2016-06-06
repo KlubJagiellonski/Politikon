@@ -53,8 +53,9 @@
                 <a id="all-bets-result" href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
             </div>
             <div id="jp-container" class="jp-container">
-                {% for bet in user.get_newest_results %}
-                    <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}"><div class="betresult new">
+            {% for bet in user.get_newest_results %}
+                <a class="a-betresult" data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
+                    <div class="betresult new">
                     {% if bet.event.small_image %}
                         <div class="image" style="background-image: url({{ bet.event.small_image.url }});"></div>
                     {% else %}
@@ -66,7 +67,8 @@
                             <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
                             <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                         </div>
-                    </a>
+                    </div>
+                </a>
             {% endfor %}
             </div>
             <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
