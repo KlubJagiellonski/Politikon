@@ -21,7 +21,7 @@
     </div>
 </section>
 <section id="profileuser" data-user_id="{{ object.id }}">
-    <div class="profile-avatar{% if object.is_vip %} uservip{% endif %}"><img src="{{ object.get_avatar_url }}"/></div>
+    <div class="profile-avatar{% if object.is_vip %} uservip{% endif %}"><div class="image" style="background-image: url({{ object.get_avatar_url }});"/></div></div>
     <div class="nickname"><h1>{{ object.name }}{% if object.is_vip %}<span class="nickvip">VIP</span>{% endif %}</h1></div>
 </section>
 
@@ -64,7 +64,7 @@
             {% for bet in object.bets.get_in_progress %}
             <div class="betinwallet betresult new">
                 <a href="{{ bet.event.get_relative_url }}">
-                    <img src="{{ STATIC_URL }}{{ bet.event.small_image }}"/>
+                    <div class="image" style="background-image: url({{ bet.event.small_image.url }}); width: 136px; background-size: cover; height: 100px; display: block; float: left; margin-right: 3.75%; margin-top: 5px;"></div>
                     <div class="status">
                         <h3 class="skroc">{{ bet.event }}</h3>
                         <p><span class="betdetails">Zakład:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}TAK{% else %}NIE{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|formatted }} <span class="why">(aktualna cena: {{ bet.current_event_price }})</span></p>
@@ -79,9 +79,9 @@
             {% for bet in user_results %}
             <div class="notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}"><a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
                     {% if bet.event.small_image %}
-                    <img src="{{ bet.event.small_image.url }}" style="width: 128px; height: 100px;"/>
+                    <div class="image" style="background-image: url({{ bet.event.small_image.url }});"></div>
                     {% else %}
-                    <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+                    <div class="image" style="background-image: url({{ STATIC_URL }}img/bet-plain.jpg);"></div>
                     {% endif %}
                     {% render_bet_status bet %}
                     <div class="status-explanation">
