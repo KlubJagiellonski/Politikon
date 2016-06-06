@@ -63,10 +63,10 @@
                         {% render_bet_status bet %}
                         <div class="status-change">
                             zysk/strata:
-                        <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
+                            <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
                             <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                         </div>
-                </div></a>
+                    </a>
             {% endfor %}
             </div>
             <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">Wyświetl wszystkie wyniki</div></a>

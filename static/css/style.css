@@ -619,8 +619,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #profile .profile-avatar {background: #fbfbfb;}
 
 #profileuser {margin-bottom: 40px;}
-.profile-avatar img {width: 160px; height: 160px; border-radius: 50%; display: table; margin: 0 auto; margin-top: -70px; position: relative;}
-#profileuser .uservip img {border: 3px solid #c84d28;}
+.profile-avatar .image {width: 160px; height: 160px; border-radius: 50%; display: table; margin: 0 auto; margin-top: -70px; position: relative;}
+#profileuser .uservip .image {border: 3px solid #c84d28;}
 #profileuser .nickname {width: 100%; text-align: center; font-size: 2.25em; font-weight: 700; color: #333; margin-top: 25px; margin-bottom: -25px;}
 #profileuser .nickname h1 {display: inline-block;}
 #profileuser .nickname .nickvip {font-size: .44em; padding: 5px 15px; border-radius: 10px; font-weight: 500; color: #fff; background: #c84d28; float: right; margin: 8px 0 0 15px;}
