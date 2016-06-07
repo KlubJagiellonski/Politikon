@@ -45,14 +45,6 @@ class EventManager(models.Manager):
         return self.ongoing_only_queryset().filter(is_featured=True).exclude(id__in=excluded)\
             .order_by('estimated_end_date')
 
-    def get_front_event(self):
-        front_events = self.ongoing_only_queryset().filter(is_front=True).\
-            order_by('estimated_end_date')
-        if front_events.exists():
-            return front_events[0]
-        else:
-            return None
-
     # TODO: what is this?
     #  def associate_people_with_events(self, user, events_list):
         #  from events.models import Bet

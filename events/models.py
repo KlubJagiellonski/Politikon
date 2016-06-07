@@ -75,7 +75,6 @@ class Event(models.Model):
     big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
 
     is_featured = models.BooleanField(u'featured', default=False)
-    is_front = models.BooleanField(u'front', default=False)
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
                                           default=1)
     outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
@@ -119,17 +118,11 @@ class Event(models.Model):
 
     def save(self, **kwargs):
         """
-        Recalculate prices for event and optionally change front event
+        Recalculate prices for event
         :param kwargs:
         """
         if not self.id:
             self.recalculate_prices()
-
-        if self.is_front and self.is_in_progress:
-            front_events = Event.objects.filter(is_front=True)
-            for e in front_events:
-                e.is_front = False
-                e.save()
 
         super(Event, self).save(**kwargs)
 

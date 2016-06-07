@@ -20,7 +20,7 @@ class EventAdmin(TaggitCounter, admin.ModelAdmin):
 
     fieldsets = (
         (u'Główne', {'fields': ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
-                                'is_featured', 'is_front', 'tags')}),
+                                'is_featured', 'tags')}),
         ('Social media', {'fields': ('short_title', 'title_fb_yes', 'title_fb_no', 'twitter_tag')}),
         (u'Rozwiązanie wydarzenia', {'fields': ('solve_event', 'end_date', 'outcome', 'outcome_reason')}),
         ('Dane statystyczne', {'fields': ('B', 'current_buy_for_price', 'current_buy_against_price',

@@ -21,7 +21,8 @@ class HomeView(TemplateView):
         json_data = {}
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
-        front_event = Event.objects.get_front_event()
+        home_events = Event.objects.get_featured_events().order_by('?')[:7]
+        front_event = home_events[0]
 
         if front_event:
             context.update({
@@ -33,14 +34,14 @@ class HomeView(TemplateView):
         else:
             json_data['front_event'] = 'null'
 
-        featured_events = list(Event.objects.get_featured_events()[:6])
+        featured_events = home_events[1:7]
         for i in range(len(featured_events)):
             featured_events[i].my_bet = featured_events[i].get_user_bet(user)
         last_minute_events = list(Event.objects.get_events('last-minute')[:3])
         for i in range(len(last_minute_events)):
             last_minute_events[i].my_bet = last_minute_events[i].get_user_bet(user)
 
-        json_data['events'] = self.makeFeaturedEventsBetfeedData(last_minute_events + featured_events)
+        json_data['events'] = self.makeFeaturedEventsBetfeedData(last_minute_events + list(featured_events))
 
         context.update({
             'featured_events': featured_events,

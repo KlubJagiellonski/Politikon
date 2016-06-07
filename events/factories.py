@@ -16,7 +16,6 @@ class EventFactory(factory.django.DjangoModelFactory):
     title_fb_yes = u'Tytuł na tak'
     title_fb_no = u'Tytuł na nie'
     description = u'Opis wydarzenia testowego.'
-    is_front = True
     is_featured = True
     outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
 
