@@ -176,7 +176,7 @@ twttr.ready(function (twttr) {
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
     <div>
-        {% render_events event.tags.similar_objects|slice:":3" %}
+        {% render_events similar_events %}
     </div>
 </section>
 {% endif %}

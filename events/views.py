@@ -72,6 +72,8 @@ class EventDetailView(DetailView):
         event = self.get_event()
         user = self.request.user
         bet = event.get_user_bet(user)
+        similar_events = [x for x in event.tags.similar_objects() if \
+                          x.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS]
         if bet:
             share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
         else:
@@ -86,6 +88,7 @@ class EventDetailView(DetailView):
             'json_data': json.dumps(event.get_event_small_chart()),
             'og_user': UserProfile.objects.filter(username=self.request.GET.get('user')).first(),
             'og_vote': self.request.GET.get('vote'),
+            'similar_events': similar_events[:3],
             'share_url': share_url
         })
         return context
