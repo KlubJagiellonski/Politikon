@@ -7,7 +7,10 @@
 
 {% block facebook_properties %}
 {{ block.super }}
-<meta property="og:image" content="{{ STATIC_URL }}img/00logo-politikon.png" />
+<meta property="og:image" content="{{ front_event.small_image.url }}" />
+{% for event in featured_events %}
+<meta property="og:image" content="{{ event.small_image.url }}" />
+{% endfor %}
 {% endblock %}
 
 {% block introjs %}
