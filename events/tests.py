@@ -382,24 +382,6 @@ class EventsManagerTestCase(TestCase):
         self.assertEqual(3, len(featured_events))
         self.assertEqual([events[4], events[5], events[6]], list(featured_events))
 
-    def test_get_front_event(self):
-        """
-        Get front event
-        """
-        front_event = Event.objects.get_front_event()
-        self.assertIsNone(front_event)
-
-        events = EventFactory.create_batch(2)
-        EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.CANCELLED)
-
-        front_event = Event.objects.get_front_event()
-        self.assertIsInstance(front_event, Event)
-
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
-        events[1].save()
-        front_event = Event.objects.get_front_event()
-        self.assertIsNone(front_event)
-
 
 class EventsTasksTestCase(TestCase):
     """
