@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import BaseUserManager
+from django.db.models import Count
 from django.http import HttpResponseForbidden
 
 from .utils import process_username
@@ -100,14 +101,18 @@ class UserProfileManager(BaseUserManager):
     def get_users(self):
         return self.get_queryset().filter(is_active=True, is_deleted=False)
 
+    def get_ranking_users(self):
+        return self.get_queryset().annotate(transaction_count=Count('transaction')).\
+            filter(is_active=True, is_deleted=False, transaction_count__gte=2)
+
     def get_admins(self):
         return self.get_queryset().filter(is_staff=True, is_admin=True)
 
     def get_best_weekly(self):
-        return self.get_users().filter(weekly_result__isnull=False).order_by('-weekly_result')
+        return self.get_ranking_users().filter(weekly_result__isnull=False).order_by('-weekly_result')
 
     def get_best_monthly(self):
-        return self.get_users().filter(monthly_result__isnull=False).order_by('-monthly_result')
+        return self.get_ranking_users().filter(monthly_result__isnull=False).order_by('-monthly_result')
 
     def get_best_overall(self):
         """
@@ -115,7 +120,7 @@ class UserProfileManager(BaseUserManager):
         :return: UserProfiles list
         :rtype: QuerySet
         """
-        return self.get_users().order_by('-reputation')
+        return self.get_ranking_users().order_by('-reputation')
 
     def get_user_positions(self, user):
         best_weekly = list(self.get_best_weekly())
