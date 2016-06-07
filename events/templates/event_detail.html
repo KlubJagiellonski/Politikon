@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% load display %}
-{% load humanize %}
 {% load format %}
+{% load humanize %}
+{% load static %}
 
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
@@ -11,7 +12,7 @@
 {% endblock %}
 
 {% block js_scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-details.js"></script>
+<script type="text/javascript" src="{% static 'js/intro/scenario-details.js' %}"></script>
 
 <!-- Twitter widget.js -->
 <script>
@@ -93,7 +94,7 @@ twttr.ready(function (twttr) {
             z-index: 100;
         "></div>
         {% else %}
-        <img src="{{ STATIC_URL }}img/bet-plain.jpg"/>
+        <img src="{% static 'img/bet-plain.jpg' %}"/>
         {% endif %}
         <div class="time-to-solution" style="
             display: block;
@@ -149,7 +150,7 @@ twttr.ready(function (twttr) {
         <div class="header">Na ten temat w mediach <span class="rss-reload prawa"></span></div>
         <div class="rss-news">
             <a href="#">
-                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
+                <img src="{% static 'img/rss-plain.jpg' %}"/>
                 <div class="prawa">
                     <h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
                     <h5>przykladowyadres.pl</h5>
@@ -160,7 +161,7 @@ twttr.ready(function (twttr) {
 
         <div class="rss-news">
             <a href="#">
-                <img src="{{ STATIC_URL }}img/rss-plain.jpg"/>
+                <img src="{% static 'img/rss-plain.jpg' %}"/>
                 <div class="prawa">
                     <h4>Tutaj tytuł przykładowego artykułu nt. zakładu</h4>
                     <h5>przykladowyadres.pl</h5>

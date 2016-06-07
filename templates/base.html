@@ -1,5 +1,7 @@
 {% load path %}
 {% load i18n %}
+{% load static %}
+
 {% url 'accounts:rank' as rank_url %}
 {% url 'events:events' as events_url %}
 
@@ -11,14 +13,15 @@
 
 <title>POLITIKON - Stawiamy na politykę!</title>
 <meta charset="utf-8" />
-<meta name="author" content="Klub Jagielloński" />
-<meta name="description" content="" />
-<meta name="keywords" content="" />
+<meta name="author" content="" />
+<meta name="description" content="Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego spojrzenia na politykę, a także wyłonienia osób, które potrafią przewidywać wydarzenia społeczno-polityczne. Projekt ma pokazać, że polityka to nie tylko cyniczna, losowa gra, ale także miejsce ścierania się idei, pomysłów, miejscem gdzie przyczyny powodują określone skutki. Serwis jest grą internetową, której uczestnicy będą mogli zakładać się o wyniki różnych wydarzeń społeczno-politycznych. Giełdowy charakter gry (rynek przewidywań) pozwala pokazać prawdopodobieństwo wystąpienia określonych wydarzeń, co sprawia, że serwis jest interesującą alternatywą dla sondaży." />
+<meta name="keywords" content="polityka" />
+
 {% block facebook_properties %}
 <meta property="og:title" content="POLITIKON - Stawiamy na politykę!" />
 <meta property="og:description" content="Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego spojrzenia na politykę, a także wyłonienia osób, które potrafią przewidywać wydarzenia społeczno-polityczne. Projekt ma pokazać, że polityka to nie tylko cyniczna, losowa gra, ale także miejsce ścierania się idei, pomysłów, miejscem gdzie przyczyny powodują określone skutki. Serwis jest grą internetową, której uczestnicy będą mogli zakładać się o wyniki różnych wydarzeń społeczno-politycznych. Giełdowy charakter gry (rynek przewidywań) pozwala pokazać prawdopodobieństwo wystąpienia określonych wydarzeń, co sprawia, że serwis jest interesującą alternatywą dla sondaży." />
-{#<meta property="og:image" content="{{ STATIC_URL }}img/00logo-politikon.png" />#}
 {% endblock %}
+<meta property="og:image" content="{% static 'img/logo-big.png' %}" />
 <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 <meta property="og:site_name" content="Politikon" />
 <meta property="fb:app_id" content="{{ FACEBOOK_APPLICATION_ID }}" />
@@ -26,24 +29,22 @@
 <link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
 <meta name="viewport" content="width=device-width">
 
-
-
-<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/rwd.css" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/rwd.css' %}" type="text/css" />
 
 <!--css dla zalogowanego-->
-<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.jscrollpane.css" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/jquery.jscrollpane.css' %}" type="text/css" />
 
 <!-- IntroJs styles -->
-<link href="{{ STATIC_URL }}css/introjs.min.css" rel="stylesheet">
+<link href="{% static 'css/introjs.min.css' %}" rel="stylesheet">
 
-<link rel="icon" type="image/png" href="{{ STATIC_URL }}img/02reputysmall.png" />
+<link rel="icon" type="image/png" href="{% static 'img/02reputysmall.png' %}" />
 
 <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script src="http://css3-mediaqueries-js.googlecode.com/files/css3-mediaqueries.js"></script>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/j24IE.css" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/j24IE.css' %}" type="text/css" />
 <![endif]-->
 
 <!--[if lt IE 9]>
@@ -52,22 +53,22 @@
 <!-- ^^ wsparcie dla IE pod http://code.google.com/p/ie7-static/js/ -->
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/jquery.dotdotdot.min.js' %}"></script>
 <!--<script src="static/js/skrypty.js"></script>-->
 
 {% if not user.is_authenticated %}
 <!--skrypty dla goscia-->
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/guest.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/guest.js' %}"></script>
 <!--WALIDACJA FORMULARZA-->
-<script src="{{ STATIC_URL }}js/walidacja/parsley.min.js"></script>
+<script src="{% static 'js/walidacja/parsley.min.js' %}"></script>
 {% else %}
 <!--skrypty dla zalogowanego-->
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/loggedin.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js' %}"></script>
 <!-- the mousewheel plugin -->
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.js' %}"></script>
 <!-- the jScrollPane script -->
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jscrollpane.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/scroll-startstop.events.jquery.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.jscrollpane.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/scroll-startstop.events.jquery.js' %}"></script>
 {% endif %}
 
 
@@ -142,8 +143,6 @@
             </ul>
             <ul>
                 <h5>Partnerzy</h5>
-{#                <li><a href="http://osomstudio.com/en/">OSoM</a></li>#}
-{#                <li><a href="http://vivente.pl/">vivente!</a></li>#}
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
             </ul>
@@ -195,11 +194,11 @@
 <script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
 <!-- ChartJS scripts -->
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/Chart.min.js' %}"></script>
 
 <!-- Noty scripts -->
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/packaged/jquery.noty.packaged.min.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/noty/layouts/topRight.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/noty/packaged/jquery.noty.packaged.min.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/noty/layouts/topRight.js' %}"></script>
 
 <!-- sugester scripts -->
 <script>
@@ -210,12 +209,12 @@ if (screen && screen.width > 480) {
 
 
 <!-- IntroJS scripts -->
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/intro.min.js"></script>
+<script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/actions.js"></script>
-<script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/charts/betfeed_featured.js"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/actions.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
-{% block js_scripts %}<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-guest.js"></script>{% endblock %}
+{% block js_scripts %}<script type="text/javascript" src="{% static 'js/intro/scenario-guest.js' %}"></script>{% endblock %}
 
 {% if messages %}
 <script type="text/javascript">

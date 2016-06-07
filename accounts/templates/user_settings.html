@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load static %}
 
 {% block js_scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-settings.js"></script>
+<script type="text/javascript" src="{% static 'js/intro/scenario-settings.js' %}"></script>
 {% endblock %}
 
 {% block content %}
