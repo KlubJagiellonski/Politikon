@@ -79,6 +79,7 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'event', 'type', 'date', 'quantity', 'price']
 
 
+EventAdmin.list_per_page = 10000
 admin.site.register(Event, EventAdmin)
 admin.site.register(Bet, BetAdmin)
 admin.site.register(Transaction, TransactionAdmin)
