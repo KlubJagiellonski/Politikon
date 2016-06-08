@@ -178,6 +178,11 @@ python manage.py runserver 0.0.0.0:8000
 python manage.py createsuperuser
 ```
 
+* To load example data:
+```
+python manage.py loaddata db_dumps/local_test_data.json
+```
+
 * If you need to sync your docker local time
 ```
 boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
