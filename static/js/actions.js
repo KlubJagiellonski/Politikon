@@ -3,6 +3,19 @@ $(function() {
         // skraca tytuły zakładów
         $('.skroc').dotdotdot();
 
+        // preload images
+        $.fn.preload = function() {
+            this.each(function() {
+                $(this).css({
+                    'background-image': 'url('+$(this).data('src')+')',
+                    'background-size': 'cover',
+                    'background-repeat': 'no-repeat'
+                }).show(100);
+            });
+        }
+
+        $('figure .image').preload();
+
         //featured - pokazuje wykres
         $('#featured').hover(function () {
             $('.details').css({'opacity': '1'});
