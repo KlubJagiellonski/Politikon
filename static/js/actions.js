@@ -4,17 +4,24 @@ $(function() {
         $('.skroc').dotdotdot();
 
         // preload images
-        $.fn.preload = function() {
-            this.each(function() {
-                $(this).css({
-                    'background-image': 'url('+$(this).data('src')+')',
+        $("[data-preload-url]").each(function (i, x) {
+            var el = $(x);
+            var url = el.attr("data-preload-url");
+            var image = new Image();
+            el.toggleClass("preloading")
+            // console.log("preloading");
+            image.onload = function () {
+                // console.log("preloaded", el);
+                el.toggleClass("preloading")
+                window.x = el;
+                el.css({
+                    'background-image': 'url(' + url + ')',
                     'background-size': 'cover',
                     'background-repeat': 'no-repeat'
-                }).show(100);
-            });
-        }
-
-        $('figure .image').preload();
+                });
+            };
+            image.src = url;
+        });
 
         //featured - pokazuje wykres
         $('#featured').hover(function () {

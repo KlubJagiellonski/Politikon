@@ -5,8 +5,7 @@
 <div class="bet{{ event|outcome }}">
     <figure>
         {% if event.small_image %}
-        <div class="image" data-src="{{ event.small_image.url }}" style="display: none; min-height: 250px;"></div>
-        <div class="loader" style="background: #fff url('{% static 'img/Loading_icon.gif' %}') no-repeat center; min-height: 250px;"></div>
+        <div class="image" data-preload-url="{{ event.small_image.url }}" style="background: #fff url('{% static 'img/Loading_icon.gif' %}') no-repeat center; min-height: 250px;"></div>
         {% else %}
         <img src="{% static 'img/bet-plain.jpg' %}"/>
         {% endif %}

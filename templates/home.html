@@ -37,9 +37,7 @@
     <section id="featured" class="section-nopadding">
         <figure>
             {% if front_event.big_image %}
-            <div style="background: url({{ front_event.big_image.url }}); height: 70vh; min-height: 200px; background-size: cover">
-
-            </div>
+            <div style="background: url({{ front_event.big_image.url }}) center; height: 70vh; min-height: 200px; background-size: cover"></div>
             {% else %}
             <img src="{{ STATIC_URL }}img/featured.jpg"/>
             {% endif %}
