@@ -10,7 +10,7 @@ $(function() {
                     'background-image': 'url('+$(this).data('src')+')',
                     'background-size': 'cover',
                     'background-repeat': 'no-repeat'
-                }).show(100);
+                });
             });
         }
 
