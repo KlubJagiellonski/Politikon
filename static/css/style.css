@@ -808,3 +808,34 @@ a.twitter-timeline:focus {
     outline: none;
     border-color: #0089cb;
 }
+
+[data-preload-url] {
+  position: relative;
+}
+
+.preloading[data-preload-url]::after {
+ content: " ";
+    display: block;
+    position: absolute;
+    left: 21%;
+    top: -79%;
+    z-index: 999;
+    width: 60%;
+    height: 60%;
+    margin: 100px auto;
+    background-color: #F90;
+    border-radius: 100%;
+    -webkit-animation: sk-scaleout 1s infinite ease-in-out;
+    animation: sk-scaleout 1s infinite ease-in-out;
+}
+
+@keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
