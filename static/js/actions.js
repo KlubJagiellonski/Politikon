@@ -9,9 +9,9 @@ $(function() {
             var url = el.attr("data-preload-url");
             var image = new Image();
             el.toggleClass("preloading")
-            console.log("preloading");
+            // console.log("preloading");
             image.onload = function () {
-                console.log("preloaded", el);
+                // console.log("preloaded", el);
                 el.toggleClass("preloading")
                 window.x = el;
                 el.css({
@@ -22,7 +22,7 @@ $(function() {
             };
             image.src = url;
         });
-        
+
         //featured - pokazuje wykres
         $('#featured').hover(function () {
             $('.details').css({'opacity': '1'});
