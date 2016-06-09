@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
 {% load display %}
+{% load static %}
 {% load user %}
 
 {% block js_scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-rank.js"></script>
+<script type="text/javascript" src="{% static 'js/intro/scenario-rank.js' %}"></script>
 {% if user.is_authenticated %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/charts/ranking.js"></script>
+<script type="text/javascript" src="{% static 'js/charts/ranking.js' %}"></script>
 {% endif %}
 {% endblock %}
 

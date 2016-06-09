@@ -2,9 +2,10 @@
 
 {% load display %}
 {% load path %}
+{% load static %}
 
 {% block js_scripts %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/intro/scenario-wydarzenia.js"></script>
+<script type="text/javascript" src="{% static 'js/intro/scenario-wydarzenia.js' %}"></script>
 {% endblock %}
 
 {% block content %}
