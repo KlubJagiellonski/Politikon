@@ -1,0 +1,34 @@
+{% load display %}
+{% load format %}
+{% load static %}
+
+<article id="powiadomieniaowynikach">
+    <div id="notifications-list">
+        {% for bet in objects_list %}
+        <div class="notifications-item notinwallet betresult{% if bet.is_new_resolved %} new{% endif %}">
+            <a data-bet_id="{{ bet.id }}" href="{{ bet.event.get_relative_url }}">
+                {% if bet.event.small_image %}
+                <div class="image" style="background-image: url({{ bet.event.small_image.url }});"></div>
+                {% else %}
+                <div class="image" style="background-image: url({% static 'img/bet-plain.jpg' %});"></div>
+                {% endif %}
+                {% render_bet_status bet %}
+                <div class="status-explanation">
+                    <span>skrócone uzasadnienie wyniku:</span>
+                    {{ bet.event.outcome_reason }}
+                </div>
+                <div class="status-change">
+                    zysk/strata:
+                    <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
+                    <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% if page_obj.has_next %}
+    <a id="loadmore" class="notifications-more-link" href="{% url 'accounts:user_notifications' pk=user_pk %}?page={{ page_obj.next_page_number }}">
+        <div class="btn astable">wyświetl więcej wyników</div>
+    </a>
+    {% endif %}
+</article>

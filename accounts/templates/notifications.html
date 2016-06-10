@@ -1,0 +1,32 @@
+{% extends "user_detail.html" %}
+
+{% load display %}
+{% load static %}
+{% load user %}
+
+{% block infinite_scrolling %}
+<script type="text/javascript">
+$(function() {
+    new Waypoint.Infinite({
+        element: $('#notifications-list')[0],
+        items: '.notifications-item',
+        more: '.notifications-more-link',
+        onBeforePageLoad: function() {
+            $("#loadmore .btn").text("Ładowanie...")
+        },
+        onAfterPageLoad: function() {
+            $("#loadmore .btn").text("wyświetl więcej wyników")
+            preloadImages();
+            $('.skroc').dotdotdot();
+            renderCharts();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block userinfo %}
+<section id="userinfo" class="hotbets prefooter-margin">
+    {% user_notifications %}
+</section>
+{% endblock %}

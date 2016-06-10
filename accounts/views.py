@@ -2,6 +2,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
@@ -9,9 +10,14 @@ from django.views.generic import ListView, DetailView
 from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
 from .models import UserProfile
 
-from events.models import Transaction, Bet
+from events.models import Bet, Transaction
 from politikon.decorators import class_view_decorator
 from politikon.forms import MultiFormsView
+
+
+PORTFOLIO_ON_PAGE = 12
+NOTIFICATIONS_ON_PAGE = 10
+TRANSACTIONS_ON_PAGE = 10
 
 
 @class_view_decorator(login_required)
@@ -66,11 +72,20 @@ class UserProfileDetailView(DetailView):
         context = super(UserProfileDetailView, self).\
             get_context_data(*args, **kwargs)
         user = self.get_object()
+        portfolio_page = Paginator(user.bets.get_in_progress(), PORTFOLIO_ON_PAGE).page(1)
+        notifications_page = Paginator(Bet.objects.get_finished(user), NOTIFICATIONS_ON_PAGE).page(1)
+        transactions_page = Paginator(Transaction.objects.get_cumulated_user_transactions(user),
+                                           TRANSACTIONS_ON_PAGE).page(1)
         context.update(UserProfile.objects.get_user_positions(user))
         context.update({
+            'user_pk': user.pk,
             'json_data': json.dumps(user.get_reputation_history()),
-            'user_results': Bet.objects.get_finished(user),
-            'user_transactions': Transaction.objects.get_cumulated_user_transactions(user),
+            'portfolio_list': portfolio_page.object_list,
+            'portfolio_page': portfolio_page,
+            'notifications_list': notifications_page.object_list,
+            'notifications_page': notifications_page,
+            'transactions_list': transactions_page.object_list,
+            'transactions_page': transactions_page,
         })
         return context
 
@@ -94,11 +109,101 @@ class UserDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
         user = self.get_object()
+        portfolio_page = Paginator(user.bets.get_in_progress(), PORTFOLIO_ON_PAGE).page(1)
+        notifications_page = Paginator(Bet.objects.get_finished(user), NOTIFICATIONS_ON_PAGE).page(1)
+        transactions_page = Paginator(Transaction.objects.get_cumulated_user_transactions(user),
+                                           TRANSACTIONS_ON_PAGE).page(1)
         context.update(UserProfile.objects.get_user_positions(user))
         context.update({
+            'user_pk': user.pk,
             'json_data': json.dumps(user.get_reputation_history()),
-            'user_results': Bet.objects.get_finished(user),
-            'user_transactions': Transaction.objects.get_cumulated_user_transactions(user),
+            'portfolio_list': portfolio_page.object_list,
+            'portfolio_page': portfolio_page,
+            'notifications_list': notifications_page.object_list,
+            'notifications_page': notifications_page,
+            'transactions_list': transactions_page.object_list,
+            'transactions_page': transactions_page,
+        })
+        return context
+
+
+class PortfolioListView(ListView):
+    """
+    Portfolio list in userprofile
+    """
+    template_name = 'portfolio.html'
+    paginate_by = PORTFOLIO_ON_PAGE
+    context_object_name = 'portfolio_list'
+
+    def get_object(self):
+        return UserProfile.objects.get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        user = self.get_object()
+        return user.bets.get_in_progress()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PortfolioListView, self).get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update({
+            'portfolio_page': context['page_obj'],
+            'object': user,
+            'user_pk': user.pk,
+            'json_data': json.dumps(user.get_reputation_history()),
+        })
+        return context
+
+
+class NotificationsListView(ListView):
+    """
+    Notifications list in userprofile
+    """
+    template_name = 'notifications.html'
+    paginate_by = NOTIFICATIONS_ON_PAGE
+    context_object_name = 'notifications_list'
+
+    def get_object(self):
+        return UserProfile.objects.get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        user = self.get_object()
+        return Bet.objects.get_finished(user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(NotificationsListView, self).get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update({
+            'notifications_page': context['page_obj'],
+            'object': user,
+            'user_pk': user.pk,
+            'json_data': json.dumps(user.get_reputation_history()),
+        })
+        return context
+
+
+class TransactionsListView(ListView):
+    """
+    Transactions list in userprofile
+    """
+    template_name = 'transactions.html'
+    paginate_by = TRANSACTIONS_ON_PAGE
+    context_object_name = 'transactions_list'
+
+    def get_object(self):
+        return UserProfile.objects.get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        user = self.get_object()
+        return Transaction.objects.get_cumulated_user_transactions(user)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(TransactionsListView, self).get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update({
+            'transactions_page': context['page_obj'],
+            'object': user,
+            'user_pk': user.pk,
+            'json_data': json.dumps(user.get_reputation_history()),
         })
         return context
 

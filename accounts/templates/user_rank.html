@@ -1,6 +1,6 @@
 {% load format %}
 
-<a href="{{ user.get_absolute_url }}" class="ranking-item">
+<a href="{{ user.get_absolute_url }}" class="{{ item_class }}-item">
     <div class="ranking-event{% if user == request.user %} ranking-you{% endif %}">
         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
             <p class="rank">{{ counter }}</p>
