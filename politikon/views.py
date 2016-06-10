@@ -1,6 +1,3 @@
-import json
-import productionsettings
-
 from constance import config
 
 from django.views.generic import TemplateView
@@ -18,7 +15,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         user = self.get_object()
-        json_data = {}
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
         home_events = Event.objects.get_featured_events().order_by('?')[:7]
@@ -29,10 +25,6 @@ class HomeView(TemplateView):
                 'front_event': front_event,
                 'front_event_bet': front_event.get_user_bet(user),
             })
-            json_data['front_event'] = json.\
-                dumps(front_event.get_event_big_chart())
-        else:
-            json_data['front_event'] = 'null'
 
         featured_events = home_events[1:7]
         for i in range(len(featured_events)):
@@ -41,24 +33,15 @@ class HomeView(TemplateView):
         for i in range(len(last_minute_events)):
             last_minute_events[i].my_bet = last_minute_events[i].get_user_bet(user)
 
-        json_data['events'] = self.makeFeaturedEventsBetfeedData(last_minute_events + list(featured_events))
-
         context.update({
             'featured_events': featured_events,
             'last_minute_events': last_minute_events,
-            'json_data': json_data,
             'config': config,
             'best_weekly': UserProfile.objects.get_best_weekly()[:10],
             'best_monthly': UserProfile.objects.get_best_monthly()[:10],
             'best_overall': UserProfile.objects.get_best_overall()[:10]
         })
         return context
-
-    def makeFeaturedEventsBetfeedData(self, events):
-        data = []
-        for ev in events:
-            data.append(ev.get_event_small_chart())
-        return json.dumps(data)
 
 
 def acme_challenge(request):

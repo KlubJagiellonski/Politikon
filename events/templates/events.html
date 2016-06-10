@@ -18,10 +18,10 @@ $(function() {
         more: '.event-more-link',
         onAfterPageLoad: function($items) {
             preloadImages();
-            var EVENTS_DATA = {{ json_data|safe }};
-            if(renderCharts) {
-                renderCharts(EVENTS_DATA);
-            }
+{#            var EVENTS_DATA = {{ json_data|safe }};#}
+{#            if(renderCharts) {#}
+{#                renderCharts(EVENTS_DATA);#}
+{#            }#}
         }
     });
 });
@@ -32,10 +32,10 @@ $(function() {
 
 <script type="text/javascript">
 $(function() {
-    var EVENTS_DATA = {{ json_data|safe }};
-    if(renderCharts) {
-        renderCharts(EVENTS_DATA);
-    }
+{#    var EVENTS_DATA = {{ json_data|safe }};#}
+{#    if (renderCharts) {#}
+{#        renderCharts(EVENTS_DATA);#}
+{#    }#}
 });
 </script>
 

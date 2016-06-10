@@ -35,21 +35,8 @@ class EventsListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
-        mode = self.kwargs['mode']
-        events = list(self.get_queryset())
-        json_data = self.makeFeaturedEventsBetfeedData(events)
-        context.update({
-            'bets': create_bets_dict(self.request.user, events),
-            'json_data': json_data,
-            'active': mode
-        })
+        context['active'] = self.kwargs['mode']
         return context
-
-    def makeFeaturedEventsBetfeedData(self, events):
-        data = []
-        for ev in events:
-            data.append(ev.get_event_small_chart())
-        return json.dumps(data)
 
 
 class EventFacebookObjectDetailView(DetailView):

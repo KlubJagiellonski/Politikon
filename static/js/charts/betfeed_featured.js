@@ -45,7 +45,7 @@ var FRONT_CHART_STYLE = {
 //wykresy na wydarzenia w betfeedzie
 
     
-function makeChart(data,opts){
+function makeChart(data, opts){
 
     var id = opts.id;
     var setStyle;
@@ -79,8 +79,8 @@ function makeChart(data,opts){
 
 function renderCharts(events, featuredEvent, chartDetails) {
     if (events) {
-        for (var i = 0, len = events.length; i < len; i++) {
-            makeChart(events[i],{
+        for (var i = 0; i < events.length; i++) {
+            makeChart(events[i], {
                 id : '.bet-'+events[i].id+'-canvas'
             });
         }

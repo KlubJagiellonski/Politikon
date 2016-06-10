@@ -23,17 +23,6 @@
 
 
 {% block content %}
-
-    <script type="text/javascript">
-        $(function () {
-            var EVENTS_DATA = {{ json_data.events|safe }};
-            var FEATURED_EVENT_DATA = {{ json_data.front_event|safe }};
-            if(renderCharts) {
-                renderCharts(EVENTS_DATA, FEATURED_EVENT_DATA);
-            }
-        });
-    </script>
-
     <section id="featured" class="section-nopadding">
         <figure>
             {% if front_event.big_image %}
@@ -54,7 +43,7 @@
                             Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
                         </div>
                         <div>
-                            <canvas id="featured-canvas" height="70"></canvas>
+                            <canvas id="featured-canvas" height="70" data-chart="{{ front_event.get_event_big_chart }}"></canvas>
                         </div>
                     </div>
                 </a>
