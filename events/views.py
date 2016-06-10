@@ -24,19 +24,21 @@ logger = logging.getLogger(__name__)
 
 class EventsListView(ListView):
     template_name = 'events.html'
+    context_object_name = 'events'
+    paginate_by = 6
 
     def get_queryset(self):
-        return Event.objects.get_events(self.kwargs['mode'])
+        events = Event.objects.get_events(self.kwargs['mode'])
+        for i, event in enumerate(events):
+            event.my_bet = event.get_user_bet(self.request.user)
+        return events
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
-        events = list(self.get_queryset())
-        for i in range(len(events)):
-            events[i].my_bet = events[i].get_user_bet(self.request.user)
         mode = self.kwargs['mode']
+        events = list(self.get_queryset())
         json_data = self.makeFeaturedEventsBetfeedData(events)
         context.update({
-            'events': events,
             'bets': create_bets_dict(self.request.user, events),
             'json_data': json_data,
             'active': mode
