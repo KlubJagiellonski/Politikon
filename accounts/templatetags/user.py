@@ -12,9 +12,10 @@ def user_home(user, reputation_change, is_formatted=False):
 
 
 @register.inclusion_tag('user_rank.html', takes_context=True)
-def user_rank(context, user, profit=None, counter=1):
+def user_rank(context, user, item_class="", profit=None, counter=1):
     return {
         'request': context['request'],
+        'class': item_class,
         'user': user,
         'profit': profit,
         'counter': counter,
