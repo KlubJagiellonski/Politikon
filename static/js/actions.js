@@ -29,7 +29,7 @@ $(document).on('click', '.intro-start', function () {
 });
 
 // wysyłanie formularza zmiany danych profilu
-$('#settings-submit #loadmore').on('click', function () {
+$(document).on('click', '#settings-submit #loadmore', function () {
     var action;
     var form;
     if ($('.active').find('a').attr('href') == '#profil') {
@@ -330,7 +330,7 @@ $(function() {
     // .data('updater', updateUploadWidget);
 
 
-    $('#loadmore').on('click', function () {
+    $('#historiatransakcji #loadmore').on('click', function () {
         var offset = $('.history-event').length;
         var user_id = $('#profileuser').attr('data-user_id');
 
