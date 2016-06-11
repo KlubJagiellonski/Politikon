@@ -29,7 +29,7 @@ class EventsListView(ListView):
 
     def get_queryset(self):
         events = Event.objects.get_events(self.kwargs['mode'])
-        for i, event in enumerate(events):
+        for event in events:
             event.my_bet = event.get_user_bet(self.request.user)
         return events
 
@@ -63,12 +63,13 @@ class EventDetailView(DetailView):
         bet = event.get_user_bet(user)
         similar_events = [x for x in event.tags.similar_objects() if \
                           x.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS]
+        for similar_event in similar_events:
+            similar_event.my_bet = similar_event.get_user_bet(self.request.user)
         if bet:
             share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
         else:
             share_url = event.get_absolute_url()
         context.update({
-            'event': event,
             'bet': event.get_user_bet(user),
             'active': 1,
             'event_dict': event.event_dict,
