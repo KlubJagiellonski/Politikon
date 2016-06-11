@@ -25,7 +25,7 @@ var CHART_STYLE = {
     scaleSteps : 10,
     scaleStepWidth: 10,
     scaleStartValue: 0,
-    pointHitDetectionRadius: 10
+    pointHitDetectionRadius: 3
 };
 
 var FRONT_CHART_STYLE = {
@@ -39,7 +39,7 @@ var FRONT_CHART_STYLE = {
     scaleSteps : 10,
     scaleStepWidth: 10,
     scaleStartValue: 0,
-    pointHitDetectionRadius : 40
+    pointHitDetectionRadius: 5
 };
 
 //wykresy na wydarzenia w betfeedzie
