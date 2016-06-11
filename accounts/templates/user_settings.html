@@ -13,7 +13,14 @@
     <form action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" id="avatar">
         {% csrf_token %}
         <div class="upload-wrapper" data-current="{{ forms.avatar.instance.avatar }}" data-current-url="{% if forms.avatar.instance.avatar %}{{ forms.avatar.instance.avatar.url }}{% else %}{{ user.get_avatar_url }}{% endif %}">
-            <a href="#"><figure class="profile-avatar lewa"><figcaption><span>zmień avatar</span></figcaption><div class="image preview" style="background-image: url({{ user.get_avatar_url }});"></div></figure></a>
+            <a href="#">
+                <figure class="profile-avatar lewa">
+                    <figcaption>
+                        <span>zmień avatar</span>
+                    </figcaption>
+                    <div class="image preview" style="background-image: url({{ user.get_avatar_url }});"></div>
+                </figure>
+            </a>
             <div class="hidden">
                 {{ forms.avatar }}
             </div>

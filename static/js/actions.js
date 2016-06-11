@@ -205,7 +205,12 @@ function setPreviewSrc($wrapper, src) {
         height = $wrapper.data('preview-height') || $preview.height();
     if (src) {
         $.when(prepareImage(src, width, height)).then(function (src) {
-            $wrapper.find('.preview').css('background-image', 'url(' + src + ')').show();
+            $wrapper.find('.preview').css({
+                'background-image': 'url(' + src + ')',
+                'background-size': 'cover',
+                'background-repeat': 'no-repeat',
+                'background-position': 'center center'
+            }).show();
             if (changeCallback) {
                 changeCallback(src);
             }
@@ -237,7 +242,8 @@ function preloadImages() {
             el.css({
                 'background-image': 'url(' + url + ')',
                 'background-size': 'cover',
-                'background-repeat': 'no-repeat'
+                'background-repeat': 'no-repeat',
+                'background-position': 'center center',
             });
             el.removeAttr('data-preload-url');
         };
