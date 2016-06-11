@@ -21,7 +21,7 @@
                         left: 10px;">
                         {% render_finish_date event %}
                     </div>
-                    <canvas class="bet-{{ event.id }}-canvas" height="70" data-chart="{{ event.get_event_small_chart }}"></canvas>
+                    <canvas class="event-canvas" id="event-{{ event.id }}-canvas" height="70" data-id="{{ event.id }}" data-chart="{{ event.get_JSON_small_chart }}"></canvas>
                 </div>
             </a>
             {% if event.is_in_progress %}

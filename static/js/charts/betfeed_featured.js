@@ -45,10 +45,12 @@ var FRONT_CHART_STYLE = {
 //wykresy na wydarzenia w betfeedzie
 
     
-function makeChart(data, opts){
+function makeChart(obj, opts){
 
     var id = opts.id;
     var setStyle;
+    var data = $(obj).data('chart');
+
     if(opts && opts.setStyle){
         setStyle = opts.setStyle;
     }
@@ -64,40 +66,39 @@ function makeChart(data, opts){
         chartStyle = CHART_STYLE;
     }
 
-    var betCanvases = document.querySelectorAll(id);
-    for (var i = 0, len = betCanvases.length; i < len; i++) {
-        var chartData = {
-            labels : data.labels,
-            datasets : [SET_STYLE]
-        };
+    var chartData = {
+        labels : data.labels,
+        datasets : [SET_STYLE]
+    };
+    chartData.datasets[0].data = data.points;
 
-        chartData.datasets[0].data = data.points;
-
-        new Chart(betCanvases[i].getContext('2d')).Line(chartData,chartStyle);
-    }
+    new Chart(document.getElementById(id).getContext('2d')).Line(chartData, chartStyle);
 }
 
-function renderCharts(events, featuredEvent, chartDetails) {
-    if (events) {
-        for (var i = 0; i < events.length; i++) {
-            makeChart(events[i], {
-                id : '.bet-'+events[i].id+'-canvas'
-            });
-        }
-    }
-    // var frontchartData = chartData;
+function renderCharts() {
+    $(".event-canvas[data-chart]").each(function (i, x) {
+        makeChart(x, {
+            id : 'event-' + $(x).data('id') + '-canvas'
+        });
+    });
 
+    var featuredEvent = document.getElementById('featured-canvas');
     if(featuredEvent) {
         makeChart(featuredEvent, {
-            id : '#featured-canvas',
+            id : 'featured-canvas',
             chartStyle: FRONT_CHART_STYLE
         });
     }
 
+    var chartDetails = document.getElementById('chart-details');
     if(chartDetails) {
         makeChart(chartDetails, {
-            id : '#chart-details',
+            id : 'chart-details',
             chartStyle: FRONT_CHART_STYLE
         });
     }
 }
+
+$(function() {
+    renderCharts();
+});

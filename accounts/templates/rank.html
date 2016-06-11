@@ -60,23 +60,23 @@ $(function() {
     <div class="zakladki-content">
         <article id="7dni">
             {% for user in best_weekly %}
-            {% user_rank user user.weekly_result forloop.counter %}
+            {% user_rank user "7dni" user.weekly_result forloop.counter %}
             {% endfor %}
-            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
+{#            <a href="#" id="loadmore" class="7dni-more-link"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="miesiac">
             {% for user in best_monthly %}
-            {% user_rank user user.monthly_result forloop.counter %}
+            {% user_rank user "miesiac" user.monthly_result forloop.counter %}
             {% endfor %}
-            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
+{#            <a href="#" id="loadmore" class="miesiac-more-link"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
 
         <article id="calosc">
             {% for user in object_list %}
-            {% user_rank user None forloop.counter %}
+            {% user_rank user "calosc" None forloop.counter %}
             {% endfor %}
-            {#<a href="#" id="loadmore"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
+{#            <a href="#" id="loadmore" class="calosc-more-link"><div class="btn astable">Pokaż dalsze pozycje</div></a>#}
         </article>
     </div>
 </section>

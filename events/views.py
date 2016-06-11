@@ -73,8 +73,6 @@ class EventDetailView(DetailView):
             'active': 1,
             'event_dict': event.event_dict,
             'bet_social': event.get_bet_social(),
-            # TODO: jsonify in temlate
-            'json_data': json.dumps(event.get_event_small_chart()),
             'og_user': UserProfile.objects.filter(username=self.request.GET.get('user')).first(),
             'og_vote': self.request.GET.get('vote'),
             'similar_events': similar_events[:3],

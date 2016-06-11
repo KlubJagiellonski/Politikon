@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from dateutil.relativedelta import relativedelta
+import json
 import logging
+
+from dateutil.relativedelta import relativedelta
 from math import exp
 from unidecode import unidecode
 
@@ -196,6 +198,12 @@ class Event(models.Model):
         :rtype: {int, [], []}
         """
         return self.__get_chart_points(self.EVENT_BIG_CHART_DAYS)
+
+    def get_JSON_small_chart(self):
+        return json.dumps(self.get_event_small_chart())
+
+    def get_JSON_big_chart(self):
+        return json.dumps(self.get_event_big_chart())
 
     @transaction.atomic
     def __get_chart_points(self, days):

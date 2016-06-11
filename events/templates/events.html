@@ -16,12 +16,10 @@ $(function() {
         element: $('#betfeed')[0],
         items: '.event-item',
         more: '.event-more-link',
-        onAfterPageLoad: function($items) {
+        onAfterPageLoad: function() {
             preloadImages();
-{#            var EVENTS_DATA = {{ json_data|safe }};#}
-{#            if(renderCharts) {#}
-{#                renderCharts(EVENTS_DATA);#}
-{#            }#}
+            $('.skroc').dotdotdot();
+            renderCharts();
         }
     });
 });

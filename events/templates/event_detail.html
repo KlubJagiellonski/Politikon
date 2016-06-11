@@ -49,15 +49,6 @@ twttr.ready(function (twttr) {
 });
 </script>
 
-<script type="text/javascript">
-    $(function(){
-        var EVENT_DETAILS_DATA = {{ json_data|safe }};
-        if(renderCharts) {
-            renderCharts(null, null, EVENT_DETAILS_DATA);
-        }
-    });
-</script>
-
 {% endblock %}
 
 {% block content %}
@@ -107,7 +98,7 @@ twttr.ready(function (twttr) {
             {% render_finish_date event %}
         </div>
         <div class="chart-container" style="position: relative; z-index:999">
-            <canvas id="chart-details" height="70"></canvas>
+            <canvas id="chart-details" height="70" data-chart="{{ event.get_JSON_big_chart }}"></canvas>
         </div>
     </div>
     <div class="bet-social">

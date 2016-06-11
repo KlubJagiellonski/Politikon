@@ -43,7 +43,7 @@
                             Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
                         </div>
                         <div>
-                            <canvas id="featured-canvas" height="70" data-chart="{{ front_event.get_event_big_chart }}"></canvas>
+                            <canvas id="featured-canvas" height="70" data-id="{{ front_event.id }}" data-chart="{{ front_event.get_JSON_big_chart }}"></canvas>
                         </div>
                     </div>
                 </a>
