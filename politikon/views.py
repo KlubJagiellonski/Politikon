@@ -17,21 +17,22 @@ class HomeView(TemplateView):
         user = self.get_object()
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
-        home_events = Event.objects.get_featured_events().order_by('?')[:7]
-        front_event = home_events[0]
 
+        last_minute_events = list(Event.objects.get_events('last-minute')[:3])
+        for event in last_minute_events:
+            event.my_bet = event.get_user_bet(user)
+
+        home_events = list(Event.objects.get_featured_events().order_by('?')[:7])
+        for event in home_events:
+            event.my_bet = event.get_user_bet(user)
+
+        front_event = home_events[0]
         if front_event:
             context.update({
                 'front_event': front_event,
                 'front_event_bet': front_event.get_user_bet(user),
             })
-
         featured_events = home_events[1:7]
-        for i in range(len(featured_events)):
-            featured_events[i].my_bet = featured_events[i].get_user_bet(user)
-        last_minute_events = list(Event.objects.get_events('last-minute')[:3])
-        for i in range(len(last_minute_events)):
-            last_minute_events[i].my_bet = last_minute_events[i].get_user_bet(user)
 
         context.update({
             'featured_events': featured_events,
