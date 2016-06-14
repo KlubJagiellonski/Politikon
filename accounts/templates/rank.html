@@ -5,7 +5,6 @@
 {% load user %}
 
 {% block js_scripts %}
-<script type="text/javascript" src="{% static 'js/intro/scenario-rank.js' %}"></script>
 {% if user.is_authenticated %}
 <script type="text/javascript" src="{% static 'js/charts/ranking.js' %}"></script>
 {% endif %}

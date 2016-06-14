@@ -5,7 +5,7 @@ function startIntro() {
         showStepNumbers: false,
         steps: [
             {
-                intro: '<h2>Witamy w <span class="orange">POLITIKONIE</span><br/>pierwszych w Polsce zakładach politycznych!</h2><p>W tym samouczku zaprezentujemy <span class="orange">podstawowe elementy</span> gry, dostępne dla <span class="orange">niezalogowanego gracza.</span></p>'
+                intro: '<h2>Witamy w <span class="orange">POLITIKONIE</span><br/>pierwszych w Polsce zakładach politycznych!</h2><p>W tym samouczku zaprezentujemy <span class="green">podstawowe elementy</span> gry, dostępne dla <span class="orange">niezalogowanego gracza.</span></p>'
             },
             {
                 element: '.graj',
@@ -44,7 +44,7 @@ function startIntro() {
             },
             {
                 element: '#betfeed',
-                intro: '<p>W przypadku innych wydarzeń, <span class="orange">wszystko</span> działa tak samo!</p>',
+                intro: '<p>W przypadku innych wydarzeń, <span class="orange">wszystko działa tak samo</span>!</p>',
                 position: 'top'
             },
             {

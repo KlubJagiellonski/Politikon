@@ -9,7 +9,7 @@ function startIntro() {
             },
             {
                 element: '#header h1',
-                intro: '<h2>Tytuł wydarzenia</h2><p><span class="green">Zawsze</span> w formie <span class="orange">pytania zamkniętego.</span> Możesz <span class="green">odpowiedzieć</span> na nie, wykupując zakłady na <span class="orange">TAK</span> lub <span class="orange">NIE.</span></p>',
+                intro: '<h2>Tytuł wydarzenia</h2><p><span class="green">Zawsze</span> w formie <span class="orange">zdania twierdzącego w czasie teraźniejszym rónoważnika zdania.</span> Możesz <span class="green">odpowiedzieć</span> na nie, wykupując zakłady na <span class="orange">TAK</span> lub <span class="orange">NIE.</span></p>',
                 position: 'BOTTOM',
             },
             {

@@ -9,7 +9,7 @@ function startIntro() {
             },
             {
                 element: '#settings-profile',
-                intro: '<h2>Obecne ustawienia</h2><p>Tutaj znajdziesz informacje o <span class="orange">Twoim profilu:</span> Twoją <span class="green">nazwę</span> w <span class="orange">POLITIKONIE,</span> <span class="green">avatar, login, datę dołączenia</span> do gry i <span class="green">dane kontaktowe.</span>',
+                intro: '<h2>Obecne ustawienia</h2><p>Tutaj znajdziesz informacje o <span class="orange">Twoim profilu:</span><br /> Twoją <span class="green">nazwę</span> w <span class="orange">POLITIKONIE,</span> <span class="green">avatar, login, datę</span> dołączenia do gry i <span class="green">dane kontaktowe.</span>',
                 position: 'bottom',
             },
             {
@@ -19,7 +19,7 @@ function startIntro() {
             },
             {
                 element: '#userinfo .tabs',
-                intro: '<p>Ustawienia zostały <span class="orange">podzielone</span> na <span class="green">dwie sekcje.</span></p><p><span class="green">Pierwsza</span> zawiera ustawienia związane z <span class="orange">Twoim profilem</span> w grze, <span class="green">druga</span> - ustawienia pozwalające uzyskać dostęp do <span class="orange">Twojego konta.</span></p>',
+                intro: '<p>Ustawienia zostały podzielone na <span class="green">dwie sekcje.</span></p><p><span class="green">Pierwsza</span> zawiera ustawienia związane z <span class="orange">Twoim profilem</span> w grze. <span class="green">Druga</span> - ustawienia pozwalające uzyskać dostęp do <span class="orange">Twojego konta.</span></p>',
                 position: 'right'
             },
             {
