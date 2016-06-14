@@ -77,8 +77,7 @@ class Event(models.Model):
     big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
 
     is_featured = models.BooleanField(u'featured', default=False)
-    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES,
-                                          default=1)
+    outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
     outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=u'data utworzenia')

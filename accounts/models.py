@@ -7,14 +7,14 @@ import os
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models, transaction
-from django.db.models import F, Q
+from django.db.models import F, Q, Sum
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
-from events.models import Bet, Event
+from events.models import Bet, Event, Transaction
 from politikon.templatetags.format import formatted
 from politikon.settings import STATIC_URL
 
@@ -185,6 +185,16 @@ class UserProfile(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def current_total_cash(self):
+        """
+        Calculate current total_cash
+        :return: total_cash value
+        :rtype: int
+        """
+        return Transaction.objects.get_user_transactions_after_reset(user=self).\
+            aggregate(sum=Sum('price'))['sum']
 
     @property
     def current_portfolio_value(self):
