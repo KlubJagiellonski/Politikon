@@ -16,7 +16,11 @@ $(function() {
         element: $('#betfeed')[0],
         items: '.event-item',
         more: '.event-more-link',
+        onBeforePageLoad: function {
+            $("#loadmore .btn").text("Ładowanie...")
+        },
         onAfterPageLoad: function() {
+            $("#loadmore .btn").text("Wyświetl więcej zakładów")
             preloadImages();
             $('.skroc').dotdotdot();
             renderCharts();
