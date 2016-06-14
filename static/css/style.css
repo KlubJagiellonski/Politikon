@@ -444,7 +444,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #featured #makeabet {width: 380px !important; margin-top: 10px;}
 
 /* betfeed */
-#betfeed {        display: table;
+#betfeed {        
+    padding-bottom: 50px;
+    display: table;
     margin-bottom: 30px;
     width: 97.17%;
     padding-left: 1.42%;
