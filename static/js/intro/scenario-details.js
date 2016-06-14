@@ -24,12 +24,12 @@ function startIntro() {
             },
             {
                 element: '#bet-desc .lewa',
-                intro: '<h2>Opis wydarzenia</h2><p>Tutaj znajdziesz szczegółowy <span class="green">opis</span> <span class="orange">wydarzenia</span> i <span class="green">warunki</span> <span class="orange">rozstrzygnięcia zakładów.</span><br/><br/>Po zakończeniu wydarzenia, pojawi się tutaj także pełne <span class="green">uzasadnienie</span> podjętego <span class="orange">rozstrzygnięcia.</span></p>',
+                intro: '<h2>Opis wydarzenia</h2><p>Tutaj znajdziesz szczegółowy <span class="green">opis</span> <span class="orange">wydarzenia</span> i warunek decydujący o jego <span class="orange">rozstrzygnięciu.</span></p>',
                 position: 'top',
             },
             {
                 element: '#bet-desc .rss-related',
-                intro: '<h2>Informacje w mediach</h2><a>Przed obstawieniem wydarzenia, <span class="green">warto</span> <span class="orange">zasięgnąć informacji</span> z nim związanych. W tym miejscu dowiesz się, <span class="green">co</span> na jego temat <span class="orange">piszą w mediach.</span></p>',
+                intro: '<h2>Informacje w mediach</h2><a>Przed <span class="green">obstawieniem</span> wydarzenia, warto <span class="orange">zasięgnąć informacji</span> z nim związanych. W tym miejscu dowiesz się, co na jego temat <span class="orange">piszą w mediach.</span></p>',
                 position: 'left',
             },
             {
