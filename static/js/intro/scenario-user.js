@@ -17,16 +17,16 @@ function startIntro() {
             },
             {
                 element: '.userdata .wallet',
-                intro: '<h2>Powiadomienia o wynikach.</h2><p>Gdy <span class="orange">wydarzenia,</span> które <span class="green">obstawiłeś</span> zostają <span class="orange">rozstrzygnięte,</span> <span class="green">informacja</span> o tym pojawi się <span class="orange">w tym miejscu.</span></p><p class="comment">Wystarczy <span class="green">kliknąć,</span> by przejrzeć <span class="orange">szczegóły.</span></p>',
+                intro: '<h2>Powiadomienia o wynikach.</h2><p>Gdy wydarzenia, które <span class="green">obstawiłeś</span> zostają <span class="orange">rozstrzygnięte,</span> <span class="green">informacja</span> o tym pojawi się <span class="orange">w tym miejscu.</span></p><p class="comment">Wystarczy <span class="green">kliknąć,</span> by przejrzeć <span class="orange">szczegóły.</span></p>',
                 position: 'left'
             },
             {
                 element: '.graj',
-                intro: '<h2>Twoje konto.</h2><p>Po <span class="green">kliknięciu</span> w <span class="orange">avatar</span>, możesz <span class="green">zarządzać</span> swoim <span class="orange">profilem.</span> <span class="green">Zmienić</span> swoje <span class="orange">zdjęcie,</span> <span class="green">dodać</span> <span class="orange">konta społecznościowe</span> i <span class="green">uzupełnić</span> informacje <span class="orange">o sobie.</span>',
+                intro: '<h2>Twoje konto.</h2><p>Po <span class="green">kliknięciu</span> w <span class="orange">avatar</span>, możesz <span class="green">zarządzać</span> swoim <span class="orange">profilem.</span> Zmienić swoje <span class="orange">zdjęcie,</span> dodać <span class="orange">konta społecznościowe</span> i uzupełnić informacje <span class="orange">o sobie.</span>',
                 position: 'left'
             },
             {
-                intro: '<p>W porządku, ale pewnie zastanawiasz się, jak właściwie grać w <span class="orange">POLITIKON?</span> Rzućmy okiem na <span class="green">wydarzenia!</span></p>'
+                intro: '<p>W porządku, ale pewnie zastanawiasz się,<br /> jak właściwie grać w <span class="orange">POLITIKON?</span><br /> Rzućmy okiem na <span class="green">wydarzenia!</span></p>'
             },
             {
                 element: '#featured',
