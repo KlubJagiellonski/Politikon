@@ -817,16 +817,16 @@ a.twitter-timeline:focus {
 }
 
 .preloading[data-preload-url]::after {
- content: " ";
+    content: " ";
     display: block;
     position: absolute;
-    left: 21%;
-    top: -79%;
+    left: 20.6%;
+    top: -90px;
     z-index: 999;
     width: 60%;
-    height: 60%;
+    height: 90%;
     margin: 100px auto;
-    background-color: #F90;
+    background-color: rgba(0, 0, 0, 0.12);
     border-radius: 100%;
     -webkit-animation: sk-scaleout 1s infinite ease-in-out;
     animation: sk-scaleout 1s infinite ease-in-out;
