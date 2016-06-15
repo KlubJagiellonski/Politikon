@@ -212,7 +212,7 @@ class Event(models.Model):
     def get_JSON_big_chart(self):
         return json.dumps(self.get_event_big_chart())
 
-    @property
+    @transaction.atomic
     def __get_chart_points(self, days):
         """
         Get last transactions price for every day;
