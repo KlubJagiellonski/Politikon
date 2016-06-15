@@ -8,6 +8,7 @@ from unidecode import unidecode
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.validators import RegexValidator
 from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
@@ -66,7 +67,14 @@ class Event(models.Model):
 
     title = models.TextField(u'tytuł wydarzenia')
     short_title = models.TextField(u'tytuł promocyjny wydarzenia')
-    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True)
+    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True,
+                                   validators=[
+                                       RegexValidator(
+                                           regex=r'^([^\s]+)$',
+                                           message=u'Tag twittera nie może zawierać spacji',
+                                           code='invalid_twitter_tag'
+                                       ),
+                                   ])
 
     title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', default='')
     title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', default='')
@@ -204,7 +212,7 @@ class Event(models.Model):
     def get_JSON_big_chart(self):
         return json.dumps(self.get_event_big_chart())
 
-    @transaction.atomic
+    @property
     def __get_chart_points(self, days):
         """
         Get last transactions price for every day;
