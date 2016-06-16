@@ -863,16 +863,37 @@ class TransactionsModelTestCase(TestCase):
             type=Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
         )
         self.assertEqual(u'zakup udziałów na TAK przez mcbrover', transaction.__unicode__())
-        self.assertEqual(0, transaction.total)
+        self.assertEqual(0, transaction.total_cash)
         transaction.quantity = 10
         transaction.price = 5
-        self.assertEqual(50, transaction.total)
+        self.assertEqual(50, transaction.total_cash)
 
 
 class TransactionManagerTestCase(TestCase):
     """
     events/managers TransactionManager
     """
+    def test_get_user_transactions_after_reset(self):
+        """
+        Get user transactions after reset
+        """
+        # TODO: FIXME
+        # user = UserFactory()
+        # events = EventFactory.create_batch(7)
+        # transactions = [TransactionFactory(user=user, event=e) for e in events]
+        # transactions[3].type = Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP
+        # transactions[3].save()
+        # user.reset_date = timezone.now()
+        # user.save()
+        # transactions2 = [TransactionFactory(user=user, event=e) for e in events]
+        # self.assertEqual(transactions2, list(Transaction.objects.get_user_transactions_after_reset(user)))
+
+    def test_get_cumulated_user_transactions(self):
+        """
+        Get cumulated user transactions
+        """
+        # TODO:
+
     def test_get_user_transactions(self):
         """
         Get user transactions
