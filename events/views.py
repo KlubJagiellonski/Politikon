@@ -210,7 +210,7 @@ def transactions(request, user_id, nr_from):
         t_dict.append({
             'title': transaction.event.title if transaction.event else '',
             'type_display': transaction.get_type_display().upper(),
-            'total': transaction.total,
+            'total': transaction.total_cash,
             'date': u'{0.day} {1} {0.year} {0.hour}:{0.minute}'.format(
                 transaction.date,
                 _(transaction.date.strftime('%B')),

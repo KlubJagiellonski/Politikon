@@ -669,10 +669,19 @@ class Transaction(models.Model):
         return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
 
     @property
-    def total(self):
+    def total_cash(self):
         """
         Get total price for all quantity in transaction: total won, total bought, total sold
         :return: total amount
         :rtype: int
         """
         return self.quantity * self.price
+
+    @property
+    def total_wallet(self):
+        """
+        Get total price for all quantity in transaction: total won, total bought, total sold
+        :return: total amount
+        :rtype: int
+        """
+        return -1 * self.quantity * self.price
