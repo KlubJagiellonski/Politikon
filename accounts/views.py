@@ -70,7 +70,7 @@ class UserProfileDetailView(DetailView):
         context.update({
             'json_data': json.dumps(user.get_reputation_history()),
             'user_results': Bet.objects.get_finished(user),
-            'user_transactions': Transaction.objects.get_user_transactions_after_reset(user),
+            'user_transactions': Transaction.objects.get_cumulated_user_transactions(user),
         })
         return context
 
@@ -98,7 +98,7 @@ class UserDetailView(DetailView):
         context.update({
             'json_data': json.dumps(user.get_reputation_history()),
             'user_results': Bet.objects.get_finished(user),
-            'user_transactions': Transaction.objects.get_user_transactions_after_reset(user),
+            'user_transactions': Transaction.objects.get_cumulated_user_transactions(user),
         })
         return context
 

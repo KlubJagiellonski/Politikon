@@ -266,6 +266,22 @@ class TransactionManager(models.Manager):
     def get_user_transactions_after_reset(self, user):
         return self.model.objects.filter(user=user, date__gte=user.reset_date)
 
+    def get_cumulated_user_transactions(self, user):
+        queryset = self.get_user_transactions_after_reset(user)
+        old = None
+        result = []
+        for q in queryset:
+            if old is None:
+                old = q
+            elif q.type == old.type and q.event == old.event:
+                old.price += q.price
+            else:
+                result.append(old)
+                old = q
+            if q == queryset.reverse()[0]:
+                result.append(q)
+        return result
+
     def get_user_transactions(self, user):
         return self.model.objects.filter(user=user).\
             exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
