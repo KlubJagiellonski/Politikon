@@ -1,0 +1,32 @@
+{% extends "user_detail.html" %}
+
+{% load display %}
+{% load static %}
+{% load user %}
+
+{% block infinite_scrolling %}
+<script type="text/javascript">
+$(function() {
+    new Waypoint.Infinite({
+        element: $('#transactions-list')[0],
+        items: '.transactions-item',
+        more: '.transactions-more-link',
+        onBeforePageLoad: function() {
+            $("#loadmore .btn").text("Ładowanie...")
+        },
+        onAfterPageLoad: function() {
+            $("#loadmore .btn").text("wyświetl więcej transakcji")
+            preloadImages();
+            $('.skroc').dotdotdot();
+            renderCharts();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block userinfo %}
+<section id="userinfo" class="hotbets prefooter-margin">
+    {% user_transactions %}
+</section>
+{% endblock %}

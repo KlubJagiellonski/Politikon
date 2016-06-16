@@ -188,32 +188,3 @@ def bets_viewed(request):
         bets_resolved.append(bet_id)
 
     return JSONResponse(json.dumps(bets_resolved))
-
-
-def transactions(request, user_id, nr_from):
-    """
-    Show list of user transactions
-    :param request:
-    :type request: WSGIRequest
-    :param user_id: User ID which transactions are showed
-    :type user_id: int
-    :param nr_from: begin of limit
-    :type nr_from: int
-    :return: list with user transactions
-    :rtype: JSONResponse
-    """
-    nr_from = int(nr_from)
-    nr_to = nr_from + 50       # 50 elemets at once
-    transactions = Transaction.objects.filter(user__id=user_id)[nr_from:nr_to]
-    t_dict = []
-    for transaction in transactions:
-        t_dict.append({
-            'title': transaction.event.title if transaction.event else '',
-            'type_display': transaction.get_type_display().upper(),
-            'total': transaction.total_cash,
-            'date': u'{0.day} {1} {0.year} {0.hour}:{0.minute}'.format(
-                transaction.date,
-                _(transaction.date.strftime('%B')),
-            ),
-        })
-    return JSONResponse(json.dumps(t_dict))

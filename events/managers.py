@@ -230,7 +230,7 @@ class BetManager(models.Manager):
         return self.filter(
             event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
             has__gt=0,
-        )
+        ).order_by('event__estimated_end_date')
 
     def get_finished(self, user):
         """
@@ -264,7 +264,7 @@ class TransactionManager(models.Manager):
         super(TransactionManager, self).__init__()
 
     def get_user_transactions_after_reset(self, user):
-        return self.model.objects.filter(user=user, date__gte=user.reset_date)
+        return self.model.objects.filter(user=user, date__gte=user.reset_date).order_by('-date')
 
     def get_cumulated_user_transactions(self, user):
         queryset = self.get_user_transactions_after_reset(user)
