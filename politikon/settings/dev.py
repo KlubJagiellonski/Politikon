@@ -1,5 +1,5 @@
-import os
-from path import path
+import dj_database_url
+from .base import *
 
 DEBUG = True
 
@@ -59,9 +59,11 @@ PUBNUB_SECRET_KEY = 'sec-c-ZmE0OTc5MDYtYWUxNi00YTJjLWFjOGMtODVhNGQ5Y2JmNTdj'
 PUBNUB_IS_SSL = False
 
 
-DATABASE_URL = 'postgres://postgres:postgres@' + \
-    os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + \
-    os.environ['POSTGRES_PORT_5432_TCP_PORT'] + '/' + 'politikon'
+DATABASES = {
+    'default': dj_database_url.parse('postgres://postgres:postgres@' + \
+                                     os.environ['POSTGRES_PORT_5432_TCP_ADDR'] + ':' + \
+                                     os.environ['POSTGRES_PORT_5432_TCP_PORT'] + '/' + 'politikon')
+}
 
 # disabling SSL on local
 SSLIFY_DISABLE = True

@@ -1,5 +1,4 @@
 import os
-import smartsettings
 import sys
 import urlparse
 
@@ -11,7 +10,7 @@ from datetime import timedelta
 from path import path
 
 
-DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
+DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname().dirname()
 
 # Django settings for politikon project.
 
@@ -148,7 +147,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '@2@yw=u4h152#iscro&(4pcka%m1eydvw=_sne)@10f9+t^g9='
 
-# List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
@@ -318,7 +316,7 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'console': {
             'level': 'DEBUG',
@@ -352,16 +350,6 @@ LOGGING = {
     }
 }
 
-# @TODO: add ensure_exists('<setting name>') to django-smartsettings
-smartsettings.config(globals(), {
-    'FLAVOURS': (
-        'TESTING',
-        'DEV',
-        'PRODUCTION',
-    ),
-    'DEFAULT': 'DEV'  # default flavour always loads localsettings.py!
-})
-
 JINJA2_GLOBALS = {
     'config': config
 }
@@ -380,3 +368,9 @@ GRAPPELLI_AUTOCOMPLETE_LIMIT = 10
 
 import djcelery
 djcelery.setup_loader()
+
+if 'test' in sys.argv:
+    try:
+        from test import *
+    except ImportError:
+        pass

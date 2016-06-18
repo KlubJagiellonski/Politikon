@@ -7,10 +7,8 @@ from .exceptions import EventAlreadyFinished
 from .forms import EventForm
 from .models import Bet, Event, Transaction
 
-from taggit_helpers import TaggitCounter, TaggitListFilter, TaggitTabularInline
 
-
-class EventAdmin(TaggitCounter, admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     form = EventForm
 
     formfield_overrides = {
@@ -45,10 +43,10 @@ class EventAdmin(TaggitCounter, admin.ModelAdmin):
         'price_change',
     ]
 
-    list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'taggit_counter', 'outcome',
+    list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'outcome',
                     'created_date', 'created_by', 'estimated_end_date', 'resolved_by', 'end_date']
 
-    list_filter = ['outcome', TaggitListFilter, 'is_featured', 'estimated_end_date', 'created_date', 'created_by']
+    list_filter = ['outcome', 'is_featured', 'estimated_end_date', 'created_date', 'created_by']
     search_fields = ['title']
 
     def save_model(self, request, obj, form, change):

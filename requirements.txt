@@ -5,9 +5,6 @@ path.py==2.4.1
 ipdb
 ipython
 
-# For distinction dev settings from production settings
--e git+https://github.com/tkopczuk/django-smartsettings.git@171e305a01f4eff01c3081b44993a6ce877ea70b#egg=smartsettings
-
 # Deployment
 gunicorn==19.3.0
 
@@ -72,9 +69,3 @@ python-social-auth
 
 # for tags
 django-taggit
-django-taggit-helpers
-
-# for twitter api -> getting user's followers
-git+https://github.com/ppeczek/django-m2m-history.git
-git+https://github.com/ppeczek/django-oauth-tokens.git
-git+https://github.com/ramusus/django-twitter-api.git

@@ -5,10 +5,11 @@ from decimal import Decimal
 import logging
 import os
 
-from django.contrib.auth.models import AbstractBaseUser
-from django.db import models, transaction
-from django.db.models import F, Q, Sum
+from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import AbstractBaseUser
+from django.db import models
+from django.db.models import F, Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -16,7 +17,6 @@ from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
 from events.models import Bet, Event, Transaction
 from politikon.templatetags.format import formatted
-from politikon.settings import STATIC_URL
 
 
 logger = logging.getLogger(__name__)
@@ -288,7 +288,7 @@ class UserProfile(AbstractBaseUser):
         if self.avatar:
             return self.avatar.url
         else:
-            return STATIC_URL + "img/blank-avatar.jpg"
+            return settings.STATIC_URL + "img/blank-avatar.jpg"
 
     def get_twitter_url(self):
         """
