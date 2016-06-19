@@ -270,7 +270,6 @@ INSTALLED_APPS = (
     # 'oauth_tokens',
     # 'm2m_history',
     'taggit',
-    'taggit_helpers',
     # 'twitter_api',
 
     'constance',
