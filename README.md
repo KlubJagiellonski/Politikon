@@ -12,7 +12,15 @@ Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego
 
 ## Status projektu
 
-Projekt jest rozwijany. Start beta testów odbędzie się 17 maja 2016.
+Projekt jest w fazie beta testów od 17 maja 2016. Planowany pełny start projektu to jesień 2016.
+
+## Konfiguracja w PyCharm
+
+Environment Variable | Development default
+--- | ---
+DJANGO_SETTINGS_MODULE | politikon.settings.dev
+POSTGRES_PORT_5432_TCP_PORT | 5432
+POSTGRES_PORT_5432_TCP_ADDR | 172.17.0.2
 
 ## Instalacja lokalna projektu (po angielsku)
 
