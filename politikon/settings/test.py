@@ -1,3 +1,4 @@
+from .base import *
 # settings used when run ./manage.py test
 
 DATABASE_URL = None

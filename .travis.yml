@@ -4,6 +4,6 @@ install:
 branches:
     only:
         - master
-script: coverage run --source=politikon,events,accounts manage.py test
+script: coverage run --source=politikon,events,accounts manage.py test --settings=politikon.settings.test
 after_success:
     - coveralls

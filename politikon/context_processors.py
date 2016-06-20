@@ -1,7 +1,7 @@
-import productionsettings
+from politikon.settings import production
 
 
 def politikon_settings(request):
     return {
-        'facebook_app_id': productionsettings.FACEBOOK_APPLICATION_ID
+        'facebook_app_id': production.FACEBOOK_APPLICATION_ID
     }
