@@ -3,6 +3,7 @@
 {% load display %}
 {% load format %}
 {% load humanize %}
+{% load static %}
 {% load user %}
 
 {% block facebook_properties %}
@@ -25,11 +26,13 @@
 {% block content %}
     <section id="featured" class="section-nopadding">
         <figure>
-            {% if front_event.big_image %}
-            <div style="background: url({{ front_event.big_image.url }}) center; height: 70vh; min-height: 200px; background-size: cover"></div>
-            {% else %}
-            <img src="{{ STATIC_URL }}img/featured.jpg"/>
-            {% endif %}
+            <a href="{{ front_event.get_relative_url }}">
+                {% if front_event.big_image %}
+                <div class="image" data-preload-url="{{ front_event.big_image.url }}" style="background: #fff url('{% static 'img/Loading_icon.gif' %}') no-repeat center; height: 70vh; min-height: 200px;"></div>
+                {% else %}
+                <img src="{{ STATIC_URL }}img/featured.jpg"/>
+                {% endif %}
+            </a>
             <figcaption>
                 <a href="{{ front_event.get_relative_url }}">
                     <div class="details">

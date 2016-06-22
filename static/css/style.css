@@ -465,7 +465,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
     box-shadow: 0 2px 11px -4px;}
 #betfeed .bet:nth-child(3n) {margin-right: 0px !important;}
 #betfeed figure {position: relative;}
-#betfeed figure img {height: 250px;} /*zmiana wysokosci dla RWD*/
+#betfeed figure a .img {height: 250px;} /*zmiana wysokosci dla RWD*/
 #betfeed figure figcaption {position: absolute; top: 0; height: 100%; width:100%;}
 #betfeed figure figcaption h2 {width: 88%; padding: 12px 6%; height: 50px; margin-top: 250px; line-height: 1.3em; font-size: 1.125em; font-weight: 500; color: #333; background: #fff; position: relative; z-index: 2000;}
 #betfeed.padding-bottom {
@@ -813,7 +813,7 @@ a.twitter-timeline:focus {
 }
 
 [data-preload-url] {
-  position: relative;
+    position: relative;
 }
 
 .preloading[data-preload-url]::after {

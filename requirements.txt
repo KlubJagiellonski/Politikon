@@ -1,4 +1,5 @@
 # Deployment and work
+
 Django==1.8.12
 psycopg2
 path.py==2.4.1
@@ -16,24 +17,12 @@ coveralls
 flake8
 
 djangorestframework
-newrelic
 
 # Admin skin
 django-grappelli
 
-# coffin and django-jinja --- can't find, probably deprecated
-# coffin
-# Was used for macros
-# django-jinja==1.4.1
-# jinja2
-
 # Compresses linked and inline JavaScript or CSS into a single cached file.
 django-compressor==1.5
-
-# For distant static files
-django-assets
-boto
-django-storages==1.1.8
 
 jsmin
 
@@ -42,8 +31,6 @@ jsmin
 # fandjango
 python-openid
 
-# -e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
-django-redis-sessions
 -e git+https://github.com/tgrf/django-constance.git#egg=django-constance
 django-picklefield
 django-celery-with-redis==3.0
@@ -67,5 +54,29 @@ django-sslify>=0.2
 # connecting with FB, TT
 python-social-auth
 
-# for tags
+# tags
 django-taggit
+
+
+# Heroku addons
+
+
+# redis
+django-redis-cache==1.6.3
+# -e git+https://github.com/martinrusev/django-redis-sessions.git#egg=django-redis-sessions
+django-redis-sessions
+
+# mailgun
+django-mailgun==0.8.0
+
+# analytics
+newrelic
+
+
+# AWS
+
+
+# For distant static files
+django-assets
+boto
+django-storages==1.1.8

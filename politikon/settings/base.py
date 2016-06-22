@@ -178,7 +178,7 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
                 # custom context processor
-                'politikon.context_processors.politikon_settings'
+                'politikon.context_processors.politikon_settings',
             ],
         },
     },
@@ -367,9 +367,3 @@ GRAPPELLI_AUTOCOMPLETE_LIMIT = 10
 
 import djcelery
 djcelery.setup_loader()
-
-if 'test' in sys.argv:
-    try:
-        from test import *
-    except ImportError:
-        pass
