@@ -147,12 +147,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '@2@yw=u4h152#iscro&(4pcka%m1eydvw=_sne)@10f9+t^g9='
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -160,7 +154,6 @@ TEMPLATES = [
             os.path.join(DJANGO_PROJECT_ROOT, 'templates'),
             DJANGO_PROJECT_ROOT
         ],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
@@ -178,7 +171,12 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
                 # custom context processor
-                'politikon.context_processors.politikon_settings'
+                'politikon.context_processors.politikon_settings',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                # 'django.template.loaders.eggs.Loader',
             ],
         },
     },

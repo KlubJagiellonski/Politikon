@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 from .views import HomeView, acme_challenge
 from events.urls import api_urls as event_api
@@ -13,7 +13,7 @@ api_urls = [
     url(r'^auth/', include('djoser.urls.authtoken'))
 ]
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Admin url patterns
     url(r'^admin/', include(admin.site.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
@@ -29,10 +29,10 @@ urlpatterns = patterns('',
         acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')
-)
+]
 
 if settings.SERVE_STATIC_FILES:
-    urlpatterns += patterns('',
+    urlpatterns += [
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',
          {'document_root': settings.STATIC_ROOT}),
-    )
+    ]

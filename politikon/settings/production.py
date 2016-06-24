@@ -65,7 +65,11 @@ else:
       }
     }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = os.environ.get('MAILGUN_API_KEY', '')
+MAILGUN_SERVER_NAME = os.environ.get('MAILGUN_SMTP_SERVER', '')
+
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = os.environ.get('MAILGUN_USERNAME', '')
 EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_PASSWORD', '')

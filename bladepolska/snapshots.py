@@ -170,7 +170,7 @@ def create_snapshot_model(cls, fields=[]):
 
     # Copy fields
     for field_name in fields:
-        target_field = cls._meta.get_field_by_name(field_name)[0]
+        target_field = cls._meta.get_field(field_name)
         attrs[field_name] = copy_field(target_field)
 
     return type(name, (models.Model,), attrs)

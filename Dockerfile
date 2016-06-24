@@ -34,6 +34,8 @@ RUN echo "KexAlgorithms=diffie-hellman-group1-sha1" >> /etc/ssh/sshd_config
 # Allows sshd to read /root/.ssh/environment
 RUN echo "PermitUserEnvironment=yes" >> /etc/ssh/sshd_config
 
+ENV DJANGO_SETTINGS_MODULE "politikon.settings.dev"
+
 ENV PORT 8000
 EXPOSE 8000
 EXPOSE 22
