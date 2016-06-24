@@ -18,7 +18,7 @@ from .exceptions import UnknownOutcome, EventAlreadyFinished
 from .managers import EventManager, BetManager, TransactionManager
 
 from bladepolska.snapshots import SnapshotAddon
-from bladepolska.site import current_domain
+
 from politikon.choices import Choices
 from taggit.managers import TaggableManager
 
@@ -136,19 +136,13 @@ class Event(models.Model):
         super(Event, self).save(**kwargs)
 
     def get_absolute_url(self):
-        return 'http://%(domain)s%(url)s' % {
-            'domain': current_domain(),
-            'url': reverse('events:event_detail', kwargs={'pk': self.pk})
-        }
+        return reverse('events:event_detail', kwargs={'pk': self.pk})
 
     def get_relative_url(self):
         return '/event/%(id)d-%(title)s' % {'id': self.id, 'title': slugify(unidecode(self.title))}
 
     def get_absolute_facebook_object_url(self):
-        return 'http://%(domain)s%(url)s' % {
-            'domain': current_domain(),
-            'url': reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
-        }
+        return reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
 
     @property
     def is_in_progress(self):

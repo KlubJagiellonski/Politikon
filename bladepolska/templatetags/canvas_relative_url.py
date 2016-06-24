@@ -1,10 +1,8 @@
-# from coffin import template
 from django import template
-register = template.Library()
-
-from jinja2 import Markup
-
 from django.conf import settings
+
+
+register = template.Library()
 
 
 @register.filter
