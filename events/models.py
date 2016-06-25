@@ -19,6 +19,8 @@ from .managers import EventManager, BetManager, TransactionManager
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 from politikon.choices import Choices
 from taggit.managers import TaggableManager
 
@@ -54,6 +56,11 @@ class Event(models.Model):
     EVENT_SMALL_CHART_DAYS = 14
     EVENT_BIG_CHART_DAYS = 28
 
+    SMALL_IMAGE_WIDTH=340
+    SMALL_IMAGE_HEIGHT=250
+    BIG_IMAGE_WIDTH=1250
+    BIG_IMAGE_HEIGHT=510
+
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
@@ -81,8 +88,21 @@ class Event(models.Model):
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
-    small_image = models.ImageField(u'mały obrazek 340x250', upload_to='events_small', null=True)
-    big_image = models.ImageField(u'duży obrazek 1250x510', upload_to='events_big', null=True)
+    small_image = ProcessedImageField(
+        help_text=u'mały obrazek {0}x{1}'.format(SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT),
+        upload_to='events_small',
+        processors=[ResizeToFill(SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT)],
+        null=True,
+        blank=False,
+    )
+
+    big_image = ProcessedImageField(
+        help_text=u'duży obrazek {0}x{1}'.format(BIG_IMAGE_WIDTH, BIG_IMAGE_HEIGHT),
+        upload_to='events_big',
+        processors=[ResizeToFill(BIG_IMAGE_WIDTH, BIG_IMAGE_HEIGHT)],
+        null=True,
+        blank=False,
+    )
 
     is_featured = models.BooleanField(u'featured', default=False)
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)

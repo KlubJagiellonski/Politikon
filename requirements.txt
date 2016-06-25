@@ -69,3 +69,6 @@ python-social-auth
 
 # for tags
 django-taggit
+
+# for image resizing
+django-imagekit
