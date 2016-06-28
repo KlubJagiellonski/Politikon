@@ -271,6 +271,8 @@ INSTALLED_APPS = (
     # 'm2m_history',
     'taggit',
     # 'twitter_api',
+    # https://github.com/matthewwithanm/django-imagekit for images resizing
+    'imagekit',
 
     'constance',
     'constance.backends.database',
