@@ -5,7 +5,7 @@ DEBUG = True
 
 SITE_ID = 2
 
-DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname()
+DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname().dirname()
 
 MEDIA_ROOT = DJANGO_PROJECT_ROOT / 'static' / 'uploads'
 MEDIA_URL = 'https://politik.s3.amazonaws.com/'
