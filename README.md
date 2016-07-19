@@ -186,6 +186,13 @@ python manage.py runserver 0.0.0.0:8000
 python manage.py createsuperuser
 ```
 
+* To load example data:
+```
+python manage.py loaddata db_dumps/local_test_data.json
+```
+
+* INFO: You can login for any user. Password is an email. For example username: kowalskijan; password: kowalskijan@example.com; Jan Kowalski is the admin.
+
 * If you need to sync your docker local time
 ```
 boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
