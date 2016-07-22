@@ -205,7 +205,10 @@ class UserProfile(AbstractBaseUser):
         """
         portfolio_value = 0
         user_bets = Bet.objects.select_related('event').\
-            filter(user=self, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, has__gt=0).\
+            only('id', 'has', 'outcome', 'event', "event__current_sell_for_price",
+                 "event__current_sell_against_price").\
+            filter(user__id=self.id, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+                   has__gt=0).\
             filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=self.reset_date))
 
         for bet in user_bets.iterator():
