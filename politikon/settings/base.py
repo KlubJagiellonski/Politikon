@@ -286,6 +286,7 @@ INSTALLED_APPS = (
     'bladepolska',
     'events',
     'politikon',
+    'rest_framework'
 )
 
 # A sample logging configuration. The only tangible logging

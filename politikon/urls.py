@@ -3,9 +3,20 @@ from django.conf.urls import patterns, include, url
 
 from .views import HomeView, acme_challenge
 
+from events.api import EventList, EventDetail
+
 from django.contrib import admin
 admin.autodiscover()
 
+
+event_urls = [
+    url(r'^$', EventList.as_view(), name='event-list'),
+    url(r'^(?P<pk>\d+)$', EventDetail.as_view(), name='event-detail')
+]
+
+api_urls = [
+    url(r'events/', include(event_urls, namespace='events'))
+]
 
 urlpatterns = patterns('',
     # Admin url patterns
@@ -15,6 +26,7 @@ urlpatterns = patterns('',
     # User authentication url patterns
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^api/', include(api_urls, namespace='api')),
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
