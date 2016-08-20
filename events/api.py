@@ -4,7 +4,7 @@ from .serializers import EventSerializer, BetSerializer, TransactionSerializer
 from .models import Event, Bet, Transaction
 
 
-class EventList(generics.ListCreateAPIView):
+class EventList(generics.ListAPIView):
     model = Event
     queryset = Event.objects.all()
     serializer_class = EventSerializer
