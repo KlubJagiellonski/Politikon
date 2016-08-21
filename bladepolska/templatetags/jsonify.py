@@ -1,10 +1,11 @@
-from coffin import template
-register = template.Library()
-
 import json
-from jinja2 import Markup
+
+from django import template
+
+
+register = template.Library()
 
 
 @register.filter
 def jsonify(value):
-    return Markup(json.dumps(value))
+    return json.dumps(value)
