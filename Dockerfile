@@ -45,3 +45,8 @@ RUN mkdir /root/.ssh/
 RUN touch /root/.ssh/environment
 
 CMD env >> /root/.ssh/environment; export -p | grep _ >> /etc/profile; /usr/sbin/sshd -D;
+
+RUN echo "export DJANGO_SETTINGS_MODULE=politikon.settings.dev"
+RUN echo "export POSTGRES_PORT_5432_TCP_PORT=5432"
+RUN echo "export POSTGRES_PORT_5432_TCP_ADDR=172.17.0.2"
+
