@@ -2,7 +2,7 @@
 
 NAME='politikon'
 DB_NAME='politikon_db'
-PSQL_VER='postgres:9.4.1'
+PSQL_VER='postgres:latest'
 NODE_NAME='politikon_instance'
 DOCKER_RUN='./docker_run.sh'
 
