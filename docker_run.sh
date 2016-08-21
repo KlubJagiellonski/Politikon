@@ -24,6 +24,14 @@ if ! docker ps -a | grep $DB_NAME | grep Up >/dev/null; then
     exit 1
 fi
 
+pri 'vm' "$NODE_NAME CONTAINER BUILD starts..."
+pri '  ' " it should NOT harm your env if it NOT CHANGED"
+read -p " Do you want to run it (you should)? [y/N] " val
+if [[ $val =~ [yY](es)* ]]; then
+    docker stop $NODE_NAME
+    ./docker_rebuild.sh || exit 1
+fi
+
 if   ! docker ps -a | grep $NODE_NAME >/dev/null; then
     pri 'vm' "$NODE_NAME creating and starting..."
     docker run -d --dns 8.8.8.8 --dns 8.8.4.4 -t -v `pwd`:/app -p 2233:22 -p 8000:8000 --name $NODE_NAME --link ${DB_NAME}:postgres $NAME /bin/bash

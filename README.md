@@ -14,7 +14,9 @@ Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego
 
 Projekt jest w fazie beta testów od 17 maja 2016. Planowany pełny start projektu to jesień 2016.
 
-## Konfiguracja w PyCharm
+## Konfiguracja w PyCharm EE / PyCharm CE (po angielsku)
+
+* PyCharm EE:
 
 Environment Variable | Development default
 --- | ---
@@ -22,176 +24,123 @@ DJANGO_SETTINGS_MODULE | politikon.settings.dev
 POSTGRES_PORT_5432_TCP_PORT | 5432
 POSTGRES_PORT_5432_TCP_ADDR | 172.17.0.2
 
+* PyCharm CE:
+
+At this moment there is no ready-to-use config for PyCharm CE IDE.
+
 ## Instalacja lokalna projektu (po angielsku)
 
 ### Mac OS X
 
-* Install [Docker](https://docs.docker.com/)
+Development environment preparation is the same as for GNU/Linux OS familiy
+using [Docker for Mac](https://docs.docker.com/engine/installation/mac/).
 
-* Run Docker
-```
-boot2docker start
-```
-(Don't forget to set the environment variables as outputed by `boot2docker start`)
+### GNU/Linux
 
-* Clone the Politikon source-code repository from [https://github.com/KlubJagiellonski/Politikon](GitHub)
-```
-git clone git@github.com:KlubJagiellonski/Politikon.git
-```
-* Go to the source-code folder
+* Install [Docker](https://docs.docker.com/).
 
-* Build and run your docker
+* Clone the Politikon source-code repository from [https://github.com/KlubJagiellonski/Politikon](GitHub).
 ```
-./docker_rebuild.sh
-./docker_run.sh
+$ git clone git@github.com:KlubJagiellonski/Politikon.git
+$ cd Politikon
 ```
 
-* Add local.politikon.org.pl to your OS hosts files Add 192.168.59.103 or whatever IP your docker instance has to the host file.
-```
-...
-192.168.59.103 local.politikon.org.pl
-...
-```
+Tip: better to fork repo and set up upstream remote.
+See: [Syncing the fork](https://help.github.com/articles/syncing-a-fork/)
 
-* Add local.politikon.org.pl as a host for your FB and Twitter app
-
-* Install missing dependencies with pip
-```
-pip install -r requirements.txt
-```
-
-* Restore the db snapshot
-```
-cd db_dumps
-ls *.dumps
-./db_restore_dump.sh THE_LATEST_DB_DUMP
-cd ..
-```
-
-* Migrate the database
-```
-python manage.py migrate
-```
-
-* Run the web server
-```
-python manage.py runserver 0.0.0.0:8000
-```
-
-* Point your web browser to the
-```
-boot2docker ip
-YOUR_IP:8000
-```
-
-* To get inside docker container when starting deployment
-```
-./docker_run.sh
-```
-
-* If you need to access Django Admin on Dev machine:
-```
-python manage.py createsuperuser
-```
-
-* If you need to sync your docker local time
-```
-boot2docker ssh sudo ntpclient -s -h de.pool.ntp.org
-docker run -it -v `pwd`:/app -p 2233:22 -p 8000:8000 --name politikon_instance politikon
-```
-
-* If you need to upgrade boot2docker:
-```
-boot2docker upgrade
-boot2docker delete
-boot2docker init
-boot2docker up
-```
-
-* WARNING: destructive code ahead - if you need to rebuild docker containers:
-```
-#list running images:
-docker ps
-# kill running images by providing ids listed from docker ps
-docker kill id1 id2
-# delete all stopped containers (because running containers will harmlessly error out)
-docker rm $(docker ps -a -q)
-# delete all images
-docker rmi $(docker images -a | awk '{print $3}' | tail -n +2)
-# rebuild the whole docker
-./docker_rebuild.sh
-```
-
-### Linux
-
-* Install [Docker](https://docs.docker.com/)
-
-* Clone the Politikon source-code repository from [https://github.com/KlubJagiellonski/Politikon](GitHub)
-```
-git clone git@github.com:KlubJagiellonski/Politikon.git
-```
-
-* Go to the source-code folder
-
-* Add local.politikon.org.pl to your OS hosts files
+* Add local.politikon.org.pl to your OS hosts files:
 ```
 ...
 127.0.0.1 local.politikon.org.pl
 ...
 ```
+(required fo Facebook and Twitter sign-in integration)
 
-* Add local.politikon.org.pl as a host for your FB and Twitter app
-
-* Build and run your docker
+* Build and run your docker container:
 ```
-./docker_rebuild.sh
-./docker_run.sh
-```
-
-* Restore the db snapshot
-```
-cd db_dumps
-ls *.dumps
-./db_restore_dump.sh THE_LATEST_DB_DUMP
-cd ..
+$ ./docker_rebuild.sh
+$ ./docker_run.sh
 ```
 
-* Install missing dependencies with pip
+When propt appears you are in Docker instance (VM).
 ```
-pip install -r requirements.txt
-```
-
-* Migrate the database
-```
-python manage.py migrate
+root@asdf1234:/app#
 ```
 
-* Run the web server
+Tip: if needed you could run many shells - just run `./docker_run.sh` again in another term.
+
+* When on VM you could install dependencies with pip:
+```
+# pip install -r requirements.txt
+```
+
+By default they are installed when building Docker container and for "playing it safe" just rebuild the whole
+container (purge old configuration). It is needed to safe pre-production testing.
+
+* Default environment variables set up during Docker container build:
+```
+export DJANGO_SETTINGS_MODULE="politikon.settings.local"
+export POSTGRES_PORT_5432_TCP_PORT="5432"
+export POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
+```
+
+* **Now need to do some steps manually... (we will automate that)**
+
+* Connect as 'postgres' user to PostgreSQL instance and create db 'politikon':
+```
+# plsql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
+postgres=# CREATE DATABASE politikon;
+```
+
+* Migrate the database:
+```
+# python manage.py migrate
+```
+
+* Run the web server:
 ```
 python manage.py runserver 0.0.0.0:8000
 ```
 
-* Point your web browser to the
+* Run site in browser:
 ```
-127.0.0.1:8000
+http://local.politikon.org.pl:8000
 ```
 
-* To get inside docker container when starting deployment
+You should see site.
+Now you know Politikon works on your docker container, but database is empty.
+**Well done :)**
+
+## Appendix
+
+* When starting deployment get inside docker container:
 ```
 ./docker_run.sh
 ```
 
-* If you need to access Django Admin on Dev machine:
-```
-python manage.py createsuperuser
-```
+# TODO issue with data json file
+django.core.serializers.base.DeserializationError: Problem installing fixture '/app/db_dumps/local_test_data.json': Event has no field named u'is_front'
 
 * To load example data:
 ```
 python manage.py loaddata db_dumps/local_test_data.json
 ```
 
-* INFO: You can login for any user. Password is an email. For example username: kowalskijan; password: kowalskijan@example.com; Jan Kowalski is the admin.
+You can login for any user - password is an email.
+For example:
+ username: kowalskijan
+ password: kowalskijan@example.com
+Importing that data gives **Jan Kowalski the Admin role.**
+
+* If you need to access Django Admin on Docker container:
+```
+python manage.py createsuperuser
+```
+
+Then you could access Admin panel in browser:
+```
+local.politikon.org.pl:8000/admin
+```
 
 * If you need to sync your docker local time
 ```
@@ -233,3 +182,5 @@ W projekt są zaangażowani:
 * Marcin Mincer
 * Piotrek Pęczek
 * Michał Nowotnik
+* Wojciech Zając
+* Wojciech Błaszczuk (@julianvolodia)

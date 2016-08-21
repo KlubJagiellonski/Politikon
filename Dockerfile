@@ -14,11 +14,6 @@ RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql
 # settings default django settings module
 ENV DJANGO_SETTINGS_MODULE="politikon.settings.dev"
 
-ADD / /app
-ADD /requirements.txt /app/
-WORKDIR /app
-RUN pip install -r requirements.txt
-
 RUN echo "export LANGUAGE=en_US.UTF-8" >> /etc/profile
 RUN echo "export LANG=en_US.UTF-8" >> /etc/profile
 RUN echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
@@ -46,7 +41,12 @@ RUN touch /root/.ssh/environment
 
 CMD env >> /root/.ssh/environment; export -p | grep _ >> /etc/profile; /usr/sbin/sshd -D;
 
-RUN echo "export DJANGO_SETTINGS_MODULE=politikon.settings.dev"
-RUN echo "export POSTGRES_PORT_5432_TCP_PORT=5432"
-RUN echo "export POSTGRES_PORT_5432_TCP_ADDR=172.17.0.2"
+RUN echo "export DJANGO_SETTINGS_MODULE=politikon.settings.dev" >> /etc/profile
+RUN echo "export POSTGRES_PORT_5432_TCP_PORT=5432" >> /etc/profile
+RUN echo "export POSTGRES_PORT_5432_TCP_ADDR=172.17.0.2" >> /etc/profile
+
+ADD /requirements.txt /app/
+WORKDIR /app
+RUN pip install -r requirements.txt
+ADD / /app
 
