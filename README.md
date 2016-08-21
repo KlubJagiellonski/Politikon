@@ -103,7 +103,7 @@ export POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
 
 * Connect as 'postgres' user to PostgreSQL instance and create db 'politikon':
 ```
-# plsql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
+# psql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
 postgres=# CREATE DATABASE politikon;
 ```
 
