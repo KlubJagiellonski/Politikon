@@ -1,2 +1,4 @@
 {% load humanize %}
-{% if is_in_progress %}Rozwiązanie{% else %}Zakończony{% endif %} {{ date|naturaltime }}
+{% if state == 'ongoing' %}Rozwiązanie {{ date|naturaltime }}
+{% elif state == 'finished' %}Zakończony {{ date|naturaltime }}
+{% else %}Czeka na rozstrzygnięcie{% endif %}

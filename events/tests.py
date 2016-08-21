@@ -539,20 +539,26 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         Render finish date
         """
-        events = EventFactory.create_batch(2)
+        events = EventFactory.create_batch(3)
         events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
         finish_time = timezone.now()
         events[0].end_date = finish_time
         future_time = timezone.now() + timedelta(days=8)
         events[1].estimated_end_date = future_time
+        past_time = timezone.now() - timedelta(days=1)
+        events[2].estimated_end_date = past_time
         self.assertEqual({
             'date': finish_time,
-            'is_in_progress': False
+            'state': 'finished'
         }, render_finish_date(events[0]))
         self.assertEqual({
             'date': future_time,
-            'is_in_progress': True
+            'state': 'ongoing'
         }, render_finish_date(events[1]))
+        self.assertEqual({
+            'date': past_time,
+            'state': 'no-result'
+        }, render_finish_date(events[2]))
 
     def test_og_title(self):
         """
