@@ -48,5 +48,5 @@ RUN echo "export POSTGRES_PORT_5432_TCP_ADDR=172.17.0.2" >> /etc/profile
 ADD /requirements.txt /app/
 WORKDIR /app
 RUN pip install -r requirements.txt
-ADD / /app
+# files will be there when starting the container - no need to copy them in build
 
