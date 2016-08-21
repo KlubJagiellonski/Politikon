@@ -71,10 +71,12 @@ class EventAdmin(admin.ModelAdmin):
 class BetAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'event', 'outcome', 'has', 'bought', 'sold', 'bought_avg_price',
                     'sold_avg_price', 'rewarded_total']
+    list_filter = ['user', 'event', 'outcome']
 
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'event', 'type', 'date', 'quantity', 'price']
+    list_filter = ['user', 'event', 'type', 'date']
 
 
 EventAdmin.list_per_page = 10000
