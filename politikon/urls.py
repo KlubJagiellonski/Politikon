@@ -2,19 +2,26 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 from .views import HomeView, acme_challenge
+from events.urls import api_urls as event_api
 
 from django.contrib import admin
 admin.autodiscover()
 
+
+api_urls = [
+    url(r'events/', include(event_api, namespace='api-events')),
+    url(r'^auth/', include('djoser.urls.authtoken'))
+]
 
 urlpatterns = patterns('',
     # Admin url patterns
     url(r'^admin/', include(admin.site.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
 
-    # User authentication url patterns
+    # User authentication url patternsapi
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^api/', include(api_urls)),
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),

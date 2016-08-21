@@ -278,6 +278,9 @@ INSTALLED_APPS = (
     'constance.backends.database',
     'djcelery',
     'gunicorn',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 
     'grappelli',
     'django.contrib.admin',
@@ -285,7 +288,7 @@ INSTALLED_APPS = (
     'accounts',
     'bladepolska',
     'events',
-    'politikon',
+    'politikon'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -375,3 +378,9 @@ if 'test' in sys.argv:
         from test import *
     except ImportError:
         pass
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}

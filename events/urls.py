@@ -1,7 +1,13 @@
 from django.conf.urls import patterns, url
 
+from .api import EventList, EventDetail
 from .views import EventDetailView, EventFacebookObjectDetailView, EventsListView
 
+
+api_urls = [
+    url(r'^$', EventList.as_view(), name='event-list'),
+    url(r'^(?P<pk>\d+)$', EventDetail.as_view(), name='event-detail')
+]
 
 urlpatterns = patterns('',
     url(r'^fbobjects/event/(?P<pk>\d+)/$', EventFacebookObjectDetailView.as_view(),
