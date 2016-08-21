@@ -37,7 +37,11 @@ else
 fi
 if [[ $val =~ [yY](es)* ]]; then
     docker stop $NODE_NAME
-    ./docker_rebuild.sh || exit 1
+    if [[ $1 =~ ^--clean$ ]] || [[ $2 =~ ^--clean$ ]]; then
+        ./docker_rebuild.sh --clean || exit 1
+    else
+        ./docker_rebuild.sh || exit 1
+    fi
 fi
 
 # > > NODE < <
