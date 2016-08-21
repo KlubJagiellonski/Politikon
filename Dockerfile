@@ -11,8 +11,9 @@ RUN apt-get update -y -qq --fix-missing
 RUN apt-get upgrade -y -qq
 RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.5 libpq-dev git libmemcached-dev curl openssh-server mercurial gettext vim libjpeg-dev libjpeg8-dev
 
-# settings default django settings module
+# settings default django settings module (1st part)
 ENV DJANGO_SETTINGS_MODULE="politikon.settings.dev"
+
 
 RUN echo "export LANGUAGE=en_US.UTF-8" >> /etc/profile
 RUN echo "export LANG=en_US.UTF-8" >> /etc/profile
@@ -41,12 +42,11 @@ RUN touch /root/.ssh/environment
 
 CMD env >> /root/.ssh/environment; export -p | grep _ >> /etc/profile; /usr/sbin/sshd -D;
 
-RUN echo "export DJANGO_SETTINGS_MODULE=politikon.settings.dev" >> /etc/profile
-RUN echo "export POSTGRES_PORT_5432_TCP_PORT=5432" >> /etc/profile
-RUN echo "export POSTGRES_PORT_5432_TCP_ADDR=172.17.0.2" >> /etc/profile
+# settings default django settings module (2nd part)
+ENV POSTGRES_PORT_5432_TCP_PORT="5432"
+ENV POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
 
 ADD /requirements.txt /app/
 WORKDIR /app
 RUN pip install -r requirements.txt
-# files will be there when starting the container - no need to copy them in build
 
