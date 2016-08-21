@@ -9,14 +9,10 @@ RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo 
 
 RUN apt-get update -y -qq --fix-missing
 RUN apt-get upgrade -y -qq
-RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.4 libpq-dev git libmemcached-dev curl openssh-server mercurial gettext vim libjpeg-dev libjpeg8-dev
+RUN apt-get install -y python-dev python-pip postgresql-client-common postgresql postgresql-contrib postgresql-9.5 libpq-dev git libmemcached-dev curl openssh-server mercurial gettext vim libjpeg-dev libjpeg8-dev
 
-RUN mkdir /var/run/sshd
-RUN echo 'root:pass' | chpasswd
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# settings default django settings module
+ENV DJANGO_SETTINGS_MODULE="politikon.settings.dev"
 
 ADD / /app
 ADD /requirements.txt /app/

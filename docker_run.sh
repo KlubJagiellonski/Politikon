@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if ! docker ps -a | grep politikon_db >/dev/null; then
-    docker run -d --name politikon_db postgres:9.4.1
+    docker run -d --name politikon_db postgres:latest
     echo "New database created" ;
 else
     docker start politikon_db ;
