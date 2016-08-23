@@ -42,24 +42,31 @@ At this moment there is no ready-to-use config for PyCharm C. If you done it alr
 Development environment preparation is the same as for GNU/Linux OS familiy
 using [Docker for Mac](https://docs.docker.com/engine/installation/mac/).
 
+If something not working - please report a bug!
+
 ### GNU/Linux
 
-* Install [Docker](https://docs.docker.com/).
+Tested on Debian which is fully supported. Pending tests on openSUSE and Mint.
 
-* Clone the Politikon repository from [https://github.com/KlubJagiellonski/Politikon](GitHub).
+* Install [Docker](https://docs.docker.com/). 
+
+Remember that user who wants to running Docker containers must be permitted to use `docker`. 
+It is needed for example add that user to `docker` group.
+
+Also check if `docker.service` or equivalent daemon runs successfully in your OS.
+
+* Consider cloning the read-only Politikon repository from [https://github.com/KlubJagiellonski/Politikon](GitHub) to view source.
 ```
-$ git clone git@github.com:KlubJagiellonski/Politikon.git
-$ cd Politikon
+user@pc$ git clone git@github.com:KlubJagiellonski/Politikon.git
+user@pc$ cd Politikon
 ```
 
 Tip: better to fork repo, clone that and then set up 'upstream' remote for syncing with base repo.
 See [syncing the fork](https://help.github.com/articles/syncing-a-fork/) for more info.
 
-* Add `local.politikon.org.pl` to your OS hosts files:
+* Add `local.politikon.org.pl` as localhost to your OS hosts file (eg. `/etc/hosts`):
 ```
-...
 127.0.0.1 local.politikon.org.pl
-...
 ```
 (required fo Facebook and Twitter sign-in integration)
 
@@ -70,8 +77,8 @@ If you found out some other possibility faster than us - please contribute!
 $ ./docker_run.sh --build
 ```
 
-Parameter force-yes Docker container check.
-Tip: run without any parameter for interactive decision. 
+Parameter force Docker container check (rebuild). It keeps your container up-to-date.
+Tip: run without any parameter for interactive decision.
 
 When propt appears you are in Docker instance (VM).
 ```
@@ -87,7 +94,7 @@ to scripts `docker_run.sh` and `docker_rebuild.sh`.
 
 * When on VM you could install dependencies with pip manually:
 ```
-# pip install -r requirements.txt
+root@asdf1234:/app# pip install -r requirements.txt
 ```
 
 By default running with `--build` check if they are up-to-date.
@@ -103,21 +110,21 @@ export POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
 
 * Connect as 'postgres' user to PostgreSQL instance and create db 'politikon':
 ```
-# psql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
+root@asdf1234:/app# psql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
 postgres=# CREATE DATABASE politikon;
 ```
 
 * Migrate the database:
 ```
-# python manage.py migrate
+root@asdf1234:/app# python manage.py migrate
 ```
 
 * **Configuration should be done.** Now run the web server...
 ```
-python manage.py runserver 0.0.0.0:8000
+root@asdf1234:/app# python manage.py runserver 0.0.0.0:8000
 ```
 
-* ...and check in browser (assuming that):
+* ...and check in browser:
 ```
 http://local.politikon.org.pl:8000
 ```
