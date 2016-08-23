@@ -69,7 +69,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = os.environ.get('MAILGUN_USERNAME', '')
 EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_PASSWORD', '')
-EMAIL_PORT = 587
+EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT', 587)
 EMAIL_USE_TLS = True
 DEFAULT_EMAIL_FROM = 'Politikon <' + EMAIL_HOST_USER + '>'
 
