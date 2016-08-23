@@ -26,7 +26,7 @@ class HomeView(TemplateView):
         for event in home_events:
             event.my_bet = event.get_user_bet(user)
 
-        front_event = home_events[0:1]
+        front_event = home_events[0]
         if front_event:
             context.update({
                 'front_event': front_event,
