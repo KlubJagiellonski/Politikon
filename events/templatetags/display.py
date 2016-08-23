@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from django import template
+from django.utils import timezone
 
 from events.models import Event, Bet
 from politikon.templatetags.format import toLower
@@ -78,9 +79,12 @@ def outcome(event):
 
 @register.inclusion_tag('finish_date.html')
 def render_finish_date(event):
+    state = 'finished'
+    if event.is_in_progress:
+        state = 'no-result' if timezone.now() > event.finish_date() else 'ongoing'
     return {
         'date': event.finish_date(),
-        'is_in_progress': event.is_in_progress
+        'state': state
     }
 
 
