@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-docker build -t politikon .
-
-#docker rm politikon_instance
-#docker rm politikon_db
+if [[ $1 =~ ^--clean$ ]]; then
+  docker build --rm=true -t politikon .
+else
+  docker build -t politikon .
+fi
