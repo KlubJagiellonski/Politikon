@@ -1,7 +1,7 @@
 import json
 import logging
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -13,7 +13,7 @@ from django.views.generic import DetailView, ListView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
-from .models import Event, Bet, Transaction
+from .models import Event, Bet, Transaction, SolutionVote
 from .utils import create_bets_dict
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
@@ -61,17 +61,32 @@ class EventDetailView(DetailView):
         event = self.get_event()
         user = self.request.user
         bet = event.get_user_bet(user)
+
+        # Voted
+        voted = None
+        if user.is_staff:
+            try:
+                sv = SolutionVote.objects.get(user=user, event=event)
+                voted = 'TAK' if sv.outcome == sv.VOTE_OUTCOME_CHOICES.YES else 'NIE'
+            except SolutionVote.DoesNotExist:
+                pass
+
+        # Similar events
         similar_events = [x for x in event.tags.similar_objects() if \
                           x.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS]
         for similar_event in similar_events:
             similar_event.my_bet = similar_event.get_user_bet(self.request.user)
+
+        # Share module
         if bet:
             share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
         else:
             share_url = event.get_absolute_url()
+
         context.update({
             'bet': event.get_user_bet(user),
             'active': 1,
+            'voted': voted,
             'event_dict': event.event_dict,
             'bet_social': event.get_bet_social(),
             'og_user': UserProfile.objects.filter(username=self.request.GET.get('user')).first(),
@@ -188,3 +203,33 @@ def bets_viewed(request):
         bets_resolved.append(bet_id)
 
     return JSONResponse(json.dumps(bets_resolved))
+
+
+@user_passes_test(lambda u: u.is_staff)
+@require_http_methods(["POST"])
+@csrf_exempt
+@transaction.atomic
+def resolve_event(request, event_id):
+    """
+    Vote for yes or no
+    :param request:
+    :type request: WSGIRequest
+    :param event_id: event id
+    :type event_id: int
+    :return:
+    """
+    data = json.loads(request.body)
+    try:
+        vote_result = Event.objects.vote_for_solution(request.user, event_id, data['outcome'])
+    except EventNotInProgress as e:
+        result = {
+            'error': unicode(e.message.decode('utf-8')),
+        }
+
+        return JSONResponseBadRequest(json.dumps(result))
+
+    result = {
+        'updates': vote_result
+    }
+
+    return JSONResponse(json.dumps(result))

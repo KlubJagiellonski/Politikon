@@ -3,7 +3,7 @@ from django.contrib import admin, messages
 from django.db import models
 from django.forms import Textarea, TextInput
 
-from .exceptions import EventAlreadyFinished
+from .exceptions import EventNotInProgress
 from .forms import EventForm
 from .models import Bet, Event, Transaction
 
@@ -20,7 +20,7 @@ class EventAdmin(admin.ModelAdmin):
         (u'Główne', {'fields': ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
                                 'is_featured', 'tags')}),
         ('Social media', {'fields': ('short_title', 'title_fb_yes', 'title_fb_no', 'twitter_tag')}),
-        (u'Rozwiązanie wydarzenia', {'fields': ('solve_event', 'end_date', 'outcome', 'outcome_reason')}),
+        (u'Rozwiązanie wydarzenia', {'fields': ('end_date', 'outcome', 'outcome_reason')}),
         ('Dane statystyczne', {'fields': ('B', 'current_buy_for_price', 'current_buy_against_price',
                                           'current_sell_for_price', 'current_sell_against_price',
                                           'last_transaction_date', 'Q_for', 'Q_against', 'turnover',
@@ -28,7 +28,6 @@ class EventAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = [
-        'resolved_by',
         'end_date',
         'outcome',
         'current_buy_for_price',
@@ -44,7 +43,7 @@ class EventAdmin(admin.ModelAdmin):
     ]
 
     list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'outcome',
-                    'created_date', 'created_by', 'estimated_end_date', 'resolved_by', 'end_date']
+                    'created_date', 'created_by', 'estimated_end_date', 'end_date']
 
     list_filter = ['outcome', 'is_featured', 'estimated_end_date', 'created_date', 'created_by']
     search_fields = ['title']
@@ -52,19 +51,6 @@ class EventAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not change:
             obj.created_by = request.user
-        # TODO: to jest najgorsze
-        if request.method == 'POST':
-            if request.POST['solve_event']:
-                try:
-                    if request.POST['solve_event'] == 'TAK':
-                        obj.finish_yes()
-                    elif request.POST['solve_event'] == 'NIE':
-                        obj.finish_no()
-                    elif request.POST['solve_event'] == 'ANULUJ':
-                        obj.cancel()
-                    obj.resolved_by = request.user
-                except EventAlreadyFinished as e:
-                    messages.error(request, e.message)
         obj.save()
 
 

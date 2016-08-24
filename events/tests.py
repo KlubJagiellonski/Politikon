@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, \
-    InsufficientCash, InsufficientBets, EventAlreadyFinished
+    InsufficientCash, InsufficientBets
 from .factories import EventFactory, ShortEventFactory, BetFactory, TransactionFactory
 from .models import Bet, Event, Transaction
 from .tasks import create_open_events_snapshot, calculate_price_change
@@ -22,6 +22,7 @@ from .templatetags.display import render_bet, render_event, render_events, rende
     render_featured_events, render_bet_status, userstats, outcome, render_finish_date, og_title
 
 from accounts.factories import UserFactory
+from constance import config
 from politikon.templatetags.path import startswith
 
 
@@ -260,6 +261,58 @@ class EventsModelTestCase(TestCase):
         event.increment_turnover(-5)
         self.assertEqual(5, event.turnover)
 
+    def test_vote_yes(self):
+        """
+        Vote yes
+        :return:
+        """
+        event = EventFactory()
+        self.assertEqual(0, event.vote_yes_count)
+        self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(1, event.vote_yes())
+        self.assertEqual(1, event.vote_yes_count)
+        self.assertEqual(0, event.vote_no_count)
+
+    def test_vote_no(self):
+        """
+        Vote no
+        :return:
+        """
+        event = EventFactory()
+        self.assertEqual(0, event.vote_yes_count)
+        self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(1, event.vote_no())
+        self.assertEqual(0, event.vote_yes_count)
+        self.assertEqual(1, event.vote_no_count)
+
+    def test_voting_resolve_yes(self):
+        """
+        Vote yes
+        :return:
+        """
+        event = EventFactory()
+        for i in range(config.VOICES_TO_RESOLVE):
+            self.assertEqual(i+1, event.vote_yes())
+            self.assertEqual(i+1, event.vote_yes_count)
+            self.assertEqual(0, event.vote_no_count)
+            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+        event.vote_yes()
+        self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
+
+    def test_voting_resolve_no(self):
+        """
+        Vote yes
+        :return:
+        """
+        event = EventFactory()
+        for i in range(config.VOICES_TO_RESOLVE):
+            self.assertEqual(i+1, event.vote_no())
+            self.assertEqual(0, event.vote_yes_count)
+            self.assertEqual(i+1, event.vote_no_count)
+            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+        event.vote_no()
+        self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+
     def test_finish_yes(self):
         """
         Finish event with outcome yes
@@ -278,7 +331,7 @@ class EventsModelTestCase(TestCase):
         self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
 
         event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
-        with self.assertRaises(EventAlreadyFinished):
+        with self.assertRaises(EventNotInProgress):
             event2.finish_yes()
 
     def test_finish_no(self):
@@ -380,6 +433,26 @@ class EventsManagerTestCase(TestCase):
         self.assertIsInstance(featured_events[0], Event)
         self.assertEqual(3, len(featured_events))
         self.assertEqual([events[4], events[5], events[6]], list(featured_events))
+
+    def test_vote_for_solution(self):
+        """
+        Vote for solution
+        """
+        event = EventFactory()
+        user = UserFactory()
+        self.assertEqual({
+            'YES': 1,
+            'NO': 0
+        }, Event.objects.vote_for_solution(user, event.id, 'YES'))
+        self.assertEqual({
+            'YES': 0,
+            'NO': 1
+        }, Event.objects.vote_for_solution(user, event.id, 'NO'))
+        with self.assertRaises(NonexistantEvent):
+            Event.objects.vote_for_solution(user, event.id+1, 'NO')
+        event.finish_yes()
+        with self.assertRaises(EventNotInProgress):
+            Event.objects.vote_for_solution(user, event.id, 'NO')
 
 
 class EventsTasksTestCase(TestCase):
