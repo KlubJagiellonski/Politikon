@@ -26,22 +26,23 @@ class HomeView(TemplateView):
         for event in home_events:
             event.my_bet = event.get_user_bet(user)
 
-        front_event = home_events[0]
-        if front_event:
-            context.update({
-                'front_event': front_event,
-                'front_event_bet': front_event.get_user_bet(user),
-            })
-        featured_events = home_events[1:7]
+        if home_events:
+            front_event = home_events[0]
+            if front_event:
+                context.update({
+                    'front_event': front_event,
+                    'front_event_bet': front_event.get_user_bet(user),
+                })
+            featured_events = home_events[1:7]
 
-        context.update({
-            'featured_events': featured_events,
-            'last_minute_events': last_minute_events,
-            'config': config,
-            'best_weekly': UserProfile.objects.get_best_weekly()[:10],
-            'best_monthly': UserProfile.objects.get_best_monthly()[:10],
-            'best_overall': UserProfile.objects.get_best_overall()[:10]
-        })
+            context.update({
+                'featured_events': featured_events,
+                'last_minute_events': last_minute_events,
+                'config': config,
+                'best_weekly': UserProfile.objects.get_best_weekly()[:10],
+                'best_monthly': UserProfile.objects.get_best_monthly()[:10],
+                'best_overall': UserProfile.objects.get_best_overall()[:10]
+            })
         return context
 
 
