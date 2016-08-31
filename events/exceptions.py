@@ -29,7 +29,3 @@ class InsufficientBets(Exception):
         super(InsufficientBets, self).__init__(message)
 
         self.updated_bet = updated_bet
-
-
-class EventAlreadyFinished(Exception):
-    pass

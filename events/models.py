@@ -10,15 +10,17 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models, transaction
+from django.db.models import F
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from .exceptions import UnknownOutcome, EventAlreadyFinished
+from .exceptions import UnknownOutcome, EventNotInProgress
 from .managers import EventManager, BetManager, TransactionManager
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
+from constance import config
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from politikon.choices import Choices
@@ -56,10 +58,10 @@ class Event(models.Model):
     EVENT_SMALL_CHART_DAYS = 14
     EVENT_BIG_CHART_DAYS = 28
 
-    SMALL_IMAGE_WIDTH=340
-    SMALL_IMAGE_HEIGHT=250
-    BIG_IMAGE_WIDTH=1250
-    BIG_IMAGE_HEIGHT=510
+    SMALL_IMAGE_WIDTH = 340
+    SMALL_IMAGE_HEIGHT = 250
+    BIG_IMAGE_WIDTH = 1250
+    BIG_IMAGE_HEIGHT = 510
 
     objects = EventManager()
     snapshots = SnapshotAddon(fields=[
@@ -105,17 +107,18 @@ class Event(models.Model):
     )
 
     is_featured = models.BooleanField(u'featured', default=False)
+    # głosowanie do rozstrzygania wydarzeń
+    vote_yes_count = models.PositiveIntegerField(u'głosów na tak', default=0)
+    vote_no_count = models.PositiveIntegerField(u'głosów na nie', default=0)
+
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
     outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=u'data utworzenia')
-    created_by = models.ForeignKey('accounts.UserProfile', verbose_name=u'utworzone przez', null=True,
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'utworzone przez', null=True,
                                    related_name='created_by')
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True, blank=True)
-    resolved_by = models.ForeignKey('accounts.UserProfile', null=True, blank=True,
-                                    related_name='resolved_by',
-                                    verbose_name=u'rozstrzygnięte przez')
 
     current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
                                                 default=BEGIN_PRICE)
@@ -414,6 +417,24 @@ class Event(models.Model):
         self.current_sell_for_price = round(factor * sell_for_price, 0)
         self.current_sell_against_price = round(factor * sell_against_price, 0)
 
+    def vote_yes(self, decrease_opposite=False):
+        self.vote_yes_count += 1
+        if decrease_opposite:
+            self.vote_no_count -= 1
+        if self.vote_yes_count > config.VOICES_TO_RESOLVE:
+            self.finish_yes()
+        self.save()
+        return self.vote_yes_count
+
+    def vote_no(self, decrease_opposite=False):
+        self.vote_no_count += 1
+        if decrease_opposite:
+            self.vote_yes_count -= 1
+        if self.vote_no_count > config.VOICES_TO_RESOLVE:
+            self.finish_no()
+        self.save()
+        return self.vote_no_count
+
     @transaction.atomic
     def __finish(self, outcome):
         """
@@ -422,7 +443,7 @@ class Event(models.Model):
         :type outcome: Choices
         """
         if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
-            raise EventAlreadyFinished("Wydarzenie zostało już rozwiązane.")
+            raise EventNotInProgress("Wydarzenie zostało już rozwiązane.")
         self.outcome = outcome
         self.end_date = timezone.now()
         self.save()
@@ -501,6 +522,23 @@ class Event(models.Model):
                 type=transaction_type,
                 price=abs(refund)
             )
+
+
+class SolutionVote(models.Model):
+    """
+    Vote for event resolve
+    """
+    class Meta:
+        unique_together = ('user', 'event')
+
+    VOTE_OUTCOME_CHOICES = Choices(
+        ('YES', 1, u'rozwiązanie na TAK'),
+        ('NO', 2, u'rozwiązanie na NIE'),
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    event = models.ForeignKey(Event)
+    outcome = models.IntegerField(u'rozwiązanie wydarzenia', choices=VOTE_OUTCOME_CHOICES, null=True)
+
 
 class Bet(models.Model):
     """

@@ -70,6 +70,10 @@
 <script type="text/javascript" src="{% static 'js/jquery.jscrollpane.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/scroll-startstop.events.jquery.js' %}"></script>
 {% endif %}
+{% if user.is_staff %}
+<!--skrypty dla redakcji-->
+<script type="text/javascript" language="javascript" src="{% static 'js/staff.js' %}"></script>
+{% endif %}
 
 
 </head>
@@ -86,6 +90,9 @@
     fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 <div class="overlay"></div>
+{% if user.is_staff %}
+    {% include 'staff.html' %}
+{% endif %}
 
 {% if not user.is_authenticated %}
 {% include 'not_logged_in.html' %}

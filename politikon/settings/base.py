@@ -117,7 +117,8 @@ CONSTANCE_CONFIG = {
     'BIG_EVENT_IMAGE_HEIGHT': (510, 'big event image height'),
     'DAILY_TOPUP': (100, 'daily cash topup'),
     'ADMIN_TOPUP': (100, 'amount of cash in admin panel'),
-    'REQUIRED_FRIENDS_THRESHOLD': (3, 'required number of registered friends')
+    'REQUIRED_FRIENDS_THRESHOLD': (3, 'required number of registered friends'),
+    'VOICES_TO_RESOLVE': (3, 'required number of voices to resolve event')
 }
 
 # Absolute path to the directory static files should be collected to.

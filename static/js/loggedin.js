@@ -1,30 +1,38 @@
 //pokaż menu z hamburgera
-$(document).on('click', '.burger', function(){
+$(document).on('click', '.burger', function () {
     $('#maintop .graj .avatarmenu ul').removeClass('display');
     $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-    $('#wallet-not').css({'margin-top' : ''});
+    $('#wallet-not').css({'margin-top': ''});
     $('#wallet-not').removeClass("opacity");
     $('#maintop .userdata .wallet .arrowup').removeClass("display");
     $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+    $('.rozsrzygniecie').removeClass("display");
+    $('.rozsrzygniecie').addClass("opacity");
     $('#maintop .mainmenu').addClass("display");
     $('.overlay').addClass("display");
-    setTimeout(function (){
+    $('#login').removeClass("display");
+    $('#login').removeClass("opacity");
+    setTimeout(function () {
         $('#maintop .mainmenu').addClass("opacity");
         $('.overlay').addClass("opacity");
     }, 100); // opoznienie
 });
 
 //pokaż menu z avatara
-$(document).on('click', '#maintop .graj .image', function() {
-    if (! $('#maintop .graj .avatarmenu ul').hasClass('display')) {
+$(document).on('click', '#maintop .graj .image', function () {
+    if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
         $('#maintop .mainmenu').removeClass('display');
         $('#maintop .mainmenu').removeClass('opacity');
         $('#wallet-not').css({'margin-top': ''});
         $('#wallet-not').removeClass("opacity");
         $('#maintop .userdata .wallet .arrowup').removeClass("display");
         $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+        $('.rozsrzygniecie').removeClass("display");
+        $('.rozsrzygniecie').removeClass("opacity");
         $('#maintop .graj .avatarmenu ul').addClass("display");
         $('.overlay').addClass("display");
+        $('#login').removeClass("display");
+        $('#login').removeClass("opacity");
         setTimeout(function () {
             $('#maintop .graj .avatarmenu ul').addClass("opacity");
             $('.overlay').addClass("opacity");
@@ -35,15 +43,19 @@ $(document).on('click', '#maintop .graj .image', function() {
 });
 
 //pokaż powiadomienia
-$(document).on('click', '#maintop .userdata .wallet.notification', function(){
-    if (! $('#maintop .userdata .wallet .arrowup').hasClass("display")) {
+$(document).on('click', '#maintop .userdata .wallet.notification', function () {
+    if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
         $('#maintop .mainmenu').removeClass('display');
         $('#maintop .mainmenu').removeClass('opacity');
         $('#maintop .graj .avatarmenu ul').removeClass('display');
         $('#maintop .graj .avatarmenu ul').removeClass('opacity');
+        $('.rozsrzygniecie').removeClass("display");
+        $('.rozsrzygniecie').removeClass("opacity");
         $('#wallet-not').css({'margin-top': '0px'});
         $('#maintop .userdata .wallet .arrowup').addClass("display");
         $('.overlay').addClass("display");
+        $('#login').removeClass("display");
+        $('#login').removeClass("opacity");
         setTimeout(function () {
             $('#wallet-not').addClass("opacity");
             $('#maintop .userdata .wallet .arrowup').addClass("opacity");
@@ -54,24 +66,28 @@ $(document).on('click', '#maintop .userdata .wallet.notification', function(){
     }
 });
 
-//ukryj wszystko po klieknieciu w overlay
-$(document).on('click', '.overlay', function(){
+//ukryj wszystko po kliknieciu w overlay
+$(document).on('click', '.overlay', function () {
     $('#maintop .mainmenu').removeClass('display');
     $('#maintop .mainmenu').removeClass('opacity');
     $('#maintop .graj .avatarmenu ul').removeClass('display');
     $('#maintop .graj .avatarmenu ul').removeClass('opacity');
     $('#maintop .userdata .wallet .arrowup').removeClass("display");
     $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+    $('.rozsrzygniecie').removeClass("display");
+    $('.rozsrzygniecie').removeClass("opacity");
     $('#wallet-not').removeClass("opacity");
     $('.overlay').removeClass("opacity");
-    setTimeout(function (){
-        $('#wallet-not').css({'margin-top' : ''});
+    $('#login').removeClass("display");
+    $('#login').removeClass("opacity");
+    setTimeout(function () {
+        $('#wallet-not').css({'margin-top': ''});
         $('.overlay').removeClass("display");
     }, 150); // opoznienie
 });
 
 //notifications - scroll setup
-$(function() {
+$(function () {
     // the element we want to apply the jScrollPane
     var $el = $('#jp-container').jScrollPane({
             verticalGutter: -16
@@ -220,10 +236,10 @@ $(function() {
             data: {bets: bets_id_list},
             contentType: 'application/json;charset=utf-8',
             url: '/bets/viewed/',
-            success: function(data) {
-                $('.a-betresult').each(function(){
+            success: function (data) {
+                $('.a-betresult').each(function () {
                     var this_bet_id = $(this).data('bet_id');
-                    for (var i = 0; i < data.length; i+=1) {
+                    for (var i = 0; i < data.length; i += 1) {
                         if (data[i] == this_bet_id) {
                             $(this).remove();
                             break;
@@ -237,29 +253,29 @@ $(function() {
                 }
                 $('.overlay').click();
             },
-            error: function(xhr, data) {
+            error: function (xhr, data) {
                 console.log('Some error when BETs sent: bezradny');
             }
         });
     }
 
-    $('.a-betresult').click(function(){
+    $('.a-betresult').click(function () {
         // set new finished bet as a read
         var bets = [$(this).data('bet_id')];
         check_bets_viewed(bets);
     });
 
-    $('#all-bets-result').click(function(){
+    $('#all-bets-result').click(function () {
         // set all new finished bets as a read
         var bets = [];
-        $('.a-betresult').each(function(){
+        $('.a-betresult').each(function () {
             bets.push($(this).data('bet_id'));
         });
         check_bets_viewed(bets);
     });
 
     // It is neccessairy only when using wallet on /accounts/user_profile site.
-    $('#go-to-all-results').click(function(){
+    $('#go-to-all-results').click(function () {
         $('.overlay').click();
         $('#userinfo > ul > li > a[href=#powiadomieniaowynikach]').click();
     });

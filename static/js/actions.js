@@ -48,11 +48,11 @@ $(document).on('click', '#settings-submit #loadmore', function () {
 });
 
 // kupowanie i sprzedawanie zakładów
-$(document).on('click', '.a_bet', function (e) {
+$(document).on('click', '#makeabet .a_bet', function (e) {
     e.preventDefault();
     var event_id = $(this).data('event_id');
     var data = {buy: $(this).data('buy'), outcome: $(this).data('outcome'), for_price: $(this).data('price')};
-    var makebets = $('body').find('[data-event_id="' + event_id + '"]').parent();
+    var makebets = $('body').find('#makeabet [data-event_id="' + event_id + '"]').parent();
     var word_yes = 'TAK';    // TODO: resolve multi-language problem
     var word_no = 'NIE';    // TODO: resolve multi-language problem
     var word_bet_yes = 'Jesteś na TAK';    // TODO: resolve multi-language problem

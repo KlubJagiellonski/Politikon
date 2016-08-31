@@ -67,6 +67,44 @@ class EventManager(models.Manager):
 
         #  return result
 
+    def vote_for_solution(self, user, event_id, outcome):
+        """
+        User votes for a solution of an event.
+         1. Increment decision of event value,
+         2. Create object to remember user's decision,
+         3. Return values of both couns
+        :type user: request user
+        :param user: voting user
+        :type event_id: int
+        :param event_id: event id
+        :type outcome: string
+        :param outcome: YES or NO
+        :return:
+        """
+        try:
+            event = self.model.objects.get(id=event_id)
+        except:
+            raise NonexistantEvent(_("Requested event does not exist."))
+
+        if not event.is_in_progress:
+            raise EventNotInProgress(_("Event is no longer in progress."))
+
+        from .models import SolutionVote
+        vote, created = SolutionVote.objects.get_or_create(user_id=user.id, event_id=event.id)
+        outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.YES if outcome == 'YES' else \
+            SolutionVote.VOTE_OUTCOME_CHOICES.NO
+        if created or vote.outcome != outcome_vote:
+            vote.outcome = outcome_vote
+            if outcome == 'YES':
+                event.vote_yes(not created)
+            elif outcome == 'NO':
+                event.vote_no(not created)
+            vote.save()
+        return {
+            'YES': event.vote_yes_count,
+            'NO': event.vote_no_count
+        }
+
 
 class BetManager(models.Manager):
     def get_user_bets_for_events(self, user, events):

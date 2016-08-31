@@ -53,7 +53,16 @@ footer ul a, footer .socialmedia div,
 .overlay {height: 100%; width: 100%; top: 0; left: 0; position: fixed; margin-top: -26px; background: rgba(0,0,0,0.35); border-bottom: 26px solid rgba(0,0,0,0.0); z-index: 5000; opacity: 0; display: none;}
 .overlay-close {position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; background: transparent;}
 
-#login {width: 560px; background: white; margin-left: 50%; top:94px; margin: 0 auto; z-index: 7000; position: relative;
+#login {
+    display: none;
+    opacity: 0;
+    width: 560px;
+    background: white;
+    top: 94px;
+    left: 50%;
+    margin-left: -280px;
+    z-index: 7000;
+    position: fixed;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
@@ -240,6 +249,7 @@ footer ul a, footer .socialmedia div,
 #maintop .userdata .stats .reputationvalue {color: #58585a;}
 
 #maintop .socialmedia {margin-top: 30px; margin-right: 20px;}
+
 .sm-bg {width: 40px; height: 40px; background-image: url(../img/00socialmedia.png); background-color: #e7e7e7; float: left; margin-right: 10px;}
 .tt {background-position: 0px 0px;}
 .fb {background-position: -40px 0px;}
@@ -311,18 +321,19 @@ footer ul a, footer .socialmedia div,
 .betresult .status-change p span:last-of-type, #userinfo .detailed-status span:last-of-type {margin-right: 0px;}
 
 
-#makeabet {width: 100%; height: 47px; z-index: 4000; color: #fff;}
-#makeabet .betYES {width: 49.5%; height: 100%; line-height: 45px; float: left; background: #a0b918; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
-#makeabet .betYES .value {color: #d1e567;}
-#makeabet .betNO {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
-#makeabet .betNO .value {color: #ffb8a5;}
+#makeabet, #resolveabet {width: 100%; height: 47px; z-index: 4000; color: #fff;}
+#makeabet a, #makeabet a:hover, #makeabet a:visited, #resolveabet a, #resolveabet a:hover, #resolveabet a:visited {color: #fff;}
+#makeabet .betYES, #resolveabet .betYES {width: 49.5%; height: 100%; line-height: 45px; float: left; background: #a0b918; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
+#makeabet .betYES .value, #resolveabet .betYES .value {color: #d1e567;}
+#makeabet .betNO, #resolveabet .betNO {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
+#makeabet .betNO .value, #resolveabet .betNO .value {color: #ffb8a5;}
 #makeabet .betCANCELED {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
 #makeabet .betCANCELED .value {color: #ffb8a5;}
-#makeabet .value {width: 30%; height: 100%; text-align: center; background: rgba(0,0,0,0.2); font-size: .75em !important; font-weight: 400;}
-#makeabet .txt {width: 70%; float: right; height: 100%; text-align: center;}
+#makeabet .value, #resolveabet .value {width: 30%; height: 100%; text-align: center; background: rgba(0,0,0,0.2); font-size: .75em !important; font-weight: 400;}
+#makeabet .txt, #resolveabet .txt {width: 70%; float: right; height: 100%; text-align: center;}
 
-#makeabet .betYES:hover {background: #c7df42;}
-#makeabet .betNO:hover {background: #f34f23;}
+#makeabet .betYES:hover, #resolveabet .betYES:hover {background: #c7df42;}
+#makeabet .betNO:hover, #resolveabet .betNO:hover {background: #f34f23;}
 #makeabet .betCANCELED:hover {background: #f34f23;}
 
 #makeabet .change {position: relative; margin: 0 auto; margin-bottom: -45px; color:#333;}

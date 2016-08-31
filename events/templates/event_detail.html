@@ -55,6 +55,9 @@ twttr.ready(function (twttr) {
 
 <section id="header"  class="body-margin">
     <h1>{{ event.title }}</h1>
+    {% if request.user.is_staff %}
+    <h2><a class="show-zakoncz-wydarzenie" href="#">Rozstrzygnij</a></h2>
+    {% endif %}
 </section>
 
 <section id="bet-details">
