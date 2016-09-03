@@ -291,7 +291,7 @@ class EventsModelTestCase(TestCase):
         :return:
         """
         event = EventFactory()
-        for i in range(config.VOICES_TO_RESOLVE):
+        for i in range(config.VOICES_TO_RESOLVE-1):
             self.assertEqual(i+1, event.vote_yes())
             self.assertEqual(i+1, event.vote_yes_count)
             self.assertEqual(0, event.vote_no_count)
@@ -305,7 +305,7 @@ class EventsModelTestCase(TestCase):
         :return:
         """
         event = EventFactory()
-        for i in range(config.VOICES_TO_RESOLVE):
+        for i in range(config.VOICES_TO_RESOLVE-1):
             self.assertEqual(i+1, event.vote_no())
             self.assertEqual(0, event.vote_yes_count)
             self.assertEqual(i+1, event.vote_no_count)
