@@ -421,7 +421,7 @@ class Event(models.Model):
         self.vote_yes_count += 1
         if decrease_opposite:
             self.vote_no_count -= 1
-        if self.vote_yes_count > config.VOICES_TO_RESOLVE:
+        if self.vote_yes_count >= config.VOICES_TO_RESOLVE:
             self.finish_yes()
         self.save()
         return self.vote_yes_count
@@ -430,7 +430,7 @@ class Event(models.Model):
         self.vote_no_count += 1
         if decrease_opposite:
             self.vote_yes_count -= 1
-        if self.vote_no_count > config.VOICES_TO_RESOLVE:
+        if self.vote_no_count >= config.VOICES_TO_RESOLVE:
             self.finish_no()
         self.save()
         return self.vote_no_count
