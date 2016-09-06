@@ -44,7 +44,7 @@ CMD env >> /root/.ssh/environment; export -p | grep _ >> /etc/profile; /usr/sbin
 
 # settings default django settings module (2nd part)
 ENV POSTGRES_PORT_5432_TCP_PORT="5432"
-ENV POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
+ENV POSTGRES_PORT_5432_TCP_ADDR="politikon_db"
 
 ADD /requirements.txt /app/
 WORKDIR /app
