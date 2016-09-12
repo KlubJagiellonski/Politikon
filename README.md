@@ -14,7 +14,9 @@ Politikon to serwis internetowy, którego celem jest popularyzowanie pozytywnego
 
 Projekt jest w fazie beta-testów od 17 maja 2016. Planowany pełny start projektu to jesień 2016.
 
-## Konfiguracja w PyCharm PE / PyCharm CE (po angielsku)
+# Tech docs - in English (dokumentacja techniczna - wyłącznie po angielsku)
+
+## PyCharm PE / PyCharm CE IDE configuration
 
 * PyCharm Professional Edition:
 
@@ -25,17 +27,23 @@ Environment Variable | Development default
 --- | ---
 DJANGO_SETTINGS_MODULE | politikon.settings.dev
 POSTGRES_PORT_5432_TCP_PORT | 5432
-POSTGRES_PORT_5432_TCP_ADDR | 172.17.0.2
+POSTGRES_PORT_5432_TCP_ADDR | *read below how check it*
 
-Note: values and vars are the same like on VM; if needed for some reason
-you should have local mod of `Dockerfile`.
+The last one variable should be set to `politikon_db` address instance.
+You could check it using that command (from local machine - NOT VM):
 
+```
+docker inspect --format '{{ .ID }} - {{ .Name }} - {{ .NetworkSettings.IPAddress }}' $(docker ps -q)
+```
+
+Note: in Dockerfile: PORT is hard-coded like here - change if needed;
+ADDR is not hard-coded because container is configured by Docker to have entry in `/etc/hosts` (so we use `politicon_db` there).
 
 * PyCharm Community Edition:
 
-At this moment there is no ready-to-use config for PyCharm C. If you done it already - please contribute!
+At this moment there is no ready-to-use config for PyCharm CE. If you done it already - please contribute!
 
-## Instalacja lokalna projektu (po angielsku)
+## Local instance (for testing) HOW-TO
 
 ### Mac OS X
 
@@ -48,9 +56,9 @@ If something not working - please report a bug!
 
 Tested on Debian which is fully supported. Pending tests on openSUSE and Mint.
 
-* Install [Docker](https://docs.docker.com/). 
+* Install [Docker](https://docs.docker.com/).
 
-Remember that user who wants to running Docker containers must be permitted to use `docker`. 
+Remember that user who wants to running Docker containers must be permitted to use `docker`.
 It is needed for example add that user to `docker` group.
 
 Also check if `docker.service` or equivalent daemon runs successfully in your OS.
@@ -103,7 +111,7 @@ By default running with `--build` check if they are up-to-date.
 ```
 export DJANGO_SETTINGS_MODULE="politikon.settings.local"
 export POSTGRES_PORT_5432_TCP_PORT="5432"
-export POSTGRES_PORT_5432_TCP_ADDR="172.17.0.2"
+export POSTGRES_PORT_5432_TCP_ADDR="politikon_db"
 ```
 
 * **Now need to do some steps manually... (we will automate that)**
