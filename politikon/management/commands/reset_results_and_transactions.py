@@ -1,13 +1,25 @@
+from decimal import Decimal
+
 from django.core.management.base import BaseCommand
+from django.utils.timezone import now
 
 from events.models import Transaction, Bet, Event
 from accounts.models import UserProfile
-from constance import config
-from django.utils.timezone import now
 
 
 class Command(BaseCommand):
+    help = 'Resets all accounts and ongoing events results'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--bonus',
+            default=0,
+            dest='bonus',
+            type=float
+        )
+
     def handle(self, *args, **options):
+
         for t in Transaction.objects.filter(type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP):
             t.delete()
 
@@ -24,11 +36,5 @@ class Command(BaseCommand):
             e.save()
 
         for u in UserProfile.objects.get_users():
-            u.reset_date = now()
-            u.weekly_result = 0
-            u.monthly_result = 0
-            u.total_cash = 0
-            u.total_given_cash = 0
-            u.portfolio_value = 0
+            u.reset_account(options['bonus'])
             u.save()
-            u.topup_cash(config.STARTING_CASH)

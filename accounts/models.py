@@ -13,10 +13,13 @@ from django.db.models import F, Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
-from .managers import UserProfileManager
 from bladepolska.snapshots import SnapshotAddon
-from events.models import Bet, Event, Transaction
+from constance import config
 from politikon.templatetags.format import formatted
+
+from .managers import UserProfileManager
+
+from events.models import Bet, Event, Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -185,6 +188,24 @@ class UserProfile(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    def reset_account(self, bonus=None):
+        bonus = round(self.reputation * 10 * Decimal(bonus)) if bonus else 0
+        self.reset_date = now()
+        self.weekly_result = 0
+        self.monthly_result = 0
+        self.total_cash = bonus
+        self.total_given_cash = 0
+        self.portfolio_value = 0
+        self.topup_cash(config.STARTING_CASH)
+        if bonus:
+            Transaction.objects.create(
+                user=self,
+                type=Transaction.TRANSACTION_TYPE_CHOICES.BONUS,
+                quantity=1,
+                price=bonus
+            )
+        self.save()
 
     @property
     def current_total_cash(self):

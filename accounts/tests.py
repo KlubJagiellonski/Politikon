@@ -124,6 +124,32 @@ class UserProfileModelTestCase(TestCase):
         self.assertEqual('avatars/johnrambro.jpg', user2.get_avatar_url())
         os.remove('avatars/johnrambro.jpg')
 
+    def test_reset_account_without_bonus(self):
+        """
+        Test reset account
+        """
+        user = UserFactory()
+        user.reset_account()
+        self.assertEqual({
+            'user_id': 1,
+            'total_cash': formatted(1000),
+            'portfolio_value': formatted(0),
+            'reputation': "100%",
+        }, user.statistics_dict)
+
+    def test_reset_account_with_bonus(self):
+        """
+        Test reset account
+        """
+        user = UserFactory()
+        user.reset_account(0.1)
+        self.assertEqual({
+            'user_id': 1,
+            'total_cash': formatted(1100),
+            'portfolio_value': formatted(0),
+            'reputation': "110%",
+        }, user.statistics_dict)
+
     def test_get_newest_results(self):
         """
         Get newest results
@@ -442,6 +468,7 @@ class UserTasksTestCase(TestCase):
         users = UserFactory.create_batch(6)
         update_users_classification()
         # TODO: mock reputation changes
+
 
 class UserTemplatetagsTestCase(TestCase):
     """
