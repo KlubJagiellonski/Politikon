@@ -190,7 +190,15 @@ class UserProfile(AbstractBaseUser):
         return True
 
     def reset_account(self, bonus=None):
-        bonus = round(self.reputation * 10 * Decimal(bonus)) if bonus else 0
+        """
+        Rollbacks user's account to start point. If bonus provided
+        as percentage (0.01 / 0.1), then player receives bonus points.
+        :param bonus: percent of bonus points for user
+        :type bonus: Decimal
+        """
+        # to include portfolio and NOT given cash, we use
+        # reputation value * 10
+        bonus = round(self.reputation * 10 * bonus) if bonus else 0
         self.reset_date = now()
         self.weekly_result = 0
         self.monthly_result = 0

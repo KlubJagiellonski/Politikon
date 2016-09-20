@@ -36,5 +36,5 @@ class Command(BaseCommand):
             e.save()
 
         for u in UserProfile.objects.get_users():
-            u.reset_account(options['bonus'])
+            u.reset_account(Decimal(options['bonus']))
             u.save()
