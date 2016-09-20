@@ -705,10 +705,10 @@ class Transaction(models.Model):
         ('BUY_NO', 3, u'zakup udziałów na NIE'),
         ('SELL_NO', 4, u'sprzedaż udziałów na NIE'),
         ('EVENT_CANCELLED_REFUND', 5, u'zwrot po anulowaniu wydarzenia'),
-        ('EVENT_CANCELLED_DEBIT', 6,
-         u'obciążenie konta po anulowaniu wydarzenia'),
+        ('EVENT_CANCELLED_DEBIT', 6, u'obciążenie konta po anulowaniu wydarzenia'),
         ('EVENT_WON_PRIZE', 7, u'wygrana po rozstrzygnięciu wydarzenia'),
         ('TOPPED_UP_BY_APP', 8, u'doładowanie konta przez aplikację'),
+        ('BONUS', 9, u'bonus')
     )
 
     # Transactions changing event price: BUY_YES, SELL_YES, BUY_NO, SELL_NO

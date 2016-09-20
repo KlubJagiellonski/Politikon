@@ -594,7 +594,7 @@ class EventsTemplatetagsTestCase(TestCase):
             'month_rank': month_rank,
             'week_rank': week_rank
         }, userstats(user, overall_rank, month_rank, week_rank))
-        
+
     def test_outcome(self):
         """
         Outcome
