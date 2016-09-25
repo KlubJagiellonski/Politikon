@@ -47,6 +47,15 @@ $(document).on('click', '#settings-submit #loadmore', function () {
     $(form).submit();
 });
 
+$(document).on('click', 'ul.tabs li', function () {
+    $('ul.tabs li').removeClass('active');
+    $(this).addClass('active');
+    $('.zakladki-content article').hide();
+    var activeTab = $(this).find('a').attr('href');
+    $(activeTab).show();
+    return false;
+});
+
 // kupowanie i sprzedawanie zakładów
 $(document).on('click', '#makeabet .a_bet', function (e) {
     e.preventDefault();
@@ -278,14 +287,6 @@ $(function() {
     //zakładki
     $('.zakladki-content article').hide();
     $('.zakladki-content article:first').show();
-    $('ul.tabs li').on('click', function () {
-        $('ul.tabs li').removeClass('active');
-        $(this).addClass('active');
-        $('.zakladki-content article').hide();
-        var activeTab = $(this).find('a').attr('href');
-        $(activeTab).show();
-        return false;
-    });
 
     // możliwość url do strony i zakładki np: /accounts/user_profile/#powiadomieniaowynikach
     var anchor = window.location.hash.split('#');

@@ -14,7 +14,7 @@
 {% block infinite_scrolling %}
 <script type="text/javascript">
 $(function() {
-    new Waypoint.Infinite({
+    var portfolioInfinite = new Waypoint.Infinite({
         element: $('#portfolio-list')[0],
         items: '.portfolio-item',
         more: '.portfolio-more-link',
@@ -23,39 +23,55 @@ $(function() {
         },
         onAfterPageLoad: function() {
             $("#loadmore .btn").text("wyświetl więcej zakładów")
-            preloadImages();
-            $('.skroc').dotdotdot();
-            renderCharts();
+            preloadImages()
+            $('.skroc').dotdotdot()
+            renderCharts()
         }
-    });
-    new Waypoint.Infinite({
+    })
+    var notificationsInfinite = new Waypoint.Infinite({
         element: $('#notifications-list')[0],
         items: '.notifications-item',
         more: '.notifications-more-link',
+        enabled: false,
         onBeforePageLoad: function() {
             $("#loadmore .btn").text("Ładowanie...")
         },
         onAfterPageLoad: function() {
             $("#loadmore .btn").text("wyświetl więcej wyników")
-            preloadImages();
-            $('.skroc').dotdotdot();
-            renderCharts();
+            preloadImages()
+            $('.skroc').dotdotdot()
+            renderCharts()
         }
-    });
-    new Waypoint.Infinite({
+    })
+    var transactionsInfinite = new Waypoint.Infinite({
         element: $('#transactions-list')[0],
         items: '.transactions-item',
         more: '.transactions-more-link',
+        enabled: false,
         onBeforePageLoad: function() {
             $("#loadmore .btn").text("Ładowanie...")
         },
         onAfterPageLoad: function() {
             $("#loadmore .btn").text("wyświetl więcej transakcji")
-            preloadImages();
-            $('.skroc').dotdotdot();
-            renderCharts();
+            preloadImages()
+            $('.skroc').dotdotdot()
+            renderCharts()
         }
-    });
+    })
+
+    $('ul.tabs li').on('click', function () {
+        Waypoint.disableAll()
+        var activeTab = $(this).find('a').attr('href')
+        if (activeTab == '#zawartoscportfela') {
+            portfolioInfinite.enable()
+        }
+        else if (activeTab == '#powiadomieniaowynikach') {
+            notificationsInfinite.enable()
+        }
+        else if (activeTab == '#historiatransakcji') {
+            transactionsInfinite.enable()
+        }
+    })
 });
 </script>
 {% endblock %}
