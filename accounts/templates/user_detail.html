@@ -8,9 +8,6 @@
 <script type="text/javascript" src="{% static 'js/intro/scenario-profile.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/charts/profile.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js' %}"></script>
-
 <script type="text/javascript">
 $(function () {
     profileChart({{ json_data|safe }})
