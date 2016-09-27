@@ -615,7 +615,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 /*informacje o użytkowniku*/
 #userinfo .tabs {margin-top: -15px;}
-#userinfo article {padding-bottom: 50px; display: table; width: 100%;}
+#userinfo article {padding-bottom: 50px; width: 100%;}
 
 #userinfo .betinwallet {width: 46%; padding: 0 1.5%; margin-bottom: 20px; float: left;}
 #userinfo .betinwallet:nth-child(even) {float: right;}
