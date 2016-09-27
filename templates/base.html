@@ -54,6 +54,9 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dotdotdot.min.js' %}"></script>
+<!-- infinite scrolling -->
+<script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js' %}"></script>
 <!--<script src="static/js/skrypty.js"></script>-->
 
 {% if not user.is_authenticated %}
@@ -69,9 +72,6 @@
 <!-- the jScrollPane script -->
 <script type="text/javascript" src="{% static 'js/jquery.jscrollpane.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/scroll-startstop.events.jquery.js' %}"></script>
-<!-- infinite scrolling -->
-<script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js' %}"></script>
 {% endif %}
 {% if user.is_staff %}
 <!--skrypty dla redakcji-->
