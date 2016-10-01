@@ -51,57 +51,18 @@ REDIS_PARAMS = urlparse.urlparse(REDIS_BASE_URL)
 REDIS_HOST = REDIS_PARAMS.hostname
 REDIS_PORT = REDIS_PARAMS.port
 REDIS_DB = 0
-REDIS_CONNECT_RETRY = True
+REDIS_CONNECT_RETRY = False
 
 BROKER_URL = REDIS_BASE_URL + "/0"
-CELERY_RESULT_BACKEND = REDIS_BASE_URL + "/0"
+CELERY_RESULT_BACKEND = REDIS_BASE_URL + "/1"
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 
 CELERY_SEND_EVENTS = True
 CELERY_TASK_RESULT_EXPIRES = 10
-CELERY_DISABLE_RATE_LIMITS = True
+CELERY_DISABLE_RATE_LIMITS = False
 CELERY_IGNORE_RESULT = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-CELERY_IMPORTS = ("accounts.tasks", "events.tasks")
-
-CELERYBEAT_SCHEDULE = {
-    'update_portfolio_values': {
-        'task': 'accounts.tasks.update_portfolio_value',
-        'schedule': timedelta(minutes=1)
-    },
-    'create_hourly_open_events_snapshot': {
-        'task': 'events.tasks.create_open_events_snapshot',
-        'schedule': crontab(minute=11)
-    },
-    'create_hourly_accounts_snapshot': {
-        'task': 'accounts.tasks.create_accounts_snapshot',
-        'schedule': crontab(minute=31)
-    },
-    # 'consume_facebook_user_sync_task': {
-    #     'task': 'canvas.tasks.consume_facebook_user_sync_task',
-    #     'schedule': timedelta(minutes=5)
-    # },
-    # 'consume_facebook_user_friends_sync_task': {
-    #     'task': 'canvas.tasks.consume_facebook_user_friends_sync_task',
-    #     'schedule': timedelta(minutes=5)
-    # },
-    # 'consume_publish_activities_tasks': {
-    #     'task': 'canvas.tasks.consume_publish_activities_tasks',
-    #     'schedule': timedelta(minutes=5)
-    # },
-    #  No daily topup
-    #  'topup_accounts_task': {
-    #      'task': 'accounts.tasks.topup_accounts_task',
-    #      'schedule': crontab(hour=0, minute=0)
-    #  },
-    'calculate_price_change': {
-        'task': 'events.tasks.calculate_price_change',
-        'schedule': crontab(hour=0, minute=0)
-    },
-    'update_users_classification': {
-        'task': 'accounts.tasks.update_users_classification',
-        'schedule': crontab(minute=45)
-    },
-}
+CELERY_ACCEPT_CONTENT = ['json', 'application/x-python-serialize']
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 # CONSTANCE_DATABASE_CACHE_BACKEND = 'default' # prior to changes in
