@@ -91,18 +91,36 @@ class EventManager(models.Manager):
 
         from .models import SolutionVote
         vote, created = SolutionVote.objects.get_or_create(user_id=user.id, event_id=event.id)
-        outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.YES if outcome == 'YES' else \
-            SolutionVote.VOTE_OUTCOME_CHOICES.NO
+        if outcome == 'YES':
+            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.YES
+        elif outcome == 'NO':
+            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.NO
+        elif outcome == 'CANCEL':
+            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.CANCEL
+        else:
+            raise UnknownOutcome(_("Unknown outcome."))
+
         if created or vote.outcome != outcome_vote:
+            if vote.outcome != outcome_vote:
+                if vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.YES:
+                    event.vote_yes_count -= 1
+                elif vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.NO:
+                    event.vote_no_count -= 1
+                elif vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.CANCEL:
+                    event.vote_cancel_count -= 1
+                event.save()
             vote.outcome = outcome_vote
             if outcome == 'YES':
-                event.vote_yes(not created)
+                event.vote_yes()
             elif outcome == 'NO':
-                event.vote_no(not created)
+                event.vote_no()
+            elif outcome == 'CANCEL':
+                event.vote_cancel()
             vote.save()
         return {
             'YES': event.vote_yes_count,
-            'NO': event.vote_no_count
+            'NO': event.vote_no_count,
+            'CANCEL': event.vote_cancel_count
         }
 
 

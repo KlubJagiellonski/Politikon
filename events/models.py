@@ -110,6 +110,7 @@ class Event(models.Model):
     # głosowanie do rozstrzygania wydarzeń
     vote_yes_count = models.PositiveIntegerField(u'głosów na tak', default=0)
     vote_no_count = models.PositiveIntegerField(u'głosów na nie', default=0)
+    vote_cancel_count = models.PositiveIntegerField(u'głosów na anuluj', default=0)
 
     outcome = models.PositiveIntegerField(u'rozstrzygnięcie', choices=EVENT_OUTCOME_CHOICES, default=1)
     outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
@@ -417,23 +418,26 @@ class Event(models.Model):
         self.current_sell_for_price = round(factor * sell_for_price, 0)
         self.current_sell_against_price = round(factor * sell_against_price, 0)
 
-    def vote_yes(self, decrease_opposite=False):
+    def vote_yes(self):
         self.vote_yes_count += 1
-        if decrease_opposite:
-            self.vote_no_count -= 1
         if self.vote_yes_count >= config.VOICES_TO_RESOLVE:
             self.finish_yes()
         self.save()
         return self.vote_yes_count
 
-    def vote_no(self, decrease_opposite=False):
+    def vote_no(self):
         self.vote_no_count += 1
-        if decrease_opposite:
-            self.vote_yes_count -= 1
         if self.vote_no_count >= config.VOICES_TO_RESOLVE:
             self.finish_no()
         self.save()
         return self.vote_no_count
+
+    def vote_cancel(self):
+        self.vote_cancel_count += 1
+        if self.vote_cancel_count >= config.VOICES_TO_RESOLVE:
+            self.cancel()
+        self.save()
+        return self.vote_cancel_count
 
     @transaction.atomic
     def __finish(self, outcome):
@@ -534,6 +538,7 @@ class SolutionVote(models.Model):
     VOTE_OUTCOME_CHOICES = Choices(
         ('YES', 1, u'rozwiązanie na TAK'),
         ('NO', 2, u'rozwiązanie na NIE'),
+        ('CANCEL', 3, u'anulowanie wydarzenia')
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     event = models.ForeignKey(Event)

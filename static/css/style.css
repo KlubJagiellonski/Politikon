@@ -326,6 +326,9 @@ footer ul a, footer .socialmedia div,
 #makeabet .betYES, #resolveabet .betYES {width: 49.5%; height: 100%; line-height: 45px; float: left; background: #a0b918; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
 #makeabet .betYES .value, #resolveabet .betYES .value {color: #d1e567;}
 #makeabet .betNO, #resolveabet .betNO {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
+#resolveabet .betYES {width: 32.3%;}
+#resolveabet .betCANCEL {width: 32.3%; height: 100%; line-height: 45px; float: left; background: #777777; font-size: 1.5em; text-transform: uppercase; font-weight: 700; margin-left: 1.5%;}
+#resolveabet .betNO {width: 32.3%;}
 #makeabet .betNO .value, #resolveabet .betNO .value {color: #ffb8a5;}
 #makeabet .betCANCELED {width: 49.5%; height: 100%; line-height: 45px; float: right; background: #d13a12; font-size: 1.5em; text-transform: uppercase; font-weight: 700;}
 #makeabet .betCANCELED .value {color: #ffb8a5;}
