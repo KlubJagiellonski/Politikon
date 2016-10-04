@@ -26,18 +26,24 @@ $(document).on('click', '#resolveabet .a_bet', function (e) {
                 // console.log('RESP: ' + JSON.stringify(data.updates));
                 var count_YES = data.updates.YES;
                 var count_NO = data.updates.NO;
+                var count_CANCEL = data.updates.CANCEL;
                 var text_YES = 'TAK';
                 var text_NO = 'NIE';
+                var text_CANCEL = 'ANULUJ';
                 resolveabet.each(function (idx) {
                     $(this).children('.a_betYES').children('.betYES').children('.value').html(count_YES);
                     $(this).children('.a_betNO').children('.betNO').children('.value').html(count_NO);
+                    $(this).children('.a_betCANCEL').children('.betCANCEL').children('.value').html(count_CANCEL);
                     $(this).prev().removeClass('hidden');
                     var newText;
                     if (outcome === 'YES') {
                         newText = text_YES;
                     }
-                    else {
+                    else if (outcome === 'NO') {
                         newText = text_NO;
+                    }
+                    else {
+                        newText = text_CANCEL;
                     }
                     $(this).prev().find('span#decision').html(newText);
                 });
