@@ -269,9 +269,11 @@ class EventsModelTestCase(TestCase):
         event = EventFactory()
         self.assertEqual(0, event.vote_yes_count)
         self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(0, event.vote_cancel_count)
         self.assertEqual(1, event.vote_yes())
         self.assertEqual(1, event.vote_yes_count)
         self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(0, event.vote_cancel_count)
 
     def test_vote_no(self):
         """
@@ -281,9 +283,25 @@ class EventsModelTestCase(TestCase):
         event = EventFactory()
         self.assertEqual(0, event.vote_yes_count)
         self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(0, event.vote_cancel_count)
         self.assertEqual(1, event.vote_no())
         self.assertEqual(0, event.vote_yes_count)
         self.assertEqual(1, event.vote_no_count)
+        self.assertEqual(0, event.vote_cancel_count)
+
+    def test_vote_cancel(self):
+        """
+        Vote cancel
+        :return:
+        """
+        event = EventFactory()
+        self.assertEqual(0, event.vote_yes_count)
+        self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(0, event.vote_cancel_count)
+        self.assertEqual(1, event.vote_cancel())
+        self.assertEqual(0, event.vote_yes_count)
+        self.assertEqual(0, event.vote_no_count)
+        self.assertEqual(1, event.vote_cancel_count)
 
     def test_voting_resolve_yes(self):
         """
@@ -295,6 +313,7 @@ class EventsModelTestCase(TestCase):
             self.assertEqual(i+1, event.vote_yes())
             self.assertEqual(i+1, event.vote_yes_count)
             self.assertEqual(0, event.vote_no_count)
+            self.assertEqual(0, event.vote_cancel_count)
             self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
         event.vote_yes()
         self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
@@ -308,10 +327,26 @@ class EventsModelTestCase(TestCase):
         for i in range(config.VOICES_TO_RESOLVE-1):
             self.assertEqual(i+1, event.vote_no())
             self.assertEqual(0, event.vote_yes_count)
+            self.assertEqual(0, event.vote_cancel_count)
             self.assertEqual(i+1, event.vote_no_count)
             self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
         event.vote_no()
         self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+
+    def test_voting_resolve_cancel(self):
+        """
+        Vote cancel
+        :return:
+        """
+        event = EventFactory()
+        for i in range(config.VOICES_TO_RESOLVE-1):
+            self.assertEqual(i+1, event.vote_cancel())
+            self.assertEqual(0, event.vote_yes_count)
+            self.assertEqual(0, event.vote_no_count)
+            self.assertEqual(i+1, event.vote_cancel_count)
+            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+        event.vote_cancel()
+        self.assertEqual(event.EVENT_OUTCOME_CHOICES.CANCELLED, event.outcome)
 
     def test_finish_yes(self):
         """
@@ -442,12 +477,19 @@ class EventsManagerTestCase(TestCase):
         user = UserFactory()
         self.assertEqual({
             'YES': 1,
-            'NO': 0
+            'NO': 0,
+            'CANCEL': 0
         }, Event.objects.vote_for_solution(user, event.id, 'YES'))
         self.assertEqual({
             'YES': 0,
-            'NO': 1
+            'NO': 1,
+            'CANCEL': 0
         }, Event.objects.vote_for_solution(user, event.id, 'NO'))
+        self.assertEqual({
+            'YES': 0,
+            'NO': 0,
+            'CANCEL': 1
+        }, Event.objects.vote_for_solution(user, event.id, 'CANCEL'))
         with self.assertRaises(NonexistantEvent):
             Event.objects.vote_for_solution(user, event.id+1, 'NO')
         event.finish_yes()
