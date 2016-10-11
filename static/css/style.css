@@ -434,6 +434,8 @@ ul.tabs li {float: left; margin: 0 .625em 0 0; padding: 8px 15px; background: #d
 ul.tabs li.active {background: #c84d28;;color: #fff;}
 .clr {clear: both;}
 .zakladki-content {margin-top: 30px;}
+.zakladki-content article {display: none;}
+.zakladki-content article.active {display: block;}
 
 
 /* strona główna */
@@ -618,7 +620,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 /*informacje o użytkowniku*/
 #userinfo .tabs {margin-top: -15px;}
-#userinfo article {padding-bottom: 50px; width: 100%;}
+#userinfo article {padding-bottom: 50px; width: 100%; overflow: hidden;}
 
 #userinfo .betinwallet {width: 46%; padding: 0 1.5%; margin-bottom: 20px; float: left;}
 #userinfo .betinwallet:nth-child(even) {float: right;}
