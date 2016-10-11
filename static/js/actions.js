@@ -310,15 +310,15 @@
             }
         }
         // tabs
-        $('.zakladki-content article').addClass('nodisplay').removeClass('display');
-        $('.zakladki-content article:first').addClass('display').removeClass('nodisplay');
+        $('.zakladki-content article').removeClass('active');
+        $('.zakladki-content article:first').addClass('active');
         // Switch to other tab
         $('ul.tabs li').on('click', function () {
             $('ul.tabs li').removeClass('active');
             $(this).addClass('active');
-            $('.zakladki-content article').addClass('nodisplay').removeClass('display');
+            $('.zakladki-content article').removeClass('active');
             var activeTab = $(this).find('a').attr('href');
-            $(activeTab).addClass('display').removeClass('nodisplay');
+            $(activeTab).addClass('active');
             var items_list = $(activeTab + ' > div')[0];
             if (items_list) {
                 active_waypoint(items_list);
@@ -328,7 +328,7 @@
 
         // Waypoint initialize on active tab after page load
         $('.zakladki-content article').each(function(){
-            if ($(this).hasClass('display') && $(this).children('div').length > 0) {
+            if ($(this).hasClass('active') && $(this).children('div').length > 0) {
                 active_waypoint($(this).children('div')[0]);
             }
         });
@@ -399,5 +399,5 @@
                 });
             });
         }
-    })
+    });
 })();
