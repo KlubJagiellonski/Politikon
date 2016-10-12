@@ -290,8 +290,9 @@
         };
 
         function active_waypoint(items_list) {
-            item_list_name = items_list.id.split('-')[0];
+            var item_list_name = items_list.id.split('-')[0];
 
+            // create a waypoint only for current tab
             if (waypoint_checks[item_list_name] == null) {
                 waypoint_checks[item_list_name] = new Waypoint.Infinite({
                     element: $('#' + item_list_name + '-list')[0],      //  #transactions-list
@@ -307,6 +308,16 @@
                         renderCharts();
                     }
                 });
+            }
+            // check if exist and destroy any waypoint on hidden tab
+            for (var key in waypoint_checks) {
+                if (key != item_list_name) {
+                    var waypoint_check = waypoint_checks[key];
+                    if (waypoint_check != null) {
+                        waypoint_check.destroy();
+                        waypoint_checks[key] = null;
+                    }
+                }
             }
         }
         // tabs
