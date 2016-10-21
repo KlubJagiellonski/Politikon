@@ -67,6 +67,7 @@ django-sslify>=0.2
 
 # connecting with FB, TT
 python-social-auth
+twitter_api==0.1.5
 
 # for tags
 django-taggit
