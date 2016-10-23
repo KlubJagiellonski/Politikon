@@ -48,7 +48,7 @@ django-redis-sessions
 -e git+https://github.com/tgrf/django-constance.git#egg=django-constance
 django-picklefield
 django-celery-with-redis==3.0
-django-celery==3.1.16
+django-celery==3.1.17
 dj-database-url==0.2.1
 pylibmc
 django-pylibmc-sasl==0.2.4
@@ -67,6 +67,8 @@ django-sslify>=0.2
 
 # connecting with FB, TT
 python-social-auth
+django-twitter-api==0.2.10
+twitter-api==0.1.5
 
 # for tags
 django-taggit
