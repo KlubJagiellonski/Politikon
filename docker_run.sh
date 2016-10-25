@@ -4,6 +4,7 @@ NAME='politikon'
 DB_NAME='politikon_db'
 PSQL_VER='postgres:latest'
 NODE_NAME='politikon_instance'
+RUN_AS_DEAMON=false
 
 function pri {
     echo " [${1}] $2"
@@ -30,6 +31,8 @@ if [[ $1 =~ ^--?build$ ]]; then
     val='yes'
 elif [[ $1 =~ ^--?no-build$ ]]; then
     val='no'
+elif [[ $1 =~ '-d' ]]; then
+    RUN_AS_DEAMON=true
 else
     pri 'vm' "$NODE_NAME CONTAINER BUILD"
     pri '  ' " It should NOT harm your env if it NOT CHANGED"
@@ -53,10 +56,17 @@ elif ! docker ps -a | grep $NODE_NAME | grep Up >/dev/null; then
     docker start $NODE_NAME
 fi
 
-pri 'vm' "getting into $NODE_NAME"
-docker exec -it $NODE_NAME bash
+
+if ! $RUN_AS_DEAMON; then
+    pri 'vm' "getting into $NODE_NAME"
+    docker exec -it $NODE_NAME bash
+else
+    pri 'vm' "running $NODE_NAME as deamon"
+    docker exec -dit $NODE_NAME bash
+fi
 
 true
+
 
 echo " tip: after work you could use ./docker_bye.sh"
 
