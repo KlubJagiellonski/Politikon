@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -164,6 +165,9 @@ def create_transaction(request, event_id):
 
         return JSONResponseBadRequest(json.dumps(result))
 
+    request.user.last_transaction = now()
+    request.user.save()
+    
     result = {
         'updates': {
             'bets': [
