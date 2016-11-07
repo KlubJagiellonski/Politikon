@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
 from django.contrib.auth.models import BaseUserManager
 from django.db.models import Count
 from django.http import HttpResponseForbidden
+from django.utils.timezone import now
 
 from .utils import process_username
 from constance import config
@@ -109,18 +112,39 @@ class UserProfileManager(BaseUserManager):
         return self.get_queryset().filter(is_staff=True, is_admin=True)
 
     def get_best_weekly(self):
-        return self.get_ranking_users().filter(weekly_result__isnull=False).order_by('-weekly_result')
-
-    def get_best_monthly(self):
-        return self.get_ranking_users().filter(monthly_result__isnull=False).order_by('-monthly_result')
-
-    def get_best_overall(self):
         """
-        Get users ordered by the best reputation
+        Get users ordered by the best weekly reputation
+        Returns queryset of users that bought / sold transaction
+        in less than 7 days
         :return: UserProfiles list
         :rtype: QuerySet
         """
-        return self.get_ranking_users().order_by('-reputation')
+        return self.get_ranking_users().\
+            filter(weekly_result__isnull=False, last_transaction__gt=now() - timedelta(days=7)).\
+            order_by('-weekly_result')
+
+    def get_best_monthly(self):
+        """
+        Get users ordered by the best monthly reputation
+        Returns queryset of users that bought / sold transaction
+        in less than 31 days (1 month)
+        :return: UserProfiles list
+        :rtype: QuerySet
+        """
+        return self.get_ranking_users().\
+            filter(monthly_result__isnull=False, last_transaction__gt=now() - timedelta(days=31)).\
+            order_by('-monthly_result')
+
+    def get_best_overall(self):
+        """
+        Get users ordered by the best overall reputation
+        Returns queryset of users that bought / sold transaction
+        in less than 93 days (3 months)
+        :return: UserProfiles list
+        :rtype: QuerySet
+        """
+        return self.get_ranking_users().filter(last_transaction__gt=now() - timedelta(days=31*3)).\
+            order_by('-reputation')
 
     def get_user_positions(self, user):
         best_weekly = list(self.get_best_weekly())

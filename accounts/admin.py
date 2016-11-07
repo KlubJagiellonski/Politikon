@@ -15,7 +15,7 @@ class MyUserAdmin(UserAdmin):
 
     list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active', 'is_vip',
                     'is_staff', 'is_deleted', 'facebook_user', 'twitter_user', 'last_visit',
-                    'reset_date')
+                    'last_transaction', 'reset_date')
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )

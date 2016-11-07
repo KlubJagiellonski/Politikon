@@ -59,6 +59,8 @@ class UserProfile(AbstractBaseUser):
     reset_date = models.DateTimeField(u"data ostatniej aktywacji", auto_now_add=True)
     created_date = models.DateTimeField(auto_now_add=True)
     last_visit = models.DateTimeField(null=True, blank=True)
+    # last buy/sell transaction
+    last_transaction = models.DateTimeField(null=True, blank=True)
 
     # TODO: czy to potrzebne?
     # Every new network relations also has to have 'related_name="django_user"'
