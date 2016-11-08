@@ -314,10 +314,10 @@
                     items: '.' + item_list_name + '-item',              //  .transactions-item
                     more: '.' + item_list_name + '-more-link',          //  .transactions-more-link
                     onBeforePageLoad: function() {
-                        $("#loadmore .btn").text("Ładowanie...")
+                        $('#' + item_list_name + '-loadmore .btn').text("Ładowanie...")
                     },
                     onAfterPageLoad: function() {
-                        $("#loadmore .btn").text("wyświetl więcej transakcji");
+                        $('#' + item_list_name + '-loadmore .btn').text("wyświetl więcej transakcji");
                         preloadImages();
                         $('.skroc').dotdotdot();
                         renderCharts();

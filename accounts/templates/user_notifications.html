@@ -27,7 +27,7 @@
         {% endfor %}
     </div>
     {% if page_obj.has_next %}
-    <a id="loadmore" class="notifications-more-link" href="{% url 'accounts:user_notifications' pk=user_pk %}?page={{ page_obj.next_page_number }}">
+    <a id="notifications-loadmore" class="notifications-more-link" href="{% url 'accounts:user_notifications' pk=user_pk %}?page={{ page_obj.next_page_number }}">
         <div class="btn astable">wyświetl więcej wyników</div>
     </a>
     {% endif %}
