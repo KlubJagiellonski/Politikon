@@ -589,6 +589,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #bet-desc .rss-related .rss-news .prawa h4 {font-weight: 700; color: #58585a; margin-bottom: 5px;}
 #bet-desc .rss-related .rss-news .prawa h5 {font-size: .875em; color: #c84d28; margin-bottom: 8px;}
 #bet-desc .rss-related .rss-news .prawa p {font-size: .875em; color: #999; max-height: 40px; line-height: 1.2em;}
+#bet-desc .tag-line {margin-bottom: 50px; height: 50px;}
+#bet-desc .tag-line .tags {margin-top: 20px;}
 
 #comments {}
 #comments .fb-comments {
