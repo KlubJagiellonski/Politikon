@@ -126,6 +126,14 @@ twttr.ready(function (twttr) {
     </div>
 </section>
 <section id="bet-desc" class="astable">
+    <div class="tag-line">
+        <p>Tagi:</p>
+        <ul class="tags tabs">
+        {% for tag in event.tags.all %}
+            <li class="active"><a href="{% url 'events:events' %}?tag={{ tag }}">{{ tag }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
     <div class="lewa">
         <div class="astable share-zone">
             <span class='st_fblike_hcount' displayText='Facebook Like'></span>
@@ -164,6 +172,7 @@ twttr.ready(function (twttr) {
     </div>
     {% endcomment %}
 </section>
+
 {% if similar_events %}
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>

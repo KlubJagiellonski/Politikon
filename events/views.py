@@ -30,6 +30,9 @@ class EventsListView(ListView):
 
     def get_queryset(self):
         events = Event.objects.get_events(self.kwargs['mode'])
+        tag = self.request.GET.get('tag')
+        if tag:
+            events = Event.objects.filter(tags__name__in=[tag]).distinct()
         for event in events:
             event.my_bet = event.get_user_bet(self.request.user)
         return events
