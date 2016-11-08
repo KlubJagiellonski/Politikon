@@ -39,7 +39,7 @@ SITE_URL = 'https://www.politikon.org.pl/'
 
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ = True
 
 ASSETS_MANIFEST = "file:"
 
@@ -237,8 +237,8 @@ MIDDLEWARE_CLASSES = (
     # 'politikon.middleware.BasicAuthMiddleware',
 
     # cause redirection to when raise social module exceptions
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
