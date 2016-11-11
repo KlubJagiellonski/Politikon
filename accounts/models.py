@@ -271,10 +271,11 @@ class UserProfile(AbstractBaseUser):
         :return: reputation value
         :rtype: Decimal
         """
-        if total_given_cash == 0:
+        if config.STARTING_CASH == 0:
             return None
         else:
-            return Decimal(portfolio_value + total_cash) / Decimal(total_given_cash) * 100
+            return Decimal(portfolio_value + total_cash - (total_given_cash - config.STARTING_CASH)) \
+                   / Decimal(config.STARTING_CASH) * 100
 
     #  @property
     #  def profile_photo(self):
