@@ -229,7 +229,7 @@ MIDDLEWARE_CLASSES = (
     # last visit
     'politikon.middleware.SetLastVisitMiddleware',
     # forcing one hostname on production
-    'politikon.middleware.HostnameRedirectMiddleware',
+    # 'politikon.middleware.HostnameRedirectMiddleware',
     # forcing SSL using https://github.com/rdegges/django-sslify.
     # This need to be the first middleware
     'sslify.middleware.SSLifyMiddleware',

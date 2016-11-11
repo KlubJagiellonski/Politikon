@@ -732,6 +732,31 @@ class EventsTemplatetagsTestCase(TestCase):
         }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
 
 
+class EventsViewsTestCase(TestCase):
+    """
+    Test views
+    """
+
+    @override_settings(SSLIFY_DISABLE=True)
+    def test_event_detail(self):
+        """
+        test event_detail
+        """
+        event = EventFactory()
+        url = reverse('events:event_detail', kwargs={'pk': event.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    @override_settings(SSLIFY_DISABLE=True)
+    def test_events(self):
+        """
+        test events
+        """
+        url = reverse('events:events')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
 class BetsModelTestCase(TestCase):
     """
     Test methods for bet
