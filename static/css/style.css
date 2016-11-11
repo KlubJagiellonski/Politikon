@@ -439,6 +439,24 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 .zakladki-content article {display: none;}
 .zakladki-content article.active {display: block;}
 
+.filters select {
+    -webkit-appearance: initial;
+    -moz-appearance: initial;
+    appearance: initial;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    background: #ea6a2a;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    height: 29px;
+    padding: 5px; /* If you add too much padding here, the options won't show in IE */
+    width: 200px;
+    text-align: right;
+}
+
 
 /* strona główna */
 #featured {margin-bottom: 28px;}
