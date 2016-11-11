@@ -30,10 +30,10 @@ b {font-weight: 700;}
 .overlay, .betresult, #wallet-not .container,
 #login div, #login aside, #login, #login .przycisk,
 #featured .details,
-.betYES, .betNO, .betCANCELED
+.betYES, .betNO, .betCANCELED,
 #betfeed h2, #betfeed .details-chart,
 #ranking-short .userrank,
-#loadmore .more,
+.loadmore .more,
 footer ul a, footer .socialmedia div,
 #bet-details .bet-social ul li img, #bet-desc .rss-related .rss-reload,
 #userinfo .detailed-status,
@@ -520,9 +520,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
         -webkit-box-sizing:border-box;
 }
 
-#loadmore {background: #eee; border-top: 32px solid transparent; min-height: 120px;}
-#loadmore .btn {background: #7e7e7e; padding-left: 6.8%; padding-right: 6.8%; margin: 0 auto; margin-top: -64px;}
-#loadmore .btn:hover {
+.loadmore {background: #eee; border-top: 32px solid transparent; min-height: 120px; clear:both;}
+.loadmore .btn {background: #7e7e7e; padding-left: 6.8%; padding-right: 6.8%; margin: 0 auto; margin-top: -64px;}
+.loadmore .btn:hover {
         background: #7e7e7e;
         background: -moz-linear-gradient(top,  #7e7e7e 0%, #717171 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7e7e7e), color-stop(100%,#717171));
@@ -532,9 +532,9 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
         background: linear-gradient(to bottom,  #7e7e7e 0%,#717171 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7e7e7e', endColorstr='#717171',GradientType=0 );
 }
-#loadmore .btn:active {background: #717171;}
-#loadmore .space {margin-top: 45px;}
-#loadmore .more {width: 29.05%; height: 70px; margin-top: 45px;
+.loadmore .btn:active {background: #717171;}
+.loadmore .space {margin-top: 45px;}
+.loadmore .more {width: 29.05%; height: 70px; margin-top: 45px;
         background: #c9c9c9;
         background: -moz-linear-gradient(top,  #c9c9c9 0%, #eeeeee 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9c9c9), color-stop(100%,#eeeeee));
@@ -544,10 +544,10 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
         background: linear-gradient(to bottom,  #c9c9c9 0%,#eeeeee 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9c9c9', endColorstr='#eeeeee',GradientType=0 );
 }
-#loadmore:hover .prawa {margin-top: 20px;}
-#loadmore:hover .lewa {margin-top: 27px;}
-#loadmore:hover .centrum {margin-top: 35px;}
-#loadmore {cursor: pointer;}
+.loadmore:hover .prawa {margin-top: 20px;}
+.loadmore:hover .lewa {margin-top: 27px;}
+.loadmore:hover .centrum {margin-top: 35px;}
+.loadmore {cursor: pointer;}
 
 
 /*Szczegóły wydarzenia*/
@@ -624,6 +624,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .tabs {margin-top: -15px;}
 #userinfo article {padding-bottom: 50px; width: 100%; overflow: hidden;}
 
+#portfolio-list {overflow: hidden;}
 #userinfo .betinwallet {width: 46%; padding: 0 1.5%; margin-bottom: 20px; float: left;}
 #userinfo .betinwallet:nth-child(even) {float: right;}
 #userinfo .betinwallet .status {width: 70%;}
@@ -650,7 +651,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .history-event .event-date {background: url(../img/time.png) left no-repeat; height: 21px; padding-left: 40px; padding-top: 9px; margin-top: -7px; font-size: .875em; font-weight: 300; color: #b4b4b4;}
 #userinfo .history-event .changeNO, #userinfo .history-event .changeYES, #userinfo .history-event .changeCANCELED {font-weight: 700}
 
-#userinfo #loadmore .btn {margin-top: 40px;}
+#userinfo .loadmore .btn {margin-top: 40px;}
 
 /*profil użytkownika*/
 #profile {background: #ebebeb; padding: 0 !important; width: 100%;}
