@@ -307,23 +307,6 @@
         function active_waypoint(items_list) {
             var item_list_name = items_list.id.split('-')[0];
 
-            // create a waypoint only for current tab
-            if (waypoint_checks[item_list_name] == null) {
-                waypoint_checks[item_list_name] = new Waypoint.Infinite({
-                    element: $('#' + item_list_name + '-list')[0],      //  #transactions-list
-                    items: '.' + item_list_name + '-item',              //  .transactions-item
-                    more: '.' + item_list_name + '-more-link',          //  .transactions-more-link
-                    onBeforePageLoad: function() {
-                        $('#' + item_list_name + '-loadmore .btn').text("Ładowanie...")
-                    },
-                    onAfterPageLoad: function() {
-                        $('#' + item_list_name + '-loadmore .btn').text("wyświetl więcej transakcji");
-                        preloadImages();
-                        $('.skroc').dotdotdot();
-                        renderCharts();
-                    }
-                });
-            }
             // check if exist and destroy any waypoint on hidden tab
             for (var key in waypoint_checks) {
                 if (key != item_list_name) {
@@ -333,6 +316,21 @@
                         waypoint_checks[key] = null;
                     }
                 }
+            }
+            // create a waypoint only for current tab
+            if (waypoint_checks[item_list_name] == null) {
+                waypoint_checks[item_list_name] = new Waypoint.Infinite({
+                    element: $('#' + item_list_name + '-list')[0],      //  #transactions-list
+                    items: '.' + item_list_name + '-item',              //  .transactions-item
+                    more: '.' + item_list_name + '-loadmore',          //  .transactions-loadmore
+                    onBeforePageLoad: function() {
+                        $('.' + item_list_name + '-loadmore .btn').text("Ładowanie...")
+                    },
+                    onAfterPageLoad: function() {
+                        $('.' + item_list_name + '-loadmore .btn').text("wyświetl więcej rekordów");
+                        $('.skroc').dotdotdot();
+                    }
+                });
             }
         }
         // tabs
@@ -412,12 +410,12 @@
                 new Waypoint.Infinite({
                     element: $('#betfeed')[0],
                     items: '.event-item',
-                    more: '.event-more-link',
+                    more: '.event-loadmore',
                     onBeforePageLoad: function () {
-                        $("#loadmore .btn").text("Ładowanie...")
+                        $(".loadmore .btn").text("Ładowanie...")
                     },
                     onAfterPageLoad: function () {
-                        $("#loadmore .btn").text("Wyświetl więcej zakładów");
+                        $(".loadmore .btn").text("Wyświetl więcej zakładów");
                         preloadImages();
                         $('.skroc').dotdotdot();
                         renderCharts();

@@ -8,26 +8,6 @@
 {% if user.is_authenticated %}
 <script type="text/javascript" src="{% static 'js/charts/ranking.js' %}"></script>
 {% endif %}
-
-<script type="text/javascript">
-$(function() {
-    new Waypoint.Infinite({
-        element: $('#7dni')[0],
-        items: '.7dni-item',
-        more: '.7dni-more-link'
-    });
-    new Waypoint.Infinite({
-        element: $('#miesiac')[0],
-        items: '.miesiac-item',
-        more: '.miesiac-more-link'
-    });
-    new Waypoint.Infinite({
-        element: $('#calosc')[0],
-        items: '.calosc-item',
-        more: '.calosc-more-link'
-    });
-});
-</script>
 {% endblock %}
 
 {% block content %}

@@ -35,8 +35,8 @@ $(function() {
 </section>
 
 {% if page_obj.has_next %}
-<section id="loadmore">
-    <a href="?page={{ page_obj.next_page_number }}" class="event-more-link"><div class="btn astable">Wyświetl więcej zakładów</div></a>
+<section class="loadmore">
+    <a href="?page={{ page_obj.next_page_number }}" class="event-loadmore"><div class="btn astable">Wyświetl więcej zakładów</div></a>
     <div class="more lewa"></div>
     <div class="more prawa"></div>
     <div class="more centrum"></div>

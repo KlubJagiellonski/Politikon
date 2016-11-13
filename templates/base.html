@@ -55,8 +55,8 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dotdotdot.min.js' %}"></script>
 <!-- infinite scrolling -->
-<script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js?v=401' %}"></script>
+<script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js?v=401' %}"></script>
 <!--<script src="static/js/skrypty.js"></script>-->
 
 {% if not user.is_authenticated %}
@@ -220,7 +220,7 @@ if (screen && screen.width > 480) {
 
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
-<script type="text/javascript" language="javascript" src="{% static 'js/actions.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=2' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
 {% block js_scripts %}
