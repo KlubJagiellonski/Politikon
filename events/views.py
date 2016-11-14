@@ -167,9 +167,6 @@ def create_transaction(request, event_id):
         }
 
         return JSONResponseBadRequest(json.dumps(result))
-
-    request.user.last_transaction = now()
-    request.user.save()
     
     result = {
         'updates': {
