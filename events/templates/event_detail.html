@@ -7,7 +7,7 @@
 
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
-    <meta property="og:description" content="{{ event.description }}" />
+    <meta property="og:description" content="{{ event.title }}" />
     <meta property="og:image" content="{{ event.small_image.url }}" />
 {% endblock %}
 
@@ -141,7 +141,7 @@ twttr.ready(function (twttr) {
             <span class='st_twitter_hcount' displayText='Tweet'></span>
             <span class='st__hcount' displayText=''></span>
         </div>
-        <p>{{ event.description }}</p>
+        <p>{{ event.description|safe }}</p>
         <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"j E Y" }}</p>
     </div>
     {% comment %}

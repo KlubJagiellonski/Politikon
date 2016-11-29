@@ -15,7 +15,7 @@
                 {% render_bet_status bet %}
                 <div class="status-explanation">
                     <span>skrócone uzasadnienie wyniku:</span>
-                    {{ bet.event.outcome_reason }}
+                    {{ bet.event.outcome_reason|safe }}
                 </div>
                 <div class="status-change">
                     zysk/strata:
