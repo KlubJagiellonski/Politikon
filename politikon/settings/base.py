@@ -284,6 +284,10 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'djoser',
 
+    # django_wysiwyg and tinymce is used in django-admin description, title and others
+    'django_wysiwyg',
+    'ckeditor',
+
     'grappelli',
     'django.contrib.admin',
 
@@ -387,3 +391,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+# wysiwig for django admin.
+DJANGO_WYSIWYG_FLAVOR = "ckeditor"

@@ -75,3 +75,7 @@ django-taggit
 
 # for image resizing
 django-imagekit
+
+# configured in django-admin fields: description and outcome_reason
+django-wysiwyg==0.8.0
+django-ckeditor==5.1.1

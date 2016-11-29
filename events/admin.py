@@ -47,6 +47,7 @@ class EventAdmin(admin.ModelAdmin):
 
     list_filter = ['outcome', 'is_featured', 'estimated_end_date', 'created_date', 'created_by']
     search_fields = ['title']
+    change_form_template = 'events/admin/change_form.html'
 
     def save_model(self, request, obj, form, change):
         if not change:
