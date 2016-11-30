@@ -17,7 +17,7 @@ class EventFactory(factory.django.DjangoModelFactory):
     title_fb_no = u'Tytuł na nie'
     description = u'Opis wydarzenia testowego.'
     is_featured = True
-    outcome = Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+    outcome = Event.IN_PROGRESS
 
 
 class ShortEventFactory(factory.django.DjangoModelFactory):
@@ -33,11 +33,11 @@ class BetFactory(factory.django.DjangoModelFactory):
 
     has = 1
     bought = 1
-    outcome = Bet.BET_OUTCOME_CHOICES.YES
+    outcome = Bet.YES
 
 
 class TransactionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Transaction
 
-    type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
+    type = Transaction.BUY_YES

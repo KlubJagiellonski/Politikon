@@ -109,7 +109,7 @@ class UserProfileModelTestCase(TestCase):
         event = EventFactory()
         bet = BetFactory(user=user, event=event)
         self.assertEqual(50, user.current_portfolio_value)
-        bet.outcome = Bet.BET_OUTCOME_CHOICES.NO
+        bet.outcome = Bet.NO
         bet.has = 2
         bet.save()
         self.assertEqual(100, user.current_portfolio_value)
@@ -161,13 +161,13 @@ class UserProfileModelTestCase(TestCase):
         bet3 = BetFactory(user=users[0], event=events[2])
         bet4 = BetFactory(user=users[0], event=events[3])
         bet5 = BetFactory(user=users[1], event=events[4])
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[1].outcome = Event.CANCELLED
         events[1].save()
-        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[2].outcome = Event.FINISHED_YES
         events[2].save()
-        events[3].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        events[3].outcome = Event.FINISHED_NO
         events[3].save()
-        events[4].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[4].outcome = Event.FINISHED_YES
         events[4].save()
         bet2.is_new_resolved = True
         bet2.save()

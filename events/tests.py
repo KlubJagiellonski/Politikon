@@ -203,8 +203,7 @@ class EventsModelTestCase(TestCase):
         users_yes = UserFactory.create_batch(10)
         users_no = UserFactory.create_batch(10)
         bets_yes = [BetFactory(user=u, event=event) for u in users_yes]
-        bets_no = [BetFactory(user=u, event=event, outcome=Bet.BET_OUTCOME_CHOICES.NO) \
-                   for u in users_no]
+        bets_no = [BetFactory(user=u, event=event, outcome=Bet.NO) for u in users_no]
         self.maxDiff = None
         social = event.get_bet_social()
         self.assertEqual(10, social['yes_count'])
@@ -314,9 +313,9 @@ class EventsModelTestCase(TestCase):
             self.assertEqual(i+1, event.vote_yes_count)
             self.assertEqual(0, event.vote_no_count)
             self.assertEqual(0, event.vote_cancel_count)
-            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+            self.assertEqual(event.IN_PROGRESS, event.outcome)
         event.vote_yes()
-        self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
+        self.assertEqual(event.FINISHED_YES, event.outcome)
 
     def test_voting_resolve_no(self):
         """
@@ -329,9 +328,9 @@ class EventsModelTestCase(TestCase):
             self.assertEqual(0, event.vote_yes_count)
             self.assertEqual(0, event.vote_cancel_count)
             self.assertEqual(i+1, event.vote_no_count)
-            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+            self.assertEqual(event.IN_PROGRESS, event.outcome)
         event.vote_no()
-        self.assertEqual(event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+        self.assertEqual(event.FINISHED_NO, event.outcome)
 
     def test_voting_resolve_cancel(self):
         """
@@ -344,9 +343,9 @@ class EventsModelTestCase(TestCase):
             self.assertEqual(0, event.vote_yes_count)
             self.assertEqual(0, event.vote_no_count)
             self.assertEqual(i+1, event.vote_cancel_count)
-            self.assertEqual(event.EVENT_OUTCOME_CHOICES.IN_PROGRESS, event.outcome)
+            self.assertEqual(event.IN_PROGRESS, event.outcome)
         event.vote_cancel()
-        self.assertEqual(event.EVENT_OUTCOME_CHOICES.CANCELLED, event.outcome)
+        self.assertEqual(event.CANCELLED, event.outcome)
 
     def test_finish_yes(self):
         """
@@ -358,14 +357,14 @@ class EventsModelTestCase(TestCase):
             u.total_cash = 2000
         event = EventFactory()
         bets = [BetFactory(event=event, user=user, has=3) for user in users[:2]]
-        bets[1].outcome = Bet.BET_OUTCOME_CHOICES.NO
+        bets[1].outcome = Bet.NO
         bets[1].save()
         event.finish_yes()
 
         self.assertIsNotNone(event.end_date)
-        self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_YES, event.outcome)
+        self.assertEqual(Event.FINISHED_YES, event.outcome)
 
-        event2 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        event2 = EventFactory(outcome=Event.FINISHED_NO)
         with self.assertRaises(EventNotInProgress):
             event2.finish_yes()
 
@@ -376,7 +375,7 @@ class EventsModelTestCase(TestCase):
         event = EventFactory()
         event.finish_no()
         self.assertIsNotNone(event.end_date)
-        self.assertEqual(Event.EVENT_OUTCOME_CHOICES.FINISHED_NO, event.outcome)
+        self.assertEqual(Event.FINISHED_NO, event.outcome)
 
     def test_cancel(self):
         """
@@ -409,7 +408,7 @@ class EventsManagerTestCase(TestCase):
             estimated_end_date=timezone.now() + timedelta(days=2)
         )
         event2 = EventFactory(
-            outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+            outcome=Event.IN_PROGRESS,
             turnover=3,
             absolute_price_change=3000,
             estimated_end_date=timezone.now() + timedelta(days=1)
@@ -420,11 +419,11 @@ class EventsManagerTestCase(TestCase):
             estimated_end_date=timezone.now() + timedelta(days=4)
         )
         event4 = EventFactory(
-            outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
+            outcome=Event.FINISHED_YES,
             absolute_price_change=5000,
             estimated_end_date=timezone.now() + timedelta(days=2)
         )
-        event5 = EventFactory(outcome=Event.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        event5 = EventFactory(outcome=Event.FINISHED_NO)
 
         ongoing_events = Event.objects.ongoing_only_queryset()
         self.assertIsInstance(ongoing_events[0], Event)
@@ -461,7 +460,7 @@ class EventsManagerTestCase(TestCase):
         Get featured events
         """
         events = EventFactory.create_batch(7)
-        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[2].outcome = Event.CANCELLED
         events[2].save()
 
         featured_events = Event.objects.get_featured_events()
@@ -490,8 +489,15 @@ class EventsManagerTestCase(TestCase):
             'NO': 0,
             'CANCEL': 1
         }, Event.objects.vote_for_solution(user, event.id, 'CANCEL'))
+        self.assertEqual({
+            'YES': 1,
+            'NO': 0,
+            'CANCEL': 0
+        }, Event.objects.vote_for_solution(user, event.id, 'YES'))
         with self.assertRaises(NonexistantEvent):
             Event.objects.vote_for_solution(user, event.id+1, 'NO')
+        with self.assertRaises(UnknownOutcome):
+            Event.objects.vote_for_solution(user, event.id, 'BAD ANSWER')
         event.finish_yes()
         with self.assertRaises(EventNotInProgress):
             Event.objects.vote_for_solution(user, event.id, 'NO')
@@ -528,7 +534,7 @@ class EventsTasksTestCase(TestCase):
             replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=2)
         with freeze_time(initial_time) as frozen_time:
             events = EventFactory.create_batch(3)
-            events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+            events[0].outcome = Event.FINISHED_YES
             events[0].save()
 
             frozen_time.tick(delta=timedelta(days=1))
@@ -544,7 +550,7 @@ class EventsTasksTestCase(TestCase):
 
             create_open_events_snapshot()
             frozen_time.tick(delta=timedelta(days=1))
-            events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+            events[1].outcome = Event.FINISHED_NO
             events[1].save()
             events[2].current_buy_for_price = 100
             events[2].save()
@@ -642,9 +648,9 @@ class EventsTemplatetagsTestCase(TestCase):
         Outcome
         """
         events = EventFactory.create_batch(4)
-        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
-        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        events[0].outcome = Event.FINISHED_YES
+        events[1].outcome = Event.FINISHED_NO
+        events[2].outcome = Event.CANCELLED
         self.assertEqual(" finished finished-yes", outcome(events[0]))
         self.assertEqual(" finished finished-no", outcome(events[1]))
         self.assertEqual(" finished finished-cancelled", outcome(events[2]))
@@ -655,7 +661,7 @@ class EventsTemplatetagsTestCase(TestCase):
         Render finish date
         """
         events = EventFactory.create_batch(3)
-        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[0].outcome = Event.FINISHED_YES
         finish_time = timezone.now()
         events[0].end_date = finish_time
         future_time = timezone.now() + timedelta(days=8)
@@ -687,7 +693,7 @@ class EventsTemplatetagsTestCase(TestCase):
         events[1].title_fb_no = u"nie będzie TAK"
         events[2].title = u"Czy będzie TAK?"
         BetFactory(user=user, event=events[0])
-        BetFactory(user=user, event=events[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
+        BetFactory(user=user, event=events[1], outcome=Bet.NO)
         self.assertEqual({
             'title': u'Bromando uważa że będzie TAK'
         }, og_title(events[0], user=user))
@@ -696,10 +702,10 @@ class EventsTemplatetagsTestCase(TestCase):
         }, og_title(events[1], user=user))
         self.assertEqual({
             'title': u'Moim zdaniem będzie TAK'
-        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
+        }, og_title(events[0], vote=Bet.YES))
         self.assertEqual({
             'title': u'Moim zdaniem nie będzie TAK'
-        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
+        }, og_title(events[1], vote=Bet.NO))
         self.assertEqual({
             'title': u'Czy będzie TAK?'
         }, og_title(events[2]))
@@ -707,29 +713,29 @@ class EventsTemplatetagsTestCase(TestCase):
             'title': u'Czy będzie TAK?'
         }, og_title(events[2], user=user))
 
-        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[0].outcome = Event.FINISHED_YES
         self.assertEqual({
             'title': u'Bromando ma rację że będzie TAK'
         }, og_title(events[0], user=user))
         self.assertEqual({
             'title': u'Mam rację że będzie TAK'
-        }, og_title(events[0], vote=Bet.BET_OUTCOME_CHOICES.YES))
+        }, og_title(events[0], vote=Bet.YES))
 
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        events[1].outcome = Event.FINISHED_NO
         self.assertEqual({
             'title': u'Bromando ma rację że nie będzie TAK'
         }, og_title(events[1], user=user))
         self.assertEqual({
             'title': u'Mam rację że nie będzie TAK'
-        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
+        }, og_title(events[1], vote=Bet.NO))
 
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        events[1].outcome = Event.FINISHED_YES
         self.assertEqual({
             'title': u'Bromando nie ma racji że nie będzie TAK'
         }, og_title(events[1], user=user))
         self.assertEqual({
             'title': u'Nie mam racji że nie będzie TAK'
-        }, og_title(events[1], vote=Bet.BET_OUTCOME_CHOICES.NO))
+        }, og_title(events[1], vote=Bet.NO))
 
 
 class BetsModelTestCase(TestCase):
@@ -742,14 +748,14 @@ class BetsModelTestCase(TestCase):
         """
         event = EventFactory(title='wydarzenie')
         user = UserFactory(username='brode')
-        bet = Bet(event=event, user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
+        bet = Bet(event=event, user=user, outcome=Bet.YES)
         bet.save()
 
         self.assertEqual({
             'bet_id': 1,
             'event_id': 1,
             'user_id': 1,
-            'outcome': Bet.BET_OUTCOME_CHOICES.YES,
+            'outcome': Bet.YES,
             'has': 0,
             'bought': 0,
             'sold': 0,
@@ -765,8 +771,8 @@ class BetsModelTestCase(TestCase):
         """
         event = EventFactory()
         users = UserFactory.create_batch(2)
-        bet1 = BetFactory(event=event, user=users[0], outcome=Bet.BET_OUTCOME_CHOICES.YES)
-        bet2 = BetFactory(event=event, user=users[1], outcome=Bet.BET_OUTCOME_CHOICES.NO)
+        bet1 = BetFactory(event=event, user=users[0], outcome=Bet.YES)
+        bet2 = BetFactory(event=event, user=users[1], outcome=Bet.NO)
         event.current_buy_for_price = 55
         event.current_buy_against_price = 45
         self.assertEqual(55, bet1.current_event_price())
@@ -778,13 +784,13 @@ class BetsModelTestCase(TestCase):
         """
         events = EventFactory.create_batch(3)
         user = UserFactory()
-        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
-        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
-        bet3 = BetFactory(event=events[2], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES)
-        bet4 = BetFactory(event=events[2], user=user, outcome=Bet.BET_OUTCOME_CHOICES.NO)
-        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
-        events[2].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.YES)
+        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.YES)
+        bet3 = BetFactory(event=events[2], user=user, outcome=Bet.YES)
+        bet4 = BetFactory(event=events[2], user=user, outcome=Bet.NO)
+        events[0].outcome = Event.FINISHED_YES
+        events[1].outcome = Event.FINISHED_NO
+        events[2].outcome = Event.FINISHED_NO
         self.assertTrue(bet1.is_won())
         self.assertFalse(bet2.is_won())
         self.assertFalse(bet3.is_won())
@@ -808,10 +814,10 @@ class BetsModelTestCase(TestCase):
         """
         events = EventFactory.create_batch(2)
         user = UserFactory()
-        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES, has=5)
-        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.BET_OUTCOME_CHOICES.YES, has=5)
-        events[0].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
-        events[1].outcome = Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        bet1 = BetFactory(event=events[0], user=user, outcome=Bet.YES, has=5)
+        bet2 = BetFactory(event=events[1], user=user, outcome=Bet.YES, has=5)
+        events[0].outcome = Event.FINISHED_YES
+        events[1].outcome = Event.FINISHED_NO
         self.assertEqual(500, bet1.get_won())
         self.assertEqual(0, bet2.get_won())
 
@@ -937,7 +943,6 @@ class BetsManagerTestCase(TestCase):
         bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'NO',
                                                           bet_event.current_sell_against_price)
 
-
     def test_get_in_progress(self):
         """
         Get in progress
@@ -962,8 +967,6 @@ class BetsManagerTestCase(TestCase):
         events[1].finish_no()
         events[2].finish_yes()
         events[3].cancel()
-        for e in events:
-            e.save()
         self.assertEqual([bets[3], bets[2], bets[1]], list(Bet.objects.get_finished(user)))
 
 
@@ -980,7 +983,7 @@ class TransactionsModelTestCase(TestCase):
         transaction = TransactionFactory(
             user=user,
             event=event,
-            type=Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
+            type=Transaction.BUY_YES
         )
         self.assertEqual(u'zakup udziałów na TAK przez mcbrover', transaction.__unicode__())
         self.assertEqual(0, transaction.total_cash)
@@ -1001,7 +1004,7 @@ class TransactionManagerTestCase(TestCase):
         # user = UserFactory()
         # events = EventFactory.create_batch(7)
         # transactions = [TransactionFactory(user=user, event=e) for e in events]
-        # transactions[3].type = Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP
+        # transactions[3].type = Transaction.TOPPED_UP
         # transactions[3].save()
         # user.reset_date = timezone.now()
         # user.save()
@@ -1021,7 +1024,7 @@ class TransactionManagerTestCase(TestCase):
         user = UserFactory()
         events = EventFactory.create_batch(4)
         transactions = [TransactionFactory(user=user, event=e) for e in events]
-        transactions[3].type = Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP
+        transactions[3].type = Transaction.TOPPED_UP
         transactions[3].save()
         result = list(reversed(transactions[:3]))
         self.assertEqual(result, list(Transaction.objects.get_user_transactions(user)))
