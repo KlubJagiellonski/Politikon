@@ -762,3 +762,62 @@ class Transaction(models.Model):
         :rtype: int
         """
         return -1 * self.quantity * self.price
+
+    def rollback_transaction(self):
+        """
+        Delete transaction and erase it's effects
+        WARNING: this method may cause loss of consistency of stock
+        :return: True if succeeded
+        :rtype: bool
+        """
+        if self.type == self.BUY_YES:
+            # event
+            self.event.Q_for -= self.quantity
+            self.event.turnover -= self.quantity
+
+            self.event.save()
+
+            # bet
+            bet = Bet.objects.filter(event=self.event, user=self.user, outcome=True)[0]
+            bet.bought_avg_price = (bet.bought_avg_price * bet.bought - self.quantity * self.price) / \
+                                   (bet.bought - self.quantity)
+            bet.bought -= self.quantity
+
+            # if consistency of Bet object is lost
+            if bet.sold > bet.bought:
+                transactions = Transaction.objects.filter(event=self.event, user=self.user,
+                                                          outcome=self.SELL_YES)
+                for t in transactions[bet.bought:]:
+                    t.rollback_transaction
+
+            bet.save()
+
+            # if it was the last user's bet
+            if bet.sold == 0 and bet.bought == 0:
+                bet.delete()
+
+            # if event was already solved
+            if not self.event.is_in_progress:
+                # TODO: correct solution
+                pass
+            else:
+                # user
+                self.user.portfolio_value -= self.quantity * self.price
+                self.user.total_cash += self.quantity * self.price
+                self.user.save()
+        elif self.type == self.SELL_YES:
+            pass
+        elif self.type == self.BUY_NO:
+            pass
+        elif self.type == self.SELL_NO:
+            pass
+        elif self.type == self.EVENT_CANCELLED_REFUND:
+            pass
+        elif self.type == self.EVENT_CANCELLED_DEBIT:
+            pass
+        elif self.type == self.EVENT_WON_PRIZE:
+            pass
+        elif self.type == self.TOPPED_UP:
+            pass
+        elif self.type == self.BONUS:
+            pass
