@@ -245,8 +245,8 @@ class Event(models.Model):
         :return: chart points
         :rtype: {int, [], []}
         """
-        first_date = max(last_date - relativedelta(days=days), self.created_date)
         last_date = self.end_date if self.end_date else timezone.now()
+        first_date = max(last_date - relativedelta(days=days), self.created_date)
         labels = []
         points = []
 
