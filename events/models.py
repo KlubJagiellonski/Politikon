@@ -245,42 +245,30 @@ class Event(models.Model):
         :return: chart points
         :rtype: {int, [], []}
         """
-        if self.end_date and self.end_date < timezone.now():
-            # for finished event last date point is end_date
-            last_date = self.end_date
-        else:
-            # for event in progress last date point is now
-            last_date = timezone.now()
-
-        first_date = last_date - relativedelta(days=days)
-        if last_date.hour == 0:
-            first_date += relativedelta(days=1)
-
-        # default is start price: 50
-        last_price = Event.BEGIN_PRICE
-        step_date = first_date
+        first_date = max(last_date - relativedelta(days=days), self.created_date)
+        last_date = self.end_date if self.end_date else timezone.now()
         labels = []
         points = []
 
-        if step_date < self.created_date - relativedelta(days=Event.CHART_MARGIN):
-            # if 2 weeks ago + margin the event wasn't created
-            # then give start when created + margin
-            step_date = self.created_date - relativedelta(days=Event.CHART_MARGIN)
+        snapshots = self.snapshots.filter(
+            snapshot_of_id=self.id,
+            created_at__gte=first_date,
+            created_at__lte=last_date,
+            created_at__hour=0
+        ).order_by('created_at')
 
-        while step_date <= last_date:
-            # display only midnight prices
-            # TODO: get this if from settings
-            if step_date.hour == 0:
-                labels.append(u'{0} {1}'.format(step_date.day, _(step_date.strftime('%B'))))
-                snapshots = self.snapshots.filter(
-                    snapshot_of_id=self.id,
-                    created_at__lte=step_date,
-                ).order_by('-created_at')[:1]
-                if snapshots.exists():
-                    snapshot = snapshots[0]
-                    last_price = snapshot.current_buy_for_price
-                points.append(last_price)
-            step_date += relativedelta(hours=1)
+        additional_points = min(days - len(snapshots), Event.CHART_MARGIN)
+        step_date = first_date - relativedelta(days=additional_points)
+
+        for point in range(additional_points):
+            labels.append(u'{0} {1}'.format(step_date.day, _(step_date.strftime('%B'))))
+            step_date += relativedelta(days=1)
+            points.append(Event.BEGIN_PRICE)
+
+        for snapshot in snapshots:
+            labels.append(u'{0} {1}'.format(snapshot.created_at.day, _(snapshot.created_at.strftime('%B'))))
+            last_price = snapshot.current_buy_for_price
+            points.append(last_price)
 
         return {
             'id': self.id,
