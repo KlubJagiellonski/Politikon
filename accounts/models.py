@@ -211,7 +211,7 @@ class UserProfile(AbstractBaseUser):
         if bonus:
             Transaction.objects.create(
                 user=self,
-                type=Transaction.TRANSACTION_TYPE_CHOICES.BONUS,
+                type=Transaction.BONUS,
                 quantity=1,
                 price=bonus
             )
@@ -238,8 +238,7 @@ class UserProfile(AbstractBaseUser):
         user_bets = Bet.objects.select_related('event').\
             only('id', 'has', 'outcome', 'event', "event__current_sell_for_price",
                  "event__current_sell_against_price").\
-            filter(user__id=self.id, event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
-                   has__gt=0).\
+            filter(user__id=self.id, event__outcome=Event.IN_PROGRESS, has__gt=0).\
             filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=self.reset_date))
 
         for bet in user_bets.iterator():
@@ -290,7 +289,7 @@ class UserProfile(AbstractBaseUser):
 
         Transaction.objects.create(
             user=self,
-            type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP,
+            type=Transaction.TOPPED_UP,
             quantity=1,
             price=amount
         )
@@ -372,9 +371,9 @@ class UserProfile(AbstractBaseUser):
         :rtype: QuerySet[Bet]
         """
         events_finished = (
-            Event.EVENT_OUTCOME_CHOICES.CANCELLED,
-            Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
-            Event.EVENT_OUTCOME_CHOICES.FINISHED_NO,
+            Event.CANCELLED,
+            Event.FINISHED_YES,
+            Event.FINISHED_NO,
         )
         return self.bets.filter(
             event__outcome__in=events_finished,

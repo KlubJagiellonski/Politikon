@@ -24,7 +24,7 @@ BET_OUTCOMES_INV_DICT = {
 
 class EventManager(models.Manager):
     def ongoing_only_queryset(self):
-        allowed_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+        allowed_outcome = self.model.IN_PROGRESS
         return self.filter(outcome=allowed_outcome)
 
     def get_events(self, mode):
@@ -37,7 +37,7 @@ class EventManager(models.Manager):
         elif mode == 'changed':
             return self.ongoing_only_queryset().order_by('-absolute_price_change')
         elif mode == 'finished':
-            excluded_outcome = self.model.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+            excluded_outcome = self.model.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
 
     def get_featured_events(self):
@@ -92,21 +92,21 @@ class EventManager(models.Manager):
         from .models import SolutionVote
         vote, created = SolutionVote.objects.get_or_create(user_id=user.id, event_id=event.id)
         if outcome == 'YES':
-            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.YES
+            outcome_vote = SolutionVote.YES
         elif outcome == 'NO':
-            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.NO
+            outcome_vote = SolutionVote.NO
         elif outcome == 'CANCEL':
-            outcome_vote = SolutionVote.VOTE_OUTCOME_CHOICES.CANCEL
+            outcome_vote = SolutionVote.CANCEL
         else:
             raise UnknownOutcome(_("Unknown outcome."))
 
         if created or vote.outcome != outcome_vote:
             if vote.outcome != outcome_vote:
-                if vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.YES:
+                if vote.outcome == SolutionVote.YES:
                     event.vote_yes_count -= 1
-                elif vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.NO:
+                elif vote.outcome == SolutionVote.NO:
                     event.vote_no_count -= 1
-                elif vote.outcome == SolutionVote.VOTE_OUTCOME_CHOICES.CANCEL:
+                elif vote.outcome == SolutionVote.CANCEL:
                     event.vote_cancel_count -= 1
                 event.save()
             vote.outcome = outcome_vote
@@ -158,9 +158,9 @@ class BetManager(models.Manager):
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, for_outcome)
 
         if for_outcome == 'YES':
-            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_YES
+            transaction_type = Transaction.BUY_YES
         else:
-            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.BUY_NO
+            transaction_type = Transaction.BUY_NO
 
         requested_price = price
         current_tx_price = event.price_for_outcome(for_outcome, direction='BUY')
@@ -232,9 +232,9 @@ class BetManager(models.Manager):
             raise InsufficientBets(_("You don't have enough shares."), bet)
 
         if for_outcome == 'YES':
-            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.SELL_YES
+            transaction_type = Transaction.SELL_YES
         else:
-            transaction_type = Transaction.TRANSACTION_TYPE_CHOICES.SELL_NO
+            transaction_type = Transaction.SELL_NO
 
         Transaction.objects.create(
             user_id=user.id,
@@ -284,7 +284,7 @@ class BetManager(models.Manager):
         """
         from events.models import Event
         return self.filter(
-            event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS,
+            event__outcome=Event.IN_PROGRESS,
             has__gt=0,
         ).order_by('event__estimated_end_date')
 
@@ -296,13 +296,8 @@ class BetManager(models.Manager):
         :rtype: QuerySet[Bet]
         """
         from events.models import Event
-        events_finshed = (
-            Event.EVENT_OUTCOME_CHOICES.CANCELLED,
-            Event.EVENT_OUTCOME_CHOICES.FINISHED_YES,
-            Event.EVENT_OUTCOME_CHOICES.FINISHED_NO,
-        )
         return self.filter(
-            event__outcome__in=events_finshed,
+            event__outcome__in=Event.EVENT_FINISHED_TYPES,
             has__gt=0,
             user=user
         ).filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=user.reset_date)).\
@@ -340,7 +335,7 @@ class TransactionManager(models.Manager):
 
     def get_user_transactions(self, user):
         return self.model.objects.filter(user=user).\
-            exclude(type=self.model.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP)
+            exclude(type=self.model.TOPPED_UP)
 
     def get_weekly_user_transactions(self, user):
         last_week = now() - timedelta(days=7)
