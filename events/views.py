@@ -71,13 +71,13 @@ class EventDetailView(DetailView):
         if user.is_staff:
             try:
                 sv = SolutionVote.objects.get(user=user, event=event)
-                voted = 'TAK' if sv.outcome == sv.VOTE_OUTCOME_CHOICES.YES else 'NIE'
+                voted = 'TAK' if sv.outcome == SolutionVote.YES else 'NIE'
             except SolutionVote.DoesNotExist:
                 pass
 
         # Similar events
         similar_events = [x for x in event.tags.similar_objects() if \
-                          x.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS]
+                          x.outcome == Event.IN_PROGRESS]
         for similar_event in similar_events:
             similar_event.my_bet = similar_event.get_user_bet(self.request.user)
 
