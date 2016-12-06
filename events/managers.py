@@ -334,8 +334,8 @@ class TransactionManager(models.Manager):
             else:
                 result.append(old)
                 old = q
-            if q == queryset.reverse()[0]:
-                result.append(q)
+        if len(result) == 0 or q != result[-1]:
+            result.append(q)
         return result
 
     def get_user_transactions(self, user):
