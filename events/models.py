@@ -448,6 +448,7 @@ class Event(models.Model):
         :type outcome: Choices
         """
         self.__finish(outcome)
+        # if won ++ total_cash
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total = self.PRIZE_FOR_WINNING * bet.has
@@ -459,12 +460,15 @@ class Event(models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
-            # TODO: tutaj wallet change
-            #  bet.user.portfolio_value -= bet.has
             bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
             bet.save()
+        # always -- portfolio_value
+        from accounts.models import UserProfile
+        for user in UserProfile.objects.filter(transaction__event=self):
+            user.portfolio_value = user.current_portfolio_value
+            user.save()
 
     @transaction.atomic
     def finish_yes(self):
@@ -492,17 +496,14 @@ class Event(models.Model):
                 users.update({
                     t.user: 0
                 })
-            # TODO WTF?
-            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
+            if t.type in t.BUY_SELL_TYPES:
                 # for transaction type BUY the price is below 0
                 users[t.user] += t.quantity * t.price
         for user, refund in users.iteritems():
             if refund == 0:
                 continue
             user.total_cash += refund
+            user.portfolio_value -= refund
             user.save()
             if refund > 0:
                 transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
