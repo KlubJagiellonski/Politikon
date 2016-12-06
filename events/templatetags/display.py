@@ -67,11 +67,11 @@ def userstats(user, overall_rank, month_rank, week_rank):
 @register.filter
 def outcome(event):
     """Usage, {{ event|get_outcome_class }}"""
-    if event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+    if event.outcome == event.FINISHED_YES:
         return " finished finished-yes"
-    elif event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+    elif event.outcome == event.FINISHED_NO:
         return " finished finished-no"
-    elif event.outcome == event.EVENT_OUTCOME_CHOICES.CANCELLED:
+    elif event.outcome == event.CANCELLED:
         return " finished finished-cancelled"
     else:
         return ""
@@ -98,32 +98,30 @@ def og_title(event, vote=None, user=None):
         else:
             if event.is_in_progress:
                 verb = u'uważa że'
-            elif bet.outcome and event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+            elif bet.outcome and event.outcome == event.FINISHED_YES:
                 verb = u'ma rację że'
-            elif not bet.outcome and event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+            elif not bet.outcome and event.outcome == event.FINISHED_NO:
                 verb = u'ma rację że'
             else:
                 verb = u'nie ma racji że'
 
-            if bet.outcome == bet.BET_OUTCOME_CHOICES.YES:
+            if bet.outcome == bet.YES:
                 title = u'%s %s %s' % (user.name, verb, event.title_fb_yes)
             else:
                 title = u'%s %s %s' % (user.name, verb, event.title_fb_no)
     elif vote is not None:
         if event.is_in_progress:
             verb = u'Moim zdaniem'
-        elif vote == Bet.BET_OUTCOME_CHOICES.YES and \
-            event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+        elif vote == Bet.YES and event.outcome == event.FINISHED_YES:
             verb = u'Mam rację że'
-        elif vote == Bet.BET_OUTCOME_CHOICES.NO and \
-            event.outcome == event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+        elif vote == Bet.NO and event.outcome == event.FINISHED_NO:
             verb = u'Mam rację że'
         else:
             verb = u'Nie mam racji że'
 
-        if vote == Bet.BET_OUTCOME_CHOICES.YES:
+        if vote == Bet.YES:
             title = u'%s %s' % (verb, event.title_fb_yes)
-        elif vote == Bet.BET_OUTCOME_CHOICES.NO:
+        elif vote == Bet.NO:
             title = u'%s %s' % (verb, event.title_fb_no)
 
     return {

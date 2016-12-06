@@ -23,7 +23,6 @@ from bladepolska.site import current_domain
 from constance import config
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-from politikon.choices import Choices
 from taggit.managers import TaggableManager
 
 
@@ -38,16 +37,18 @@ class Event(models.Model):
         verbose_name = 'wydarzenie'
         verbose_name_plural = 'wydarzenia'
 
-    EVENT_OUTCOME_CHOICES = Choices(
-        ('IN_PROGRESS', 1, u'w trakcie'),
-        ('CANCELLED', 2, u'anulowane'),
-        ('FINISHED_YES', 3, u'rozstrzygnięte na TAK'),
-        ('FINISHED_NO', 4, u'rozstrzygnięte na NIE'),
+    IN_PROGRESS, CANCELLED, FINISHED_YES, FINISHED_NO = range(1, 5)
+    EVENT_OUTCOME_CHOICES = (
+        (IN_PROGRESS, u'w trakcie'),
+        (CANCELLED, u'anulowane'),
+        (FINISHED_YES, u'rozstrzygnięte na TAK'),
+        (FINISHED_NO, u'rozstrzygnięte na NIE'),
     )
+    EVENT_FINISHED_TYPES = (CANCELLED, FINISHED_YES, FINISHED_NO)
 
     BOOLEAN_OUTCOME_DICT = {
-        EVENT_OUTCOME_CHOICES.FINISHED_YES: True,
-        EVENT_OUTCOME_CHOICES.FINISHED_NO: False
+        FINISHED_YES: True,
+        FINISHED_NO: False
     }
 
     BEGIN_PRICE = 50
@@ -176,7 +177,7 @@ class Event(models.Model):
 
     @property
     def is_in_progress(self):
-        return self.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS
+        return self.outcome == Event.IN_PROGRESS
 
     @property
     def publish_channel(self):
@@ -434,7 +435,7 @@ class Event(models.Model):
         :param outcome: outcome status; EVENT_OUTCOME_CHOICES
         :type outcome: Choices
         """
-        if self.outcome != self.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
+        if self.outcome != self.IN_PROGRESS:
             raise EventNotInProgress("Wydarzenie zostało już rozwiązane.")
         self.outcome = outcome
         self.end_date = timezone.now()
@@ -455,7 +456,7 @@ class Event(models.Model):
                 Transaction.objects.create(
                     user=bet.user,
                     event=self,
-                    type=Transaction.TRANSACTION_TYPE_CHOICES.EVENT_WON_PRIZE,
+                    type=Transaction.EVENT_WON_PRIZE,
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
@@ -471,32 +472,28 @@ class Event(models.Model):
         """
         if event is finished on YES then prizes calculate
         """
-        self.__finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_YES)
+        self.__finish_with_outcome(self.FINISHED_YES)
 
     @transaction.atomic
     def finish_no(self):
         """
         if event is finished on NO then prizes calculate
         """
-        self.__finish_with_outcome(self.EVENT_OUTCOME_CHOICES.FINISHED_NO)
+        self.__finish_with_outcome(self.FINISHED_NO)
 
     @transaction.atomic
     def cancel(self):
         """
         refund for users on cancel event.
         """
-        self.__finish(self.EVENT_OUTCOME_CHOICES.CANCELLED)
+        self.__finish(self.CANCELLED)
         users = {}
         for t in Transaction.objects.filter(event=self).order_by('user'):
             if t.user not in users:
                 users.update({
                     t.user: 0
                 })
-            # TODO WTF?
-            if t.type == t.TRANSACTION_TYPE_CHOICES.BUY_YES or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.BUY_NO or \
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_YES or\
-                    t.type == t.TRANSACTION_TYPE_CHOICES.SELL_NO:
+            if t.type in Transaction.BUY_SELL_TYPES:
                 # for transaction type BUY the price is below 0
                 users[t.user] += t.quantity * t.price
         for user, refund in users.iteritems():
@@ -505,9 +502,9 @@ class Event(models.Model):
             user.total_cash += refund
             user.save()
             if refund > 0:
-                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_REFUND
+                transaction_type = Transaction.EVENT_CANCELLED_REFUND
             else:
-                transaction_type = t.TRANSACTION_TYPE_CHOICES.EVENT_CANCELLED_DEBIT
+                transaction_type = Transaction.EVENT_CANCELLED_DEBIT
             Transaction.objects.create(
                 user=user,
                 event=self,
@@ -523,10 +520,11 @@ class SolutionVote(models.Model):
     class Meta:
         unique_together = ('user', 'event')
 
-    VOTE_OUTCOME_CHOICES = Choices(
-        ('YES', 1, u'rozwiązanie na TAK'),
-        ('NO', 2, u'rozwiązanie na NIE'),
-        ('CANCEL', 3, u'anulowanie wydarzenia')
+    YES, NO, CANCEL = range(1, 4)
+    VOTE_OUTCOME_CHOICES = (
+        (YES, u'rozwiązanie na TAK'),
+        (NO, u'rozwiązanie na NIE'),
+        (CANCEL, u'anulowanie wydarzenia')
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     event = models.ForeignKey(Event)
@@ -541,9 +539,11 @@ class Bet(models.Model):
         verbose_name = 'zakład'
         verbose_name_plural = 'zakłady'
 
-    BET_OUTCOME_CHOICES = Choices(
-        ('YES', True, u'udziały na TAK'),
-        ('NO', False, u'udziały na NIE'),
+    YES = True
+    NO = False
+    BET_OUTCOME_CHOICES = (
+        (YES, u'udziały na TAK'),
+        (NO, u'udziały na NIE'),
     )
 
     BET_OUTCOMES_TO_PRICE_ATTR = {
@@ -617,9 +617,9 @@ class Bet(models.Model):
         :return: True if won
         :rtype: bool
         """
-        if self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES:
+        if self.outcome and self.event.outcome == Event.FINISHED_YES:
             return True
-        elif not self.outcome and self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO:
+        elif not self.outcome and self.event.outcome == Event.FINISHED_NO:
             return True
         return False
 
@@ -631,7 +631,7 @@ class Bet(models.Model):
         :rtype: int
         """
         # TODO: NAPRAWDE NIE WIEM
-        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
+        if self.is_won() or self.event.outcome == Event.IN_PROGRESS:
             return self.get_won() - self.get_invested()
         else:
             return -self.get_invested()
@@ -643,7 +643,7 @@ class Bet(models.Model):
         :rtype: float
         """
         # TODO: NO NIE WIEM
-        if self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED:
+        if self.event.outcome == Event.CANCELLED:
             return 0
         return round(self.has * self.bought_avg_price, 0)
 
@@ -653,7 +653,7 @@ class Bet(models.Model):
         :return: price
         :rtype: int
         """
-        if self.is_won() or self.event.outcome == Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS:
+        if self.is_won() or self.event.outcome == Event.IN_PROGRESS:
             return self.has * Event.PRIZE_FOR_WINNING
         else:
             return 0
@@ -664,7 +664,7 @@ class Bet(models.Model):
         :return: True if event resolved for YES
         :rtype: bool
         """
-        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_YES
+        return self.event.outcome == Event.FINISHED_YES
 
     def is_finished_no(self):
         """
@@ -672,7 +672,7 @@ class Bet(models.Model):
         :return: True if event resolved for NO
         :rtype: bool
         """
-        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.FINISHED_NO
+        return self.event.outcome == Event.FINISHED_NO
 
     def is_cancelled(self):
         """
@@ -680,7 +680,7 @@ class Bet(models.Model):
         :return: True if canceled bet
         :rtype: bool
         """
-        return self.event.outcome == Event.EVENT_OUTCOME_CHOICES.CANCELLED
+        return self.event.outcome == Event.CANCELLED
 
 
 class Transaction(models.Model):
@@ -692,25 +692,31 @@ class Transaction(models.Model):
         verbose_name = 'transakcja'
         verbose_name_plural = 'transakcje'
 
-    TRANSACTION_TYPE_CHOICES = Choices(
-        ('BUY_YES', 1, u'zakup udziałów na TAK'),
-        ('SELL_YES', 2, u'sprzedaż udziałów na TAK'),
-        ('BUY_NO', 3, u'zakup udziałów na NIE'),
-        ('SELL_NO', 4, u'sprzedaż udziałów na NIE'),
-        ('EVENT_CANCELLED_REFUND', 5, u'zwrot po anulowaniu wydarzenia'),
-        ('EVENT_CANCELLED_DEBIT', 6, u'obciążenie konta po anulowaniu wydarzenia'),
-        ('EVENT_WON_PRIZE', 7, u'wygrana po rozstrzygnięciu wydarzenia'),
-        ('TOPPED_UP_BY_APP', 8, u'doładowanie konta przez aplikację'),
-        ('BONUS', 9, u'bonus')
+    BUY_YES, SELL_YES, BUY_NO, SELL_NO, \
+    EVENT_CANCELLED_REFUND, EVENT_CANCELLED_DEBIT, \
+    EVENT_WON_PRIZE, TOPPED_UP, BONUS = range(1, 10)
+    TRANSACTION_TYPE_CHOICES = (
+        (BUY_YES, u'zakup udziałów na TAK'),
+        (SELL_YES, u'sprzedaż udziałów na TAK'),
+        (BUY_NO, u'zakup udziałów na NIE'),
+        (SELL_NO, u'sprzedaż udziałów na NIE'),
+        (EVENT_CANCELLED_REFUND, u'zwrot po anulowaniu wydarzenia'),
+        (EVENT_CANCELLED_DEBIT, u'obciążenie konta po anulowaniu wydarzenia'),
+        (EVENT_WON_PRIZE, u'wygrana po rozstrzygnięciu wydarzenia'),
+        (TOPPED_UP, u'doładowanie konta przez aplikację'),
+        (BONUS, u'bonus')
     )
 
     # Transactions changing event price: BUY_YES, SELL_YES, BUY_NO, SELL_NO
-    BUY_SELL_TYPES = (
-        TRANSACTION_TYPE_CHOICES.BUY_YES,
-        TRANSACTION_TYPE_CHOICES.SELL_YES,
-        TRANSACTION_TYPE_CHOICES.BUY_NO,
-        TRANSACTION_TYPE_CHOICES.SELL_NO,
-    )
+    BUY_SELL_TYPES = (BUY_YES, SELL_YES, BUY_NO, SELL_NO)
+    EVENT_SOLVED_TYPES = (EVENT_CANCELLED_REFUND, EVENT_CANCELLED_DEBIT, EVENT_WON_PRIZE)
+    BONUS_TYPES = (TOPPED_UP, BONUS)
+
+    YES_OUTCOME = (BUY_YES, SELL_YES)
+    NO_OUTCOME = (BUY_NO, SELL_NO)
+
+    BUY_TYPES = (BUY_YES, BUY_NO)
+    SELL_TYPES = (SELL_YES, SELL_NO)
 
     objects = TransactionManager()
 
@@ -725,7 +731,7 @@ class Transaction(models.Model):
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
 
     def __unicode__(self):
-        return u'%s przez %s' % (self.TRANSACTION_TYPE_CHOICES[self.type].label, self.user)
+        return u'%s przez %s' % (self.get_type_display(), self.user)
 
     @property
     def total_cash(self):
