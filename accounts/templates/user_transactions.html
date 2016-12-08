@@ -7,7 +7,7 @@
             <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
             <div class="prawa">
                 <span class="history-action">{{ transaction.get_type_display|upper }}</span>
-                <span class="reputy-change {% if transaction.total_cash > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total_cash|formatted:"True" }}</span>
+                <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.price|formatted:"True" }}</span>
                 {# <span class="wallet-change {% if transaction.total_wallet >= 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total_wallet|formatted:"True" }}</span>#}
                 <span class="event-date">{{ transaction.date }}</span>
             </div>
