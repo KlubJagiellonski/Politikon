@@ -74,7 +74,7 @@ class UserProfileDetailView(DetailView):
         user = self.get_object()
         portfolio_page = Paginator(user.bets.get_in_progress(), PORTFOLIO_ON_PAGE).page(1)
         notifications_page = Paginator(Bet.objects.get_finished(user), NOTIFICATIONS_ON_PAGE).page(1)
-        transactions_page = Paginator(Transaction.objects.get_cumulated_user_transactions(user),
+        transactions_page = Paginator(Transaction.objects.get_user_transactions_after_reset(user),
                                            TRANSACTIONS_ON_PAGE).page(1)
         context.update(UserProfile.objects.get_user_positions(user))
         context.update({
@@ -111,7 +111,7 @@ class UserDetailView(DetailView):
         user = self.get_object()
         portfolio_page = Paginator(user.bets.get_in_progress(), PORTFOLIO_ON_PAGE).page(1)
         notifications_page = Paginator(Bet.objects.get_finished(user), NOTIFICATIONS_ON_PAGE).page(1)
-        transactions_page = Paginator(Transaction.objects.get_cumulated_user_transactions(user),
+        transactions_page = Paginator(Transaction.objects.get_user_transactions_after_reset(user),
                                            TRANSACTIONS_ON_PAGE).page(1)
         context.update(UserProfile.objects.get_user_positions(user))
         context.update({
@@ -194,7 +194,7 @@ class TransactionsListView(ListView):
 
     def get_queryset(self):
         user = self.get_object()
-        return Transaction.objects.get_cumulated_user_transactions(user)
+        return Transaction.objects.get_user_transactions_after_reset(user)
 
     def get_context_data(self, *args, **kwargs):
         context = super(TransactionsListView, self).get_context_data(*args, **kwargs)

@@ -286,7 +286,7 @@ class BetManager(models.Manager):
         return self.filter(
             event__outcome=Event.IN_PROGRESS,
             has__gt=0,
-        ).order_by('event__estimated_end_date')
+        ).order_by('event__estimated_end_date').select_related('event')
 
     def get_finished(self, user):
         """
@@ -301,7 +301,7 @@ class BetManager(models.Manager):
             has__gt=0,
             user=user
         ).filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=user.reset_date)).\
-            order_by('-event__end_date')
+            order_by('-event__end_date').select_related('event')
 
 
 class TransactionManager(models.Manager):
@@ -315,7 +315,8 @@ class TransactionManager(models.Manager):
         super(TransactionManager, self).__init__()
 
     def get_user_transactions_after_reset(self, user):
-        return self.model.objects.filter(user=user, date__gte=user.reset_date).order_by('-date')
+        return self.model.objects.filter(user=user, date__gte=user.reset_date).order_by('-date')\
+            .select_related('event')
 
     def get_cumulated_user_transactions(self, user):
         queryset = self.get_user_transactions_after_reset(user)
@@ -324,7 +325,7 @@ class TransactionManager(models.Manager):
         for q in queryset:
             if old is None:
                 old = q
-            elif q.type == old.type and q.event == old.event:
+            elif q.type == old.type and q.event_id == old.event_id:
                 old.price += q.price
             else:
                 result.append(old)
