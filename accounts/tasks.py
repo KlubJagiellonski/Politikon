@@ -5,6 +5,7 @@ from constance import config
 from django.db import transaction
 
 from accounts.models import UserProfile
+from events.models import Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -60,11 +61,25 @@ def create_accounts_snapshot():
 
 
 @task
+def update_users_last_transaction():
+    """
+    Update users last transaction date.
+    """
+    for user in UserProfile.objects.get_users().iterator():
+        transactions = Transaction.objects.filter(user=user, type__in=Transaction.BUY_SELL_TYPES).\
+            order_by('-date')[:1]
+        if len(transactions):
+            user.last_transaction = transactions[0].date
+            user.save()
+
+
+@task
 def update_users_classification():
     """
     Update weekly and monthly users classifications.
     """
     for user in UserProfile.objects.get_users().iterator():
+
         weekly_result = user.get_last_week_reputation_change()
         monthly_result = user.get_last_month_reputation_change()
 

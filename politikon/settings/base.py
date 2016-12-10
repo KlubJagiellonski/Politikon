@@ -89,11 +89,6 @@ CELERYBEAT_SCHEDULE = {
     #     'task': 'canvas.tasks.consume_publish_activities_tasks',
     #     'schedule': timedelta(minutes=5)
     # },
-    #  No daily topup
-    #  'topup_accounts_task': {
-    #      'task': 'accounts.tasks.topup_accounts_task',
-    #      'schedule': crontab(hour=0, minute=0)
-    #  },
     'calculate_price_change': {
         'task': 'events.tasks.calculate_price_change',
         'schedule': crontab(hour=0, minute=0)
@@ -102,6 +97,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.update_users_classification',
         'schedule': crontab(minute=45)
     },
+    'update_users_last_transaction': {
+        'task': 'accounts.tasks.update_users_last_transaction',
+        'schedule': crontab(hour=0, minute=1)
+    }
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
