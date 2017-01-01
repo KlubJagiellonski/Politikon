@@ -22,6 +22,7 @@ from .templatetags.display import render_bet, render_event, render_events, rende
     render_featured_events, render_bet_status, userstats, outcome, render_finish_date, og_title
 
 from accounts.factories import UserFactory
+from accounts.models import UserProfile
 from constance import config
 from politikon.templatetags.path import startswith
 
@@ -381,7 +382,72 @@ class EventsModelTestCase(TestCase):
         """
         Cancel event
         """
-        # TODO:
+        event = EventFactory()
+        event.cancel()
+        self.assertIsNotNone(event.end_date)
+        self.assertEqual(Event.CANCELLED, event.outcome)
+
+    def test_cancel_and_reputy(self):
+        """
+        Test calculation reputy after cancel event
+        """
+        event = EventFactory()
+        user = UserFactory(
+            total_cash=100,
+        )
+
+        TransactionFactory(
+            user=user,
+            event=event,
+            type=Transaction.BUY_YES,
+            price=-78,
+            quantity=1,
+        )
+
+        event.cancel()
+
+        transaction = Transaction.objects.all().order_by('date')[1]
+        self.assertEqual(78, transaction.price)
+        self.assertEqual(Transaction.EVENT_CANCELLED_REFUND, transaction.type)
+
+        user = UserProfile.objects.get(pk=user.pk)
+        self.assertEqual(user.total_cash, 178)
+
+    def test_cancel_and_reputy_debit(self):
+        """
+        Test calculation reputy after cancel event
+        """
+        event = EventFactory()
+        user = UserFactory(
+            total_cash=100,
+        )
+
+        TransactionFactory(
+            user=user,
+            event=event,
+            type=Transaction.BUY_YES,
+            price=-12,
+            quantity=1,
+        )
+
+        TransactionFactory(
+            user=user,
+            event=event,
+            type=Transaction.SELL_YES,
+            price=22,
+            quantity=1,
+        )
+
+        event.cancel()
+
+        transactions = Transaction.objects.filter(type=Transaction.EVENT_CANCELLED_DEBIT)
+        self.assertEqual(1, len(transactions))
+        transaction = transactions[0]
+        self.assertEqual(-10, transaction.price)
+        self.assertEqual(Transaction.EVENT_CANCELLED_DEBIT, transaction.type)
+
+        user = UserProfile.objects.get(pk=user.pk)
+        self.assertEqual(user.total_cash, 90)
 
 
 class EventsManagerTestCase(TestCase):
