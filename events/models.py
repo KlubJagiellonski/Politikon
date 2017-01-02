@@ -494,8 +494,11 @@ class Event(models.Model):
                     t.user: 0
                 })
             if t.type in Transaction.BUY_SELL_TYPES:
-                # for transaction type BUY the price is below 0
-                users[t.user] += t.quantity * t.price
+                # for transaction type BUY the price is below 0 that means refund should be
+                # other side. For BUY (buy is always -) refund should be (+) (EVENT_CANCELLED_REFUND)
+                # but for BUY and SELL with profit refund should be (-) (EVENT_CANCELLED_DEBIT)
+                users[t.user] -= t.quantity * t.price
+
         for user, refund in users.iteritems():
             if refund == 0:
                 continue
@@ -509,7 +512,7 @@ class Event(models.Model):
                 user=user,
                 event=self,
                 type=transaction_type,
-                price=abs(refund)
+                price=refund
             )
 
 
