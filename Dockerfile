@@ -48,5 +48,6 @@ ENV POSTGRES_PORT_5432_TCP_ADDR="politikon_db"
 
 ADD /requirements.txt /app/
 WORKDIR /app
+RUN apt-get install zlib1g-dev
 RUN pip install -r requirements.txt
 
