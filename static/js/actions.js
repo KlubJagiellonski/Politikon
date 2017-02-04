@@ -71,15 +71,6 @@
                         for_price: $(this).data('price')
                     };
                     var makebets = $('body').find('#makeabet [data-event_id="' + event_id + '"]').parent();
-                    var word_yes = 'TAK';    // TODO: resolve multi-language problem
-                    var word_no = 'NIE';    // TODO: resolve multi-language problem
-                    var word_bet_yes = 'Jesteś na TAK';    // TODO: resolve multi-language problem
-                    var word_bet_no = 'Jesteś na NIE';    // TODO: resolve multi-language problem
-                    var word_eng_yes = 'YES';    // TODO: resolve multi-language problem
-                    var word_eng_no = 'NO';    // TODO: resolve multi-language problem
-                    var word_true = 'True';
-                    var word_false = 'False';
-
                     $.ajax({
                         type: 'POST',
                         data: JSON.stringify(data),
@@ -93,71 +84,77 @@
                                 var bet = data.updates.bets[0];
                                 var user = data.updates.user;
                                 var bets_type = '';     // YES or NO
-                                makebets.each(function (idx) {
+                                makebets.each(function () {
                                     // console.log($(this));
-                                    $(this).children('.currentbet').children('p').children('.has_bets').html(bet.has);
-                                    $(this).children('.currentbet').children('p').children('.bought_avg_price').html(Math.round(bet.bought_avg_price));
+                                    // update element with bets number and average bet price
+                                    var currentbet = $(this).children('.currentbet');
+                                    var p_el = currentbet.children('p');
+                                    var first_currentbet = currentbet.children().first();
+                                    var a_betYes = $(this).children('.a_betYES');
+                                    var a_betNo = $(this).children('.a_betNO');
+                                    var betYes = a_betYes.children('.betYES');
+                                    var betNo = a_betNo.children('.betNO');
+
+                                    p_el.children('.has_bets').html(bet.has);
+                                    p_el.children('.bought_avg_price').html(Math.round(bet.bought_avg_price));
+
                                     if ($(this).hasClass('collapsible')) {
                                         $(this).children('.change').addClass('hidden');
                                     }
+                                    $(this).addClass('morebets');
 
                                     if (bet.outcome == true) {
                                         // You have YES bets for the event
-                                        bets_type = word_bet_yes;
-                                        $(this).addClass('morebets');
-                                        $(this).children('.a_betYES').data('price', event.buy_for_price);
-                                        $(this).children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
-                                        $(this).children('.a_betYES').children('.betYES').children('.txt').html('dokup na „TAK“');
-                                        $(this).children('.a_betNO').data('price', event.sell_for_price);
-                                        $(this).children('.a_betNO').data('outcome', word_eng_yes);
-                                        $(this).children('.a_betNO').data('buy', word_false);
-                                        $(this).children('.a_betNO').children('.betNO').children('.value').html(event.sell_for_price);
-                                        $(this).children('.a_betNO').children('.betNO').children('.txt').html('sprzedaj zakład');
-                                        $(this).children('.currentbet').children().first()
-                                            .removeClass('change')
+                                        bets_type = words['youYes'];
+                                        a_betYes.data('price', event.buy_for_price);
+                                        betYes.children('.value').html(event.buy_for_price);
+                                        betYes.children('.txt').html(words['buyYes']);
+                                        a_betNo.data('price', event.sell_for_price);
+                                        a_betNo.data('outcome', true);
+                                        a_betNo.data('buy', false);
+                                        betNo.children('.value').html(event.sell_for_price);
+                                        betNo.children('.txt').html(words['sellBet']);
+                                        first_currentbet.removeClass('change')
                                             .addClass('changeYES')
                                             .html(bets_type);
                                     } else {    // bet.outcome = false
                                         // You have NO bets for the event
-                                        bets_type = word_bet_no;
-                                        $(this).addClass('morebets');
-                                        $(this).children('.a_betYES').data('price', event.sell_against_price);
-                                        $(this).children('.a_betYES').data('outcome', word_eng_no);
-                                        $(this).children('.a_betYES').data('buy', word_false);
-                                        $(this).children('.a_betYES').children('.betYES').children('.value').html(event.sell_against_price);
-                                        $(this).children('.a_betYES').children('.betYES').children('.txt').html('sprzedaj zakład');
-                                        $(this).children('.a_betNO').data('price', event.buy_against_price);
-                                        $(this).children('.a_betNO').children('.betNO').children('.value').html(event.buy_against_price);
-                                        $(this).children('.a_betNO').children('.betNO').children('.txt').html('dokup na „NIE“');
-                                        $(this).children('.currentbet').children().first()
-                                            .removeClass('change')
+                                        bets_type = words['youNo'];
+                                        a_betYes.data('price', event.sell_against_price);
+                                        a_betYes.data('outcome', false);
+                                        a_betYes.data('buy', false);
+                                        betYes.children('.value').html(event.sell_against_price);
+                                        betYes.children('.txt').html(words['sellBet']);
+                                        a_betNo.data('price', event.buy_against_price);
+                                        betNo.children('.value').html(event.buy_against_price);
+                                        betNo.children('.txt').html(words['buyNo']);
+                                        first_currentbet.removeClass('change')
                                             .addClass('changeNO')
                                             .html(bets_type);
                                     }
                                     if (bet.has == 0) {    // bet.has = 0
                                         // You don't have any bets for the event
                                         $(this).removeClass('morebets');
-                                        $(this).children('.a_betYES').children('.betYES').children('.txt').html(word_yes);
-                                        $(this).children('.a_betNO').children('.betNO').children('.txt').html(word_no);
-                                        $(this).children('.a_betYES').children('.betYES').children('.value').html(event.buy_for_price);
-                                        $(this).children('.a_betNO').children('.betNO').children('.value').html(event.buy_against_price);
-                                        $(this).children('.a_betYES').data('price', event.buy_for_price);
-                                        $(this).children('.a_betNO').data('price', event.buy_against_price);
-                                        $(this).children('.a_betYES').data('buy', word_true);
-                                        $(this).children('.a_betNO').data('buy', word_true);
-                                        $(this).children('.a_betYES').data('outcome', word_eng_yes);
-                                        $(this).children('.a_betNO').data('outcome', word_eng_no);
-                                        $(this).children('.currentbet').hide();
+                                        betYes.children('.txt').html(words['yes']);
+                                        betNo.children('.txt').html(words['no']);
+                                        betYes.children('.value').html(event.buy_for_price);
+                                        betNo.children('.value').html(event.buy_against_price);
+                                        a_betYes.data('price', event.buy_for_price);
+                                        a_betNo.data('price', event.buy_against_price);
+                                        a_betYes.data('buy', true);
+                                        a_betNo.data('buy', true);
+                                        a_betYes.data('outcome', true);
+                                        a_betNo.data('outcome', false);
+                                        currentbet.hide();
                                         if ($(this).hasClass('collapsible')) {
                                             $(this).children('.change').removeClass('hidden');
                                         }
-                                        $(this).children('.currentbet').children().first()
-                                            .removeClass('changeNO')
+                                        first_currentbet.removeClass('changeNO')
                                             .removeClass('changeYES')
                                             .addClass('change')
                                             .html(bets_type);
                                     } else {
-                                        $(this).children('.currentbet').show();
+                                        currentbet.show();
                                     }
                                 });
 

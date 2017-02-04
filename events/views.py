@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -14,8 +13,7 @@ from django.views.generic import DetailView, ListView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
-from .models import Event, Bet, Transaction, SolutionVote
-from .utils import create_bets_dict
+from .models import Event, Bet, SolutionVote
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
 
@@ -34,7 +32,7 @@ class EventsListView(ListView):
         if tag:
             events = Event.objects.filter(tags__name__in=[tag]).distinct()
         for event in events:
-            event.my_bet = event.get_user_bet(self.request.user)
+            event.bet_line = event.get_user_bet(self.request.user)
         return events
 
     def get_context_data(self, *args, **kwargs):
@@ -64,7 +62,7 @@ class EventDetailView(DetailView):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
         event = self.get_event()
         user = self.request.user
-        bet = event.get_user_bet(user)
+        bet_line = event.get_user_bet(user)
 
         # Voted
         voted = None
@@ -82,13 +80,16 @@ class EventDetailView(DetailView):
             similar_event.my_bet = similar_event.get_user_bet(self.request.user)
 
         # Share module
-        if bet:
-            share_url = u'%s?vote=%s' % (event.get_absolute_url(), 'YES' if bet.outcome else 'NO')
+        if bet_line:
+            share_url = u'%s?vote=%s' % (
+                event.get_absolute_url(),
+                'true' if bet_line['outcome'] else 'false',
+            )
         else:
             share_url = event.get_absolute_url()
 
         context.update({
-            'bet': event.get_user_bet(user),
+            'bet_line': bet_line,
             'active': 1,
             'voted': voted,
             'event_dict': event.event_dict,
@@ -106,21 +107,26 @@ class EventDetailView(DetailView):
 @csrf_exempt
 @transaction.atomic
 def create_transaction(request, event_id):
+    """
+    Buy or sell bet
+    :param request:
+    :param event_id:
+    :return:
+    """
     data = json.loads(request.body)
     try:
-        buy = (data['buy'] == 'True')   # kupno, sprzedaz
-        outcome = data['outcome']     # tak nie
-        for_price = data['for_price']  # cena
-    except:
-        return HttpResponseBadRequest(_("Something went wrong, try again in a \
-                                        few seconds."))
+        # simple params validation
+        buy = bool(data['buy'])              # True - buy, False - sell
+        outcome = bool(data['outcome'])      # True - YES,   False - NO
+        for_price = int(data['for_price'])   # price
+
+    except KeyError:
+        return HttpResponseBadRequest(_("Something went wrong, try again in a few seconds."))
     try:
         if buy:
-            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id,
-                                                     outcome, for_price)
+            user, event, bet = Bet.objects.buy_a_bet(request.user, event_id, outcome, for_price)
         else:
-            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id,
-                                                      outcome, for_price)
+            user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
     except NonexistantEvent:
         raise Http404
     except PriceMismatch as e:
