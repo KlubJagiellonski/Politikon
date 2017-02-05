@@ -1,90 +1,94 @@
-//pokaż menu z hamburgera
-$(document).on('click', '.burger', function () {
-    $('#maintop .graj .avatarmenu ul').removeClass('display');
-    $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-    $('#wallet-not').css({'margin-top': ''});
-    $('#wallet-not').removeClass("opacity");
-    $('#maintop .userdata .wallet .arrowup').removeClass("display");
-    $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
-    $('.rozsrzygniecie').removeClass("display");
-    $('.rozsrzygniecie').addClass("opacity");
-    $('#maintop .mainmenu').addClass("display");
-    $('.overlay').addClass("display");
-    $('#login').removeClass("display");
-    $('#login').removeClass("opacity");
-    setTimeout(function () {
-        $('#maintop .mainmenu').addClass("opacity");
-        $('.overlay').addClass("opacity");
-    }, 100); // opoznienie
-});
+(function() {
+    $(document).ready(function () {
+        //pokaż menu z hamburgera
+        $('.burger').click(function () {
+            $('#maintop .graj .avatarmenu ul').removeClass('display');
+            $('#maintop .graj .avatarmenu ul').removeClass('opacity');
+            $('#wallet-not').css({'margin-top': ''});
+            $('#wallet-not').removeClass("opacity");
+            $('#maintop .userdata .wallet .arrowup').removeClass("display");
+            $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+            $('.rozsrzygniecie').removeClass("display");
+            $('.rozsrzygniecie').addClass("opacity");
+            $('#maintop .mainmenu').addClass("display");
+            $('.overlay').addClass("display");
+            $('#login').removeClass("display");
+            $('#login').removeClass("opacity");
+            setTimeout(function () {
+                $('#maintop .mainmenu').addClass("opacity");
+                $('.overlay').addClass("opacity");
+            }, 100); // opoznienie
+        });
 
-//pokaż menu z avatara
-$(document).on('click', '#maintop .graj .image', function () {
-    if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
-        $('#maintop .mainmenu').removeClass('display');
-        $('#maintop .mainmenu').removeClass('opacity');
-        $('#wallet-not').css({'margin-top': ''});
-        $('#wallet-not').removeClass("opacity");
-        $('#maintop .userdata .wallet .arrowup').removeClass("display");
-        $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
-        $('.rozsrzygniecie').removeClass("display");
-        $('.rozsrzygniecie').removeClass("opacity");
-        $('#maintop .graj .avatarmenu ul').addClass("display");
-        $('.overlay').addClass("display");
-        $('#login').removeClass("display");
-        $('#login').removeClass("opacity");
-        setTimeout(function () {
-            $('#maintop .graj .avatarmenu ul').addClass("opacity");
-            $('.overlay').addClass("opacity");
-        }, 100); // opoznienie
-    } else {
-        $('.overlay').click();
-    }
-});
+        //pokaż menu z avatara
+        $('#maintop .graj .image').click(function () {
+            if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
+                $('#maintop .mainmenu').removeClass('display');
+                $('#maintop .mainmenu').removeClass('opacity');
+                $('#wallet-not').css({'margin-top': ''});
+                $('#wallet-not').removeClass("opacity");
+                $('#maintop .userdata .wallet .arrowup').removeClass("display");
+                $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+                $('.rozsrzygniecie').removeClass("display");
+                $('.rozsrzygniecie').removeClass("opacity");
+                $('#maintop .graj .avatarmenu ul').addClass("display");
+                $('.overlay').addClass("display");
+                $('#login').removeClass("display");
+                $('#login').removeClass("opacity");
+                setTimeout(function () {
+                    $('#maintop .graj .avatarmenu ul').addClass("opacity");
+                    $('.overlay').addClass("opacity");
+                }, 100); // opoznienie
+            } else {
+                $('.overlay').click();
+            }
+        });
 
-//pokaż powiadomienia
-$(document).on('click', '#maintop .userdata .wallet.notification', function () {
-    if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
-        $('#maintop .mainmenu').removeClass('display');
-        $('#maintop .mainmenu').removeClass('opacity');
-        $('#maintop .graj .avatarmenu ul').removeClass('display');
-        $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-        $('.rozsrzygniecie').removeClass("display");
-        $('.rozsrzygniecie').removeClass("opacity");
-        $('#wallet-not').css({'margin-top': '0px'});
-        $('#maintop .userdata .wallet .arrowup').addClass("display");
-        $('.overlay').addClass("display");
-        $('#login').removeClass("display");
-        $('#login').removeClass("opacity");
-        setTimeout(function () {
-            $('#wallet-not').addClass("opacity");
-            $('#maintop .userdata .wallet .arrowup').addClass("opacity");
-            $('.overlay').addClass("opacity");
-        }, 100); // opoznienie
-    } else {
-        $('.overlay').click();
-    }
-});
+        //pokaż powiadomienia
+        $('#maintop .userdata .wallet.notification').click(function () {
+            if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
+                $('#maintop .mainmenu').removeClass('display');
+                $('#maintop .mainmenu').removeClass('opacity');
+                $('#maintop .graj .avatarmenu ul').removeClass('display');
+                $('#maintop .graj .avatarmenu ul').removeClass('opacity');
+                $('.rozsrzygniecie').removeClass("display");
+                $('.rozsrzygniecie').removeClass("opacity");
+                $('#wallet-not').css({'margin-top': '0px'});
+                $('#maintop .userdata .wallet .arrowup').addClass("display");
+                $('.overlay').addClass("display");
+                $('#login').removeClass("display");
+                $('#login').removeClass("opacity");
+                setTimeout(function () {
+                    $('#wallet-not').addClass("opacity");
+                    $('#maintop .userdata .wallet .arrowup').addClass("opacity");
+                    $('.overlay').addClass("opacity");
+                }, 100); // opoznienie
+            } else {
+                $('.overlay').click();
+            }
+        });
 
-//ukryj wszystko po kliknieciu w overlay
-$(document).on('click', '.overlay', function () {
-    $('#maintop .mainmenu').removeClass('display');
-    $('#maintop .mainmenu').removeClass('opacity');
-    $('#maintop .graj .avatarmenu ul').removeClass('display');
-    $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-    $('#maintop .userdata .wallet .arrowup').removeClass("display");
-    $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
-    $('.rozsrzygniecie').removeClass("display");
-    $('.rozsrzygniecie').removeClass("opacity");
-    $('#wallet-not').removeClass("opacity");
-    $('.overlay').removeClass("opacity");
-    $('#login').removeClass("display");
-    $('#login').removeClass("opacity");
-    setTimeout(function () {
-        $('#wallet-not').css({'margin-top': ''});
-        $('.overlay').removeClass("display");
-    }, 150); // opoznienie
-});
+        //ukryj wszystko po kliknieciu w overlay
+        $('.overlay').click(function () {
+            $('#maintop .mainmenu').removeClass('display');
+            $('#maintop .mainmenu').removeClass('opacity');
+            $('#maintop .graj .avatarmenu ul').removeClass('display');
+            $('#maintop .graj .avatarmenu ul').removeClass('opacity');
+            $('#maintop .userdata .wallet .arrowup').removeClass("display");
+            $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
+            $('.rozsrzygniecie').removeClass("display");
+            $('.rozsrzygniecie').removeClass("opacity");
+            $('#wallet-not').removeClass("opacity");
+            $('.overlay').removeClass("opacity");
+            $('#login').removeClass("display");
+            $('#login').removeClass("opacity");
+            setTimeout(function () {
+                $('#wallet-not').css({'margin-top': ''});
+                $('.overlay').removeClass("display");
+            }, 150); // opoznienie
+        });
+    });
+})();
 
 //notifications - scroll setup
 $(function () {
