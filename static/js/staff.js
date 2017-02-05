@@ -60,5 +60,18 @@
             });
         });
 
+        //ukryj okno logowania po kliknieciu w X
+        $(function () {
+            $('.login-close').click(function () {
+                $('#maintop .mainmenu').removeClass('display');
+                $('#maintop .mainmenu').removeClass('opacity');
+                $('.overlay').removeClass("opacity");
+                $('.blankoverlay').removeClass("display");
+                $('#login').removeClass("display");
+                setTimeout(function () {
+                    $('.overlay').removeClass("display");
+                }, 150); // opoznienie
+            });
+        });
     });
 })();
