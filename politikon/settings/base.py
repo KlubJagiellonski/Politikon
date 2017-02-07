@@ -266,7 +266,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
 
     'django_assets',
-    'social.apps.django_app.default',
+    'social_django',
 
     # 'oauth_tokens',
     # 'm2m_history',
