@@ -50,9 +50,7 @@
                 </a>
                 {% endif %}
             {% endif %}
-                <div id="makeabet" {% if bet.has_any %} class="morebets" {% endif %} >
-                    {% render_bet event bet True %}
-                </div>
+            {% render_bet event bet_line %}
         </figcaption>
     </figure>
 </div>
