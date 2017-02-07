@@ -24,7 +24,8 @@ class EventAdmin(admin.ModelAdmin):
         ('Dane statystyczne', {'fields': ('B', 'current_buy_for_price', 'current_buy_against_price',
                                           'current_sell_for_price', 'current_sell_against_price',
                                           'last_transaction_date', 'Q_for', 'Q_against', 'turnover',
-                                          'absolute_price_change', 'price_change')})
+                                          'absolute_price_change', 'price_change', 'created_date',
+                                          'created_by',)})
     )
 
     readonly_fields = [
@@ -40,6 +41,8 @@ class EventAdmin(admin.ModelAdmin):
         'turnover',
         'absolute_price_change',
         'price_change',
+        'created_date',
+        'created_by',
     ]
 
     list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'outcome',

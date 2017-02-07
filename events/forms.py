@@ -18,3 +18,25 @@ class EventForm(forms.ModelForm):
         self.action = None
         super(EventForm, self).__init__(*args, **kwargs)
         self.fields['estimated_end_date'].initial = timezone.now() + relativedelta(months=1)
+
+
+class EventCreateForm(forms.ModelForm):
+    """
+    Adding new event by politikon users form
+    """
+    def save(self, commit=True):
+        """
+        Save event form to object
+        :param commit: If True, then the changes to ``instance`` will be saved to the database.
+        :type commit: bool
+        :return: new event instance
+        :rtype: Event
+        """
+        self.instance.created_by = self.instance.logged_user
+        return super(EventCreateForm, self).save(commit)
+
+    class Meta:
+        model = Event
+        fields = ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
+                  'is_featured', 'tags', 'short_title', 'title_fb_yes', 'title_fb_no',
+                  'twitter_tag')
