@@ -168,10 +168,8 @@ class BetManager(models.Manager):
 
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, bet_outcome)
 
-        if bet_outcome:
-            transaction_type = Transaction.BUY_YES
-        else:
-            transaction_type = Transaction.BUY_NO
+        # bet on 'YES' if bet_outcome is True else bet on 'NO'
+        transaction_type = Transaction.BUY_YES if bet_outcome else Transaction.BUY_NO
 
         requested_price = price
         current_tx_price = event.price_for_outcome(bet_outcome, direction=Bet.BUY)
