@@ -53,15 +53,14 @@ REDIS_PORT = REDIS_PARAMS.port
 REDIS_DB = 0
 REDIS_CONNECT_RETRY = False
 
-BROKER_URL = REDIS_BASE_URL + "/0"
-CELERY_RESULT_BACKEND = REDIS_BASE_URL + "/1"
+BROKER_URL = REDIS_BASE_URL
+CELERY_RESULT_BACKEND = REDIS_BASE_URL
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 
 CELERY_SEND_EVENTS = True
 CELERY_TASK_RESULT_EXPIRES = 10
 CELERY_DISABLE_RATE_LIMITS = False
 CELERY_IGNORE_RESULT = True
-#CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_ACCEPT_CONTENT = ['json', 'application/x-python-serialize']
 
 CELERYBEAT_SCHEDULE = {
@@ -277,7 +276,6 @@ INSTALLED_APPS = (
 
     'constance',
     'constance.backends.database',
-    'djcelery',
     'gunicorn',
     'rest_framework',
     'rest_framework.authtoken',
@@ -374,9 +372,6 @@ JINJA2_EXTENSIONS = [
 GRAPPELLI_ADMIN_TITLE = 'Politikon'
 GRAPPELLI_AUTOCOMPLETE_LIMIT = 10
 # GRAPPELLI_SWITCH_USER = True
-
-import djcelery
-djcelery.setup_loader()
 
 if 'test' in sys.argv:
     try:
