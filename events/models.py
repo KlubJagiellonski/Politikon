@@ -75,9 +75,11 @@ class Event(models.Model):
         'B'
     ])
 
-    title = models.TextField(u'tytuł wydarzenia')
-    short_title = models.TextField(u'tytuł promocyjny wydarzenia')
-    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True,
+    title = models.CharField(u'tytuł wydarzenia', max_length=255)
+    short_title = models.CharField(verbose_name=u'tytuł promocyjny wydarzenia', max_length=255,
+                                   default='', blank=True)
+    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True, blank=True,
+                                   default='',
                                    validators=[
                                        RegexValidator(
                                            regex=r'^([^\s]+)$',
@@ -86,8 +88,10 @@ class Event(models.Model):
                                        ),
                                    ])
 
-    title_fb_yes = models.TextField(u'tytuł na TAK obiektu FB', default='')
-    title_fb_no = models.TextField(u'tytuł na NIE obiektu FB', default='')
+    title_fb_yes = models.CharField(u'tytuł na TAK obiektu FB', max_length=255, default='',
+                                    blank=True, null=True)
+    title_fb_no = models.CharField(u'tytuł na NIE obiektu FB', max_length=255, default='',
+                                   blank=True, null=True)
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
