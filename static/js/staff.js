@@ -2,7 +2,7 @@
     $(document).ready(function () {
 
         // Show dialog with voting
-        $('.show-zakoncz-wydarzenie').click(function () {
+        $('.show-zakoncz-wydarzenie').on('click', function () {
             $('#login').addClass("display");
             $('.overlay').addClass("display");
 
@@ -13,7 +13,7 @@
         });
 
         // Vote for solution
-        $('#resolveabet .a_bet').click(function (e) {
+        $('#resolveabet .a_bet').on('click', function (e) {
             var event_id = $(this).data('event_id');
             var outcome = $(this).data('outcome');
             var data = {outcome: outcome};
@@ -62,7 +62,7 @@
 
         //ukryj okno logowania po kliknieciu w X
         $(function () {
-            $('.login-close').click(function () {
+            $('.login-close').on('click', function () {
                 $('#maintop .mainmenu').removeClass('display');
                 $('#maintop .mainmenu').removeClass('opacity');
                 $('.overlay').removeClass("opacity");
