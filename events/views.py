@@ -81,7 +81,7 @@ class EventDetailView(DetailView):
 
         # Share module
         if bet_line:
-            share_url = u'%s?vote=%s' % (
+            share_url = u'{}?vote={}'.format(
                 event.get_absolute_url(),
                 'true' if bet_line['outcome'] else 'false',
             )
