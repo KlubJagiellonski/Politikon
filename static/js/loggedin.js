@@ -1,7 +1,7 @@
 (function() {
     $(document).ready(function () {
         //pokaż menu z hamburgera
-        $('.burger').click(function () {
+        $('.burger').on('click', function () {
             $('#maintop .graj .avatarmenu ul').removeClass('display');
             $('#maintop .graj .avatarmenu ul').removeClass('opacity');
             $('#wallet-not').css({'margin-top': ''});
@@ -21,7 +21,7 @@
         });
 
         //pokaż menu z avatara
-        $('#maintop .graj .image').click(function () {
+        $('#maintop .graj .image').on('click', function () {
             if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
                 $('#maintop .mainmenu').removeClass('display');
                 $('#maintop .mainmenu').removeClass('opacity');
@@ -45,7 +45,7 @@
         });
 
         //pokaż powiadomienia
-        $('#maintop .userdata .wallet.notification').click(function () {
+        $('#maintop .userdata .wallet.notification').on('click', function () {
             if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
                 $('#maintop .mainmenu').removeClass('display');
                 $('#maintop .mainmenu').removeClass('opacity');
@@ -69,7 +69,7 @@
         });
 
         //ukryj wszystko po kliknieciu w overlay
-        $('.overlay').click(function () {
+        $('.overlay').on('click', function () {
             $('#maintop .mainmenu').removeClass('display');
             $('#maintop .mainmenu').removeClass('opacity');
             $('#maintop .graj .avatarmenu ul').removeClass('display');
@@ -263,13 +263,13 @@ $(function () {
         });
     }
 
-    $('.a-betresult').click(function () {
+    $('.a-betresult').on('click', function () {
         // set new finished bet as a read
         var bets = [$(this).data('bet_id')];
         check_bets_viewed(bets);
     });
 
-    $('#all-bets-result').click(function () {
+    $('#all-bets-result').on('click', function () {
         // set all new finished bets as a read
         var bets = [];
         $('.a-betresult').each(function () {
@@ -279,7 +279,7 @@ $(function () {
     });
 
     // It is neccessairy only when using wallet on /accounts/user_profile site.
-    $('#go-to-all-results').click(function () {
+    $('#go-to-all-results').on('click', function () {
         $('.overlay').click();
         $('#userinfo > ul > li > a[href=#powiadomieniaowynikach]').click();
     });
