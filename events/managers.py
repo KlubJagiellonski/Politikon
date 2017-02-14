@@ -256,12 +256,8 @@ class BetManager(models.Manager):
         if bet.has < quantity:
             raise InsufficientBets(_("You don't have enough shares."), bet)
 
-        if bet_outcome:
-            # bet on 'YES'
-            transaction_type = Transaction.SELL_YES
-        else:
-            # bet on 'NO'
-            transaction_type = Transaction.SELL_NO
+        # bet on 'YES' if bet_outcome is True else bet on 'NO'
+        transaction_type = Transaction.SELL_YES if bet_outcome else Transaction.SELL_NO
 
         Transaction.objects.create(
             user_id=user.id,
