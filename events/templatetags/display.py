@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django import template
 from django.utils import timezone
 
@@ -10,19 +10,18 @@ register = template.Library()
 
 
 @register.inclusion_tag('render_bet.html')
-def render_bet(event, bet, render_current):
+def render_bet(event, bet_line):
     return {
         'event': event,
-        'bet': bet,
-        'render_current': render_current
+        'bet': bet_line,
     }
 
 
 @register.inclusion_tag('render_event.html')
-def render_event(event, bet):
+def render_event(event, bet_line):
     return {
         'event': event,
-        'bet': bet,
+        'bet_line': bet_line,
     }
 
 
@@ -92,10 +91,8 @@ def render_finish_date(event):
 def og_title(event, vote=None, user=None):
     title = event.title
     if user:
-        bet = event.get_user_bet(user)
-        if bet.has == 0:
-            title = event.title
-        else:
+        bet = event.get_user_bet_object(user)
+        if bet and bet.has > 0:
             if event.is_in_progress:
                 verb = u'uważa że'
             elif bet.outcome and event.outcome == event.FINISHED_YES:
@@ -109,6 +106,9 @@ def og_title(event, vote=None, user=None):
                 title = u'%s %s %s' % (user.name, verb, event.title_fb_yes)
             else:
                 title = u'%s %s %s' % (user.name, verb, event.title_fb_no)
+        else:
+            title = event.title
+
     elif vote is not None:
         if event.is_in_progress:
             verb = u'Moim zdaniem'

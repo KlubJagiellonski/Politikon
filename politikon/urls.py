@@ -19,13 +19,13 @@ urlpatterns = patterns('',
     url(r'^grappelli/', include('grappelli.urls')),
 
     # User authentication url patternsapi
-    url('', include('social.apps.django_app.urls', namespace='social')),
+    # url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^api/', include(api_urls)),
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
-    url(r'^.well-known/acme-challenge/sJN3Ermg6w3afMwhPJ2PPlatJ9RXlWFDTeDnHzccpdU',
+    url(r'^.well-known/acme-challenge/(?P<acme>\w+)$',
         acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')

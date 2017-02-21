@@ -61,13 +61,13 @@ class EventsModelTestCase(TestCase):
             'sell_against_price': 50
         }, event.event_dict)
 
-        outcome1 = event.price_for_outcome('YES', 'BUY')
+        outcome1 = event.price_for_outcome(Bet.YES, Bet.BUY)
         self.assertEqual(event.current_buy_for_price, outcome1)
-        outcome2 = event.price_for_outcome('YES', 'SELL')
+        outcome2 = event.price_for_outcome(Bet.YES, Bet.SELL)
         self.assertEqual(event.current_sell_for_price, outcome2)
-        outcome3 = event.price_for_outcome('NO')
+        outcome3 = event.price_for_outcome(Bet.NO)
         self.assertEqual(event.current_buy_against_price, outcome3)
-        outcome4 = event.price_for_outcome('NO', 'SELL')
+        outcome4 = event.price_for_outcome(Bet.NO, Bet.SELL)
         self.assertEqual(event.current_sell_against_price, outcome4)
         with self.assertRaises(UnknownOutcome):
             event.price_for_outcome('OOOPS', 'MY MISTAKE')
@@ -222,11 +222,8 @@ class EventsModelTestCase(TestCase):
         self.assertEqual(0, event.Q_for)
         self.assertEqual(0, event.Q_against)
 
-        outcome_yes = 'YES'
-        outcome_no = 'NO'
-
         # TODO check this on paper
-        event.increment_quantity(outcome_yes, amount)
+        event.increment_quantity(Bet.YES, amount)
         self.assertEqual(amount, event.Q_for)
         self.assertEqual(0, event.Q_against)
         self.assertNotEqual(start_event_dict, event.event_dict)
@@ -235,7 +232,7 @@ class EventsModelTestCase(TestCase):
         self.assertNotEqual(start_event_dict['buy_against_price'], event.event_dict['buy_against_price'])
         self.assertEqual(start_event_dict['sell_for_price'], event.event_dict['sell_for_price'])
 
-        event.increment_quantity(outcome_no, amount)
+        event.increment_quantity(Bet.NO, amount)
         self.assertEqual(amount, event.Q_for)
         self.assertEqual(amount, event.Q_against)
         self.assertNotEqual(start_event_dict, event.event_dict)
@@ -637,12 +634,11 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         event = EventFactory()
         user = UserFactory()
-        bet = BetFactory(event=event, user=user)
+        bet_line = event.get_user_bet(user)
         self.assertEqual({
             'event': event,
-            'bet': bet,
-            'render_current': True,
-        }, render_bet(event, bet, True))
+            'bet': bet_line,
+        }, render_bet(event, bet_line))
 
     def test_render_event(self):
         """
@@ -650,11 +646,11 @@ class EventsTemplatetagsTestCase(TestCase):
         """
         event = EventFactory()
         user = UserFactory()
-        bet = BetFactory(event=event, user=user)
+        bet_line = event.get_user_bet(user)
         self.assertEqual({
             'event': event,
-            'bet': bet,
-        }, render_event(event, bet))
+            'bet_line': bet_line,
+        }, render_event(event, bet_line))
 
     def test_render_events(self):
         """
@@ -929,20 +925,20 @@ class BetsManagerTestCase(TestCase):
         users = UserFactory.create_batch(2)
         events = EventFactory.create_batch(3)
         with self.assertRaises(NonexistantEvent):
-            Bet.objects.get_user_event_and_bet_for_update(users[0], -1, 'YES')
+            Bet.objects.get_user_event_and_bet_for_update(users[0], -1, Bet.YES)
         events[1].finish_yes()
         with self.assertRaises(EventNotInProgress):
-            Bet.objects.get_user_event_and_bet_for_update(users[0], 2, 'YES')
+            Bet.objects.get_user_event_and_bet_for_update(users[0], 2, Bet.YES)
         with self.assertRaises(UnknownOutcome):
             Bet.objects.get_user_event_and_bet_for_update(users[0], 1, 'OOOPS')
-        new_bet = Bet.objects.get_user_event_and_bet_for_update(users[0], 1, 'YES')
+        new_bet = Bet.objects.get_user_event_and_bet_for_update(users[0], 1, Bet.YES)
         self.assertEqual(users[0], new_bet[0])
         self.assertEqual(events[0], new_bet[1])
 
         bet = BetFactory(user=users[1], event=events[2])
         self.assertEqual(
             (users[1], events[2], bet),
-            Bet.objects.get_user_event_and_bet_for_update(users[1], 3, 'YES')
+            Bet.objects.get_user_event_and_bet_for_update(users[1], 3, Bet.YES)
         )
 
     def test_buy_a_bet(self):
@@ -952,7 +948,7 @@ class BetsManagerTestCase(TestCase):
         event = EventFactory()
         user = UserFactory(total_cash=event.current_buy_for_price)
         old_price = event.current_buy_for_price
-        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, Bet.YES,
                                                          event.current_buy_for_price)
         self.assertEqual(user, bet_user)
         self.assertEqual(event, bet_event)
@@ -965,15 +961,15 @@ class BetsManagerTestCase(TestCase):
         self.assertEqual(1, bet_event.turnover)
 
         with self.assertRaises(PriceMismatch):
-            Bet.objects.buy_a_bet(user, event.id, 'YES', old_price)
+            Bet.objects.buy_a_bet(user, event.id, Bet.YES, old_price)
 
         with self.assertRaises(InsufficientCash):
-            Bet.objects.buy_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+            Bet.objects.buy_a_bet(user, event.id, Bet.YES, bet_event.current_buy_for_price)
 
         user.total_cash = bet_event.current_buy_against_price
         user.save()
         # TODO should throw exception
-        Bet.objects.buy_a_bet(user, event.id, 'NO', bet_event.current_buy_against_price)
+        Bet.objects.buy_a_bet(user, event.id, Bet.NO, bet_event.current_buy_against_price)
 
     def test_sell_a_bet(self):
         """
@@ -982,14 +978,14 @@ class BetsManagerTestCase(TestCase):
         event = EventFactory()
         user = UserFactory(total_cash=event.current_buy_for_price)
         old_price = event.current_sell_for_price
-        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'YES',
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, Bet.YES,
                                                          event.current_buy_for_price)
         avg_price = bet_event.current_sell_for_price
 
         with self.assertRaises(PriceMismatch):
-            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_buy_for_price)
+            Bet.objects.sell_a_bet(user, event.id, Bet.YES, bet_event.current_buy_for_price)
 
-        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'YES',
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, Bet.YES,
                                                           bet_event.current_sell_for_price)
         self.assertEqual(user, bet_user)
         self.assertEqual(event, bet_event)
@@ -1002,11 +998,11 @@ class BetsManagerTestCase(TestCase):
         self.assertEqual(2, bet_event.turnover)
 
         with self.assertRaises(InsufficientBets):
-            Bet.objects.sell_a_bet(user, event.id, 'YES', bet_event.current_sell_for_price)
+            Bet.objects.sell_a_bet(user, event.id, Bet.YES, bet_event.current_sell_for_price)
 
-        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, 'NO',
+        bet_user, bet_event, bet = Bet.objects.buy_a_bet(user, event.id, Bet.NO,
                                                          event.current_buy_for_price)
-        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, 'NO',
+        bet_user, bet_event, bet = Bet.objects.sell_a_bet(user, event.id, Bet.NO,
                                                           bet_event.current_sell_against_price)
 
     def test_get_in_progress(self):

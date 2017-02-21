@@ -176,8 +176,8 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 # social auth
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                # 'social.apps.django_app.context_processors.backends',
+                # 'social.apps.django_app.context_processors.login_redirect',
                 # custom context processor
                 'politikon.context_processors.politikon_settings'
             ],
@@ -186,8 +186,8 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.twitter.TwitterOAuth',
-    'social.backends.facebook.FacebookOAuth2',
+    # 'social.backends.twitter.TwitterOAuth',
+    # 'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -237,7 +237,7 @@ MIDDLEWARE_CLASSES = (
 
     # cause redirection to when raise social module exceptions
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    # 'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -266,7 +266,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
 
     'django_assets',
-    'social_django',
+    # 'social_django',
 
     # 'oauth_tokens',
     # 'm2m_history',

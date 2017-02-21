@@ -20,18 +20,18 @@ class HomeView(TemplateView):
 
         last_minute_events = list(Event.objects.get_events('last-minute')[:3])
         for event in last_minute_events:
-            event.my_bet = event.get_user_bet(user)
+            event.bet_line = event.get_user_bet(user)
 
         home_events = list(Event.objects.get_featured_events().order_by('?')[:7])
         for event in home_events:
-            event.my_bet = event.get_user_bet(user)
+            event.bet_line = event.get_user_bet(user)
 
         if home_events:
             front_event = home_events[0]
             if front_event:
                 context.update({
                     'front_event': front_event,
-                    'front_event_bet': front_event.get_user_bet(user),
+                    'bet_line': front_event.get_user_bet(user),
                 })
             featured_events = home_events[1:7]
 
@@ -46,7 +46,7 @@ class HomeView(TemplateView):
         return context
 
 
-def acme_challenge(request):
+def acme_challenge(request, acme):
     """
     Make sure your web server displays the following content at
     http://www.politikon.org.pl/.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI
@@ -57,6 +57,6 @@ def acme_challenge(request):
     :return:
     :rtype: HttpResponse
     """
-    response = 'sJN3Ermg6w3afMwhPJ2PPlatJ9RXlWFDTeDnHzccpdU.Y7pUq0Nm4uLkCi6OkzsKAJFImCjQAd1XDl-VBHNwvSE'
+    response = acme + '.biboVBCHhlGXFnpZ9-E_WPPKgYAtXYoeK19afc-E3GQ'
 
     return HttpResponse(response)

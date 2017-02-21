@@ -212,7 +212,7 @@ class Event(models.Model):
         else:
             return self.end_date
 
-    def price_for_outcome(self, outcome, direction='BUY'):
+    def price_for_outcome(self, outcome, direction=True):
         if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:
             raise UnknownOutcome()
 
@@ -281,57 +281,59 @@ class Event(models.Model):
             'points': points
         }
 
+    def get_user_bet_object(self, user):
+        """
+        find not empty just only one bet object or None
+        :param user: logged user
+        :type user: User
+        :return: normally it should returns one bet where bet.has > 0
+        :rtype: Bet or None
+        """
+        bets = self.bets.filter(user=user, has__gt=0).order_by('-id')
+        if bets.exists():
+            return bets[0]
+
     def get_user_bet(self, user):
         """
         get bet summary for user; user maybe anonymous.
+        :param user: logged user or anonymous
+        :type user: User
+        :return: data for one bet display
+        :rtype: {}
         """
-        if user.pk:
-            # TODO: resolve problem with bets > 1. Which bet choose?
-            # comment: maybe condition has__gt=0 resolves this problem.
-            bets = self.bets.filter(user=user, has__gt=0).order_by('-id')
-            if bets.exists():
-                bet = bets[0]
-                bet.extension = {
-                    'is_user': True,
-                    'has_any': True,
-                    'buyYES': bet.outcome,
-                    'buyNO': not bet.outcome,
-                    'outcomeYES': "YES" if bet.outcome else "NO",
-                    'outcomeNO': "YES" if bet.outcome else "NO",
-                    'priceYES': self.current_buy_for_price if bet.outcome
-                    else self.current_sell_against_price,
-                    'priceNO': self.current_sell_for_price if bet.outcome
-                    else self.current_buy_against_price,
-                    'textYES': "dokup na „TAK“" if bet.outcome else "sprzedaj zakład",
-                    'textNO': "sprzedaj zakład" if bet.outcome else "dokup na „NIE“",
-                    'has': bet.has,
-                    # TODO cancelled classOutcome
-                    # TODO ask @jglodek
-                    'classOutcome': "YES" if bet.outcome else "NO",
-                    'textOutcome': "TAK" if bet.outcome else "NIE",
-                    'avgPrice': bet.bought_avg_price,
-                }
-                return bet
-            else:
-                bet = Bet(event=self, user=user)
-        else:
-            bet = Bet(event=self)
-        # this bet.extension is for users with no bets and for anonymous
-        bet.extension = {
+        # Using 'true' and 'false' because some keys are designed for json
+        bet_line = {
             'is_user': False,
-            'has_any': False,
-            'buyYES': True,
-            'buyNO': True,
-            'outcomeYES': "YES",
-            'outcomeNO': "NO",
+            'has': 0,
+            'avgPrice': 0,
+            'outcome': None,    # note: None is the same as False
+            'buyNO': 'true',    # default option is buy bet
+            'buyYES': 'true',   # default option is buy bet
             'priceYES': self.current_buy_for_price,
             'priceNO': self.current_buy_against_price,
-            'textYES': "TAK",
-            'textNO': "NIE"
         }
         if user.pk:
-            bet.extension['is_user'] = True
-        return bet
+            bet_line['is_user'] = True
+            bet = self.get_user_bet_object(user)
+            if bet:
+                bet_line['id'] = bet.pk     # it is only for debugging purpose
+                bet_line['has'] = bet.has
+                bet_line['avgPrice'] = bet.bought_avg_price
+                bet_line['outcome'] = bet.outcome       # True - YES          False - NO
+                if bet.outcome:
+                    # you have bet for YES, you can sell them
+                    bet_line['buyNO'] = 'false'     # that means you sell bet YES
+                    bet_line['priceYES'] = self.current_buy_for_price
+                    bet_line['priceNO'] = self.current_sell_for_price
+                    bet_line['outcome_str'] = 'true'
+                else:
+                    # you have bet for NO, you can sell them
+                    bet_line['buyYES'] = 'false'    # that means you sell bet NO
+                    bet_line['priceYES'] = self.current_sell_against_price
+                    bet_line['priceNO'] = self.current_buy_against_price
+                    bet_line['outcome_str'] = 'false'
+
+        return bet_line
 
     def get_bet_social(self):
         """
@@ -553,16 +555,18 @@ class Bet(models.Model):
         (NO, u'udziały na NIE'),
     )
 
+    BUY = True
+    SELL = False
     BET_OUTCOMES_TO_PRICE_ATTR = {
-        ('BUY', 'YES'): 'current_buy_for_price',
-        ('BUY', 'NO'): 'current_buy_against_price',
-        ('SELL', 'YES'): 'current_sell_for_price',
-        ('SELL', 'NO'): 'current_sell_against_price'
+        (BUY, YES): 'current_buy_for_price',
+        (BUY, NO): 'current_buy_against_price',
+        (SELL, YES): 'current_sell_for_price',
+        (SELL, NO): 'current_sell_against_price'
     }
 
     BET_OUTCOMES_TO_QUANTITY_ATTR = {
-        'YES': 'Q_for',
-        'NO': 'Q_against'
+        True: 'Q_for',
+        False: 'Q_against'
     }
 
     objects = BetManager()
