@@ -46,7 +46,7 @@ class HomeView(TemplateView):
         return context
 
 
-def acme_challenge(request):
+def acme_challenge(request, acme):
     """
     Make sure your web server displays the following content at
     http://www.politikon.org.pl/.well-known/acme-challenge/lMSbr1wkgq8wCK1aSU-hMDN4xuvwsx3GQjYiwh922XI
@@ -57,6 +57,6 @@ def acme_challenge(request):
     :return:
     :rtype: HttpResponse
     """
-    response = 'sJN3Ermg6w3afMwhPJ2PPlatJ9RXlWFDTeDnHzccpdU.Y7pUq0Nm4uLkCi6OkzsKAJFImCjQAd1XDl-VBHNwvSE'
+    response = acme + '.biboVBCHhlGXFnpZ9-E_WPPKgYAtXYoeK19afc-E3GQ'
 
     return HttpResponse(response)
