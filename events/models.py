@@ -149,7 +149,7 @@ class Event(models.Model):
     # probably: how you need to increment quantity, to change price
     B = models.FloatField(u'stała B', default=FACTOR_B)
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return self.title

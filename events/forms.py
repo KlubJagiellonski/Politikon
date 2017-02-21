@@ -37,6 +37,4 @@ class EventCreateForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
-                  'is_featured', 'tags', 'short_title', 'title_fb_yes', 'title_fb_no',
-                  'twitter_tag')
+        fields = ('title', 'small_image', 'big_image', 'description', 'estimated_end_date')
