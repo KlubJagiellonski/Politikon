@@ -67,7 +67,8 @@ unidecode
 
 # connecting with FB, TT
 # https://github.com/python-social-auth/social-app-django
-# social-auth-app-django
+python-social-auth
+social-auth-app-django
 django-twitter-api==0.2.10
 twitter-api==0.1.5
 
@@ -80,5 +81,3 @@ django-imagekit
 # configured in django-admin fields: description and outcome_reason
 django-wysiwyg==0.8.0
 django-ckeditor==5.1.1
-
-social-auth-app-django
