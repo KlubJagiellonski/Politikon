@@ -61,7 +61,7 @@ CELERY_SEND_EVENTS = True
 CELERY_TASK_RESULT_EXPIRES = 10
 CELERY_DISABLE_RATE_LIMITS = False
 CELERY_IGNORE_RESULT = True
-#CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+# CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_ACCEPT_CONTENT = ['json', 'application/x-python-serialize']
 
 CELERYBEAT_SCHEDULE = {
@@ -237,7 +237,6 @@ MIDDLEWARE_CLASSES = (
 
     # cause redirection to when raise social module exceptions
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -246,6 +245,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 # needed by SSLify
@@ -267,6 +267,7 @@ INSTALLED_APPS = (
 
     'django_assets',
     # 'social_django',
+    'social.apps.django_app.default',
 
     # 'oauth_tokens',
     # 'm2m_history',
