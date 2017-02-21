@@ -94,4 +94,4 @@ STATIC_URL = 'https://s3.amazonaws.com/{0}/'.format(AWS_STORAGE_BUCKET_NAME)
 ASSETS_AUTO_BUILD = False
 
 # uncomment when certificate renewing
-SSLIFY_DISABLE = True
+# SSLIFY_DISABLE = True

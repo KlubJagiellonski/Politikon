@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^grappelli/', include('grappelli.urls')),
 
     # User authentication url patternsapi
-    # url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^api/', include(api_urls)),
 
