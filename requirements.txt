@@ -67,7 +67,6 @@ unidecode
 
 # connecting with FB, TT
 # https://github.com/python-social-auth/social-app-django
-python-social-auth
 social-auth-app-django
 django-twitter-api==0.2.10
 twitter-api==0.1.5
