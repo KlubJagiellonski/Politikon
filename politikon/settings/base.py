@@ -176,8 +176,8 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 # social auth
-                # 'social.apps.django_app.context_processors.backends',
-                # 'social.apps.django_app.context_processors.login_redirect',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
                 # custom context processor
                 'politikon.context_processors.politikon_settings'
             ],
@@ -267,6 +267,7 @@ INSTALLED_APPS = (
 
     'django_assets',
     # 'social_django',
+    'social.apps.django_app.default',
 
     # 'oauth_tokens',
     # 'm2m_history',
