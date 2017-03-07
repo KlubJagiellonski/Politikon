@@ -13,7 +13,8 @@ api_urls = [
     url(r'^auth/', include('djoser.urls.authtoken'))
 ]
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Admin url patterns
     url(r'^admin/', include(admin.site.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
@@ -25,14 +26,13 @@ urlpatterns = patterns('',
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
-    url(r'^.well-known/acme-challenge/(?P<acme>\w+)$',
-        acme_challenge, name='acme_challenge'),
+    url(r'^.well-known/acme-challenge/(?P<acme>\w+)$', acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')
 )
 
 if settings.SERVE_STATIC_FILES:
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-         {'document_root': settings.STATIC_ROOT}),
+    urlpatterns += patterns(
+        '',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     )
