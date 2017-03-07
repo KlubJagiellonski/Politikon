@@ -76,22 +76,26 @@ class Event(models.Model):
     ])
 
     title = models.CharField(u'tytuł wydarzenia', max_length=255)
-    short_title = models.CharField(verbose_name=u'tytuł promocyjny wydarzenia', max_length=255,
-                                   default='', blank=True)
-    twitter_tag = models.CharField(u'tag twittera', max_length=32, null=True, blank=True,
-                                   default='',
-                                   validators=[
-                                       RegexValidator(
-                                           regex=r'^([^\s]+)$',
-                                           message=u'Tag twittera nie może zawierać spacji',
-                                           code='invalid_twitter_tag'
-                                       ),
-                                   ])
+    short_title = models.CharField(
+        verbose_name=u'tytuł promocyjny wydarzenia', max_length=255, default='', blank=True
+    )
+    twitter_tag = models.CharField(
+        verbose_name=u'tag twittera', max_length=32, null=True, blank=True, default='',
+        validators=[
+            RegexValidator(
+                regex=r'^([^\s]+)$',
+                message=u'Tag twittera nie może zawierać spacji',
+                code='invalid_twitter_tag'
+            ),
+        ]
+    )
 
-    title_fb_yes = models.CharField(u'tytuł na TAK obiektu FB', max_length=255, default='',
-                                    blank=True, null=True)
-    title_fb_no = models.CharField(u'tytuł na NIE obiektu FB', max_length=255, default='',
-                                   blank=True, null=True)
+    title_fb_yes = models.CharField(
+        u'tytuł na TAK obiektu FB', max_length=255, default='', blank=True, null=True
+    )
+    title_fb_no = models.CharField(
+        u'tytuł na NIE obiektu FB', max_length=255, default='', blank=True, null=True
+    )
 
     description = models.TextField(u'pełny opis wydarzenia', default='')
 
@@ -121,19 +125,24 @@ class Event(models.Model):
     outcome_reason = models.TextField(u'uzasadnienie wyniku', default='', blank=True)
 
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=u'data utworzenia')
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'utworzone przez', null=True,
-                                   related_name='created_by')
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, verbose_name=u'utworzone przez', null=True, related_name='created_by'
+    )
     estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True, blank=True)
 
-    current_buy_for_price = models.IntegerField(u'cena nabycia akcji zdarzenia',
-                                                default=BEGIN_PRICE)
-    current_buy_against_price = models.IntegerField(u'cena nabycia akcji zdarzenia przeciwnego',
-                                                    default=BEGIN_PRICE)
-    current_sell_for_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia',
-                                                 default=BEGIN_PRICE)
-    current_sell_against_price = models.IntegerField(u'cena sprzedaży akcji zdarzenia przeciwnego',
-                                                     default=BEGIN_PRICE)
+    current_buy_for_price = models.IntegerField(
+        u'cena nabycia akcji zdarzenia', default=BEGIN_PRICE
+    )
+    current_buy_against_price = models.IntegerField(
+        u'cena nabycia akcji zdarzenia przeciwnego', default=BEGIN_PRICE
+    )
+    current_sell_for_price = models.IntegerField(
+        u'cena sprzedaży akcji zdarzenia', default=BEGIN_PRICE
+    )
+    current_sell_against_price = models.IntegerField(
+        u'cena sprzedaży akcji zdarzenia przeciwnego', default=BEGIN_PRICE
+    )
 
     last_transaction_date = models.DateTimeField(u'data ostatniej transakcji', null=True)
 
@@ -179,6 +188,10 @@ class Event(models.Model):
             'url': reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
         }
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "title__icontains", "short_title__icontains")
+
     @property
     def is_in_progress(self):
         return self.outcome == Event.IN_PROGRESS
@@ -197,10 +210,7 @@ class Event(models.Model):
             'sell_against_price': self.current_sell_against_price,
         }
 
-    @staticmethod
-    def autocomplete_search_fields():
-        return ("id__iexact", "title__icontains", "short_title__icontains")
-
+    @property
     def finish_date(self):
         """
         If event is not finished then estimated_end_date, else end_date
@@ -571,8 +581,9 @@ class Bet(models.Model):
 
     objects = BetManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='bets',
-                             related_query_name='bet')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet'
+    )
     event = models.ForeignKey(Event, null=False, related_name='bets', related_query_name='bet')
     outcome = models.BooleanField(u'zakład na TAK', choices=BET_OUTCOME_CHOICES)
     # most important param: how many bets user has.
@@ -731,12 +742,16 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=False, related_name='transactions',
-                             related_query_name='transaction')
-    event = models.ForeignKey(Event, null=True, related_name='transactions',
-                              related_query_name='transaction')
-    type = models.PositiveIntegerField("rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES,
-                                       default=1)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=False, related_name='transactions',
+        related_query_name='transaction'
+    )
+    event = models.ForeignKey(
+        Event, null=True, related_name='transactions', related_query_name='transaction'
+    )
+    type = models.PositiveIntegerField(
+        "rodzaj transakcji", choices=TRANSACTION_TYPE_CHOICES, default=1
+    )
     date = models.DateTimeField('data', auto_now_add=True)
     quantity = models.PositiveIntegerField(u'ilość', default=1)
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
