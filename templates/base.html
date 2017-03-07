@@ -98,7 +98,7 @@
 {% endif %}
 
 {% if not user.is_authenticated %}
-{% include 'not_logged_in.html' %}
+    {% include 'not_logged_in.html' %}
 {% endif %}
 
 <div id="body-wrapper">
@@ -221,13 +221,6 @@
 <!-- Noty scripts -->
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/packaged/jquery.noty.packaged.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/layouts/topRight.js' %}"></script>
-
-<!-- sugester scripts -->
-<script>
-if (screen && screen.width > 480) {
-    document.write('<script src="//s3-eu-west-1.amazonaws.com/app1.sugester.com/8155/widget.js" type="text/javascript"><\/script>');
-}
-</script>
 
 
 <!-- IntroJS scripts -->

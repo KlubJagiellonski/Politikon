@@ -126,6 +126,7 @@ class EventCreateView(CreateView):
         self.model.logged_user = request.user
         return super(EventCreateView, self).post(request, *args, **kwargs)
 
+
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt

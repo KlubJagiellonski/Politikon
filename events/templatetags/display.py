@@ -80,9 +80,9 @@ def outcome(event):
 def render_finish_date(event):
     state = 'finished'
     if event.is_in_progress:
-        state = 'no-result' if timezone.now() > event.finish_date() else 'ongoing'
+        state = 'no-result' if timezone.now() > event.finish_date else 'ongoing'
     return {
-        'date': event.finish_date(),
+        'date': event.finish_date,
         'state': state
     }
 
