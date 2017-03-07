@@ -9,13 +9,14 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_headers
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, CreateView
 
 from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
     UnknownOutcome, InsufficientBets, InsufficientCash
 from .models import Event, Bet, SolutionVote
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
+from .forms import EventCreateForm
 
 
 logger = logging.getLogger(__name__)
@@ -101,6 +102,29 @@ class EventDetailView(DetailView):
         })
         return context
 
+
+class EventCreateView(CreateView):
+    """
+    User can add new event
+    """
+    template_name = 'event_create.html'
+    context_object_name = 'event'
+    model = Event
+    form_class = EventCreateForm
+
+    def post(self, request, *args, **kwargs):
+        """
+        New event post form, logged user can send it.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: http response
+        :rtype: HttpResponseRedirect
+        """
+        if not request.user.is_active:
+            raise Exception('Not Allowed. You must login to add event.')
+        self.model.logged_user = request.user
+        return super(EventCreateView, self).post(request, *args, **kwargs)
 
 @login_required
 @require_http_methods(["POST"])

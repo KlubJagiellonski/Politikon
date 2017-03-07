@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from .api import EventList, EventDetail
-from .views import EventDetailView, EventFacebookObjectDetailView, EventsListView
+from .views import EventDetailView, EventFacebookObjectDetailView, EventsListView, EventCreateView
 
 
 api_urls = [
@@ -20,5 +20,6 @@ urlpatterns = patterns('',
         name="create_transaction"),
     url(r'^event/(?P<event_id>\d+)/resolve/$', 'events.views.resolve_event',
         name="resolve_event"),
+    url(r'^event/create/$', EventCreateView.as_view(), name="create_event"),
     url(r'^bets/viewed/$', 'events.views.bets_viewed', name='bets_viewed'),
 )
