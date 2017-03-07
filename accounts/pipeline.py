@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from django.conf import settings
-from django.contrib import messages
+# from django.conf import settings
+# from django.contrib import messages
 from django.core.files.base import ContentFile
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.http.response import HttpResponseForbidden
-from django.utils.translation import ugettext as _
+# from django.utils.translation import ugettext as _
 
-from constance import config
+# from constance import config
 from requests import request, HTTPError
 from social.pipeline.partial import partial
-from twitter_api.models import User
+# from twitter_api.models import User
 
 from .models import UserProfile
 
