@@ -21,11 +21,18 @@
                         left: 10px;">
                         {% render_finish_date event %}
                     </div>
+                    {% if event.is_published %}
                     <canvas class="event-canvas" id="event-{{ event.id }}-canvas" height="70" data-id="{{ event.id }}" data-chart="{{ event.get_JSON_small_chart }}"></canvas>
+                    {% endif %}
                 </div>
             </a>
+            {% if not event.is_published %}
+            <h3>szkic wydarzenia</h3>
+            {% endif %}
             {% if event.is_in_progress %}
-            <a href="{{ event.get_relative_url }}"><h2 class="skroc">{{ event.title }}</h2></a>
+            <a href="{{ event.get_relative_url }}">
+                <h2 class="skroc{% if not event.is_published %} draft{% endif %}">{{ event.title }}</h2>
+            </a>
             {% else %}
                 {% if event.outcome == 2 %}
                 <a href="{{ event.get_relative_url }}">

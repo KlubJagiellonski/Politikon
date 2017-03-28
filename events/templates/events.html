@@ -27,6 +27,10 @@ $(function() {
         <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">Kończące się</a></li>
         <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">Największe zmiany</a></li>
         <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">Najnowsze</a></li>
+        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">Zakończone</a></li>
+        {% if user.is_authenticated and user.is_staff %}
+        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">Poczekalnia</a></li>
+        {% endif %}
     </ul>
 </section>
 
