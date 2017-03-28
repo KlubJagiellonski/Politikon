@@ -30,6 +30,8 @@ class EventManager(models.Manager):
         elif mode == 'finished':
             excluded_outcome = self.model.IN_PROGRESS
             return self.exclude(outcome=excluded_outcome).order_by('-end_date')
+        elif mode == 'draft':
+            return self.filter(is_published=False)
 
     def get_featured_events(self):
         excluded = self.get_events('last-minute').values('id')[:3]
