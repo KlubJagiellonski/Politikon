@@ -19,10 +19,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        for t in Transaction.objects.filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
+        for t in Transaction.objects.filter(event__outcome=Event.IN_PROGRESS):
             t.delete()
 
-        for b in Bet.objects.filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
+        for b in Bet.objects.filter(event__outcome=Event.IN_PROGRESS):
             b.delete()
 
         for e in Event.objects.ongoing_only_queryset():
