@@ -384,8 +384,13 @@ if 'test' in sys.argv:
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'politikon.pagination.StandardResultsSetPagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 # wysiwig for django admin.

@@ -17,15 +17,31 @@ class EventAdmin(admin.ModelAdmin):
     }
 
     fieldsets = (
-        (u'Główne', {'fields': ('description', 'estimated_end_date', 'small_image', 'big_image', 'title',
-                                'is_featured', 'tags')}),
-        ('Social media', {'fields': ('short_title', 'title_fb_yes', 'title_fb_no', 'twitter_tag')}),
-        (u'Rozwiązanie wydarzenia', {'fields': ('end_date', 'outcome', 'outcome_reason')}),
-        ('Dane statystyczne', {'fields': ('B', 'current_buy_for_price', 'current_buy_against_price',
-                                          'current_sell_for_price', 'current_sell_against_price',
-                                          'last_transaction_date', 'Q_for', 'Q_against', 'turnover',
-                                          'absolute_price_change', 'price_change', 'created_date',
-                                          'created_by',)})
+        (u'Główne', {
+            'fields': (
+                'description', 'estimated_end_date', 'small_image',
+                'big_image', 'title', 'is_published', 'is_featured', 'tags'
+            )
+        }),
+        ('Social media', {
+            'fields': (
+                'short_title', 'title_fb_yes', 'title_fb_no', 'twitter_tag'
+            )
+        }),
+        (u'Rozwiązanie wydarzenia', {
+            'fields': (
+                'end_date', 'outcome', 'outcome_reason'
+            )
+        }),
+        ('Dane statystyczne', {
+            'fields': (
+                'B', 'current_buy_for_price', 'current_buy_against_price',
+                'current_sell_for_price', 'current_sell_against_price',
+                'last_transaction_date', 'Q_for', 'Q_against', 'turnover',
+                'absolute_price_change', 'price_change', 'created_date',
+                'created_by',
+            )
+        })
     )
 
     readonly_fields = [
@@ -45,8 +61,10 @@ class EventAdmin(admin.ModelAdmin):
         'created_by',
     ]
 
-    list_display = ['id', 'title', 'is_featured', 'twitter_tag', 'outcome',
-                    'created_date', 'created_by', 'estimated_end_date', 'end_date']
+    list_display = [
+        'id', 'title', 'is_featured', 'is_published', 'twitter_tag', 'outcome',
+        'created_date', 'created_by', 'estimated_end_date', 'end_date'
+    ]
 
     list_filter = ['outcome', 'is_featured', 'estimated_end_date', 'created_date', 'created_by']
     search_fields = ['title']

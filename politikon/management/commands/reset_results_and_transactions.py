@@ -19,10 +19,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
-        for t in Transaction.objects.filter(type=Transaction.TRANSACTION_TYPE_CHOICES.TOPPED_UP_BY_APP):
-            t.delete()
-
         for t in Transaction.objects.filter(event__outcome=Event.EVENT_OUTCOME_CHOICES.IN_PROGRESS):
             t.delete()
 

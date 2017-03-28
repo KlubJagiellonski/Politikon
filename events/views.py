@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -9,14 +10,15 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_headers
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView
 
-from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, \
+from .exceptions import (
+    NonexistantEvent, DraftEvent, PriceMismatch, EventNotInProgress,
     UnknownOutcome, InsufficientBets, InsufficientCash
+)
 from .models import Event, Bet, SolutionVote
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
-from .forms import EventCreateForm
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +34,8 @@ class EventsListView(ListView):
         tag = self.request.GET.get('tag')
         if tag:
             events = Event.objects.filter(tags__name__in=[tag]).distinct()
+        if not self.request.user.is_authenticated() or not self.request.user.is_staff:
+            events = events.exclude(is_published=False)
         for event in events:
             event.bet_line = event.get_user_bet(self.request.user)
         return events
@@ -58,6 +62,12 @@ class EventDetailView(DetailView):
 
     def get_event(self):
         return get_object_or_404(Event, id=self.kwargs['pk'])
+
+    def dispatch(self, request, *args, **kwargs):
+        event = self.get_event()
+        if not request.user.is_staff and event.is_draft:
+            raise PermissionDenied
+        return super(EventDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
@@ -103,30 +113,6 @@ class EventDetailView(DetailView):
         return context
 
 
-class EventCreateView(CreateView):
-    """
-    User can add new event
-    """
-    template_name = 'event_create.html'
-    context_object_name = 'event'
-    model = Event
-    form_class = EventCreateForm
-
-    def post(self, request, *args, **kwargs):
-        """
-        New event post form, logged user can send it.
-        :param request:
-        :param args:
-        :param kwargs:
-        :return: http response
-        :rtype: HttpResponseRedirect
-        """
-        if not request.user.is_active:
-            raise Exception('Not Allowed. You must login to add event.')
-        self.model.logged_user = request.user
-        return super(EventCreateView, self).post(request, *args, **kwargs)
-
-
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
@@ -154,6 +140,11 @@ def create_transaction(request, event_id):
             user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
     except NonexistantEvent:
         raise Http404
+    except DraftEvent as e:
+        result = {
+            'error': unicode(e.message.decode('utf-8')),
+        }
+        return JSONResponseBadRequest(json.dumps(result))
     except PriceMismatch as e:
         result = {
             'error': unicode(e.message.decode('utf-8')),

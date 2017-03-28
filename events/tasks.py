@@ -17,7 +17,7 @@ def create_open_events_snapshot():
     """
     logger.debug("'events:tasks:create_open_events_snapshot' worker up")
 
-    for event in Event.objects.ongoing_only_queryset():
+    for event in Event.objects.ongoing_only_queryset().exclude(is_published=False):
         try:
             logger.debug(
                 "'events:tasks:create_open_events_snapshot' snapshotting event"
@@ -40,7 +40,7 @@ def calculate_price_change():
     """
     logger.debug("'events:tasks:calculate_price_change' worker up")
     yesterday = now() - timedelta(days=1)
-    for event in Event.objects.ongoing_only_queryset():
+    for event in Event.objects.ongoing_only_queryset().exclude(is_published=False):
         snapshots = event.snapshots.filter(
             snapshot_of_id=event.id,
             created_at__lte=yesterday,
