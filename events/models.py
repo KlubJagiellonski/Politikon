@@ -10,7 +10,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models, transaction
-from django.db.models import F
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -33,10 +32,6 @@ class Event(models.Model):
     """
     Event model represents exactly real question which you can answer YES or NO.
     """
-    class Meta:
-        verbose_name = 'wydarzenie'
-        verbose_name_plural = 'wydarzenia'
-
     IN_PROGRESS, CANCELLED, FINISHED_YES, FINISHED_NO = range(1, 5)
     EVENT_OUTCOME_CHOICES = (
         (IN_PROGRESS, u'w trakcie'),
@@ -64,7 +59,6 @@ class Event(models.Model):
     BIG_IMAGE_WIDTH = 1250
     BIG_IMAGE_HEIGHT = 510
 
-    objects = EventManager()
     snapshots = SnapshotAddon(fields=[
         'current_buy_for_price',
         'current_buy_against_price',
@@ -79,6 +73,10 @@ class Event(models.Model):
     short_title = models.CharField(
         verbose_name=u'tytuł promocyjny wydarzenia', max_length=255, default='', blank=True
     )
+    description = models.TextField(u'pełny opis wydarzenia', default='')
+    is_featured = models.BooleanField(u'wyróżniony', default=False)
+    is_published = models.BooleanField(u'opublikowano', default=True)
+
     twitter_tag = models.CharField(
         verbose_name=u'tag twittera', max_length=32, null=True, blank=True, default='',
         validators=[
@@ -97,8 +95,6 @@ class Event(models.Model):
         u'tytuł na NIE obiektu FB', max_length=255, default='', blank=True, null=True
     )
 
-    description = models.TextField(u'pełny opis wydarzenia', default='')
-
     small_image = ProcessedImageField(
         help_text=u'mały obrazek {0}x{1}'.format(SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT),
         upload_to='events_small',
@@ -106,7 +102,6 @@ class Event(models.Model):
         null=True,
         blank=False,
     )
-
     big_image = ProcessedImageField(
         help_text=u'duży obrazek {0}x{1}'.format(BIG_IMAGE_WIDTH, BIG_IMAGE_HEIGHT),
         upload_to='events_big',
@@ -115,7 +110,6 @@ class Event(models.Model):
         blank=False,
     )
 
-    is_featured = models.BooleanField(u'featured', default=False)
     # głosowanie do rozstrzygania wydarzeń
     vote_yes_count = models.PositiveIntegerField(u'głosów na tak', default=0)
     vote_no_count = models.PositiveIntegerField(u'głosów na nie', default=0)
@@ -150,28 +144,34 @@ class Event(models.Model):
     Q_against = models.IntegerField(u'zakładów na NIE', default=0)
     turnover = models.IntegerField(u'obrót', default=0, db_index=True)
 
-    absolute_price_change = models.IntegerField(u'zmiana ceny (wartość absolutna)', db_index=True,
-                                                default=0)
+    absolute_price_change = models.IntegerField(
+        u'zmiana ceny (wartość absolutna)', db_index=True, default=0
+    )
     price_change = models.IntegerField(u'zmiana ceny', default=0)
 
     # constant for calculating event change
     # probably: how you need to increment quantity, to change price
     B = models.FloatField(u'stała B', default=FACTOR_B)
 
+    objects = EventManager()
     tags = TaggableManager(blank=True)
+
+    class Meta:
+        verbose_name = 'wydarzenie'
+        verbose_name_plural = 'wydarzenia'
 
     def __unicode__(self):
         return self.title
 
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         """
         Recalculate prices for event
         :param kwargs:
         """
-        if not self.id:
+        if not self.pk:
             self.recalculate_prices()
 
-        super(Event, self).save(**kwargs)
+        super(Event, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return 'http://%(domain)s%(url)s' % {
@@ -579,8 +579,6 @@ class Bet(models.Model):
         False: 'Q_against'
     }
 
-    objects = BetManager()
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=False, related_name='bets', related_query_name='bet'
     )
@@ -596,6 +594,8 @@ class Bet(models.Model):
     rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
     # this is used to show event in my wallet.
     is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte', default=False, null=False)
+
+    objects = BetManager()
 
     @property
     def bet_dict(self):
@@ -740,8 +740,6 @@ class Transaction(models.Model):
     BUY_TYPES = (BUY_YES, BUY_NO)
     SELL_TYPES = (SELL_YES, SELL_NO)
 
-    objects = TransactionManager()
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=False, related_name='transactions',
         related_query_name='transaction'
@@ -755,6 +753,8 @@ class Transaction(models.Model):
     date = models.DateTimeField('data', auto_now_add=True)
     quantity = models.PositiveIntegerField(u'ilość', default=1)
     price = models.IntegerField(u'cena jednostkowa', default=0, null=False)
+
+    objects = TransactionManager()
 
     def __unicode__(self):
         return u'%s przez %s' % (self.get_type_display(), self.user)

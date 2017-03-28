@@ -8,7 +8,9 @@
 {% block facebook_properties %}
     {% og_title event og_vote og_user %}
     <meta property="og:description" content="{{ event.title }}" />
+    {% if event.small_image %}
     <meta property="og:image" content="{{ event.small_image.url }}" />
+    {% endif %}
 {% endblock %}
 
 {% block js_scripts %}
@@ -55,8 +57,11 @@ twttr.ready(function (twttr) {
 
 <section id="header"  class="body-margin">
     <h1>{{ event.title }}</h1>
-    {% if request.user.is_staff %}
+    {% if request.user.is_staff and event.is_published %}
     <h2><a class="show-zakoncz-wydarzenie" href="#">Rozstrzygnij</a></h2>
+    {% endif %}
+    {% if not event.is_published %}
+        <h2>Szkic wydarzenia</h2>
     {% endif %}
 </section>
 

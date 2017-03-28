@@ -6,8 +6,10 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
-from .exceptions import NonexistantEvent, PriceMismatch, EventNotInProgress, UnknownOutcome, \
-    InsufficientCash, InsufficientBets
+from .exceptions import (
+    NonexistantEvent, DraftEvent, PriceMismatch, EventNotInProgress,
+    UnknownOutcome, InsufficientCash, InsufficientBets
+)
 # from vendor.Pubnub import Pubnub as PubNub
 
 
@@ -168,6 +170,9 @@ class BetManager(models.Manager):
 
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, bet_outcome)
 
+        if not event.is_published:
+            raise DraftEvent(_("Event is currently a draft."))
+
         # bet on 'YES' if bet_outcome is True else bet on 'NO'
         transaction_type = Transaction.BUY_YES if bet_outcome else Transaction.BUY_NO
 
@@ -242,6 +247,9 @@ class BetManager(models.Manager):
         from events.models import Transaction, Bet
 
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, bet_outcome)
+
+        if not event.is_published:
+            raise DraftEvent(_("Event is currently a draft."))
 
         requested_price = price
         current_tx_price = event.price_for_outcome(bet_outcome, direction=Bet.SELL)
