@@ -65,7 +65,7 @@ class EventDetailView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         event = self.get_event()
-        if not request.user.is_staff and event.is_draft:
+        if not request.user.is_staff and not event.is_published:
             raise PermissionDenied
         return super(EventDetailView, self).dispatch(request, *args, **kwargs)
 
