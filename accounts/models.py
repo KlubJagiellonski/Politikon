@@ -263,27 +263,25 @@ class UserProfile(AbstractBaseUser):
         """
         Calculate and set user reputation
         """
-        self.reputation = self.reputation_formula(self.portfolio_value,
-                                                  self.total_cash, self.total_given_cash)
+        self.reputation = self.reputation_formula(self.portfolio_value, self.total_cash)
 
     @classmethod
-    def reputation_formula(cls, portfolio_value, total_cash, total_given_cash):
+    def reputation_formula(cls, portfolio_value, total_cash):
         """
         Calculate and return reputation
         :param portfolio_value: total in wallet
         :type portfolio_value: int
         :param total_cash: unused reputation value
         :type total_cash: int
-        :param total_given_cash: total reputation assigned for user
-        :type total_given_cash: int
         :return: reputation value
         :rtype: Decimal
         """
         if config.STARTING_CASH == 0:
             return None
         else:
-            return Decimal(portfolio_value + total_cash - (total_given_cash - config.STARTING_CASH)) \
-                   / Decimal(config.STARTING_CASH) * 100
+            return Decimal(
+                portfolio_value + total_cash
+            ) / Decimal(config.STARTING_CASH) * 100
 
     #  @property
     #  def profile_photo(self):
@@ -437,9 +435,9 @@ class UserProfile(AbstractBaseUser):
             old_reputation = self.reputation_formula(snapshots[0].portfolio_value,
                                                      snapshots[0].total_cash,
                                                      snapshots[0].total_given_cash)
-            return int(self.reputation - old_reputation)
+            return int((self.reputation - old_reputation)*100/old_reputation)
         else:
-            return int(self.reputation) - 100
+            return int(self.reputation - 100)
 
     def get_last_week_reputation_change(self):
         """
