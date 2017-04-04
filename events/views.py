@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class EventsListView(ListView):
-    template_name = 'events.html'
+    template_name = 'events/events.html'
     context_object_name = 'events'
     paginate_by = 6
 
@@ -48,7 +48,7 @@ class EventsListView(ListView):
 
 
 class EventFacebookObjectDetailView(DetailView):
-    template_name = 'facebook_event_detail.html'
+    template_name = 'events/facebook_event_detail.html'
     context_object_name = 'event'
     model = Event
 
@@ -57,7 +57,7 @@ class EventFacebookObjectDetailView(DetailView):
 
 
 class EventDetailView(DetailView):
-    template_name = 'event_detail.html'
+    template_name = 'events/event_detail.html'
     context_object_name = 'event'
     model = Event
 

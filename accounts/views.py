@@ -26,7 +26,7 @@ class UserUpdateView(MultiFormsView):
     User settings
     """
     # TODO: nie do końca o to chodziło, ale jest lepiej
-    template_name = 'user_settings.html'
+    template_name = 'accounts/user_settings.html'
     form_classes = {
         'main': UserProfileForm,
         'email': UserProfileEmailForm,
@@ -63,7 +63,7 @@ class UserProfileDetailView(DetailView):
     Logged user profile detail (user.id from session)
     """
     model = UserProfile
-    template_name = 'userprofile_detail.html'
+    template_name = 'accounts/userprofile_detail.html'
 
     def get_object(self, **kwargs):
         return self.request.user
@@ -95,7 +95,7 @@ class UserDetailView(DetailView):
     User profile detail. Any user can see this page (user.id from url)
     """
     model = UserProfile
-    template_name = 'user_detail.html'
+    template_name = 'accounts/user_detail.html'
 
     def get_object(self, **kwargs):
         """
@@ -131,7 +131,7 @@ class PortfolioListView(ListView):
     """
     Portfolio list in userprofile
     """
-    template_name = 'portfolio.html'
+    template_name = 'accounts/portfolio.html'
     paginate_by = PORTFOLIO_ON_PAGE
     context_object_name = 'portfolio_list'
 
@@ -158,7 +158,7 @@ class NotificationsListView(ListView):
     """
     Notifications list in userprofile
     """
-    template_name = 'notifications.html'
+    template_name = 'accounts/notifications.html'
     paginate_by = NOTIFICATIONS_ON_PAGE
     context_object_name = 'notifications_list'
 
@@ -185,7 +185,7 @@ class TransactionsListView(ListView):
     """
     Transactions list in userprofile
     """
-    template_name = 'transactions.html'
+    template_name = 'accounts/transactions.html'
     paginate_by = TRANSACTIONS_ON_PAGE
     context_object_name = 'transactions_list'
 
@@ -212,7 +212,7 @@ class UsersListView(ListView):
     """
     Users list in rank
     """
-    template_name = 'rank.html'
+    template_name = 'accounts/rank.html'
 
     def get_queryset(self):
         """
