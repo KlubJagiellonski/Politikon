@@ -18,6 +18,7 @@ def user_rank(context, user, item_class="", profit=None, counter=1):
         'item_class': item_class,
         'user': user,
         'profit': profit,
+        'showProfit': profit is not None,
         'counter': counter,
     }
 
