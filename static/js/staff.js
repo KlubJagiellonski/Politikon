@@ -1,17 +1,6 @@
 (function() {
     $(document).ready(function () {
 
-        // Show dialog with voting
-        $('.show-zakoncz-wydarzenie').on('click', function () {
-            $('#login').addClass("display");
-            $('.overlay').addClass("display");
-
-            setTimeout(function () {
-                $('#login').addClass("opacity");
-                $('.overlay').addClass("opacity");
-            }, 150); // opoznienie
-        });
-
         // Vote for solution
         $('#resolveabet .a_bet').on('click', function (e) {
             var event_id = $(this).data('event_id');
@@ -60,18 +49,5 @@
             });
         });
 
-        //ukryj okno logowania po kliknieciu w X
-        $(function () {
-            $('.login-close').on('click', function () {
-                $('#maintop .mainmenu').removeClass('display');
-                $('#maintop .mainmenu').removeClass('opacity');
-                $('.overlay').removeClass("opacity");
-                $('.blankoverlay').removeClass("display");
-                $('#login').removeClass("display");
-                setTimeout(function () {
-                    $('.overlay').removeClass("display");
-                }, 150); // opoznienie
-            });
-        });
     });
 })();

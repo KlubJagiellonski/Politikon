@@ -1,7 +1,8 @@
 (function() {
     $(document).ready(function () {
-        //pokaż menu z hamburgera
-        $('.burger').on('click', function () {
+        function showSmallPopup(name){
+            $('#maintop .mainmenu').removeClass('display');
+            $('#maintop .mainmenu').removeClass('opacity');
             $('#maintop .graj .avatarmenu ul').removeClass('display');
             $('#maintop .graj .avatarmenu ul').removeClass('opacity');
             $('#wallet-not').css({'margin-top': ''});
@@ -10,35 +11,25 @@
             $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
             $('.rozsrzygniecie').removeClass("display");
             $('.rozsrzygniecie').addClass("opacity");
-            $('#maintop .mainmenu').addClass("display");
-            $('.overlay').addClass("display");
             $('#login').removeClass("display");
             $('#login').removeClass("opacity");
+            $('#' + name).addClass("display");
+            $('.overlay').addClass("display");
             setTimeout(function () {
-                $('#maintop .mainmenu').addClass("opacity");
+                $('#' + name).addClass("opacity");
                 $('.overlay').addClass("opacity");
             }, 100); // opoznienie
+        }
+
+        //pokaż menu z hamburgera
+        $('.burger').on('click', function () {
+            showSmallPopup('mainmenu');
         });
 
         //pokaż menu z avatara
         $('#maintop .graj .image').on('click', function () {
             if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
-                $('#maintop .mainmenu').removeClass('display');
-                $('#maintop .mainmenu').removeClass('opacity');
-                $('#wallet-not').css({'margin-top': ''});
-                $('#wallet-not').removeClass("opacity");
-                $('#maintop .userdata .wallet .arrowup').removeClass("display");
-                $('#maintop .userdata .wallet .arrowup').removeClass("opacity");
-                $('.rozsrzygniecie').removeClass("display");
-                $('.rozsrzygniecie').removeClass("opacity");
-                $('#maintop .graj .avatarmenu ul').addClass("display");
-                $('.overlay').addClass("display");
-                $('#login').removeClass("display");
-                $('#login').removeClass("opacity");
-                setTimeout(function () {
-                    $('#maintop .graj .avatarmenu ul').addClass("opacity");
-                    $('.overlay').addClass("opacity");
-                }, 100); // opoznienie
+                showSmallPopup('avatarmenu');
             } else {
                 $('.overlay').click();
             }
@@ -47,22 +38,9 @@
         //pokaż powiadomienia
         $('#maintop .userdata .wallet.notification').on('click', function () {
             if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
-                $('#maintop .mainmenu').removeClass('display');
-                $('#maintop .mainmenu').removeClass('opacity');
-                $('#maintop .graj .avatarmenu ul').removeClass('display');
-                $('#maintop .graj .avatarmenu ul').removeClass('opacity');
-                $('.rozsrzygniecie').removeClass("display");
-                $('.rozsrzygniecie').removeClass("opacity");
+                showSmallPopup('arrowup');
                 $('#wallet-not').css({'margin-top': '0px'});
-                $('#maintop .userdata .wallet .arrowup').addClass("display");
-                $('.overlay').addClass("display");
-                $('#login').removeClass("display");
-                $('#login').removeClass("opacity");
-                setTimeout(function () {
-                    $('#wallet-not').addClass("opacity");
-                    $('#maintop .userdata .wallet .arrowup').addClass("opacity");
-                    $('.overlay').addClass("opacity");
-                }, 100); // opoznienie
+                $('#wallet-not').addClass("opacity");
             } else {
                 $('.overlay').click();
             }

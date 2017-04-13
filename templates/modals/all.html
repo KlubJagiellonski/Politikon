@@ -1,0 +1,13 @@
+{% load modals %}
+
+<div id="overlay" class="overlay"><div id="overlay-close" class="overlay-close"></div></div>
+<div id="modals">
+    {% if user.is_authenticated %}
+        {% authenticated_modals user %}
+    {% else %}
+        {% anonymous_modals user %}
+    {% endif %}
+    {% if user.is_staff %}
+        {% staff_modals event %}
+    {% endif %}
+</div>

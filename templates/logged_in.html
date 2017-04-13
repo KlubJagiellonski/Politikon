@@ -4,7 +4,7 @@
 <div class="graj avatar prawa">
     <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
     <nav class="avatarmenu">
-        <ul>
+        <ul id="avatarmenu">
             <li><a href="{% url 'accounts:user_profile' %}">Mój profil</a></li>
             <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
             <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
@@ -18,7 +18,7 @@
         <div class="lewa wallet{% if user.get_newest_results.count %} notification{% endif %}">
             {% if user.get_newest_results.count %}
                 <span id="wallet_notification_count">{{ user.get_newest_results.count }}</span>
-            <div class="arrowup"></div>
+            <div id="arrowup" class="arrowup"></div>
         {% endif %}
         </div>
     </a>

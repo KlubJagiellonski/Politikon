@@ -191,6 +191,15 @@ class UserProfile(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+    @property
+    def should_show_reset_info(self):
+        """
+        Check did user logged in after reset date
+        :return: True if user didn't see message about points reset
+        :rtype: bool
+        """
+        return True if self.last_visit < self.reset_date else False
+
     def reset_account(self, bonus=None):
         """
         Rollbacks user's account to start point. If bonus provided
