@@ -40,7 +40,7 @@
                 }
             });
             $mainmenu.removeClass('display')
-                     .removeClass('opacity')
+                     .removeClass('opacity');
             $overlay.css('z-index', 0);
             setTimeout(function () {
                 $overlay.removeClass("opacity");

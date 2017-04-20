@@ -126,6 +126,7 @@ footer ul a, footer .socialmedia div,
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5f5f5f', endColorstr='#7e7e7e',GradientType=0 );
 }
 .modal-opened .login-close {background: url(../img/login-close.png) top left no-repeat; width: 17px; height: 17px; cursor: pointer;}
+.modal-big {width: 900px; margin-left: -450px;}
 
 .parsley-errors-list li {width: 100%; background: #fff5f5; border: 1px solid #8c0808; padding: 5px 0; color: #8c0808; font-weight: 700; margin: -11px 0 10px;}
 

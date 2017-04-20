@@ -1,10 +1,17 @@
 {% if user.should_show_reset_info %}
-<div id="reset-message" class="modal-opened">
+<div id="reset-message" class="modal-opened modal-big">
     <div class="header">Reset punktów <span class="prawa login-close"></span></div>
 
-    <aside class="asblock opacity">
-        <p>Dnia 12 kwietnia zostały zresetowane punkty. Wersja beta została pomyślnie zakończona. Gra wystartowała!</p>
+    <aside class="asblock opacity rules">
+        <p>Wprowadzamy parę zmian w Politikonie. Będą to:</p>
+        <p>
+           - poprawa bufora płynności (ceny zakładów będą się zmieniać mniej gwałtownie)<br/>
+           - poprawa czytelności rankingów<br/>
+           - i najważniejsze: koniec z brakiem reputów i niemożnością grania. Suma reputów dla każdego gracza będzie od wtorku wynosić 50 tysięcy.<br/>
+        </p>
+        <p>Uwaga! Przy podwyższeniu limitu reputów wyrównamy wartość portfela + wolnych punktów, ale zmianie NIE ulegną Wasze dokonane inwestycje (czyli czekające na rozstrzygnięcie zakłady).</p>
+        <p>Mamy nadzieję, że dzięki tym poprawkom Politikon będzie lepiej odpowiadał Waszym potrzebom. Pamiętajcie, że cały czas jesteśmy do dyspozycji - możecie do nas pisać poprzez Facebooka albo Twittera.</p>
     </aside>
-    <div class="other">&nbsp;</div>
+    <div class="other"><p>Ekipa Politikonu</p></div>
 </div>
 {% endif %}
