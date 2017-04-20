@@ -1,9 +1,10 @@
 # Deployment and work
+pip>=9.0.1
 Django==1.8.12
 psycopg2
 path.py==2.4.1
 ipdb
-ipython
+ipython==5.4
 
 # Deployment
 gunicorn==19.3.0
