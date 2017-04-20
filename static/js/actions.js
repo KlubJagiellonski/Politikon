@@ -5,6 +5,160 @@
 (function() {
     $(document).ready(function () {
 
+        var $mainmenu = $('#maintop');
+        var $overlay = $('#overlay');
+
+        function showModal(name) {
+            /*
+            Show modal (popup), name must be tag id ex.: <tag id="name">...</tag>
+             */
+            $overlay.addClass('display')
+                .width('100%')
+                .height('100%');
+            var $modal = $('#'+name);
+            $modal.appendTo($overlay);
+            $modal.addClass('display');
+            $modal.css('z-index', 9000);
+            $mainmenu.removeClass("opacity");
+            setTimeout(function () {
+                $overlay.addClass('opacity');
+                $modal.addClass("opacity");
+            }, 150); // opoznienie
+        }
+
+        function hideModal() {
+            /*
+            Hide all popups
+             */
+            $overlay.children().each(function(){
+                // this condition skips div#overlay-close element
+                if ($(this).hasClass('display')) {
+                    $(this).removeClass('display')
+                        .removeClass('opacity');
+                    // move active modal from div#overlay to div#modals
+                    $(this).appendTo($('#modals'));
+                }
+            });
+            $mainmenu.removeClass('display')
+                     .removeClass('opacity')
+            $overlay.css('z-index', 0);
+            setTimeout(function () {
+                $overlay.removeClass("opacity");
+                $overlay.removeClass("display");
+            }, 150); // opoznienie
+        }
+
+        //pokaż menu z hamburgera
+        $('.burger').on('click', function () {
+            $mainmenu.addClass("display");
+            $('.blankoverlay').addClass("display");
+            setTimeout(function () {
+                $mainmenu.addClass("opacity");
+                $('.blankoverlay').addClass("opacity");
+            }, 100); // opoznienie
+        });
+
+        //pokaż okno logowania
+        $('.show-login').on('click', function () {
+            showModal('login');
+        });
+
+        // Show dialog with voting
+        $('.show-zakoncz-wydarzenie').on('click', function () {
+            showModal('outcome-action');
+        });
+
+        // Show message about points reset - in authomaticated.html is condition for it
+        $('#reset-message').each(function(){
+            showModal('reset-message');
+        });
+
+        //ukryj okno logowania po kliknieciu w X
+        $('.login-close').on('click', function () {
+            hideModal();
+        });
+
+        //ukryj wszystko po klieknieciu w overlay
+        $('#overlay-close').on('click', function () {
+            hideModal();
+        });
+
+        //pokaż rejestrację przez e-mail
+        $('.show-rejestracjaemail').on('click', function () {
+            $('.rejestracja').removeClass('opacity');
+            $('.logowanie').removeClass('opacity');
+            $('.przypomnienie').removeClass('opacity');
+
+            setTimeout(function () {
+                $('.rejestracja').removeClass('asblock');
+                $('.logowanie').removeClass('asblock');
+                $('.przypomnienie').removeClass('asblock');
+
+                $('.rejestracjaemail').addClass('asblock');
+            }, 150); // opoznienie
+
+            setTimeout(function () {
+                $('.rejestracjaemail').addClass('opacity');
+            }, 200); // opoznienie
+        });
+
+        //pokaż rejestrację
+        $('.show-rejestracja').on('click', function () {
+            $('.rejestracjaemail').removeClass('opacity');
+            $('.logowanie').removeClass('opacity');
+            $('.przypomnienie').removeClass('opacity');
+
+            setTimeout(function () {
+                $('.rejestracjaemail').removeClass('asblock');
+                $('.logowanie').removeClass('asblock');
+                $('.przypomnienie').removeClass('asblock');
+
+                $('.rejestracja').addClass('asblock');
+            }, 150); // opoznienie
+
+            setTimeout(function () {
+                $('.rejestracja').addClass('opacity');
+            }, 200); // opoznienie
+        });
+
+        //pokaż logowanie
+        $('.show-logowanie').on('click', function () {
+            $('.rejestracjaemail').removeClass('opacity');
+            $('.rejestracja').removeClass('opacity');
+            $('.przypomnienie').removeClass('opacity');
+
+            setTimeout(function () {
+                $('.rejestracjaemail').removeClass('asblock');
+                $('.rejestracja').removeClass('asblock');
+                $('.przypomnienie').removeClass('asblock');
+
+                $('.logowanie').addClass('asblock');
+            }, 150); // opoznienie
+
+            setTimeout(function () {
+                $('.logowanie').addClass('opacity');
+            }, 200); // opoznienie
+        });
+
+        //pokaż reset hasła
+        $('.show-przypomnienie').on('click', function () {
+            $('.rejestracjaemail').removeClass('opacity');
+            $('.rejestracja').removeClass('opacity');
+            $('.logowanie').removeClass('opacity');
+
+            setTimeout(function () {
+                $('.rejestracjaemail').removeClass('asblock');
+                $('.rejestracja').removeClass('asblock');
+                $('.logowanie').removeClass('asblock');
+
+                $('.przypomnienie').addClass('asblock');
+            }, 150); // opoznienie
+
+            setTimeout(function () {
+                $('.przypomnienie').addClass('opacity');
+            }, 200); // opoznienie
+        });
+
         //featured - pokazuje wykres
         $(document).on({
             mouseenter: function () {
@@ -27,10 +181,10 @@
 
         //ukrywa menu z hamburgera po odpaleniu intro
         $(document).on('click', '.intro-start', function () {
-            $('#maintop .mainmenu').removeClass("opacity");
+            $mainmenu.removeClass("opacity");
             $('.blankoverlay').removeClass("opacity");
             setTimeout(function () {
-                $('#maintop .mainmenu').removeClass("display");
+                $mainmenu.removeClass("display");
                 $('.blankoverlay').removeClass("display");
             }, 100); // opoznienie
         });
@@ -276,19 +430,18 @@
         preloadImages();
 
         // GŁÓWNE MENU - SCROLL
-        var s = $("#maintop");
-        var pos = s.position();
+        var pos = $mainmenu.position();
         var pagestatus = $("#POLITIKON");
         $(window).scroll(function () {
             var windowpos = $(window).scrollTop();
 
             if (windowpos >= 30) { // wysokosc, po ktorej zaczyna sie scroll
-                s.addClass("sticktotop");
-                s.css({'top': '0px'});
+                $mainmenu.addClass("sticktotop");
+                $mainmenu.css({'top': '0px'});
                 pagestatus.addClass("body-scrolled");
             } else {
-                s.removeClass("sticktotop");
-                s.css({'top': ''});
+                $mainmenu.removeClass("sticktotop");
+                $mainmenu.css({'top': ''});
                 pagestatus.removeClass("body-scrolled");
             }
         });

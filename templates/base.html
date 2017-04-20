@@ -1,6 +1,7 @@
 {% load path %}
 {% load i18n %}
 {% load static %}
+{% load modals %}
 
 {% url 'accounts:rank' as rank_url %}
 {% url 'events:events' as events_url %}
@@ -52,7 +53,8 @@
 <![endif]-->
 <!-- ^^ wsparcie dla IE pod http://code.google.com/p/ie7-static/js/ -->
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+{#<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>#}
+<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dotdotdot.min.js' %}"></script>
 <!-- infinite scrolling -->
 <script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js?v=401' %}"></script>
@@ -60,13 +62,11 @@
 <!--<script src="static/js/skrypty.js"></script>-->
 
 {% if not user.is_authenticated %}
-<!--skrypty dla goscia-->
-<script type="text/javascript" language="javascript" src="{% static 'js/guest.js' %}"></script>
 <!--WALIDACJA FORMULARZA-->
 <script src="{% static 'js/walidacja/parsley.min.js' %}"></script>
 {% else %}
 <!--skrypty dla zalogowanego-->
-<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js?v=3' %}"></script>
 <!-- the mousewheel plugin -->
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.js' %}"></script>
 <!-- the jScrollPane script -->
@@ -85,14 +85,9 @@
 <body id="POLITIKON">
 
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId={{ facebook_app_id }}";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-<div class="overlay"></div>
+
+{% choose_modal user event %}
+
 {% if user.is_staff %}
     {% include 'staff.html' %}
 {% endif %}
@@ -108,7 +103,7 @@
         </div>
         <nav class="astable lewa">
             <div class="burger"></div>
-            <ul class="mainmenu">
+            <ul id="mainmenu" class="mainmenu">
                 <div class="arrowup"></div>
                 <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
                 <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
@@ -187,30 +182,6 @@
     </div>
 </div>
 
-<!-- Google Analytics -->
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-78893476-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
-<!-- Hotjar Tracking Code for www.politikon.org.pl -->
-<script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:352781,hjsv:5};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
-</script>
-
 <!-- ShareThis scripts -->
 <script type="text/javascript" src="http://ws.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
@@ -226,7 +197,7 @@
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
-<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=2' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=5' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
 {% block js_scripts %}
@@ -234,6 +205,34 @@
 
 {% if messages %}
 <script type="text/javascript">
+{# facebook script #}
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId={{ facebook_app_id }}";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+{# Google Analytics #}
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-78893476-1', 'auto');
+ga('send', 'pageview');
+
+{# Hotjar Tracking Code for www.politikon.org.pl #}
+(function(h,o,t,j,a,r){
+    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+    h._hjSettings={hjid:352781,hjsv:5};
+    a=o.getElementsByTagName('head')[0];
+    r=o.createElement('script');r.async=1;
+    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+    a.appendChild(r);
+})(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+
 $(function () {
 {% for message in messages %}
     noty({

@@ -1,0 +1,30 @@
+{% load display format %}
+<div id="outcome-action" class="modal-opened">
+    <div class="header">Rozstrzygnij wydarzenie! <span class="prawa login-close"></span></div>
+    <aside class="rozstrzygniecie asblock opacity">
+        {% if event.is_in_progress %}
+        <h2{% if not voted %} class="hidden"{% endif %}>Zagłosowałeś na <span id="decision">{{ voted }}</span></h2>
+        <div id="resolveabet">
+            <a href="#" class="a_bet a_betYES" data-outcome="YES" data-event_id="{{ event.id }}">
+                <div class="betYES">
+                    <span class="value prawa">{{ event.vote_yes_count }}</span><span class="txt lewa">tak</span>
+                </div>
+            </a>
+            <a href="#" class="a_bet a_betCANCEL" data-outcome="CANCEL" data-event_id="{{ event.id }}">
+                <div class="betCANCEL">
+                    <span class="value prawa">{{ event.vote_cancel_count }}</span><span class="txt lewa">anuluj</span>
+                </div>
+            </a>
+            <a href="#" class="a_bet a_betNO" data-outcome="NO" data-event_id="{{ event.id }}">
+                <div class="betNO">
+                    <span class="value prawa">{{ event.vote_no_count }}</span><span class="txt lewa">nie</span>
+                </div>
+            </a>
+        </div>
+        <div class="other"><p>Problem z podjęciem decyzji? <a href="#" class="show-logowanie">Skontaktuj się z innymi</a>.</p></div>
+        {% else %}
+        <h1>Wydarzenie zostało rozstrzygnięte na {% if event.outcome == 3 %}TAK{% elif event.outcome == 4 %}NIE{% endif %}</h1>
+        <div class="other"><p>Problem z podjęciem decyzji? <a href="#" class="show-logowanie">Skontaktuj się z innymi</a>.</p></div>
+        {% endif %}
+    </aside>
+</div>

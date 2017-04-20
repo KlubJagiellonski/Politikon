@@ -50,10 +50,13 @@ footer ul a, footer .socialmedia div,
 .section-nopadding {width: 100% !important; padding: 0 !important; }
 .body-margin {margin-top: 40px;}
 
-.overlay {height: 100%; width: 100%; top: 0; left: 0; position: fixed; margin-top: -26px; background: rgba(0,0,0,0.35); border-bottom: 26px solid rgba(0,0,0,0.0); z-index: 5000; opacity: 0; display: none;}
+.overlay {top: 0; left: 0; position: fixed; margin-top: -26px; background: rgba(0,0,0,0.35); border-bottom: 26px solid rgba(0,0,0,0.0); z-index: 5000; opacity: 0; display: none;}
 .overlay-close {position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; background: transparent;}
 
-#login {
+#overlay {width: 0; height: 0; z-index: 6000;}
+#modals {display: none;}
+
+.modal-opened {
     display: none;
     opacity: 0;
     width: 560px;
@@ -61,38 +64,37 @@ footer ul a, footer .socialmedia div,
     top: 94px;
     left: 50%;
     margin-left: -280px;
-    z-index: 7000;
     position: fixed;
         -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
 }
-#login aside {padding: 35px 0 0; text-align: center; display: none; opacity: 0;}
-#login p, #login h2, #login div, #login form {width: 71.43%; margin: 0 auto;}
-#login p {color: #666;}
-#login a, #login a:visited {color: #ea6a2a;}
-#login a:hover {color: #c84d28;}
-#login .twitter-login {height: 70px; background: #5ea9dd url(../img/login-socialmedia.png) 0 0 no-repeat; margin-bottom: 10px;}
-#login .twitter-login:hover {background-color: #7fc2f1;}
-#login .facebook-login {height: 70px; background: #395183 url(../img/login-socialmedia.png) 0 -70px no-repeat; margin-bottom: 35px;}
-#login .facebook-login:hover {background-color: #5370ad;}
-#login .twitter-login span, #login .facebook-login span {color: #fff; font-size: 1.125em; float: left; margin: 25px 0 0 95px;}
-#login .other {width: 100%; height: 80px; background: #efefef url(../img/login-logo-politikon.png) left no-repeat; margin-top: 25px;}
-#login .other p {font-weight: 700; padding-top: 30px;}
-#login .or {width: 100%; background: url(../img/login-line.png) repeat-x; margin-bottom: 35px;}
-#login .or span {background: #fff; padding: 0 20px;}
-#login .tip, #login .rules {font-size: .875em; font-weight: 300;}
-#login .tip a, #login .tip a:visited {color: #999;}
-#login .tip a:hover {color: #333;}
-#login .rules {width: 100%; margin: 5px 0 20px; text-align: left;}
-#login h2 {font-size: 1.125em; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; color: #666;}
-#login .spaceafter {margin-bottom: 25px;}
+.modal-opened aside {padding: 35px 0 0; text-align: center; display: none; opacity: 0;}
+.modal-opened p, .modal-opened h2, .modal-opened div, .modal-opened form {width: 71.43%; margin: 0 auto;}
+.modal-opened p {color: #666;}
+.modal-opened a, .modal-opened a:visited {color: #ea6a2a;}
+.modal-opened a:hover {color: #c84d28;}
+.modal-opened .twitter-login {height: 70px; background: #5ea9dd url(../img/login-socialmedia.png) 0 0 no-repeat; margin-bottom: 10px;}
+.modal-opened .twitter-login:hover {background-color: #7fc2f1;}
+.modal-opened .facebook-login {height: 70px; background: #395183 url(../img/login-socialmedia.png) 0 -70px no-repeat; margin-bottom: 35px;}
+.modal-opened .facebook-login:hover {background-color: #5370ad;}
+.modal-opened .twitter-login span, .modal-opened .facebook-login span {color: #fff; font-size: 1.125em; float: left; margin: 25px 0 0 95px;}
+.modal-opened .other {width: 100%; height: 80px; background: #efefef url(../img/login-logo-politikon.png) left no-repeat; margin-top: 25px;}
+.modal-opened .other p {font-weight: 700; padding-top: 30px;}
+.modal-opened .or {width: 100%; background: url(../img/login-line.png) repeat-x; margin-bottom: 35px;}
+.modal-opened .or span {background: #fff; padding: 0 20px;}
+.modal-opened .tip, .modal-opened .rules {font-size: .875em; font-weight: 300;}
+.modal-opened .tip a, .modal-opened .tip a:visited {color: #999;}
+.modal-opened .tip a:hover {color: #333;}
+.modal-opened .rules {width: 100%; margin: 5px 0 20px; text-align: left;}
+.modal-opened h2 {font-size: 1.125em; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; color: #666;}
+.modal-opened .spaceafter {margin-bottom: 25px;}
 .jednalinia, .wielelinii {border: 1px solid #ccc; margin-bottom: 10px; font-family: 'Exo 2', Arial, sans-serif; font-size: 1em; color: #666;}
-#login .jednalinia {width: 90%; padding: 20px 5%;}
-#login form {margin-bottom: 20px;}
-#login .jednalinia:hover {border-color: #aaa;}
-#login .jednalinia:focus {border-color: #999;}
-#login .przycisk {width: 100%; height: 55px; border: 1px solid #7e7e7e; border-radius: 5px;
+.modal-opened .jednalinia {width: 90%; padding: 20px 5%;}
+.modal-opened form {margin-bottom: 20px;}
+.modal-opened .jednalinia:hover {border-color: #aaa;}
+.modal-opened .jednalinia:focus {border-color: #999;}
+.modal-opened .przycisk {width: 100%; height: 55px; border: 1px solid #7e7e7e; border-radius: 5px;
         font-size: 1.25em; font-weight: 700; color: #fff; text-transform: uppercase; font-family: 'Exo 2', Arial, sans-serif;
         background: #7e7e7e;
         background: -moz-linear-gradient(top,  #7e7e7e 0%, #717171 100%);
@@ -103,7 +105,7 @@ footer ul a, footer .socialmedia div,
         background: linear-gradient(to bottom,  #7e7e7e 0%,#717171 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7e7e7e', endColorstr='#717171',GradientType=0 );
 }
-#login .przycisk:hover {
+.modal-opened .przycisk:hover {
         background: #7e7e7e;
         background: -moz-linear-gradient(top,  #7e7e7e 0%, #5f5f5f 100%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7e7e7e), color-stop(100%,#5f5f5f));
@@ -113,7 +115,7 @@ footer ul a, footer .socialmedia div,
         background: linear-gradient(to bottom,  #7e7e7e 0%,#5f5f5f 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7e7e7e', endColorstr='#5f5f5f',GradientType=0 );
 }
-#login .przycisk:active {
+.modal-opened .przycisk:active {
         background: #5f5f5f;
         background: -moz-linear-gradient(top,  #5f5f5f 0%, #7e7e7e 99%);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5f5f5f), color-stop(99%,#7e7e7e));
@@ -123,11 +125,11 @@ footer ul a, footer .socialmedia div,
         background: linear-gradient(to bottom,  #5f5f5f 0%,#7e7e7e 99%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5f5f5f', endColorstr='#7e7e7e',GradientType=0 );
 }
-#login .login-close {background: url(../img/login-close.png) top left no-repeat; width: 17px; height: 17px; cursor: pointer;}
+.modal-opened .login-close {background: url(../img/login-close.png) top left no-repeat; width: 17px; height: 17px; cursor: pointer;}
 
 .parsley-errors-list li {width: 100%; background: #fff5f5; border: 1px solid #8c0808; padding: 5px 0; color: #8c0808; font-weight: 700; margin: -11px 0 10px;}
 
-#maintop {height: 100px; background: #f6f6f6; z-index: 5000; position: relative;
+#maintop {height: 100px; background: #f6f6f6; z-index: 8000; position: relative;
         -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
         -moz-box-shadow:    0px 5px 5px 0px rgba(0, 0, 0, 0.1);
         box-shadow:         0px 5px 5px 0px rgba(0, 0, 0, 0.1);
@@ -289,7 +291,7 @@ footer ul a, footer .socialmedia div,
         -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
 }
-#wallet-not .inside .header, #login .header {width: 95.1%; padding: 20px 2.5%; background: #ea6a2a; color: #fff; font-size: 1.125em; font-weight: 700; text-transform: uppercase;}
+#wallet-not .inside .header, .modal-opened .header {width: 95.1%; padding: 20px 2.5%; background: #ea6a2a; color: #fff; font-size: 1.125em; font-weight: 700; text-transform: uppercase;}
 #wallet-not .inside .header span {float: right; color: #feceb5; font-size: .8em; font-weight: 400; text-transform: none;}
 .betresult {padding: 0 2.5%; background: #f5f5f5; width: 94%; display: table; margin-bottom: 5px; height: 110px; border: 1px solid #f5f5f5;}
 .betresult:hover {border: 1px solid #d6d6d6;}
