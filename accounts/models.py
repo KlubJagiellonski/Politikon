@@ -198,7 +198,7 @@ class UserProfile(AbstractBaseUser):
         :return: True if user didn't see message about points reset
         :rtype: bool
         """
-        return True if self.last_visit < self.reset_date else False
+        return self.last_visit < self.reset_date
 
     def reset_account(self, bonus=None):
         """
