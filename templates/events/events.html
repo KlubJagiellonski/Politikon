@@ -22,31 +22,31 @@ $(function() {
 
 <section id="header"  class="body-margin">
     <h2>Wydarzenia</h2>
-{#    <ul class="tabs prawa">#}
-{#        <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}">Najpopularniejsze</a></li>#}
-{#        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">Kończące się</a></li>#}
-{#        <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">Największe zmiany</a></li>#}
-{#        <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">Najnowsze</a></li>#}
-{#        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">Zakończone</a></li>#}
-{#        {% if user.is_authenticated and user.is_staff %}#}
-{#        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">Poczekalnia</a></li>#}
-{#        {% endif %}#}
-{#    </ul>#}
-    <div class="tabs prawa filters">
-        sortuj według:
-        <select>
-            <option>popularności</option>
-            <option>kończących się</option>
-            <option>największych zmian</option>
-            <option>najnowszych</option>
-        </select>
-    </div>
-    Popularne tagi:
     <ul class="tabs prawa">
-        {% for tag in popular_tags %}
-          <li><a href="?tag={{ tag }}">{{ tag }}</a></li>
-        {% endfor %}
+        <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}">Najpopularniejsze</a></li>
+        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">Kończące się</a></li>
+        <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">Największe zmiany</a></li>
+        <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">Najnowsze</a></li>
+        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">Zakończone</a></li>
+        {% if user.is_authenticated and user.is_staff %}
+        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">Poczekalnia</a></li>
+        {% endif %}
     </ul>
+{#    <div class="tabs prawa filters">#}
+{#        sortuj według:#}
+{#        <select>#}
+{#            <option>popularności</option>#}
+{#            <option>kończących się</option>#}
+{#            <option>największych zmian</option>#}
+{#            <option>najnowszych</option>#}
+{#        </select>#}
+{#    </div>#}
+{#    Popularne tagi:#}
+{#    <ul class="tabs prawa">#}
+{#        {% for tag in popular_tags %}#}
+{#          <li><a href="?tag={{ tag }}">{{ tag }}</a></li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
 </section>
 
 <section id="betfeed">
