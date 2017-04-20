@@ -66,7 +66,7 @@
 <script src="{% static 'js/walidacja/parsley.min.js' %}"></script>
 {% else %}
 <!--skrypty dla zalogowanego-->
-<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js?v=3' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/loggedin.js?v=4' %}"></script>
 <!-- the mousewheel plugin -->
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.js' %}"></script>
 <!-- the jScrollPane script -->
@@ -75,7 +75,7 @@
 {% endif %}
 {% if user.is_staff %}
 <!--skrypty dla redakcji-->
-<script type="text/javascript" language="javascript" src="{% static 'js/staff.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/staff.js?v=2' %}"></script>
 {% endif %}
 
 
@@ -183,7 +183,7 @@
 </div>
 
 <!-- ShareThis scripts -->
-<script type="text/javascript" src="http://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
 <!-- ChartJS scripts -->
@@ -197,7 +197,7 @@
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
-<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=5' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=6' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
 {% block js_scripts %}
