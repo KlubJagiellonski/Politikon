@@ -47,7 +47,7 @@ class Event(models.Model):
     }
 
     BEGIN_PRICE = 50
-    FACTOR_B = 2
+    FACTOR_B = 10
     PRIZE_FOR_WINNING = 100
 
     CHART_MARGIN = 3
