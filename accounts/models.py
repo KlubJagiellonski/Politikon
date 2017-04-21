@@ -409,8 +409,7 @@ class UserProfile(AbstractBaseUser):
                     snapshot.created_at.day,
                     _(snapshot.created_at.strftime('%B'))
                 ))
-                reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash,
-                                                     snapshot.total_given_cash)
+                reputation = self.reputation_formula(snapshot.portfolio_value, snapshot.total_cash)
                 points.append(str(int(reputation)))
             old_created_at = snapshot.created_at.strftime('%m%d')
 
