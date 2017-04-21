@@ -22,7 +22,7 @@
                         {% render_finish_date event %}
                     </div>
                     {% if event.is_published %}
-                    <canvas class="event-canvas" id="event-{{ event.id }}-canvas" height="70" data-id="{{ event.id }}" data-chart="{{ event.get_JSON_small_chart }}"></canvas>
+                    <canvas class="event-canvas" id="event-{{ event.id }}-canvas" height="120" data-id="{{ event.id }}" data-chart="{{ event.get_JSON_small_chart }}"></canvas>
                     {% endif %}
                 </div>
             </a>

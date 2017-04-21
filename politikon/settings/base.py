@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 import urlparse
@@ -17,8 +18,8 @@ DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname().dirname()
 DEBUG = True
 
 ADMINS = (
-    ('Jakub Lipinski', ''),
-    ('Tomasz Grynfelder', '')
+    (u'Piotr Pęczek', ''),
+    (u'Wojciech Zając', '')
 )
 
 MANAGERS = ADMINS

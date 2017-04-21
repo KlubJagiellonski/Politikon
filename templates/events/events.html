@@ -32,6 +32,21 @@ $(function() {
         <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">Poczekalnia</a></li>
         {% endif %}
     </ul>
+{#    <div class="tabs prawa filters">#}
+{#        sortuj według:#}
+{#        <select>#}
+{#            <option>popularności</option>#}
+{#            <option>kończących się</option>#}
+{#            <option>największych zmian</option>#}
+{#            <option>najnowszych</option>#}
+{#        </select>#}
+{#    </div>#}
+{#    Popularne tagi:#}
+{#    <ul class="tabs prawa">#}
+{#        {% for tag in popular_tags %}#}
+{#          <li><a href="?tag={{ tag }}">{{ tag }}</a></li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
 </section>
 
 <section id="betfeed">

@@ -440,6 +440,24 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 .zakladki-content article {display: none;}
 .zakladki-content article.active {display: block;}
 
+.filters select {
+    -webkit-appearance: initial;
+    -moz-appearance: initial;
+    appearance: initial;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    background: #ea6a2a;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    height: 29px;
+    padding: 5px; /* If you add too much padding here, the options won't show in IE */
+    width: 200px;
+    text-align: right;
+}
+
 
 /* strona główna */
 #featured {margin-bottom: 28px;}
@@ -491,9 +509,23 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
     padding-bottom: 40px;
 }
 
-#betfeed .details-chart {top: 0px; background: rgba(0,0,0,0.5); width: 100%; height: 95px; padding: 50px 0; position: absolute; top: 0px; margin-bottom: 50px; opacity: 0; z-index: 2000;}
-#betfeed .details-chart canvas {width: 110%;}
-#betfeed .details-chart:hover {opacity: 1;}
+#betfeed .details-chart {
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 150px;
+    padding: 40px 0;
+    position: absolute;
+    top: 0px;
+    margin-bottom: 50px;
+    opacity: 0;
+    z-index: 2000;
+}
+#betfeed .details-chart canvas {
+    width: 110%;
+}
+#betfeed .details-chart:hover {
+    opacity: 1;
+}
 
 #betfeed #makeabet {margin-top: 5px;}
 #betfeed .bet:hover {

@@ -9,7 +9,7 @@ from politikon.templatetags.format import toLower
 register = template.Library()
 
 
-@register.inclusion_tag('render_bet.html')
+@register.inclusion_tag('events/render_bet.html')
 def render_bet(event, bet_line):
     return {
         'event': event,
@@ -17,7 +17,7 @@ def render_bet(event, bet_line):
     }
 
 
-@register.inclusion_tag('render_event.html')
+@register.inclusion_tag('events/render_event.html')
 def render_event(event, bet_line):
     return {
         'event': event,
@@ -25,41 +25,31 @@ def render_event(event, bet_line):
     }
 
 
-@register.inclusion_tag('render_events.html')
+@register.inclusion_tag('events/render_events.html')
 def render_events(events):
     return {
         'events': events,
     }
 
 
-@register.inclusion_tag('render_featured_event.html')
+@register.inclusion_tag('events/render_featured_event.html')
 def render_featured_event(event):
     return {
         'event': event,
     }
 
 
-@register.inclusion_tag('render_featured_events.html')
+@register.inclusion_tag('events/render_featured_events.html')
 def render_featured_events(events):
     return {
         'events': events,
     }
 
 
-@register.inclusion_tag('render_bet_status.html')
+@register.inclusion_tag('events/render_bet_status.html')
 def render_bet_status(bet):
     return {
         'bet': bet,
-    }
-
-
-@register.inclusion_tag('user_stats.html')
-def userstats(user, overall_rank, month_rank, week_rank):
-    return {
-        'user': user,
-        'overall_rank': overall_rank,
-        'month_rank': month_rank,
-        'week_rank': week_rank
     }
 
 
@@ -76,7 +66,7 @@ def outcome(event):
         return ""
 
 
-@register.inclusion_tag('finish_date.html')
+@register.inclusion_tag('events/finish_date.html')
 def render_finish_date(event):
     state = 'finished'
     if event.is_in_progress:
@@ -87,7 +77,7 @@ def render_finish_date(event):
     }
 
 
-@register.inclusion_tag('og_title.html')
+@register.inclusion_tag('events/og_title.html')
 def og_title(event, vote=None, user=None):
     title = event.title
     if user:

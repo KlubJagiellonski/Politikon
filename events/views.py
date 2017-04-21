@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class EventsListView(ListView):
-    template_name = 'events.html'
+    template_name = 'events/events.html'
     context_object_name = 'events'
     paginate_by = 6
 
@@ -43,11 +43,12 @@ class EventsListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
         context['active'] = self.kwargs['mode']
+        context['popular_tags'] = Event.tags.most_common()[:10]
         return context
 
 
 class EventFacebookObjectDetailView(DetailView):
-    template_name = 'facebook_event_detail.html'
+    template_name = 'events/facebook_event_detail.html'
     context_object_name = 'event'
     model = Event
 
@@ -56,7 +57,7 @@ class EventFacebookObjectDetailView(DetailView):
 
 
 class EventDetailView(DetailView):
-    template_name = 'event_detail.html'
+    template_name = 'events/event_detail.html'
     context_object_name = 'event'
     model = Event
 
