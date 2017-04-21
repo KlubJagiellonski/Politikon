@@ -146,10 +146,7 @@ class UserProfile(AbstractBaseUser):
 
     @property
     def statistics_dict(self):
-        if self.reputation:
-            reputation = "%s%%" % formatted(self.reputation)
-        else:
-            reputation = None
+        reputation = "%s%%" % formatted(self.reputation) if self.reputation else "100%"
         return {
             'user_id': self.id,
             'total_cash': formatted(self.total_cash),
@@ -431,8 +428,9 @@ class UserProfile(AbstractBaseUser):
             created_at__gte=start_date,
         ).order_by('created_at')
         if len(snapshots):
-            old_reputation = self.reputation_formula(snapshots[0].portfolio_value,
-                                                     snapshots[0].total_cash)
+            old_reputation = self.reputation_formula(
+                snapshots[0].portfolio_value, snapshots[0].total_cash
+            )
             return int((self.reputation - old_reputation)*100/old_reputation)
         else:
             return int(self.reputation - 100)
