@@ -12,8 +12,8 @@
             <p class="rank-freereputy">{{ user.total_cash|formatted }}</p>
             {% if showProfit %}
             <p class="rank-reputation">
-            {% if profit > 0 %}<span style="color: red;">&#9660;</span>{% endif %}
-            {% if profit < 0 %}<span style="color: green;">&#9650;</span>{% endif %}
+            {% if profit > 0 %}<span style="color: green;">&#9650;</span>{% endif %}
+            {% if profit < 0 %}<span style="color: red;">&#9660;</span>{% endif %}
             {% if profit == 0 %}&#9658;{% endif %}
             {{ profit|floatformat:"2" }}%
             </p>
