@@ -2,6 +2,11 @@ from django import template
 register = template.Library()
 
 
+@register.filter
+def absolute(value):
+    return abs(value)
+
+
 @register.inclusion_tag('accounts/user_home.html')
 def user_home(user, reputation_change, is_formatted=False):
     return {

@@ -1,4 +1,5 @@
 {% load format %}
+{% load user %}
 
 <a href="{{ user.get_absolute_url }}" class="{{ item_class }}-item">
     <div class="ranking-event{% if user == request.user %} ranking-you{% endif %}">
@@ -15,7 +16,7 @@
             {% if profit > 0 %}<span style="color: green;">&#9650;</span>{% endif %}
             {% if profit < 0 %}<span style="color: red;">&#9660;</span>{% endif %}
             {% if profit == 0 %}&#9658;{% endif %}
-            {{ profit|floatformat:"2" }}%
+            {{ profit|absolute }}%
             </p>
             {% else %}
             <p class="rank-reputation">{{ user.reputation|formatted }}%
