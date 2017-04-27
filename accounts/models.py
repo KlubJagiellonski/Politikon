@@ -74,8 +74,8 @@ class UserProfile(AbstractBaseUser):
     reputation = models.DecimalField(u"reputation", default=100, max_digits=12, decimal_places=2,
                                      null=True)
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
-    weekly_result = models.IntegerField(u"wynik tygodniowy", null=True, blank=True)
-    monthly_result = models.IntegerField(u"wynik miesięczny", null=True, blank=True)
+    weekly_result = models.DecimalField(u"wynik tygodniowy", decimal_places=2, max_digits=7, null=True, blank=True)
+    monthly_result = models.DecimalField(u"wynik miesięczny", decimal_places=2, max_digits=7, null=True, blank=True)
 
     web_site = models.URLField(u"strona www", max_length=255, default='')
     description = models.CharField(u"krótki opis", max_length=255, default='')
@@ -431,9 +431,9 @@ class UserProfile(AbstractBaseUser):
             old_reputation = self.reputation_formula(
                 snapshots[0].portfolio_value, snapshots[0].total_cash
             )
-            return int((self.reputation - old_reputation)*100/old_reputation)
+            return (self.reputation - old_reputation)*100/old_reputation
         else:
-            return int(self.reputation - 100)
+            return self.reputation - 100
 
     def get_last_week_reputation_change(self):
         """
