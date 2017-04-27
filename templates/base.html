@@ -203,7 +203,6 @@
 {% block js_scripts %}
 {% endblock %}
 
-{% if messages %}
 <script type="text/javascript">
 {# facebook script #}
 (function(d, s, id) {
@@ -232,7 +231,10 @@ ga('send', 'pageview');
     r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
     a.appendChild(r);
 })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
 
+{% if messages %}
+<script type="text/javascript">
 $(function () {
 {% for message in messages %}
     noty({
