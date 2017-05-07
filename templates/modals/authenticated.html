@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if user.should_show_reset_info %}
 <div id="reset-message" class="modal-opened modal-big">
     <div class="header">Reset punktów <span class="prawa login-close"></span></div>
@@ -15,3 +16,47 @@
     <div class="other"><p>Ekipa Politikonu</p></div>
 </div>
 {% endif %}
+<div id="add-event" class="modal-opened modal-big">
+    <div class="header">Dodaj wydarzenie <span class="prawa login-close"></span></div>
+
+    <aside id="add-event-content" class="asblock opacity rules">
+        <p>Dodawanie wydarzenia</p>
+        <form id="add-event-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-sm-2">{% trans 'Event title' %}</label>
+                <div class="col-sm-10">
+                    <input name="title" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">{% trans 'Small image' %}</label>
+                <div class="col-sm-10">
+                    <input name="small_image" type="file" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">{% trans 'Big image' %}</label>
+                <div class="col-sm-10">
+                    <input name="big_image" type="file" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">{% trans 'Description' %}</label>
+                <div class="col-sm-10">
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">{% trans 'Prediction end of event' %}</label>
+                <div class="col-sm-10">
+                    <input name="estimate_end_date" class="form-control" type="datetime-local" />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="add-event-submit" class="btn btn-primary" title="Send">{% trans 'Send' %}</button>
+            </div>
+        </form>
+    </aside>
+    <div class="other">&nbsp;</div>
+</div>
