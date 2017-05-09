@@ -92,26 +92,15 @@
         // Add new event proposition
         $('#add-event-button').on('click', function(){
             showModal('add-event');
-            $.ajax({
-                type: 'GET',
-                contentType: 'application/json',
-                url: '/api/events/event/create/',
-                success: function (data) {
-                    console.log(data);
-                    $('#add-event-content').html(data.content);
-                }
-            });
         });
 
         $('#add-event-submit').on('click', function() {
             $.ajax({
                 type: 'POST',
-                data: JSON.stringify($('#add-event-form').serialize()),
-                contentType: 'application/json',
+                data: $('#add-event-form').serialize(),
                 url: '/api/events/event/create/',
                 success: function (data) {
-                    console.log(data);
-                    $('#add-event-content').html(data.content);
+                    $('#add-event-content').html('wydarzenie utworzone');
                 }
             });
             return false;
