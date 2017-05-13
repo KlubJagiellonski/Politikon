@@ -21,7 +21,7 @@
 
     <aside id="add-event-content" class="asblock opacity rules">
         <p>Dodawanie wydarzenia</p>
-        <form id="add-event-form" method="post" enctype="multipart/form-data">
+        <form id="add-event-form" action="/api/events/event/create/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label class="col-sm-2">{% trans 'Event title' %}</label>
