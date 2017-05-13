@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework import generics
 
 from .serializers import (
@@ -15,7 +16,13 @@ class CreateEventView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         """Force author to the current user on save"""
-        serializer.save(created_by=self.request.user, is_published=False)
+        instance = serializer.save(created_by=self.request.user, is_published=False)
+        self.redirect_to = instance.get_relative_url()
+        return instance
+
+    def post(self, request, *args, **kwargs):
+        super(CreateEventView, self).post(request, *args, **kwargs)
+        return redirect(self.redirect_to)
 
 
 class EventMixin(object):

@@ -94,18 +94,6 @@
             showModal('add-event');
         });
 
-        $('#add-event-submit').on('click', function() {
-            $.ajax({
-                type: 'POST',
-                data: $('#add-event-form').serialize(),
-                url: '/api/events/event/create/',
-                success: function (data) {
-                    $('#add-event-content').html('wydarzenie utworzone');
-                }
-            });
-            return false;
-        });
-
         //ukryj okno logowania po kliknieciu w X
         $('.login-close').on('click', function () {
             hideModal();
