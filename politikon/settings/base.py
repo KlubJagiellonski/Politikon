@@ -25,7 +25,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 TIME_ZONE = 'Europe/Warsaw'
-LANGUAGE_CODE = 'pl'
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.10/topics/i18n/
+LANGUAGE_CODE = 'en-us'
 
 LOCALE_PATHS = [
     '/app/locale',
@@ -33,7 +36,11 @@ LOCALE_PATHS = [
 
 LANGUAGES = [
     ('pl', _('Polish')),
+    ('en', _('English')),
 ]
+
+# test for keep chosen language
+LANGUAGE_COOKIE_NAME = 'django_language'
 
 SITE_ID = 1
 SITE_URL = 'https://www.politikon.org.pl/'

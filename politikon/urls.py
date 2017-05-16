@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.conf.urls.i18n import i18n_patterns
 
-from .views import HomeView, acme_challenge
+from .views import HomeView, acme_challenge, change_language
 from events.urls import api_urls as event_api
 
 from django.contrib import admin
@@ -15,18 +16,23 @@ api_urls = [
 
 urlpatterns = patterns(
     '',
+    url(r'^change_language/(?P<lang>(pl|en))$', change_language, name='change_language'),
+    url('', include('social_django.urls', namespace='social')),
+    url(r'^api/', include(api_urls)),
+    url(r'^.well-known/acme-challenge/(?P<acme>\w+)$', acme_challenge, name='acme_challenge'),
+)
+
+urlpatterns += i18n_patterns(
+    '',
     # Admin url patterns
     url(r'^admin/', include(admin.site.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
 
     # User authentication url patternsapi
-    url('', include('social_django.urls', namespace='social')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
-    url(r'^api/', include(api_urls)),
 
     # Application url patterns
     url(r'^', include('events.urls', namespace='events')),
-    url(r'^.well-known/acme-challenge/(?P<acme>\w+)$', acme_challenge, name='acme_challenge'),
 
     url(r'^$', HomeView.as_view(), name='home')
 )
