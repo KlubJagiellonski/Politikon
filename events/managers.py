@@ -200,8 +200,7 @@ class BetManager(models.Manager):
         event_total_bought_price = (bet.bought_avg_price * bet.bought)
         after_bought_quantity = bet.bought + quantity
 
-        bet.bought_avg_price = (event_total_bought_price +
-                                bought_for_total) / after_bought_quantity
+        bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
         bet.has += quantity
         bet.bought += quantity
         bet.save(update_fields=['bought_avg_price', 'has', 'bought'])
