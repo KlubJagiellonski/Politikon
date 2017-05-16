@@ -32,8 +32,8 @@ def get_image_path(instance, filename):
 
 class UserProfile(AbstractBaseUser):
     class Meta:
-        verbose_name = u'użytkownik'
-        verbose_name_plural = u'użytkownicy'
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
 
     objects = UserProfileManager()
     # przeliczane rankingi: ranking, miesiąc, tydzień

@@ -1,7 +1,7 @@
 from constance import config
 
 from django.views.generic import TemplateView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from accounts.models import UserProfile
 from events.models import Event
@@ -60,3 +60,21 @@ def acme_challenge(request, acme):
     response = acme + '.biboVBCHhlGXFnpZ9-E_WPPKgYAtXYoeK19afc-E3GQ'
 
     return HttpResponse(response)
+
+
+def change_language(request, lang):
+    """
+    Set language
+    :param request:
+    :param lang:
+    :return:
+    """
+    request.session['_language'] = lang
+    if 'HTTP_REFERER' in request.META and 'change_language' not in request.META['HTTP_REFERER']:
+        referer_path = request.META['HTTP_REFERER'].split('/')
+        if len(referer_path) > 2:  # looking for 'en' or 'pl' or other lang
+            referer_path[3] = lang
+            jump_to = '/'.join(referer_path)
+            return HttpResponseRedirect(jump_to)
+    jump_to = '/{}'.format(lang)
+    return HttpResponseRedirect(jump_to)

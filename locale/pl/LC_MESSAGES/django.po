@@ -1,17 +1,18 @@
+# -*- coding: utf-8 -*-
 # Politikon
 # Copyright (C) 2016
 # This file is distributed under the same license as the 0.1 package.
 # Piotr Pęczek <ppeczek@gmail.com>, 2016
 #
 #, fuzzy
-msgid "Politikon"
-msgstr "Politikon"
-"Project-Id-Version: 0.1\n"
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-26 00:29+0100\n"
-"PO-Revision-Date: 2016-02-26 00:29+0100\n"
-"Last-Translator: Piotr Pęczek <ppeczek@gmail.com>\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2017-05-16 16:38+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Wojciech Zając <wojciech@reunix.eu>\n"
+"Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
 "Language: PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,70 +20,62 @@ msgstr "Politikon"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: accounts/admin.py:79 accounts/admin.py:87
+#: accounts/admin.py:30 accounts/admin.py:41
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: accounts/admin.py:80
+#: accounts/admin.py:31
 msgid "Important dates"
 msgstr "Ważne daty"
 
-#: accounts/pipeline.py:62 accounts/pipeline.py:97
-msgid "Your account is inactive. Wait for administrator approval."
-msgstr "Twoje konto jest nieaktywne. Zaczekaj na aktywację przez administratora."
+#: accounts/models.py:35
+msgid "user"
+msgstr "użytkownik"
 
-#: accounts/views.py:66
-msgid "user's data updated"
-msgstr "dane użytkownika zaktualizowane"
+#: accounts/models.py:36
+msgid "users"
+msgstr "użytkownicy"
 
-#: accounts/views.py:72
-msgid "e-mail updated"
-msgstr "e-mail zaktualizowany"
-
-#: accounts/views.py:74
-msgid "e-mails doesn't match"
-msgstr "e-maile się nie zgadzają"
-
-#: accounts/views.py:81
-msgid "password updated"
-msgstr "hasło zaktualizowane"
-
-#: accounts/views.py:83
-msgid "passwords doesn't match"
-msgstr "hasła się nie zgadzają"
-
-#: accounts/views.py:85
-msgid "wrong old password"
-msgstr "złe stare hasło"
-
-#: events/managers.py:87
+#: events/managers.py:80 events/managers.py:140
 msgid "Requested event does not exist."
 msgstr "Wydarzenie nie istnieje."
 
-#: events/managers.py:90
+#: events/managers.py:83 events/managers.py:143
 msgid "Event is no longer in progress."
 msgstr "Wydarzenie zostało zakończone"
 
-#: events/managers.py:123 events/managers.py:182
+#: events/managers.py:94
+msgid "Unknown outcome."
+msgstr "Nie prawidłowy zakład."
+
+#: events/managers.py:176 events/managers.py:254
+msgid "Event is currently a draft."
+msgstr "Wydarzenie jest tylko szkicem."
+
+#: events/managers.py:184 events/managers.py:259
 msgid "Price has changed."
 msgstr "Cena uległa zmianie."
 
-#: events/managers.py:129
+#: events/managers.py:190
 msgid "You don't have enough cash."
 msgstr "Nie masz wystarczająco reputów."
 
-#: events/managers.py:188
+#: events/managers.py:265
 msgid "You don't have enough shares."
 msgstr "Nie masz wystarczająco zakładów."
 
-#: events/views.py:100
+#: events/views.py:136
 msgid "Something went wrong, try again in a few seconds."
-msgstr "Spróbuj ponownie."
+msgstr "Coś nie poszło, spróbuj ponownie."
 
-#: politikon/settings.py:31
+#: politikon/settings/base.py:38
 msgid "Polish"
 msgstr "Polski"
 
-#: politikon/settings.py:32
+#: politikon/settings/base.py:39
 msgid "English"
 msgstr "Angielski"
+
+#: templates/base.html:128
+msgid "PLAY"
+msgstr "GRAJ"
