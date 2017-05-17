@@ -916,3 +916,5 @@ a.twitter-timeline:focus {
     opacity: 0;
   }
 }
+
+#cookie-info-container {margin: auto; text-align: center; background-color: white; padding: 3px;}
