@@ -145,6 +145,23 @@ footer ul a, footer .socialmedia div,
 #maintop nav ul li.active {color: #ea6a2a;}
 #maintop nav ul li a {color: inherit;}
 
+ul.language-bar li {
+    float: right !important;
+    line-height: 15px;
+    padding: 15px 10px !important;
+}
+
+ul.language-bar li a img {
+    opacity: 0.4;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+ul.language-bar li.active a img, ul.language-bar li a:hover img {
+    opacity: 1;
+    box-shadow: 1px 1px 10px #000000;
+}
+
 #maintop nav .burger {width: 29px; height: 27px; background: url(../img/00burger.png) center no-repeat; margin-top: 35px; cursor: pointer; opacity: 1; display: none; margin-left: 35%;}
 #maintop nav .burger:hover {opacity: 0.8;}
 
@@ -422,7 +439,10 @@ footer h5 {font-size: 1.14em; color: #e8e7e7; text-transform: uppercase; font-we
 footer ul:nth-child(2) li:first-of-type {margin-top: 2.35em;}
 footer ul a:hover {color: #a1a1a1;}
 
-footer .socialmedia {margin-left: 15%; max-width: 170px;}
+footer nav .language-bar {float: right;}
+footer nav ul.language-bar {margin-top: 10px; margin-right: 10px;}
+
+footer .socialmedia {max-width: 110px;}
 footer .socialmedia div {width: 48px; height: 48px; background-color: #1c1c1c; margin-top: 0px !important; margin-right: 5%; background-repeat: no-repeat; background-image: url(../img/footer-socialmedia.png); background-position: 0 0;}
 footer .socialmedia div:hover {background-color: #222;}
 footer .socialmedia .tt {background-position: 0 0;}

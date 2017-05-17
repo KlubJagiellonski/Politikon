@@ -3,6 +3,8 @@
 {% load display %}
 {% load format %}
 {% load humanize %}
+{% load i18n %}
+
 {% load user %}
 
 {% block facebook_properties %}
@@ -40,7 +42,7 @@
                             color: rgba(255,255,255,0.8);
                             top: 10px;
                             left: 10px;">
-                            Rozwiązanie {{ front_event.estimated_end_date|naturaltime }}
+                            {% trans 'Rozwiązanie' %} {{ front_event.estimated_end_date|naturaltime }}
                         </div>
                         <div>
                             <canvas id="featured-canvas" height="70" data-id="{{ front_event.id }}" data-chart="{{ front_event.get_JSON_big_chart }}"></canvas>
@@ -62,18 +64,18 @@
     </section>
 
     <section id="betfeed" class="hotbets">
-        <h3 class="orangeheader goupheader">Kończące się <div class="prawa hotbet-icon"></div></h3>
+        <h3 class="orangeheader goupheader">{% trans 'Kończące się' %} <div class="prawa hotbet-icon"></div></h3>
         <div>
             {% render_events last_minute_events %}
         </div>
     </section>
 
     <section id="ranking-short">
-        <h3 class="orangetxt lewa">Najlepsi gracze</h3>
+        <h3 class="orangetxt lewa">{% trans 'Najlepsi gracze' %}</h3>
         <ul class="tabs prawa">
-            <li class="active"><a href="#tydzien">Tydzień</a></li>
-            <li><a href="#miesiac">Miesiąc</a></li>
-            <li><a href="#calosc">Całość</a></li>
+            <li class="active"><a href="#tydzien">{% trans 'Tydzień' %}</a></li>
+            <li><a href="#miesiac">{% trans 'Miesiąc' %}</a></li>
+            <li><a href="#calosc">{% trans 'Całość' %}</a></li>
         </ul>
         <div class="clr"></div>
         <div id="userrank_content" class="zakladki-content">
@@ -96,7 +98,7 @@
     </section>
 
     <section id="loadmore">
-        <a href="{% url 'events:events' %}"><div class="btn astable">Wyświetl więcej zakładów</div></a>
+        <a href="{% url 'events:events' %}"><div class="btn astable">{% trans 'Wyświetl więcej zakładów' %}</div></a>
         <div class="more lewa"></div>
         <div class="more prawa"></div>
         <div class="more centrum"></div>

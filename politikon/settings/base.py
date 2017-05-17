@@ -25,7 +25,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 TIME_ZONE = 'Europe/Warsaw'
-LANGUAGE_CODE = 'pl'
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.10/topics/i18n/
+LANGUAGE_CODE = 'en-us'
 
 LOCALE_PATHS = [
     '/app/locale',
@@ -33,7 +36,12 @@ LOCALE_PATHS = [
 
 LANGUAGES = [
     ('pl', _('Polish')),
+    ('en', _('English')),
+    ('lt', _('Lithuanian')),
 ]
+
+# test for keep chosen language
+LANGUAGE_COOKIE_NAME = 'django_language'
 
 SITE_ID = 1
 SITE_URL = 'https://www.politikon.org.pl/'
@@ -109,8 +117,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 # django-constances
 
 CONSTANCE_CONFIG = {
-    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and \
-                                 it\'s publication'),
+    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (340, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (250, 'small event image height'),

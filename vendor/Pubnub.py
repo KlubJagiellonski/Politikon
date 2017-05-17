@@ -1,5 +1,5 @@
-## www.pubnub.com - PubNub Real-time push service in the cloud. 
-# coding=utf8
+# coding=utf-8
+## www.pubnub.com - PubNub Real-time push service in the cloud.
 
 ## PubNub Real-time Push APIs and Notifications Framework
 ## Copyright (c) 2010 Stephen Blum
