@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+
+<ul class="language-bar">
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% for language in languages reversed %}
+    {% with 'img/flags/'|add:language.code|add:'.png' as flag_img %}
+    <li{% if language.code == LANGUAGE_CODE %} class="active"{% endif %}>
+        <a href="{% url 'change_language' language.code %}">
+            <img src="{% static flag_img %}" />
+        </a>
+    </li>
+    {% endwith %}
+{% endfor %}
+</ul>

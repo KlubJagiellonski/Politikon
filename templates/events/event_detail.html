@@ -58,10 +58,10 @@ twttr.ready(function (twttr) {
 <section id="header"  class="body-margin">
     <h1>{{ event.title }}</h1>
     {% if request.user.is_staff and event.is_published %}
-    <h2><a class="show-zakoncz-wydarzenie" href="#">Rozstrzygnij</a></h2>
+    <h2><a class="show-zakoncz-wydarzenie" href="#">{% trans 'Rozstrzygnij' %}</a></h2>
     {% endif %}
     {% if not event.is_published %}
-        <h2>Szkic wydarzenia</h2>
+        <h2>{% trans 'Szkic wydarzenia' %}</h2>
     {% endif %}
 </section>
 
@@ -116,7 +116,12 @@ twttr.ready(function (twttr) {
             <span class='st__hcount' displayText=''></span>
         </div>
         <p>{{ event.description|safe }}</p>
-        <p><b>{% if event.is_in_progress %}Przewidywana data rozstrzygnięcia:{% else %}Data rozstrzygnięcia:{% endif %}</b> {{ event.finish_date|date:"j E Y" }}</p>
+        <p>
+          <b>
+            {% if event.is_in_progress %}{% trans 'Przewidywana data rozstrzygnięcia' %}:
+              {% else %}{% trans 'Data rozstrzygnięcia' %}:{% endif %}
+          </b> {{ event.finish_date|date:"j E Y" }}
+        </p>
     </div>
     {% comment %}
     <div class="prawa rss-related">
@@ -149,7 +154,7 @@ twttr.ready(function (twttr) {
 
 {% if similar_events %}
 <section id="betfeed" class="hotbets">
-    <h3 class="orangeheader goupheader">Powiązane wydarzenia</h3>
+    <h3 class="orangeheader goupheader">{% trans 'Powiązane wydarzenia' %}</h3>
     <div>
         {% render_events similar_events %}
     </div>

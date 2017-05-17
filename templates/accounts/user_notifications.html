@@ -1,6 +1,4 @@
-{% load display %}
-{% load format %}
-{% load static %}
+{% load display format static i18n %}
 
 <article id="powiadomieniaowynikach">
     <div id="notifications-list">
@@ -14,11 +12,11 @@
                 {% endif %}
                 {% render_bet_status bet %}
                 <div class="status-explanation">
-                    <span>skrócone uzasadnienie wyniku:</span>
+                    <span>{% trans 'skrócone uzasadnienie wyniku:' %}</span>
                     {{ bet.event.outcome_reason|safe }}
                 </div>
                 <div class="status-change">
-                    zysk/strata:
+                    {% trans 'zysk' %}/{% trans 'strata' %}:
                     <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
                     <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                 </div>
@@ -28,7 +26,7 @@
     </div>
     {% if page_obj.has_next %}
     <a class="notifications-loadmore loadmore" href="{% url 'accounts:user_notifications' pk=user_pk %}?page={{ page_obj.next_page_number }}">
-        <div class="btn astable">wyświetl więcej wyników</div>
+        <div class="btn astable">{% trans 'wyświetl więcej wyników' %}</div>
     </a>
     {% endif %}
 </article>

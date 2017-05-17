@@ -16,7 +16,7 @@ api_urls = [
 
 urlpatterns = patterns(
     '',
-    url(r'^change_language/(?P<lang>(pl|en))$', change_language, name='change_language'),
+    url(r'^change_language/(?P<lang>(pl|en|lt))$', change_language, name='change_language'),
     url('', include('social_django.urls', namespace='social')),
     url(r'^api/', include(api_urls)),
     url(r'^.well-known/acme-challenge/(?P<acme>\w+)$', acme_challenge, name='acme_challenge'),

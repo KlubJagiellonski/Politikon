@@ -1,4 +1,4 @@
-{% load humanize %}
-{% if state == 'ongoing' %}Rozwiązanie {{ date|naturaltime }}
-{% elif state == 'finished' %}Zakończony {{ date|naturaltime }}
-{% else %}Czeka na rozstrzygnięcie{% endif %}
+{% load humanize i18n %}
+{% if state == 'ongoing' %}{% trans 'Rozwiązanie' %} {{ date|naturaltime }}
+{% elif state == 'finished' %}{% trans 'Zakończony' %} {{ date|naturaltime }}
+{% else %}{% trans 'Czeka na rozstrzygnięcie' %}{% endif %}
