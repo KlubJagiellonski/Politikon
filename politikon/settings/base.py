@@ -37,6 +37,7 @@ LOCALE_PATHS = [
 LANGUAGES = [
     ('pl', _('Polish')),
     ('en', _('English')),
+    ('lt', _('Lithuanian')),
 ]
 
 # test for keep chosen language
@@ -116,8 +117,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 # django-constances
 
 CONSTANCE_CONFIG = {
-    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and \
-                                 it\'s publication'),
+    'PUBLISH_DELAY_IN_MINUTES': (10.0, 'minutes of delay between action and it\'s publication'),
     'STARTING_CASH': (1000.0, 'cash for start'),
     'SMALL_EVENT_IMAGE_WIDTH': (340, 'small event image width'),
     'SMALL_EVENT_IMAGE_HEIGHT': (250, 'small event image height'),

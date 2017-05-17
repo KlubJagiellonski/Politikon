@@ -1,5 +1,4 @@
 {% load path %}
-{% load i18n %}
 {% load static %}
 {% load modals %}
 
@@ -92,10 +91,6 @@
     {% include 'staff.html' %}
 {% endif %}
 
-{% if not user.is_authenticated %}
-    {% include 'not_logged_in.html' %}
-{% endif %}
-
 <div id="body-wrapper">
     <section id="maintop" class="section-nopadding">
         <div class="logo lewa">
@@ -108,34 +103,14 @@
                 <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
                 <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
                 <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
-                <li>
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                        {% if language.code == LANGUAGE_CODE %}
-                           <span><u>{{ language.name_local }}</u></span>
-                        {% else %}
-                            <a href="{% url 'change_language' language.code %}">{{ language.name_local }}</a>
-                        {% endif %}
-                    {% endfor %}
-                </li>
             </ul>
         </nav>
 
-        {% if not user.is_authenticated %}
-        <div class="graj prawa">
-            <a href="#"><div class="prawa show-login">{% trans 'PLAY' %}!</div></a>
-        </div>
-
-        <div class="socialmedia prawa">
-{#            <a href="{% url 'social:begin' 'twitter' %}"><div class="sm-bg tt"></div></a>#}
-{#            <a href="{% url 'social:begin' 'facebook' %}"><div class="sm-bg fb"></div></a>#}
-{#            <a href="{% url 'social:begin' 'google' %}"><div class="sm-bg gp"></div></a>#}
-        </div>
-        {% else %}
+    {% if not user.is_authenticated %}
+        {% include 'not_logged_in.html' %}
+    {% else %}
         {% include 'logged_in.html' %}
-        {% endif %}
+    {% endif %}
 
     </section>
 
@@ -170,6 +145,9 @@
                 <a href="https://www.facebook.com/politikon.stawiamy.na.polityke/"><div class="fb lewa"></div></a>
                 {#<a href="http://plus.google.com/"><div class="gp lewa"></div></a>#}
             </div>
+            <nav class="languages">
+              {% include 'language-bar.html' %}
+            </nav>
             <a href="http://kodujdlapolski.pl/"><div class="kdp prawa"></div></a>
             <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
         </div>
