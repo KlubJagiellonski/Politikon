@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
 
-from .views import HomeView, acme_challenge, change_language
+from .views import HomeView, acme_challenge, change_language, agree_on_cookie_store
 from events.urls import api_urls as event_api
 
 from django.contrib import admin
@@ -20,6 +20,7 @@ urlpatterns = patterns(
     url('', include('social_django.urls', namespace='social')),
     url(r'^api/', include(api_urls)),
     url(r'^.well-known/acme-challenge/(?P<acme>\w+)$', acme_challenge, name='acme_challenge'),
+    url(r'^agree-on-cookie-store$', agree_on_cookie_store, name='agree_on_cookie_store'),
 )
 
 urlpatterns += i18n_patterns(

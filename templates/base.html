@@ -31,7 +31,7 @@
 <link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
 <meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" href="{% static 'css/style.css?v=2' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/style.css?v=4' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/rwd.css' %}" type="text/css" />
 
 <!--css dla zalogowanego-->
@@ -92,7 +92,14 @@
 {% if user.is_staff %}
     {% include 'staff.html' %}
 {% endif %}
-
+{% if not request.session.isagree %}
+    <div id="cookie-info-container" class="">
+        <div class="">
+            {% trans 'Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz zgodę na ich używanie, zgodnie z ustawieniami przeglądarki.' %}
+            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    </div>
+{% endif %}
 <div id="body-wrapper">
     <section id="maintop" class="section-nopadding">
         <div class="logo lewa">
@@ -189,7 +196,7 @@
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
-<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=6' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=7' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
 {% block js_scripts %}
