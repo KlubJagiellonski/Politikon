@@ -1,13 +1,14 @@
 {% load display %}
 {% load format %}
+{% load i18n %}
 
 <div class="graj avatar prawa">
     <div class="image" style="background-image: url({{ user.get_avatar_url }});"></div>
     <nav class="avatarmenu">
         <ul id="avatarmenu">
-            <li><a href="{% url 'accounts:user_profile' %}">Mój profil</a></li>
-            <li><a href="{% url 'accounts:user_settings' %}">Ustawienia</a></li>
-            <li><a href="{% url 'accounts:logout' %}">Wyloguj</a></li>
+            <li><a href="{% url 'accounts:user_profile' %}">{% trans 'Mój profil' %}</a></li>
+            <li><a href="{% url 'accounts:user_settings' %}">{% trans 'Ustawienia' %}</a></li>
+            <li><a href="{% url 'accounts:logout' %}">{% trans 'Wyloguj' %}</a></li>
         </ul>
     </nav>
 </div>
@@ -25,21 +26,21 @@
 
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
-            <p>wartość portfela</p>
+            <p>{% trans 'wartość portfela' %}</p>
             <p class="walletvalue">{{ user.portfolio_value|formatted }}</p>
         </div>
     </a>
 
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
-            <p>wolne reputy</p>
+            <p>{% trans 'wolne reputy' %}</p>
             <p class="freevalue">{{ user.total_cash|formatted }}</p>
         </div>
     </a>
 
     <a href="{% url 'accounts:user_profile' %}">
         <div class="lewa stats">
-            <p>reputacja</p>
+            <p>{% trans 'reputacja' %}</p>
             <p class="reputationvalue">{{ user.reputation|formatted }}%</p>
         </div>
     </a>
@@ -49,8 +50,8 @@
     <div class="container">
         <div class="inside">
             <div class="header">
-                najnowsze wyniki
-                <a id="all-bets-result" href="#"><span>Oznacz wszystkie jako przeczytane</span></a>
+                {% trans 'najnowsze wyniki' %}
+                <a id="all-bets-result" href="#"><span>{% trans 'Oznacz wszystkie jako przeczytane' %}</span></a>
             </div>
             <div id="jp-container" class="jp-container">
             {% for bet in user.get_newest_results %}
@@ -63,7 +64,7 @@
                     {% endif %}
                         {% render_bet_status bet %}
                         <div class="status-change">
-                            zysk/strata:
+                            {% trans 'zysk' %}/{% trans 'strata' %}:
                             <div class="{% if bet.is_won %}changeYES{% else %}changeNO{% endif %}">{{ bet.get_wallet_change|formatted:"True" }}</div>
                             <p><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="won">{{ bet.get_won|formatted }}</span></p>
                         </div>
@@ -71,7 +72,7 @@
                 </a>
             {% endfor %}
             </div>
-            <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">Wyświetl wszystkie wyniki</div></a>
+            <a href="{% url 'accounts:user_profile' %}#powiadomieniaowynikach" id="go-to-all-results"><div class="viewall">{% trans 'Wyświetl wszystkie wyniki' %}</div></a>
         </div>
     </div>
 </section>

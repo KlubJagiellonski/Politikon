@@ -1,5 +1,7 @@
+{% load i18n %}
 {% load path %}
 {% load static %}
+
 {% load modals %}
 
 {% url 'accounts:rank' as rank_url %}
@@ -121,9 +123,9 @@
 
             <ul>
                 <h5>Politikon</h5>
-                <li><a href="{% url 'events:events' %}">Wydarzenia</a></li>
-                <li><a href="{% url 'accounts:rank' %}">Rankingi</a></li>
-                <li><a href="javascript:void(0);" onclick="startIntro();">Jak grać?</a></li>
+                <li><a href="{% url 'events:events' %}">{% trans 'Wydarzenia' %}</a></li>
+                <li><a href="{% url 'accounts:rank' %}">{% trans 'Rankingi' %}</a></li>
+                <li><a href="javascript:void(0);" onclick="startIntro();">{% trans 'Jak grać?' %}</a></li>
             </ul>
             <ul>
                 <li></li>
@@ -165,10 +167,10 @@
         -webkit-transform: rotate(-45deg);
         -moz-transfrom: rotate(-45deg);
         font-size: 98%;
-    ">Wersja beta <span style="
+    ">{% trans 'Wersja beta' %} <span style="
         display: block;
         font-size: 80%;
-    ">Po publikacji stracisz reputy :-o</span>
+    ">{% trans 'Po publikacji stracisz reputy' %} :-o</span>
     </div>
 </div>
 

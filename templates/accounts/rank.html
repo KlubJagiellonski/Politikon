@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
-{% load display %}
-{% load static %}
+{% load display static i18n %}
 {% load user %}
 
 {% block js_scripts %}
@@ -29,9 +28,9 @@
 
 <section id="userinfo" class="hotbets prefooter-margin body-margin">
     <ul class="tabs lewa">
-        <li class="active"><a href="#7dni">Ranking 7-dniowy</a></li>
-        <li><a href="#miesiac">Ranking miesięczny</a></li>
-        <li><a href="#calosc">Ranking całościowy</a></li>
+        <li class="active"><a href="#7dni">{% trans 'Ranking 7-dniowy' %}</a></li>
+        <li><a href="#miesiac">{% trans 'Ranking miesięczny' %}</a></li>
+        <li><a href="#calosc">{% trans 'Ranking całościowy' %}</a></li>
     </ul>
     <div class="clr"></div>
     <div class="zakladki-content">
