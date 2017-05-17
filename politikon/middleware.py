@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponsePermanentRedirect
@@ -16,9 +17,9 @@ class SetLastVisitMiddleware(object):
             if request.user.is_authenticated():
                 # Update last visit time after request finished processing.
                 UserProfile.objects.filter(pk=request.user.pk).update(last_visit=now())
-        except AttributeError as e:
+        except:
             logger.exception(
-                "Fatal error saving user last visit: %s" % e
+                "Fatal error saving user last visit: {0}".format(sys.exc_info()[0])
             )
         return response
 
