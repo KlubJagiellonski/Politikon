@@ -95,7 +95,14 @@
         </div>
     </div>
 {% endif %}
-
+{% if not request.session.isagree %}
+    <div id="cookie-info-container" class="">
+        <div class="">
+            {% trans 'Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz zgodę na ich używanie, zgodnie z ustawieniami przeglądarki.' %}
+            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    </div>
+{% endif %}
 <div id="body-wrapper">
     <section id="maintop" class="section-nopadding">
         <div class="logo lewa">
