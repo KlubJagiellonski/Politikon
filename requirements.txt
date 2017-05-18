@@ -74,6 +74,7 @@ twitter-api==0.1.5
 
 # for tags
 django-taggit
+django-taggit-autosuggest
 
 # for image resizing
 django-imagekit
