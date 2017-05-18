@@ -98,7 +98,10 @@
                 <div class="arrowup"></div>
                 <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
                 <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
-                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>grać?</li></a>
+                {% if user.is_authenticated %}
+                    <a id="add-event-button" href="javascript:void(0);"><li>A</li></a>
+                {% endif %}
             </ul>
         </nav>
 
