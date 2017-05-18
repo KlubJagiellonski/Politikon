@@ -22,8 +22,8 @@ from bladepolska.site import current_domain
 from constance import config
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-from taggit.managers import TaggableManager
-
+# from taggit.managers import TaggableManager
+from taggit_autosuggest.managers import TaggableManager
 
 logger = logging.getLogger(__name__)
 

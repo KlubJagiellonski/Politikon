@@ -276,6 +276,7 @@ INSTALLED_APPS = (
     # 'oauth_tokens',
     # 'm2m_history',
     'taggit',
+    'taggit_autosuggest',
     # 'twitter_api',
     # https://github.com/matthewwithanm/django-imagekit for images resizing
     'imagekit',
