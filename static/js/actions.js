@@ -19,7 +19,7 @@
             $modal.appendTo($overlay)
                 .addClass('display')
                 .css('z-index', 9000);
-            $mainmenu.css('z-index', 1000)
+            $mainmenu.css('z-index', 5000)
                 .removeClass("opacity");
             setTimeout(function () {
                 $overlay.addClass('opacity');
