@@ -10,16 +10,17 @@
 
         function showModal(name) {
             /*
-            Show modal (popup), name must be tag id ex.: <tag id="name">...</tag>
+             * Show modal (popup), name must be tag id ex.: <tag id="name">...</tag>
              */
             $overlay.addClass('display')
                 .width('100%')
                 .height('100%');
             var $modal = $('#'+name);
-            $modal.appendTo($overlay);
-            $modal.addClass('display');
-            $modal.css('z-index', 9000);
-            $mainmenu.removeClass("opacity");
+            $modal.appendTo($overlay)
+                .addClass('display')
+                .css('z-index', 9000);
+            $mainmenu.css('z-index', 5000)
+                .removeClass("opacity");
             setTimeout(function () {
                 $overlay.addClass('opacity');
                 $modal.addClass("opacity");
@@ -28,7 +29,7 @@
 
         function hideModal() {
             /*
-            Hide all popups
+             * Hide all popups
              */
             $overlay.children().each(function(){
                 // this condition skips div#overlay-close element
@@ -41,11 +42,26 @@
             });
             $mainmenu.removeClass('display')
                      .removeClass('opacity');
-            $overlay.css('z-index', 0);
+            $('.small-popup').removeClass('display')
+                    .removeClass('opacity');
             setTimeout(function () {
-                $overlay.removeClass("opacity");
-                $overlay.removeClass("display");
+                $overlay.removeClass("opacity")
+                        .removeClass("display");
             }, 150); // opoznienie
+        }
+
+        function showSmallPopup(name){
+            $('.small-popup').removeClass('display')
+                .removeClass('opacity');
+            $mainmenu.css('z-index', 8000);
+            $('#' + name).addClass("display");
+            $overlay.addClass("display")
+                .width('100%')
+                .height('100%');
+            setTimeout(function () {
+                $('#' + name).addClass("opacity");
+                $overlay.addClass("opacity");
+            }, 100); // opoznienie
         }
 
         //pokaż menu z hamburgera
@@ -71,6 +87,11 @@
         // Show message about points reset - in authomaticated.html is condition for it
         $('#reset-message').each(function(){
             showModal('reset-message');
+        });
+
+        // Add new event proposition
+        $('#add-event-button').on('click', function(){
+            showModal('add-event');
         });
 
         //ukryj okno logowania po kliknieciu w X
@@ -150,7 +171,6 @@
                 $('.rejestracjaemail').removeClass('asblock');
                 $('.rejestracja').removeClass('asblock');
                 $('.logowanie').removeClass('asblock');
-
                 $('.przypomnienie').addClass('asblock');
             }, 150); // opoznienie
 
@@ -159,6 +179,30 @@
             }, 200); // opoznienie
         });
 
+        //pokaż menu z hamburgera
+        $('.burger').on('click', function () {
+            showSmallPopup('mainmenu');
+        });
+
+        //pokaż menu z avatara
+        $('#maintop .graj .image').on('click', function () {
+            if (!$('#maintop .graj .avatarmenu ul').hasClass('display')) {
+                showSmallPopup('avatarmenu');
+            } else {
+                $('.overlay').click();
+            }
+        });
+
+        //pokaż powiadomienia
+        $('#maintop .userdata .wallet.notification').on('click', function () {
+            if (!$('#maintop .userdata .wallet .arrowup').hasClass("display")) {
+                showSmallPopup('arrowup');
+                $('#wallet-not').css({'margin-top': '0px'});
+                $('#wallet-not').addClass("opacity");
+            } else {
+                $('.overlay').click();
+            }
+        });
         //featured - pokazuje wykres
         $(document).on({
             mouseenter: function () {
