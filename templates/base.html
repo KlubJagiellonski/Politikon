@@ -115,9 +115,17 @@
 
     {% block content %}{% endblock %}
 
+    <section id="partners">
+        <a href="http://kodujdlapolski.pl/"><div class="logo kdp"></div></a>
+        <a href="http://www.kj.org.pl/"><div class="logo kj"><h5>Klub Jagielloński</h5><p>www.kj.org.pl</p></div></a>
+        <a href="http://erasmusplus.org.pl/"><div class="logo erasmus-plus"></div></a>
+    </section>
+
+{#<iframe id="statementFrame3394349" style="width: 100%; max-width: 400px; min-width: 250px; height: 300px; min-height: 300px; margin-top: 10px; margin-bottom: 10px; display: block; border-width: 0px;" scrolling="yes"></iframe><script type="text/javascript">document.getElementById("statementFrame3394349").src="http://www.scotussearch.com/statementwidget/QQ51Vr92OeqpHJ7T6_PO2w/3394349?page="+encodeURIComponent(window.location.href);</script>#}
+{#    <iframe src="https://www.w3schools.com"></iframe>#}
+
     <footer>
         <div class="lewa">
-
             <ul>
                 <h5>Politikon</h5>
                 <li><a href="{% url 'events:events' %}">{% trans 'Wydarzenia' %}</a></li>
@@ -136,6 +144,7 @@
                 <h5>Partnerzy</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
+                <li><a href="http://erasmusplus.org.pl/">Erasmus Plus</a></li>
             </ul>
         </div>
         <div class="prawa">
@@ -147,8 +156,6 @@
             <nav class="languages">
               {% include 'language-bar.html' %}
             </nav>
-            <a href="http://kodujdlapolski.pl/"><div class="kdp prawa"></div></a>
-            <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
         </div>
     </footer>
     <div id="beta-emblem" style="
