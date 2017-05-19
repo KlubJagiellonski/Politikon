@@ -114,6 +114,21 @@ class EventDetailView(DetailView):
         return context
 
 
+class EventEmbedDetailView(DetailView):
+    template_name = 'events/event_embed_detail.html'
+    context_object_name = 'event'
+    model = Event
+
+    def get_event(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
+
+    def dispatch(self, request, *args, **kwargs):
+        event = self.get_event()
+        if not event.is_published:
+            raise PermissionDenied
+        return super(EventEmbedDetailView, self).dispatch(request, *args, **kwargs)
+
+
 @login_required
 @require_http_methods(["POST"])
 @csrf_exempt
