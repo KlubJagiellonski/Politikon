@@ -922,3 +922,5 @@ a.twitter-timeline:focus {
     opacity: 0;
   }
 }
+
+#cookie-info-container {position: fixed; bottom: 0; width: 100%; z-index: 8500; margin: auto; text-align: center; background-color: white; padding: 3px; font-size: 12px; border-top: 1px solid; box-shadow: darkgray; }

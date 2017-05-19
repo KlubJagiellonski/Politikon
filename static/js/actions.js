@@ -252,6 +252,12 @@
             $(form).submit();
         });
 
+        // wysyla request: akceptuje zasady dotyczace cookie.
+        $('#cookie-info-container').on('click', function () {
+            $.ajax('/agree-on-cookie-store');
+            $(this).hide();
+        });
+
         // kupowanie i sprzedawanie zakładów
         function play_bet() {
             $('.a_bet').each(function () {
