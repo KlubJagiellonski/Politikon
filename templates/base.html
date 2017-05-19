@@ -102,14 +102,9 @@
             <div class="burger"></div>
             <ul id="mainmenu" class="mainmenu small-popup">
                 <div class="arrowup"></div>
-                <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
-                <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
-                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>grać?</li></a>
-                {% comment %}
-                {% if user.is_authenticated %}
-                    <a id="add-event-button" href="javascript:void(0);"><li>A</li></a>
-                {% endif %}
-                {% endcomment %}
+                <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>{% trans "Events" %}</li></a>
+                <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>{% trans "Leaderboard" %}</li></a>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>{% trans "Tutorial" %}</li></a>
             </ul>
         </nav>
 
@@ -136,9 +131,9 @@
         <div class="lewa">
             <ul>
                 <h5>Politikon</h5>
-                <li><a href="{% url 'events:events' %}">{% trans 'Wydarzenia' %}</a></li>
-                <li><a href="{% url 'accounts:rank' %}">{% trans 'Rankingi' %}</a></li>
-                <li><a href="javascript:void(0);" onclick="startIntro();">{% trans 'Jak grać?' %}</a></li>
+                <li><a href="{% url 'events:events' %}">{% trans "Events" %}</a></li>
+                <li><a href="{% url 'accounts:rank' %}">{% trans "Leaderboard" %}</a></li>
+                <li><a href="javascript:void(0);" onclick="startIntro();">{% trans "Tutorial" %}</a></li>
             </ul>
             <ul>
                 <li></li>
@@ -149,7 +144,7 @@
 {#                <li><a href="#">Kontakt</a></li>#}
             </ul>
             <ul>
-                <h5>Partnerzy</h5>
+                <h5>{% trans "Partners" %}</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
                 <li><a href="http://erasmusplus.org.pl/">Erasmus Plus</a></li>
@@ -179,10 +174,10 @@
         -webkit-transform: rotate(-45deg);
         -moz-transfrom: rotate(-45deg);
         font-size: 98%;
-    ">{% trans 'Wersja beta' %} <span style="
+    ">{% trans "Beta version" %} <span style="
         display: block;
         font-size: 80%;
-    ">{% trans 'Po publikacji stracisz reputy' %} :-o</span>
+    ">{% trans "Expect changes and forgive us!" %} :-o</span>
     </div>
 </div>
 
