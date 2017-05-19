@@ -1,4 +1,4 @@
-{% load static %}
+{% load i18n static %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -36,10 +36,10 @@
             </div>
             <div class="event-body">
                 <div class="event-info">
-                    <a href="{% url 'events:event_detail' pk=event.pk %}">Załóż się!</a>
+                    <a href="{% url 'events:event_detail' pk=event.pk %}">{% trans 'Załóż się!' %}</a>
                 </div>
                 <div class="event-chance">
-                    <p>szanse</p>
+                    <p>{% trans 'szanse' %}</p>
                     <h1 style="color: {% if event.Q_for > 50 %}#809413{% elif event.Q_for < 50 %}#c84d28{% endif %};">
                       {{ event.Q_for }}%
                     </h1>
