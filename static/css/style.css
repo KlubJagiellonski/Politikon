@@ -7,7 +7,7 @@ html {height: 100%;}
 body {height: 100%; background: url(../img/00bg.png) repeat-x fixed; font-family: 'Exo 2', Arial, sans-serif; color: #58585a; font-weight: 400; position: relative;}
 section, footer {width: 93.16%; padding-left: 3.42%; padding-right: 3.42%; max-width: 1250px;}
 a, a:visited {color: inherit; text-decoration: none;}
-b {font-weight: 700;}
+strong {font-weight: bold;}
 
 /* pozycja */
 .prawa {float: right;}
@@ -423,16 +423,22 @@ ul.language-bar li.active a img, ul.language-bar li a:hover img {
     line-height: 1.2em;
 }
 
+#partners {height: 130px; background: #ffffff;}
+#partners .logo {height: 100px; margin-left: 100px; margin-top: 15px; width: 250px; float: left;}
+#partners .kj {background: url(../img/kj.png) center left no-repeat;}
+#partners .kj h5, #partners .kj p {margin-left: 100px;}
+#partners .kj:hover {color: #000000;}
+#partners .kj h5 {text-transform: none !important; margin-top: 30px;}
+#partners .kdp {background: url(../img/kdp-duze.png) center center no-repeat;}
+#partners .kdp:hover {background: url(../img/kdp-duze-gray.png) center center no-repeat;}
+#partners .erasmus-plus {background: url(../img/erasmus-plus.png) center center no-repeat;}
+#partners .erasmus-plus:hover {background: url(../img/erasmus-plus-gray.png) center center no-repeat;}
+
 footer {height: 120px; background: url(../img/footer-bg.jpg) top center repeat-x;}
 footer .logo {width: 174px; height: 129px; background: url(../img/footer-logo-politikon.png) top center no-repeat; position: absolute; margin-top: -50px; margin-left:-87px; left:50%;}
 footer .lewa {width: 30%}
 footer .prawa {width: 60%;}
 footer .lewa, footer .prawa {margin-top: 20px; color: #7a7a7a; font-size: .875em;}
-
-footer .kj {background: url(../img/footer-logo-kj.png) left top no-repeat; height: 43px; padding-left: 65px; padding-top: 8px; max-width: 135px;}
-footer .kj h5 {text-transform: none !important; margin-bottom: 3px;}
-
-footer .kdp {background: url(../img/footer-logo-kdp.png) left top no-repeat; height: 77px; padding-left: 65px; padding-top: 8px; margin-left: 15px; margin-top: 15px; max-width: 135px;}
 
 footer ul {float: left; margin-right: 13%;}
 footer h5 {font-size: 1.14em; color: #e8e7e7; text-transform: uppercase; font-weight: 700; margin-bottom: 1em;}
@@ -558,7 +564,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 .hotbets {background: url(../img/01hotbg.jpg); margin-bottom: 60px;}
 
-#ranking-short {display: table; margin-bottom: 150px; margin-top: 60px;}
+#ranking-short {display: table; margin-bottom: 100px; margin-top: 60px;}
 #ranking-short .userrank {width: 8.55%; float: left; margin-left: 1.6%; background: transparent; border-radius: 5px; border-top-left-radius: 50%; border-top-right-radius: 50%;}
 #ranking-short .userrank:hover {background: #eee;}
 #ranking-short .userrank:first-child {margin-left: 0;}

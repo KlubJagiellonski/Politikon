@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% load display %}
-{% load path %}
-{% load static %}
+{% load display i18n path static %}
 
 {% block js_scripts %}
 <script type="text/javascript" src="{% static 'js/intro/scenario-wydarzenia.js' %}"></script>
@@ -47,6 +45,11 @@ $(function() {
 {#          <li><a href="?tag={{ tag }}">{{ tag }}</a></li>#}
 {#        {% endfor %}#}
 {#    </ul>#}
+    {% if user.is_authenticated %}
+        <ul class="tabs prawa" style="margin-top:20px;">
+            <li><a id="add-event-button" href="javascript:void(0);">{% trans 'Dodaj wydarzenie' %}</a></li>
+        </ul>
+    {% endif %}
 </section>
 
 <section id="betfeed">

@@ -1,6 +1,4 @@
-{% load i18n %}
-{% load path %}
-{% load static %}
+{% load i18n path static %}
 
 {% load modals %}
 
@@ -89,9 +87,6 @@
 
 {% choose_modal user event %}
 
-{% if user.is_staff %}
-    {% include 'staff.html' %}
-{% endif %}
 {% if not request.session.isagree %}
     <div id="cookie-info-container" class="">
         <div class="">
@@ -107,11 +102,16 @@
         </div>
         <nav class="astable lewa">
             <div class="burger"></div>
-            <ul id="mainmenu" class="mainmenu">
+            <ul id="mainmenu" class="mainmenu small-popup">
                 <div class="arrowup"></div>
                 <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
                 <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
-                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>Jak grać?</li></a>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>grać?</li></a>
+                {% comment %}
+                {% if user.is_authenticated %}
+                    <a id="add-event-button" href="javascript:void(0);"><li>A</li></a>
+                {% endif %}
+                {% endcomment %}
             </ul>
         </nav>
 
@@ -125,9 +125,17 @@
 
     {% block content %}{% endblock %}
 
+    <section id="partners">
+        <a href="http://kodujdlapolski.pl/"><div class="logo kdp"></div></a>
+        <a href="http://www.kj.org.pl/"><div class="logo kj"><h5>Klub Jagielloński</h5><p>www.kj.org.pl</p></div></a>
+        <a href="http://erasmusplus.org.pl/"><div class="logo erasmus-plus"></div></a>
+    </section>
+
+{#<iframe id="statementFrame3394349" style="width: 100%; max-width: 400px; min-width: 250px; height: 300px; min-height: 300px; margin-top: 10px; margin-bottom: 10px; display: block; border-width: 0px;" scrolling="yes"></iframe><script type="text/javascript">document.getElementById("statementFrame3394349").src="http://www.scotussearch.com/statementwidget/QQ51Vr92OeqpHJ7T6_PO2w/3394349?page="+encodeURIComponent(window.location.href);</script>#}
+{#    <iframe src="https://www.w3schools.com"></iframe>#}
+
     <footer>
         <div class="lewa">
-
             <ul>
                 <h5>Politikon</h5>
                 <li><a href="{% url 'events:events' %}">{% trans 'Wydarzenia' %}</a></li>
@@ -146,6 +154,7 @@
                 <h5>Partnerzy</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
+                <li><a href="http://erasmusplus.org.pl/">Erasmus Plus</a></li>
             </ul>
         </div>
         <div class="prawa">
@@ -157,8 +166,6 @@
             <nav class="languages">
               {% include 'language-bar.html' %}
             </nav>
-            <a href="http://kodujdlapolski.pl/"><div class="kdp prawa"></div></a>
-            <a href="http://www.kj.org.pl/"><div class="kj prawa"><h5>Klub Jagielloński</h5>www.kj.org.pl</div></a>
         </div>
     </footer>
     <div id="beta-emblem" style="
