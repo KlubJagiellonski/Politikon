@@ -12,13 +12,14 @@
     <aside class="logowanie asblock opacity">
         <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans 'Zaloguj się przez Twittera' %}</span></div></a>
         <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans 'Zaloguj się przez Facebooka' %}</span></div></a>
-{#        <p class="or"><span>lub zaloguj się przez e-mail</span></p>#}
-{#        <form data-parsley-validate>#}
-{#            <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>#}
-{#            <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>#}
-{#            <input type="submit" class="przycisk" value="Zaloguj się">#}
-{#            </form>#}
-{#        <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>#}
+        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="google-login"><span>{% trans 'Zaloguj się przez G+' %}</span></div></a>
+        <p class="or"><span>lub zaloguj się przez e-mail</span></p>
+        <form data-parsley-validate>
+            <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+            <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
+            <input type="submit" class="przycisk" value="Zaloguj się">
+            </form>
+        <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
         <div class="other"><p>{% trans 'Nie masz jeszcze konta?' %} <a href="#" class="show-rejestracja">{% trans 'Zarejestruj się!' %}</a></p></div>
     </aside>
 

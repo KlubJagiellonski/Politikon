@@ -32,6 +32,10 @@ FACEBOOK_APPLICATION_NAMESPACE = "politikon_dev"
 TWITTER_CONSUMER_KEY = "c96DyRfYWpIYTktS7CymHFNBJ"
 TWITTER_CONSUMER_SECRET = "omcuLc58rqAYhvjis5FjgTqrH2mDoqFqRhwP9bhxlZuleQS6HL"
 
+# Since below these are test app settings, it should be safe to open-source it
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'TODO-some-key-from-google-here.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'TODO-also-some-key'
+
 # oauth-tokens settings
 # to keep in DB expired access tokens
 OAUTH_TOKENS_HISTORY = True
