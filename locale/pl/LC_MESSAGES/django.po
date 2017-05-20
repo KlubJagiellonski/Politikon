@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-19 12:56+0200\n"
+"POT-Creation-Date: 2017-05-21 02:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
 "Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
@@ -64,7 +64,7 @@ msgstr "Nie masz wystarczająco reputów."
 msgid "You don't have enough shares."
 msgstr "Nie masz wystarczająco zakładów."
 
-#: events/views.py:136
+#: events/views.py:154
 msgid "Something went wrong, try again in a few seconds."
 msgstr "Coś nie poszło, spróbuj ponownie."
 
@@ -88,8 +88,8 @@ msgstr "Ranking 7-dniowy"
 msgid "Monthly leaders"
 msgstr "Ranking miesięczny"
 
-#: templates/accounts/rank.html:33 templates/base.html:100
-#: templates/base.html.py:121
+#: templates/accounts/rank.html:33 templates/base.html:106
+#: templates/base.html.py:134
 msgid "Leaderboard"
 msgstr "Rankingi"
 
@@ -148,7 +148,7 @@ msgstr "NIE"
 msgid "current price"
 msgstr "aktualna cena"
 
-#: templates/accounts/user_portfolio.html:20 templates/events/events.html:56
+#: templates/accounts/user_portfolio.html:20 templates/events/events.html:61
 msgid "show more events"
 msgstr "wyświetl więcej zakładów"
 
@@ -225,50 +225,70 @@ msgstr "tydzień"
 msgid "show more predictions"
 msgstr "wyświetl więcej transakcji"
 
-#: templates/base.html:99 templates/base.html.py:120
+#: templates/base.html:92
+msgid ""
+"Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz "
+"zgodę na ich używanie, zgodnie z ustawieniami przeglądarki."
+msgstr ""
+
+#: templates/base.html:105 templates/base.html.py:133
 #: templates/events/events.html:22
 msgid "Events"
 msgstr "Wydarzenia"
 
-#: templates/base.html:101 templates/base.html.py:122
+#: templates/base.html:107 templates/base.html.py:135
 msgid "Tutorial"
 msgstr "Jak grać?"
 
-#: templates/base.html:133
+#: templates/base.html:146
 msgid "Partners"
 msgstr "Partnerzy"
 
-#: templates/base.html:164
+#: templates/base.html:175
 msgid "Beta version"
 msgstr "Wersja beta"
 
-#: templates/base.html:167
+#: templates/base.html:178
 msgid "Expect changes and forgive us!"
 msgstr "Po publikacji stracisz reputy"
 
-#: templates/events/event_detail.html:58
+#: templates/events/event_detail.html:73
 msgid "Resolve"
 msgstr "Rozstrzygnij"
 
-#: templates/events/event_detail.html:61
+#: templates/events/event_detail.html:76
 #, fuzzy
 #| msgid "Event is currently a draft."
 msgid "Event's draft"
 msgstr "Szkic wydarzenia"
 
-#: templates/events/event_detail.html:118
+#: templates/events/event_detail.html:80
+msgid "Share"
+msgstr "Podziel się"
+
+#: templates/events/event_detail.html:132
 msgid "Estimated closure"
 msgstr "Przewidywana data rozstrzygnięcia"
 
-#: templates/events/event_detail.html:119
+#: templates/events/event_detail.html:133
 #, fuzzy
 #| msgid "Permissions"
 msgid "Termination"
 msgstr "Data rozstrzygnięcia"
 
-#: templates/events/event_detail.html:155
+#: templates/events/event_detail.html:169
 msgid "Related events"
 msgstr "Powiązane wydarzenia"
+
+#: templates/events/event_embed_detail.html:39
+#, fuzzy
+#| msgid "You predict"
+msgid "Predict!"
+msgstr "Załóż się!"
+
+#: templates/events/event_embed_detail.html:42
+msgid "odds"
+msgstr "szanse"
 
 #: templates/events/events.html:24
 msgid "Most popular"
@@ -293,6 +313,10 @@ msgstr "Zakończone"
 #: templates/events/events.html:30
 msgid "Anteroom"
 msgstr "Poczekalnia"
+
+#: templates/events/events.html:50
+msgid "Dodaj wydarzenie"
+msgstr ""
 
 #: templates/events/finish_date.html:2 templates/home.html:45
 #, fuzzy
@@ -459,6 +483,56 @@ msgstr "Masz TT lub FB?"
 #: templates/modals/anonymous.html:50
 msgid "Join us quicker"
 msgstr "Zarejestruj się szybciej"
+
+#: templates/modals/any.html:4
+#, fuzzy
+#| msgid "Show more events"
+msgid "Share the event!"
+msgstr "Wyświetl więcej zakładów"
+
+#: templates/modals/any.html:7
+#, fuzzy
+#| msgid "Twitter"
+msgid "Share on Twitter"
+msgstr "Twittera"
+
+#: templates/modals/any.html:8
+#, fuzzy
+#| msgid "Facebook"
+msgid "Share on Facebook"
+msgstr "Facebooka"
+
+#: templates/modals/any.html:9
+msgid "Share on Webpage:"
+msgstr ""
+
+#: templates/modals/authenticated.html:26
+msgid "Event title"
+msgstr ""
+
+#: templates/modals/authenticated.html:32
+msgid "Small image"
+msgstr ""
+
+#: templates/modals/authenticated.html:38
+msgid "Big image"
+msgstr ""
+
+#: templates/modals/authenticated.html:44
+#, fuzzy
+#| msgid "Player's description"
+msgid "Description"
+msgstr "Opis użytkownika"
+
+#: templates/modals/authenticated.html:50
+#, fuzzy
+#| msgid "Prediction results"
+msgid "Prediction end of event"
+msgstr "Powiadomienia o wynikach"
+
+#: templates/modals/authenticated.html:57
+msgid "Send"
+msgstr ""
 
 #: templates/not_logged_in.html:4
 msgid "PLAY"

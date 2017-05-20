@@ -188,6 +188,12 @@ class Event(models.Model):
             'url': reverse('events:event_facebook_object_detail', kwargs={'event_id': self.id})
         }
 
+    def get_small_embed_url(self):
+        return 'http://%(domain)s%(url)s' % {
+            'domain': current_domain(),
+            'url': reverse('events:event_embed_detail', kwargs={'pk': self.id})
+        }
+
     @staticmethod
     def autocomplete_search_fields():
         return ("id__iexact", "title__icontains", "short_title__icontains")

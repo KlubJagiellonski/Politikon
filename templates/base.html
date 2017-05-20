@@ -24,7 +24,10 @@
 <meta property="og:image" content="{% static 'img/logo-big.png' %}" />
 <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 <meta property="og:site_name" content="Politikon" />
-<meta property="fb:app_id" content="{{ FACEBOOK_APPLICATION_ID }}" />
+<meta property="fb:app_id" content="{{ facebook_app_id }}" />
+{% for moderator in facebook_moderators %}
+<meta property="fb:admins" content="{{ moderator }}" />
+{% endfor %}
 
 <link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
 <meta name="viewport" content="width=device-width">
@@ -82,7 +85,6 @@
 
 
 <body id="POLITIKON">
-
 <div id="fb-root"></div>
 
 {% choose_modal user event %}
@@ -118,15 +120,6 @@
 
     {% block content %}{% endblock %}
 
-    <iframe id="PolitikonWidget"
-            style="width: 450px; height: 110px; margin-top: 10px; margin-bottom: 10px; display: block; border-width: 0px;"
-            scrolling="no"
-            src="http://politikon-lt.herokuapp.com/pl/event/embed/635-dyskusja-w-parlamencie-ue-nt-lamania-prawa-unijnego-przez-polske">
-    </iframe>
-
-    {#<iframe id="statementFrame3394349" style="width: 100%; max-width: 400px; min-width: 250px; height: 300px; min-height: 300px; margin-top: 10px; margin-bottom: 10px; display: block; border-width: 0px;" scrolling="yes"></iframe><script type="text/javascript">document.getElementById("statementFrame3394349").src="http://www.scotussearch.com/statementwidget/QQ51Vr92OeqpHJ7T6_PO2w/3394349?page="+encodeURIComponent(window.location.href);</script>#}
-    {#    <iframe src="https://www.w3schools.com"></iframe>#}
-
     <section id="partners">
         <a href="http://kodujdlapolski.pl/"><div class="logo kdp"></div></a>
         <a href="http://www.kj.org.pl/"><div class="logo kj"><h5>Klub Jagielloński</h5><p>www.kj.org.pl</p></div></a>
@@ -153,7 +146,6 @@
                 <h5>{% trans "Partners" %}</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
-                <li><a href="http://erasmusplus.org.pl/">Erasmus+</a></li>
             </ul>
         </div>
         <div class="prawa">
@@ -194,7 +186,6 @@
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/packaged/jquery.noty.packaged.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/layouts/topRight.js' %}"></script>
 
-
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
@@ -206,11 +197,19 @@
 
 {# facebook script #}
 <script type="text/javascript">
+window.fbAsyncInit = function () {
+  FB.init({
+      appId: '{{ facebook_app_id }}',
+      xfbml: true,
+      version: 'v2.9'
+  });
+};
+
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId={{ facebook_app_id }}";
+    js.src = "//connect.facebook.net/en_GB/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
 </script>
