@@ -14,11 +14,13 @@
         <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans 'Zaloguj się przez Facebooka' %}</span></div></a>
         <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="google-login"><span>{% trans 'Zaloguj się przez G+' %}</span></div></a>
         <p class="or"><span>lub zaloguj się przez e-mail</span></p>
-        <form data-parsley-validate>
-            <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-            <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
-            <input type="submit" class="przycisk" value="Zaloguj się">
-            </form>
+        <form id="form-login" method="post" action="{% url 'accounts:login' %}" data-parsley-validate >
+            {% csrf_token %}
+            <input name="username" type="text" class="jednalinia" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
+            <input name="password" type="password" class="jednalinia" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
+            <input id="next-to-redirect" name="next" type="hidden" >
+            <input id="send-login-form" type="submit" class="przycisk" value="Zaloguj się">
+        </form>
         <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
         <div class="other"><p>{% trans 'Nie masz jeszcze konta?' %} <a href="#" class="show-rejestracja">{% trans 'Zarejestruj się!' %}</a></p></div>
     </aside>
@@ -27,7 +29,7 @@
         <h2>Zmiana zapomnianego hasła</h2>
         <p class="spaceafter">Nie pamiętasz hasła? Nic nie szkodzi! Stworzymy Ci nowe! Wpisz poniżej swój adres e-mail, lub nazwę użytkownika użyte podczas rejestracji.</p>
         <form data-parsley-validate>
-            <input type="text" class="jednalinia" id="remind" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+            <input type="text" class="jednalinia" id="remind" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
 
             <input type="submit" class="przycisk" value="Poproś o nowe hasło">
 
