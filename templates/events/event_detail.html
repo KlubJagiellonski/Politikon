@@ -32,6 +32,20 @@ window.twttr = (function(d, s, id) {
   return t;
 }(document, "script", "twitter-wjs"));
 </script>
+
+<script>
+(function() {
+    $(document).ready(function () {
+        $('#facebook-share').on('click', function () {
+            FB.ui({
+              method: 'share',
+              href: '{{ event.get_absolute_url }}'
+            }, function(response){});
+        });
+    });
+})();
+</script>
+
 <script>
 twttr.ready(function (twttr) {
     twttr.widgets.createTimeline(
@@ -53,13 +67,19 @@ twttr.ready(function (twttr) {
 {% block content %}
 
 <section id="header"  class="body-margin">
-    <h1>{{ event.title }}</h1>
-    {% if request.user.is_staff and event.is_published %}
-    <h2><a class="show-zakoncz-wydarzenie" href="#">{% trans 'Rozstrzygnij' %}</a></h2>
-    {% endif %}
-    {% if not event.is_published %}
-        <h2>{% trans 'Szkic wydarzenia' %}</h2>
-    {% endif %}
+    <div class="lewa">
+        <h1>{{ event.title }}</h1>
+        {% if request.user.is_staff and event.is_published %}
+        <h2><a class="show-zakoncz-wydarzenie" href="#">{% trans "Resolve" %}</a></h2>
+        {% endif %}
+        {% if not event.is_published %}
+            <h2>{% trans "Event's draft" %}</h2>
+        {% endif %}
+    </div>
+    <div class="prawa">
+        <button id="share-event"><i class="share-icon"></i><p>{% trans "Share" %}</p></button>
+{#        <a href="#"><div id="share-event"><i class="share-icon"></i><span>{% trans "Share" %}</span></div></a>#}
+    </div>
 </section>
 
 <section id="bet-details">
@@ -106,17 +126,11 @@ twttr.ready(function (twttr) {
         </ul>
     </div>
     <div class="lewa">
-        <div class="astable share-zone">
-            <span class='st_fblike_hcount' displayText='Facebook Like'></span>
-            <span class='st_facebook_hcount' displayText='Facebook'></span>
-            <span class='st_twitter_hcount' displayText='Tweet'></span>
-            <span class='st__hcount' displayText=''></span>
-        </div>
         <p>{{ event.description|safe }}</p>
         <p>
           <b>
-            {% if event.is_in_progress %}{% trans 'Przewidywana data rozstrzygnięcia' %}:
-              {% else %}{% trans 'Data rozstrzygnięcia' %}:{% endif %}
+            {% if event.is_in_progress %}{% trans "Estimated closure" %}:
+              {% else %}{% trans "Termination" %}:{% endif %}
           </b> {{ event.finish_date|date:"j E Y" }}
         </p>
     </div>
@@ -151,7 +165,7 @@ twttr.ready(function (twttr) {
 
 {% if similar_events %}
 <section id="betfeed" class="hotbets">
-    <h3 class="orangeheader goupheader">{% trans 'Powiązane wydarzenia' %}</h3>
+    <h3 class="orangeheader goupheader">{% trans "Related events" %}</h3>
     <div>
         {% render_events similar_events %}
     </div>

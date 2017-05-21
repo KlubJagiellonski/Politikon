@@ -1,4 +1,4 @@
 {% load humanize i18n %}
-{% if state == 'ongoing' %}{% trans 'Rozwiązanie' %} {{ date|naturaltime }}
-{% elif state == 'finished' %}{% trans 'Zakończony' %} {{ date|naturaltime }}
-{% else %}{% trans 'Czeka na rozstrzygnięcie' %}{% endif %}
+{% if state == 'ongoing' %}{% trans "Estimated closure:" %} {{ date|naturaltime }}
+{% elif state == 'finished' %}{% trans "Terminated:" %} {{ date|naturaltime }}
+{% else %}{% trans "Waiting to be resolved" %}{% endif %}

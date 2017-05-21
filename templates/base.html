@@ -24,7 +24,10 @@
 <meta property="og:image" content="{% static 'img/logo-big.png' %}" />
 <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 <meta property="og:site_name" content="Politikon" />
-<meta property="fb:app_id" content="{{ FACEBOOK_APPLICATION_ID }}" />
+<meta property="fb:app_id" content="{{ facebook_app_id }}" />
+{% for moderator in facebook_moderators %}
+<meta property="fb:admins" content="{{ moderator }}" />
+{% endfor %}
 
 <link rel="icon" href=favicon.ico sizes="16x16 32x32 48x48 64x64" type=image/vnd.microsoft.icon>
 <meta name="viewport" content="width=device-width">
@@ -82,7 +85,6 @@
 
 
 <body id="POLITIKON">
-
 <div id="fb-root"></div>
 
 {% choose_modal user event %}
@@ -102,14 +104,9 @@
             <div class="burger"></div>
             <ul id="mainmenu" class="mainmenu small-popup">
                 <div class="arrowup"></div>
-                <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>Wydarzenia</li></a>
-                <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>Rankingi</li></a>
-                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>grać?</li></a>
-                {% comment %}
-                {% if user.is_authenticated %}
-                    <a id="add-event-button" href="javascript:void(0);"><li>A</li></a>
-                {% endif %}
-                {% endcomment %}
+                <a href="{{ events_url }}"><li {% if request.path|startswith:events_url %} class="active"{% endif %}>{% trans "Events" %}</li></a>
+                <a href="{{ rank_url }}"><li {% if request.path|startswith:rank_url %} class="active"{% endif %}>{% trans "Leaderboard" %}</li></a>
+                <a href="javascript:void(0);" onclick="startIntro();" class="intro-start"><li>{% trans "Tutorial" %}</li></a>
             </ul>
         </nav>
 
@@ -124,28 +121,28 @@
     {% block content %}{% endblock %}
 
     <section id="partners">
+        <a href="http://erasmusplus.org.pl/"><div class="logo erasmus-plus"></div></a>
         <a href="http://kodujdlapolski.pl/"><div class="logo kdp"></div></a>
         <a href="http://www.kj.org.pl/"><div class="logo kj"><h5>Klub Jagielloński</h5><p>www.kj.org.pl</p></div></a>
-        <a href="http://erasmusplus.org.pl/"><div class="logo erasmus-plus"></div></a>
     </section>
 
-{#<iframe id="statementFrame3394349" style="width: 100%; max-width: 400px; min-width: 250px; height: 300px; min-height: 300px; margin-top: 10px; margin-bottom: 10px; display: block; border-width: 0px;" scrolling="yes"></iframe><script type="text/javascript">document.getElementById("statementFrame3394349").src="http://www.scotussearch.com/statementwidget/QQ51Vr92OeqpHJ7T6_PO2w/3394349?page="+encodeURIComponent(window.location.href);</script>#}
-{#    <iframe src="https://www.w3schools.com"></iframe>#}
+    <section id="erasmus-info">
+      <p>Projekt finansowany ze środków Unii Europejskiej w ramach programu Erasmus+</p>
+    </section>
 
     <footer>
         <div class="lewa">
             <ul>
                 <h5>Politikon</h5>
-                <li><a href="{% url 'events:events' %}">{% trans 'Wydarzenia' %}</a></li>
-                <li><a href="{% url 'accounts:rank' %}">{% trans 'Rankingi' %}</a></li>
-                <li><a href="javascript:void(0);" onclick="startIntro();">{% trans 'Jak grać?' %}</a></li>
+                <li><a href="{% url 'events:events' %}">{% trans "Events" %}</a></li>
+                <li><a href="{% url 'accounts:rank' %}">{% trans "Leaderboard" %}</a></li>
+                <li><a href="javascript:void(0);" onclick="startIntro();">{% trans "Tutorial" %}</a></li>
             </ul>
                 {% published_pages %}
             <ul>
-                <h5>Partnerzy</h5>
+                <h5>{% trans "Partners" %}</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
                 <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
-                <li><a href="http://erasmusplus.org.pl/">Erasmus Plus</a></li>
             </ul>
         </div>
         <div class="prawa">
@@ -172,10 +169,10 @@
         -webkit-transform: rotate(-45deg);
         -moz-transfrom: rotate(-45deg);
         font-size: 98%;
-    ">{% trans 'Wersja beta' %} <span style="
+    ">{% trans "Beta version" %} <span style="
         display: block;
         font-size: 80%;
-    ">{% trans 'Po publikacji stracisz reputy' %} :-o</span>
+    ">{% trans "Expect changes and forgive us!" %} :-o</span>
     </div>
 </div>
 
@@ -186,7 +183,6 @@
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/packaged/jquery.noty.packaged.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/noty/layouts/topRight.js' %}"></script>
 
-
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
@@ -196,17 +192,27 @@
 {% block js_scripts %}
 {% endblock %}
 
-<script type="text/javascript">
 {# facebook script #}
+<script type="text/javascript">
+window.fbAsyncInit = function () {
+  FB.init({
+      appId: '{{ facebook_app_id }}',
+      xfbml: true,
+      version: 'v2.9'
+  });
+};
+
 (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId={{ facebook_app_id }}";
+    js.src = "//connect.facebook.net/en_GB/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+</script>
 
 {# Google Analytics #}
+<script type="text/javascript">
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -214,8 +220,10 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 ga('create', 'UA-78893476-1', 'auto');
 ga('send', 'pageview');
+</script>
 
 {# Hotjar Tracking Code for www.politikon.org.pl #}
+<script type="text/javascript">
 (function(h,o,t,j,a,r){
     h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
     h._hjSettings={hjid:352781,hjsv:5};

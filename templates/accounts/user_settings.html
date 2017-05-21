@@ -15,7 +15,7 @@
             <a href="#">
                 <figure class="profile-avatar lewa">
                     <figcaption>
-                        <span>{% trans 'zmień avatar' %}</span>
+                        <span>{% trans "change avatar" %}</span>
                     </figcaption>
                     <div class="image preview" style="background-image: url({{ user.get_avatar_url }});"></div>
                 </figure>
@@ -28,12 +28,12 @@
     <div class="current-settings lewa">
         <div class="astable">
             <h2>{% if user.name %}{{ user.name }}{% else %}-{% endif %}</h2>
-            <p><span class="what">{% trans 'Użytkownik' %}:</span> <span class="value">{{ user.username }}</span></p>
-            <p><span class="what">{% trans 'Dołączył do gry' %}:</span> <span class="value">{{ user.created_date }}</span></p>
+            <p><span class="what">{% trans "Player" %}:</span> <span class="value">{{ user.username }}</span></p>
+            <p><span class="what">{% trans "Joined game" %}:</span> <span class="value">{{ user.created_date }}</span></p>
         </div>
         <div class="astable">
-            <p><span class="what">{% trans 'Adres e-mail' %}:</span> <span class="value">{% if user.email %}<a href="emailto:{{ user.email }}">{{ user.email }}</a>{% else %}-{% endif %}</span></p>
-            <p><span class="what">{% trans 'Połączone konta' %}:</span> <span class="value">
+            <p><span class="what">{% trans "E-mail address" %}:</span> <span class="value">{% if user.email %}<a href="emailto:{{ user.email }}">{{ user.email }}</a>{% else %}-{% endif %}</span></p>
+            <p><span class="what">{% trans "Connected accounts" %}:</span> <span class="value">
                 {% if user.twitter_user %}
                 <a href="{{ user.get_twitter_url }}"><span class="att-tt">{{ user.twitter_user }}</span></a>
                 {% endif %}
@@ -48,7 +48,7 @@
 
 <section id="userinfo" class="hotbets">
     <ul class="tabs lewa">
-        <li class="active"><a href="#profil">{% trans 'Twój profil' %}</a></li>
+        <li class="active"><a href="#profil">{% trans "Your profile" %}</a></li>
         <li><a href="#haslo">E-mail</a></li>
     </ul>
     <div class="clr"></div>
@@ -57,15 +57,15 @@
             <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" class="settings-form" id="profil">
                 {% csrf_token %}
                 <div class="lewa">
-                    <span>{% trans 'Wyświetlane imię i nazwisko' %}:</span>
+                    <span>{% trans "Name as presented" %}:</span>
                     <input name="name" type="text" class="jednalinia" id="{{ forms.main.name.auto_id }}" value="{{ user.name }}" data-parsley-minlength="3" data-parsley-trigger="focusout" required />
-                    <span>{% trans 'Opis użytkownika' %}:</span>
+                    <span>{% trans "Player's description" %}:</span>
                     <textarea name="description" class="wielelinii" id="{{ forms.main.description.auto_id }}" data-parsley-minlength="10" data-parsley-trigger="focusout">{{ user.description }}</textarea>
                 </div>
                 <div class="prawa">
-                    <span>{% trans 'Twoja strona www' %}:</span>
+                    <span>{% trans "Your website" %}:</span>
                     <input name="web_site" type="url" class="jednalinia" id="{{ forms.main.web_site.auto_id }}" value="{{ user.web_site }}" data-parsley-type="url" data-parsley-trigger="focusout">
-                    <span>{% trans 'Połączone konta' %}:</span>
+                    <span>{% trans "Connected accounts" %}:</span>
                     {% if user.twitter_user %}
                     <div class="social-connect connection"><div class="connect-tt"></div>{{ user.twitter_user }}</div>
                     {% endif %}
@@ -80,7 +80,7 @@
             <form data-parsley-validate action="{% url 'accounts:user_settings' %}" method="post" enctype="multipart/form-data" class="settings-form" id="haslo">
                 {% csrf_token %}
                 <div class="lewa">
-                    <span>{% trans 'Zmień adres e-mail' %}:</span>
+                    <span>{% trans "Change e-mail address" %}:</span>
                     <input name="email" type="email" class="jednalinia" id="{{ forms.email.email.auto_id }}" value="{{ user.email }}" placeholder="{{ forms.email.email.label }}" data-parsley-trigger="focusout" required>
                     <input name="checkemail" type="email" class="jednalinia" id="{{ forms.email.checkemail.auto_id }}" placeholder="{{ forms.email.checkemail.label }}" data-parsley-equalto="#newemail" data-parsley-trigger="focusout" required>
                 </div>
@@ -101,7 +101,7 @@
     {% for message in messages %}
     <div{% if message.1 %} class="error"{% endif %}>{{ message.0 }}</div>
     {% endfor %}
-    <a href="#" id="loadmore" class="loadmore"><div class="btn astable">{% trans 'Zapisz zmiany' %}</div></a>
+    <a href="#" id="loadmore" class="loadmore"><div class="btn astable">{% trans "Save changes" %}</div></a>
 </section>
 
 {% endblock %}

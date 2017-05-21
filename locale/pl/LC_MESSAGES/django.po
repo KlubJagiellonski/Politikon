@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-16 16:38+0200\n"
+"POT-Creation-Date: 2017-05-21 02:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Wojciech Zając <wojciech@reunix.eu>\n"
+"Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
 "Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
 "Language: PL\n"
 "MIME-Version: 1.0\n"
@@ -42,17 +42,17 @@ msgstr "Wydarzenie nie istnieje."
 
 #: events/managers.py:83 events/managers.py:143
 msgid "Event is no longer in progress."
-msgstr "Wydarzenie zostało zakończone"
+msgstr "Wydarzenie zostało zakończone."
 
 #: events/managers.py:94
 msgid "Unknown outcome."
-msgstr "Nie prawidłowy zakład."
+msgstr "Nieprawidłowy zakład."
 
-#: events/managers.py:176 events/managers.py:254
+#: events/managers.py:176 events/managers.py:253
 msgid "Event is currently a draft."
-msgstr "Wydarzenie jest tylko szkicem."
+msgstr "Wydarzenie jest szkicem."
 
-#: events/managers.py:184 events/managers.py:259
+#: events/managers.py:184 events/managers.py:258
 msgid "Price has changed."
 msgstr "Cena uległa zmianie."
 
@@ -60,11 +60,11 @@ msgstr "Cena uległa zmianie."
 msgid "You don't have enough cash."
 msgstr "Nie masz wystarczająco reputów."
 
-#: events/managers.py:265
+#: events/managers.py:264
 msgid "You don't have enough shares."
 msgstr "Nie masz wystarczająco zakładów."
 
-#: events/views.py:136
+#: events/views.py:154
 msgid "Something went wrong, try again in a few seconds."
 msgstr "Coś nie poszło, spróbuj ponownie."
 
@@ -76,6 +76,464 @@ msgstr "Polski"
 msgid "English"
 msgstr "Angielski"
 
-#: templates/base.html:128
+#: politikon/settings/base.py:40
+msgid "Lithuanian"
+msgstr "Litewski"
+
+#: templates/accounts/rank.html:31
+msgid "Weekly leaders"
+msgstr "Ranking 7-dniowy"
+
+#: templates/accounts/rank.html:32
+msgid "Monthly leaders"
+msgstr "Ranking miesięczny"
+
+#: templates/accounts/rank.html:33 templates/base.html:106
+#: templates/base.html.py:134
+msgid "Leaderboard"
+msgstr "Rankingi"
+
+#: templates/accounts/user_detail.html:58
+msgid "On bet"
+msgstr "Zawartość portfela"
+
+#: templates/accounts/user_detail.html:59
+msgid "Prediction results"
+msgstr "Powiadomienia o wynikach"
+
+#: templates/accounts/user_detail.html:60
+msgid "Prediction history"
+msgstr "Historia transakcji"
+
+#: templates/accounts/user_notifications.html:15
+msgid "explanation of the result:"
+msgstr "skrócone uzasadnienie wyniku:"
+
+#: templates/accounts/user_notifications.html:19 templates/logged_in.html:67
+msgid "profit"
+msgstr "zysk"
+
+#: templates/accounts/user_notifications.html:19 templates/logged_in.html:67
+msgid "loss"
+msgstr "strata"
+
+#: templates/accounts/user_notifications.html:29
+msgid "show more results"
+msgstr "wyświetl więcej wyników"
+
+#: templates/accounts/user_portfolio.html:11
+#: templates/events/render_bet_status.html:4
+msgid "Bet"
+msgstr "Zakład"
+
+#: templates/accounts/user_portfolio.html:11
+#: templates/events/render_bet.html:11 templates/events/render_bet.html:16
+#: templates/events/render_bet.html:39 templates/events/render_bet.html:55
+#: templates/events/render_bet.html:70
+#: templates/events/render_bet_status.html:4
+#: templates/events/render_bet_status.html:5
+msgid "YES"
+msgstr "TAK"
+
+#: templates/accounts/user_portfolio.html:11
+#: templates/events/render_bet.html:29 templates/events/render_bet.html:32
+#: templates/events/render_bet.html:39 templates/events/render_bet.html:61
+#: templates/events/render_bet.html:70
+#: templates/events/render_bet_status.html:4
+#: templates/events/render_bet_status.html:5
+msgid "NO"
+msgstr "NIE"
+
+#: templates/accounts/user_portfolio.html:11
+msgid "current price"
+msgstr "aktualna cena"
+
+#: templates/accounts/user_portfolio.html:20 templates/events/events.html:61
+msgid "show more events"
+msgstr "wyświetl więcej zakładów"
+
+#: templates/accounts/user_settings.html:18
+msgid "change avatar"
+msgstr "zmień avatar"
+
+#: templates/accounts/user_settings.html:31
+msgid "Player"
+msgstr "Użytkownik"
+
+#: templates/accounts/user_settings.html:32
+msgid "Joined game"
+msgstr "Dołączył do gry"
+
+#: templates/accounts/user_settings.html:35
+msgid "E-mail address"
+msgstr "Adres e-mail"
+
+#: templates/accounts/user_settings.html:36
+#: templates/accounts/user_settings.html:68
+msgid "Connected accounts"
+msgstr "Połączone konta"
+
+#: templates/accounts/user_settings.html:51
+msgid "Your profile"
+msgstr "Twój profil"
+
+#: templates/accounts/user_settings.html:60
+msgid "Name as presented"
+msgstr "Wyświetlane imię i nazwisko"
+
+#: templates/accounts/user_settings.html:62
+msgid "Player's description"
+msgstr "Opis użytkownika"
+
+#: templates/accounts/user_settings.html:66
+msgid "Your website"
+msgstr "Twoja strona www"
+
+#: templates/accounts/user_settings.html:83
+msgid "Change e-mail address"
+msgstr "Zmień adres e-mail"
+
+#: templates/accounts/user_settings.html:105
+msgid "Save changes"
+msgstr "Zapisz zmiany"
+
+#: templates/accounts/user_stats.html:7 templates/logged_in.html:29
+msgid "portfolio value"
+msgstr "wartość portfela"
+
+#: templates/accounts/user_stats.html:11 templates/logged_in.html:36
+msgid "points to use"
+msgstr "wolne reputy"
+
+#: templates/accounts/user_stats.html:15 templates/logged_in.html:43
+msgid "performance"
+msgstr "reputacja"
+
+#: templates/accounts/user_stats.html:19
+msgid "classification"
+msgstr "ranking"
+
+#: templates/accounts/user_stats.html:20 templates/home.html:77
+msgid "monthly"
+msgstr "miesiąc"
+
+#: templates/accounts/user_stats.html:21 templates/home.html:76
+msgid "weekly"
+msgstr "tydzień"
+
+#: templates/accounts/user_transactions.html:19
+msgid "show more predictions"
+msgstr "wyświetl więcej transakcji"
+
+#: templates/base.html:92
+msgid ""
+"Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz "
+"zgodę na ich używanie, zgodnie z ustawieniami przeglądarki."
+msgstr ""
+
+#: templates/base.html:105 templates/base.html.py:133
+#: templates/events/events.html:22
+msgid "Events"
+msgstr "Wydarzenia"
+
+#: templates/base.html:107 templates/base.html.py:135
+msgid "Tutorial"
+msgstr "Jak grać?"
+
+#: templates/base.html:146
+msgid "Partners"
+msgstr "Partnerzy"
+
+#: templates/base.html:175
+msgid "Beta version"
+msgstr "Wersja beta"
+
+#: templates/base.html:178
+msgid "Expect changes and forgive us!"
+msgstr "Po publikacji stracisz reputy"
+
+#: templates/events/event_detail.html:73
+msgid "Resolve"
+msgstr "Rozstrzygnij"
+
+#: templates/events/event_detail.html:76
+#, fuzzy
+#| msgid "Event is currently a draft."
+msgid "Event's draft"
+msgstr "Szkic wydarzenia"
+
+#: templates/events/event_detail.html:80
+msgid "Share"
+msgstr "Podziel się"
+
+#: templates/events/event_detail.html:132
+msgid "Estimated closure"
+msgstr "Przewidywana data rozstrzygnięcia"
+
+#: templates/events/event_detail.html:133
+#, fuzzy
+#| msgid "Permissions"
+msgid "Termination"
+msgstr "Data rozstrzygnięcia"
+
+#: templates/events/event_detail.html:169
+msgid "Related events"
+msgstr "Powiązane wydarzenia"
+
+#: templates/events/event_embed_detail.html:39
+#, fuzzy
+#| msgid "You predict"
+msgid "Predict!"
+msgstr "Załóż się!"
+
+#: templates/events/event_embed_detail.html:42
+msgid "odds"
+msgstr "szanse"
+
+#: templates/events/events.html:24
+msgid "Most popular"
+msgstr "Najpopularniejsze"
+
+#: templates/events/events.html:25 templates/home.html:67
+msgid "Ending"
+msgstr "Kończące się"
+
+#: templates/events/events.html:26
+msgid "Changes"
+msgstr "Największe zmiany"
+
+#: templates/events/events.html:27
+msgid "Newest"
+msgstr "Najnowsze"
+
+#: templates/events/events.html:28
+msgid "Finished"
+msgstr "Zakończone"
+
+#: templates/events/events.html:30
+msgid "Anteroom"
+msgstr "Poczekalnia"
+
+#: templates/events/events.html:50
+msgid "Dodaj wydarzenie"
+msgstr ""
+
+#: templates/events/finish_date.html:2 templates/home.html:45
+#, fuzzy
+#| msgid "Estimated closure"
+msgid "Estimated closure:"
+msgstr "Przewidywana data rozstrzygnięcia"
+
+#: templates/events/finish_date.html:3
+msgid "Terminated:"
+msgstr "Zakończony"
+
+#: templates/events/finish_date.html:4
+msgid "Waiting to be resolved"
+msgstr "Czeka na rozstrzygnięcie"
+
+#: templates/events/render_bet.html:11 templates/events/render_bet.html:29
+msgid "acquire more for"
+msgstr "dokup na"
+
+#: templates/events/render_bet.html:13 templates/events/render_bet.html:27
+msgid "sell share"
+msgstr "sprzedaj zakład"
+
+#: templates/events/render_bet.html:39
+msgid "You predict"
+msgstr "Jesteś na"
+
+#: templates/events/render_bet.html:49 templates/events/render_event.html:36
+msgid "Cancelled"
+msgstr "Anulowane"
+
+#: templates/events/render_bet.html:55 templates/events/render_bet.html:61
+msgid "Outcome:"
+msgstr "Było"
+
+#: templates/events/render_bet.html:68
+msgid "You didn't participate."
+msgstr "Nie brałeś udziału."
+
+#: templates/events/render_bet.html:70
+msgid "You predicted:"
+msgstr "Byłeś na"
+
+#: templates/events/render_bet_status.html:5
+msgid "Result"
+msgstr "Wynik"
+
+#: templates/events/render_bet_status.html:5
+msgid "CANCELLED"
+msgstr "ANULOWANE"
+
+#: templates/events/render_event.html:27
+msgid "event's draft"
+msgstr "szkic wydarzenia"
+
+#: templates/events/render_event.html:43
+msgid "Happened"
+msgstr "Wydarzyło się"
+
+#: templates/events/render_event.html:50
+msgid "Didn't happen"
+msgstr "Nie wydarzyło się"
+
+#: templates/home.html:74
+msgid "Best players"
+msgstr "Najlepsi gracze"
+
+#: templates/home.html:78
+msgid "overall"
+msgstr "całość"
+
+#: templates/home.html:101
+msgid "Show more events"
+msgstr "Wyświetl więcej zakładów"
+
+#: templates/logged_in.html:9
+msgid "My profile"
+msgstr "Mój profil"
+
+#: templates/logged_in.html:10
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: templates/logged_in.html:11
+msgid "Log out"
+msgstr "Wyloguj"
+
+#: templates/logged_in.html:53
+msgid "fresh outcomes"
+msgstr "najnowsze wyniki"
+
+#: templates/logged_in.html:54
+msgid "Mark as read"
+msgstr "Oznacz wszystkie jako przeczytane"
+
+#: templates/logged_in.html:75
+msgid "Show all results"
+msgstr "Wyświetl wszystkie wyniki"
+
+#: templates/modals/anonymous.html:3
+msgid "Play Politikon!"
+msgstr "Graj w Politikon!"
+
+#: templates/modals/anonymous.html:8
+msgid "You can also sign up, using"
+msgstr "Możesz także zarejestrować się używając"
+
+#: templates/modals/anonymous.html:8
+msgid "e-mail address"
+msgstr "adresu e-mail"
+
+#: templates/modals/anonymous.html:9
+msgid "Have an account?"
+msgstr "Masz już konto?"
+
+#: templates/modals/anonymous.html:9
+msgid "Log in here"
+msgstr "Zaloguj się tutaj"
+
+#: templates/modals/anonymous.html:13 templates/modals/anonymous.html.py:14
+msgid "Log in with"
+msgstr "Zaloguj się przez"
+
+#: templates/modals/anonymous.html:13
+msgid "Twitter"
+msgstr "Twittera"
+
+#: templates/modals/anonymous.html:14
+msgid "Facebook"
+msgstr "Facebooka"
+
+#: templates/modals/anonymous.html:22
+msgid "Don't have an account yet?"
+msgstr "Nie masz jeszcze konta?"
+
+#: templates/modals/anonymous.html:22
+msgid "Join the game!"
+msgstr "Zarejestruj się!"
+
+#: templates/modals/anonymous.html:39
+msgid "Join us with e-mail"
+msgstr "Zarejestruj się przy użyciu adresu e-mail"
+
+#: templates/modals/anonymous.html:45
+msgid "I have acknowledged"
+msgstr "Zapoznałem się z"
+
+#: templates/modals/anonymous.html:45
+msgid "Terms & conditions"
+msgstr "Regulaminem"
+
+#: templates/modals/anonymous.html:45
+msgid "and"
+msgstr "i"
+
+#: templates/modals/anonymous.html:45
+msgid "Privacy policy"
+msgstr "Polityką Prywatności"
+
+#: templates/modals/anonymous.html:50
+msgid "Have Twitter or Facebook?"
+msgstr "Masz TT lub FB?"
+
+#: templates/modals/anonymous.html:50
+msgid "Join us quicker"
+msgstr "Zarejestruj się szybciej"
+
+#: templates/modals/any.html:4
+#, fuzzy
+#| msgid "Show more events"
+msgid "Share the event!"
+msgstr "Wyświetl więcej zakładów"
+
+#: templates/modals/any.html:7
+#, fuzzy
+#| msgid "Twitter"
+msgid "Share on Twitter"
+msgstr "Twittera"
+
+#: templates/modals/any.html:8
+#, fuzzy
+#| msgid "Facebook"
+msgid "Share on Facebook"
+msgstr "Facebooka"
+
+#: templates/modals/any.html:9
+msgid "Share on Webpage:"
+msgstr ""
+
+#: templates/modals/authenticated.html:26
+msgid "Event title"
+msgstr ""
+
+#: templates/modals/authenticated.html:32
+msgid "Small image"
+msgstr ""
+
+#: templates/modals/authenticated.html:38
+msgid "Big image"
+msgstr ""
+
+#: templates/modals/authenticated.html:44
+#, fuzzy
+#| msgid "Player's description"
+msgid "Description"
+msgstr "Opis użytkownika"
+
+#: templates/modals/authenticated.html:50
+#, fuzzy
+#| msgid "Prediction results"
+msgid "Prediction end of event"
+msgstr "Powiadomienia o wynikach"
+
+#: templates/modals/authenticated.html:57
+msgid "Send"
+msgstr ""
+
+#: templates/not_logged_in.html:4
 msgid "PLAY"
 msgstr "GRAJ"

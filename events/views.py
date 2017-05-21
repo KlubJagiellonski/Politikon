@@ -6,7 +6,9 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_headers
@@ -112,6 +114,22 @@ class EventDetailView(DetailView):
             'share_url': share_url
         })
         return context
+
+
+class EventEmbedDetailView(DetailView):
+    template_name = 'events/event_embed_detail.html'
+    context_object_name = 'event'
+    model = Event
+
+    def get_event(self):
+        return get_object_or_404(Event, id=self.kwargs['pk'])
+
+    @method_decorator(xframe_options_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        event = self.get_event()
+        if not event.is_published:
+            raise PermissionDenied
+        return super(EventEmbedDetailView, self).dispatch(request, *args, **kwargs)
 
 
 @login_required

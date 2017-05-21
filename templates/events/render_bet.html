@@ -8,12 +8,12 @@
             <span class="txt prawa">
             {% if bet.has > 0 %}
                 {% if bet.outcome %}
-                    {% trans 'dokup na TAK' %}
+                    {% trans "acquire more for" %} {% trans "YES" %}
                 {% else %}
-                    {% trans 'sprzedaj zakład' %}
+                    {% trans "sell share" %}
                 {% endif %}
             {% else %}
-                {% trans 'TAK' %}
+                {% trans "YES" %}
             {% endif %}
             </span>
         </div>
@@ -24,19 +24,19 @@
             <span class="txt lewa">
             {% if bet.has > 0 %}
                 {% if bet.outcome %}
-                    {% trans 'sprzedaj zakład' %}
+                    {% trans "sell share" %}
                 {% else %}
-                    {% trans 'dokup na NIE' %}
+                    {% trans "acquire more for" %} {% trans "NO" %}
                 {% endif %}
             {% else %}
-                {% trans 'NIE' %}
+                {% trans "NO" %}
             {% endif %}
             </span>
         </div>
     </a>
     <div class="currentbet centrum" {% if bet.has == 0 %}hidden{% endif %}>
         <p class="change{% if bet.outcome %}YES{% else %}NO{% endif %}">
-            {% trans 'Jesteś na' %} {% if bet.outcome %}{% trans 'TAK' %}{% else %}{% trans 'NIE' %}{% endif %}
+            {% trans "You predict" %} {% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}
         </p>
         <p>
             <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
@@ -46,28 +46,28 @@
     {% if event.outcome == 2 %}
         <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES">
             <div class="betCANCELED">
-                <span class="value lewa">0</span><span class="txt prawa">{% trans 'Anulowane' %}</span>
+                <span class="value lewa">0</span><span class="txt prawa">{% trans "Cancelled" %}</span>
             </div>
         </div>
     {% elif event.outcome == 3 %}
         <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betYES">
             <div class="betYES">
-                <span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{% trans 'Było TAK' %}</span>
+                <span class="value lewa">{{ bet.priceYES }}</span><span class="txt prawa">{% trans "Outcome:" %} {% trans "YES" %}</span>
             </div>
         </div>
     {% elif event.outcome == 4 %}
         <div href="#" class="{% if bet.is_user %}a_bet{% else %}show-login{% endif %} a_betNO">
             <div class="betNO">
-                <span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{% trans 'Było NIE' %}</span>
+                <span class="value prawa">{{ bet.priceNO }}</span><span class="txt lewa">{% trans "Outcome:" %} {% trans "NO" %}</span>
             </div>
         </div>
     {% endif %}
     <div class="currentbet centrum" >
         <p class="change{% if bet.outcome %}YES{% else %}NO{% endif %}">
             {% if bet.has == 0 %}
-                {% trans 'Nie brałeś udziału.' %}
+                {% trans "You didn't participate." %}
             {% else %}
-                {% trans 'Byłeś na' %} {% if bet.outcome %}{% trans 'TAK' %}{% else %}{% trans 'NIE' %}{% endif %}
+                {% trans "You predicted:" %} {% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}
             {% endif %}
         </p>
         <p {% if bet.has == 0 %}hidden{% endif %}>

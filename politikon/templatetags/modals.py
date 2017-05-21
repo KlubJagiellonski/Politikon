@@ -28,6 +28,11 @@ def anonymous_modals(user):
     }
 
 
+@register.inclusion_tag('modals/any.html', takes_context=True)
+def anyuser_modals(context):
+    return context
+
+
 @register.inclusion_tag('modals/all.html')
 def choose_modal(user, event):
     return {

@@ -2,8 +2,7 @@
 from django import template
 from django.utils import timezone
 
-from events.models import Event, Bet
-from politikon.templatetags.format import toLower
+from events.models import Bet
 
 
 register = template.Library()
