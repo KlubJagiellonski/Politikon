@@ -37,7 +37,7 @@ urlpatterns += i18n_patterns(
     url(r'^', include('events.urls', namespace='events')),
 
     # CMS pages
-    url(r'^news/', include('cms.urls', namespace='cms')),
+    url(r'^pages/', include('cms.urls', namespace='cms')),
 
     url(r'^$', HomeView.as_view(), name='home')
 )

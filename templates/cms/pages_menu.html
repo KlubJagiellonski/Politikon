@@ -1,7 +1,7 @@
 {% load i18n %}
 <ul>
-    <h5>{% trans 'Others' %}</h5>
+{#    <h5>{% trans 'Others' %}</h5>#}
     {% for page in published_pages %}
-    <li><a href="">{{ page.title }}</a></li>
+    <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
     {% endfor %}
 </ul>

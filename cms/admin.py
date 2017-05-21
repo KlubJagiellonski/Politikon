@@ -9,6 +9,7 @@ class PageAdmin(admin.ModelAdmin):
         'user_profile',
         'slug',
     ]
+    change_form_template = 'cms/admin/change_form.html'
 
 
 class ExtraContentAdmin(admin.ModelAdmin):

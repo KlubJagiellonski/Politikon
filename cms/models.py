@@ -25,6 +25,7 @@ class Page(models.Model):
     )
     slug = models.SlugField(
         verbose_name=_('Slug url'),
+        unique=True
     )
     created_at = models.DateTimeField(
         verbose_name=_('Creation date'),
@@ -50,7 +51,7 @@ class Page(models.Model):
         :return: user url
         :rtype: str
         """
-        return reverse('cms:page', kwargs={'pk': str(self.pk)})
+        return reverse('cms:page', kwargs={'slug': self.slug})
 
 
 class ExtraContent(models.Model):
