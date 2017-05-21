@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load i18n %}{% load static %}
+
+{% block content %}
+    <section id="header" class="body-margin">
+        <h3 class="orangetxt">{{ object.title }}</h3>
+    </section>
+    <section id="bet-desc">
+        {{ object.content|safe }}
+    </section>
+{% endblock %}

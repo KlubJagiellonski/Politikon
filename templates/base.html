@@ -1,6 +1,6 @@
 {% load i18n path static %}
 
-{% load modals %}
+{% load modals pages %}
 
 {% url 'accounts:rank' as rank_url %}
 {% url 'events:events' as events_url %}
@@ -138,14 +138,7 @@
                 <li><a href="{% url 'accounts:rank' %}">{% trans 'Rankingi' %}</a></li>
                 <li><a href="javascript:void(0);" onclick="startIntro();">{% trans 'Jak grać?' %}</a></li>
             </ul>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-{#                <li><a href="#">Regulamin</a></li>#}
-{#                <li><a href="#">Reklama</a></li>#}
-{#                <li><a href="#">Kontakt</a></li>#}
-            </ul>
+                {% published_pages %}
             <ul>
                 <h5>Partnerzy</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
@@ -183,10 +176,6 @@
     ">{% trans 'Po publikacji stracisz reputy' %} :-o</span>
     </div>
 </div>
-
-<!-- ShareThis scripts -->
-<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({publisher: "8c0ef4da-6251-49e0-ba79-cc5e4d894120", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
 <!-- ChartJS scripts -->
 <script type="text/javascript" language="javascript" src="{% static 'js/Chart.min.js' %}"></script>

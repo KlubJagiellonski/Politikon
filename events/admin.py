@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.db import models
 from django.forms import Textarea, TextInput
 
-from .exceptions import EventNotInProgress
 from .forms import EventForm
 from .models import Bet, Event, Transaction
 
