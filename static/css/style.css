@@ -439,6 +439,9 @@ ul.language-bar li.active a img, ul.language-bar li a:hover img {
 #partners .erasmus-plus {background: url(../img/partners/erasmus-plus.png) center center no-repeat;}
 #partners .erasmus-plus:hover {background: url(../img/partners/erasmus-plus-gray.png) center center no-repeat;}
 
+#erasmus-info {height: 30px; background: #ffffff;}
+#erasmus-info p {text-align: center;}
+
 footer {height: 120px; background: url(../img/footer-bg.jpg) top center repeat-x;}
 footer .logo {width: 174px; height: 129px; background: url(../img/footer-logo-politikon.png) top center no-repeat; position: absolute; margin-top: -50px; margin-left:-87px; left:50%;}
 footer .lewa {width: 30%}
