@@ -1,17 +1,17 @@
 {% load display format i18n %}
 <div id="login" class="modal-opened">
-    <div class="header">{% trans 'Graj w Politikon!' %} <span class="prawa login-close"></span></div>
+    <div class="header">{% trans "Play Politikon!" %} <span class="prawa login-close"></span></div>
 
     <aside class="rejestracja">
 {#        <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>#}
 {#        <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>#}
-        <p>{% trans 'Możesz także zarejestrować się używając' %} <a href="#" class="show-rejestracjaemail">{% trans 'adresu e-mail' %}</a></p>
-        <div class="other"><p>{% trans 'Masz już konto?' %} <a href="#" class="show-logowanie">{% trans 'Zaloguj się tutaj' %}</a>.</p></div>
+        <p>{% trans "You can also sign up, using" %} <a href="#" class="show-rejestracjaemail">{% trans "e-mail address" %}</a></p>
+        <div class="other"><p>{% trans "Have an account?" %} <a href="#" class="show-logowanie">{% trans "Log in here" %}</a>.</p></div>
     </aside>
 
     <aside class="logowanie asblock opacity">
-        <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans 'Zaloguj się przez Twittera' %}</span></div></a>
-        <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans 'Zaloguj się przez Facebooka' %}</span></div></a>
+        <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans "Log in with" %} {% trans "Twitter" %}</span></div></a>
+        <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans "Log in with" %} {% trans "Facebook" %}</span></div></a>
         <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="google-login"><span>{% trans 'Zaloguj się przez G+' %}</span></div></a>
         <p class="or"><span>lub zaloguj się przez e-mail</span></p>
         <form id="form-login" method="post" action="{% url 'accounts:login' %}" data-parsley-validate >
@@ -22,7 +22,7 @@
             <input id="send-login-form" type="submit" class="przycisk" value="Zaloguj się">
         </form>
         <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
-        <div class="other"><p>{% trans 'Nie masz jeszcze konta?' %} <a href="#" class="show-rejestracja">{% trans 'Zarejestruj się!' %}</a></p></div>
+        <div class="other"><p>{% trans "Don't have an account yet?" %} <a href="#" class="show-rejestracja">{% trans "Join the game!" %}</a></p></div>
     </aside>
 
     <aside class="przypomnienie">
@@ -39,17 +39,17 @@
     </aside>
 
     <aside class="rejestracjaemail">
-        <h2 class="spaceafter">{% trans 'Zarejestruj się przy użyciu adresu e-mail' %}</h2>
+        <h2 class="spaceafter">{% trans "Join us with e-mail" %}</h2>
         <form data-parsley-validate>
             <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
             <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
             <input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
             <input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
-            <p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans 'Zapoznałem się z' %} <a href="#">{% trans 'Regulaminem' %}</a> {% trans 'i' %} <a href="#">{% trans 'Polityką Prywatności' %}</a></p>
+            <p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans "I have acknowledged" %} <a href="#">{% trans "Terms & conditions" %}</a> {% trans "and" %} <a href="#">{% trans "Privacy policy" %}</a></p>
 
             <input type="submit" class="przycisk" value="Zarejestruj się">
 
         </form>
-        <div class="other"><p>{% trans 'Masz TT lub FB?' %} <a href="#" class="show-rejestracja">{% trans 'Zarejestruj się szybciej' %}</a>.</p></div>
+        <div class="other"><p>{% trans "Have Twitter or Facebook?" %} <a href="#" class="show-rejestracja">{% trans "Join us quicker" %}</a>.</p></div>
     </aside>
 </div>

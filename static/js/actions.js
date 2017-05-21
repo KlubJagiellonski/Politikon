@@ -128,13 +128,17 @@
         });
 
         // Show message about points reset - in authomaticated.html is condition for it
-        $('#reset-message').each(function(){
+        $('#reset-message').each(function () {
             showModal('reset-message');
         });
 
         // Add new event proposition
-        $('#add-event-button').on('click', function(){
+        $('#add-event-button').on('click', function () {
             showModal('add-event');
+        });
+
+        $('#share-event').on('click', function () {
+            showModal('podziel-sie');
         });
 
         //ukryj okno logowania po kliknieciu w X
@@ -246,6 +250,7 @@
                 $('.overlay').click();
             }
         });
+
         //featured - pokazuje wykres
         $(document).on({
             mouseenter: function () {

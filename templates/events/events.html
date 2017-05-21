@@ -19,15 +19,15 @@ $(function() {
 </script>
 
 <section id="header"  class="body-margin">
-    <h2>{% trans 'Wydarzenia' %}</h2>
+    <h2>{% trans "Events" %}</h2>
     <ul class="tabs prawa">
-        <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}">{% trans 'Najpopularniejsze' %}</a></li>
-        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">{% trans 'Kończące się' %}</a></li>
-        <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">{% trans 'Największe zmiany' %}</a></li>
-        <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">{% trans 'Najnowsze' %}</a></li>
-        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">{% trans 'Zakończone' %}</a></li>
+        <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}">{% trans "Most popular" %}</a></li>
+        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">{% trans "Ending" %}</a></li>
+        <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">{% trans "Changes" %}</a></li>
+        <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">{% trans "Newest" %}</a></li>
+        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">{% trans "Finished" %}</a></li>
         {% if user.is_authenticated and user.is_staff %}
-        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">{% trans 'Poczekalnia' %}</a></li>
+        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">{% trans "Anteroom" %}</a></li>
         {% endif %}
     </ul>
 {#    <div class="tabs prawa filters">#}
@@ -45,11 +45,6 @@ $(function() {
 {#          <li><a href="?tag={{ tag }}">{{ tag }}</a></li>#}
 {#        {% endfor %}#}
 {#    </ul>#}
-    {% if user.is_authenticated %}
-        <ul class="tabs prawa" style="margin-top:20px;">
-            <li><a id="add-event-button" href="javascript:void(0);">{% trans 'Dodaj wydarzenie' %}</a></li>
-        </ul>
-    {% endif %}
 </section>
 
 <section id="betfeed">
@@ -58,7 +53,7 @@ $(function() {
 
 {% if page_obj.has_next %}
 <section class="loadmore">
-    <a href="?page={{ page_obj.next_page_number }}" class="event-loadmore"><div class="btn astable">{% trans 'Wyświetl więcej zakładów' %}</div></a>
+    <a href="?page={{ page_obj.next_page_number }}" class="event-loadmore"><div class="btn astable">{% trans "show more events" %}</div></a>
     <div class="more lewa"></div>
     <div class="more prawa"></div>
     <div class="more centrum"></div>

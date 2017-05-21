@@ -8,7 +8,7 @@
                 <div class="image" style="background-image: url({{ bet.event.small_image.url }}); width: 136px; background-size: cover; height: 100px; display: block; float: left; margin-right: 3.75%; margin-top: 5px;"></div>
                 <div class="status">
                     <h3 class="skroc">{{ bet.event }}</h3>
-                    <p><span class="betdetails">{% trans 'Zakład' %}:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}{% trans 'TAK' %}{% else %}{% trans 'NIE' %}{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|formatted }} <span class="why">({% trans 'aktualna cena' %}: {{ bet.current_event_price }})</span></p>
+                    <p><span class="betdetails">{% trans "Bet" %}:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|formatted }} <span class="why">({% trans "current price" %}: {{ bet.current_event_price }})</span></p>
                     <p class="detailed-status"><span class="invested">{{ bet.get_invested|formatted }}</span> <span class="maywin">{{ bet.get_won|formatted }}</span> <span class="inwallet">{{ bet.get_wallet_change|formatted:"True" }}</span></p>
                 </div>
             </a>
@@ -17,7 +17,7 @@
     </div>
     {% if page_obj.has_next %}
     <a class="portfolio-loadmore loadmore" href="{% url 'accounts:user_portfolio' pk=user_pk %}?page={{ page_obj.next_page_number }}">
-        <div class="btn astable">{% trans 'wyświetl więcej zakładów' %}</div>
+        <div class="btn astable">{% trans "show more events" %}</div>
     </a>
     {% endif %}
 </article>

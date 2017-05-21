@@ -1,0 +1,12 @@
+{% load display format i18n %}
+{% load iframe %}
+<div id="podziel-sie" class="modal-opened">
+    <div class="header">{% trans "Share the event!" %} <span class="prawa login-close"></span></div>
+
+    <aside class="asblock opacity">
+        <a href="https://twitter.com/intent/tweet?url={{ event.get_absolute_url }}"><div class="twitter-login" id="twitter-share"><span>{% trans "Share on Twitter" %}</span></div></a>
+        <a href="#"><div class="facebook-login" id="facebook-share"><span>{% trans "Share on Facebook" %}</span></div></a>
+        <div class="website-share"><span>{% trans "Share on Webpage:" %}</span><input type="text" value="{% small_iframe %}" /></div>
+        <div class="other"></div>
+    </aside>
+</div>

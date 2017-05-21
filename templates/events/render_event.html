@@ -24,7 +24,7 @@
                 </div>
             </a>
             {% if not event.is_published %}
-            <h3>{% trans 'szkic wydarzenia' %}</h3>
+            <h3>{% trans "event's draft" %}</h3>
             {% endif %}
             {% if event.is_in_progress %}
             <a href="{{ event.get_relative_url }}">
@@ -33,21 +33,21 @@
             {% else %}
                 {% if event.outcome == 2 %}
                 <a href="{{ event.get_relative_url }}">
-                    <h3>{% trans 'Anulowane' %}</h3>
+                    <h3>{% trans "Cancelled" %}</h3>
                     <h2 class="skroc">
                         {{ event.title }}
                     </h2>
                 </a>
                 {% elif event.outcome == 3 %}
                 <a href="{{ event.get_relative_url }}">
-                    <h3>{% trans 'Wydarzyło się' %}</h3>
+                    <h3>{% trans "Happened" %}</h3>
                     <h2 class="skroc">
                         {{ event.title }}
                     </h2>
                 </a>
                 {% elif event.outcome == 4 %}
                 <a href="{{ event.get_relative_url }}">
-                    <h3>{% trans 'Nie wydarzyło się' %}</h3>
+                    <h3>{% trans "Didn't happen" %}</h3>
                     <h2 class="skroc">
                         {{ event.title }}
                     </h2>

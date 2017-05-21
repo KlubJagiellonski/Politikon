@@ -16,7 +16,7 @@
     </div>
     {% if page_obj.has_next %}
     <a class="transactions-loadmore loadmore" href="{% url 'accounts:user_transactions' pk=user_pk %}?page={{ page_obj.next_page_number }}">
-        <div class="btn astable">{% trans 'wyświetl więcej transakcji' %}</div>
+        <div class="btn astable">{% trans "show more predictions" %}</div>
     </a>
     {% endif %}
 </article>
