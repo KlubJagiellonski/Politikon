@@ -303,6 +303,7 @@ INSTALLED_APPS = (
     'accounts',
     'bladepolska',
     'events',
+    'cms',
     'politikon'
 )
 

@@ -440,7 +440,7 @@ footer .lewa {width: 30%}
 footer .prawa {width: 60%;}
 footer .lewa, footer .prawa {margin-top: 20px; color: #7a7a7a; font-size: .875em;}
 
-footer ul {float: left; margin-right: 13%;}
+footer ul {float: left; margin-right: 10%;}
 footer h5 {font-size: 1.14em; color: #e8e7e7; text-transform: uppercase; font-weight: 700; margin-bottom: 1em;}
 footer ul:nth-child(2) li:first-of-type {margin-top: 2.35em;}
 footer ul a:hover {color: #a1a1a1;}
