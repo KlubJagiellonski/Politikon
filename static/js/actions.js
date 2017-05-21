@@ -624,5 +624,7 @@
                 });
             });
         }
+        // for redirect after user logged in.
+        $('input#next-to-redirect').val(window.location.href);
     });
 })();
