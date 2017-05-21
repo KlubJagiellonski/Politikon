@@ -87,12 +87,10 @@
 
 {% choose_modal user event %}
 
-{% if not request.session.isagree %}
-    <div id="cookie-info-container">
-        {% trans 'Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz zgodę na ich używanie, zgodnie z ustawieniami przeglądarki.' %}
-        &nbsp; &nbsp; <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-    </div>
-{% endif %}
+<div id="cookie-info-container" style="display: none;">
+    {% trans 'Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz zgodę na ich używanie, zgodnie z ustawieniami przeglądarki.' %}
+    &nbsp; &nbsp; <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+</div>
 <div id="body-wrapper">
     <section id="maintop" class="section-nopadding">
         <div class="logo lewa">

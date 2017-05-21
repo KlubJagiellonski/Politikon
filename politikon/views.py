@@ -78,15 +78,3 @@ def change_language(request, lang):
             return HttpResponseRedirect(jump_to)
     jump_to = '/{}'.format(lang)
     return HttpResponseRedirect(jump_to)
-
-
-def agree_on_cookie_store(request):
-    """
-    Used by ajax to say agree for storing cookie
-    :param request: standard request object
-    :type request: HttpRequest
-    :return: confirmation
-    :rtype: HttpResponse
-    """
-    request.session['isagree'] = True
-    return HttpResponse("OK")
