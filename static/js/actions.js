@@ -666,6 +666,37 @@
                 });
             });
         }
+
+        // user registration by form (e-mail)
+        $('#form-registration-submit').on('click', function () {
+            $.ajax({
+                type: 'POST',
+                data: $('#form-registration').serialize(),
+                url: '/en/accounts/create/',
+                success: function (data) {
+                    if ('errors' in data) {
+                        for (var name in data.errors) {
+                            var errors2 = data.errors[name];
+                            var el = $('#' + name);
+                            if (el.attr('type') == 'checkbox') {
+                                var errContainer = el.parent().next('ul');
+                            } else {
+                                var errContainer = el.next('ul');
+                            }
+                            errContainer.html('');
+                            for (var key in errors2) {
+                                errContainer.append('<li>' + errors2[key] + '</li>');
+                            }
+                        }
+                    } else {
+                        // success - user is registered
+                        var el = $('#form-registration');
+                        el.parent().html('<h2>' + data.message + '</h2>');
+                    }
+                }
+            });
+            return false;
+        });
         // for redirect after user logged in.
         $('input#next-to-redirect').val(window.location.href);
     });

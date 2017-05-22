@@ -4,10 +4,13 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse_lazy
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.utils.translation import ugettext as _
 
-from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
+from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm,\
+    UserSelfRegisterForm
 from .models import UserProfile
 
 from events.models import Bet, Transaction
@@ -233,3 +236,47 @@ class UsersListView(ListView):
             'best_monthly': UserProfile.objects.get_best_monthly()
         })
         return context
+
+
+class UserProfileCreateView(CreateView):
+    """
+    Create user when he chose e-mail registration from popup on website
+    """
+    model = UserProfile
+    form_class = UserSelfRegisterForm
+
+    def post(self, request, *args, **kwargs):
+        """
+
+        :param request: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
+        return super(UserProfileCreateView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        User is created, return message to ajax.
+        :return: 
+        """
+        results = super(UserProfileCreateView, self).form_valid(form)
+        # results.url - url to new user profile
+        message = _('Wait please for verification by editor.')
+        return JsonResponse({'message': message})
+
+    def render_to_response(self, context, **response_kwargs):
+        """
+        
+        :param context: 
+        :param response_kwargs: 
+        :return: 
+        """
+        response = {}
+        if hasattr(context['form'], 'errors'):
+            response['errors'] = {}
+            for field_name, error_message in context['form'].errors.items():
+                response['errors'][field_name] = error_message
+        else:
+            pass
+        return JsonResponse(response)
