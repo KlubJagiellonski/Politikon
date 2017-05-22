@@ -931,7 +931,7 @@ a.twitter-timeline:focus {
   }
 }
 
-#cookie-info-container {position: fixed; bottom: 0; width: 100%; z-index: 8500; margin: auto; text-align: center; background-color: white; padding: 3px; font-size: 12px; border-top: 1px solid; box-shadow: darkgray; }
+#cookie-info-container {position: fixed; bottom: 0; width: 100%; z-index: 8500; margin: auto; text-align: center; background-color: white; padding: 3px; font-size: 12px; border-top: 1px solid; box-shadow: darkgray; cursor: pointer;}
 
 #widget-box {background: #f6f6f6; border-radius: 4px; border: 1px solid #999999; min-height: 100px; box-shadow: 0 2px 11px -4px;}
 #widget-box .widget.widget-thumbnail {max-width: 100px; border-right: 1px solid #999999;}
