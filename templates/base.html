@@ -4,9 +4,10 @@
 
 {% url 'accounts:rank' as rank_url %}
 {% url 'events:events' as events_url %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="{{ LANGUAGE_CODE }}">
 
 <head>
 <link href='https://fonts.googleapis.com/css?family=Exo+2:400,400italic,500,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -183,7 +184,11 @@
 
 <!-- IntroJS scripts -->
 <script type="text/javascript" src="{% static 'js/intro/intro.min.js' %}"></script>
-<script type="text/javascript" language="javascript" src="{% static 'js/locale/pl.js?v=1' %}"></script>
+
+{% with "js/locale/"|add:LANGUAGE_CODE|add:".js?v=3" as locale_path %}
+<script type="text/javascript" language="javascript" src="{% static locale_path %}"></script>
+{% endwith %}
+
 <script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=8' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 
