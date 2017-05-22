@@ -40,14 +40,15 @@
 
     <aside class="rejestracjaemail">
         <h2 class="spaceafter">{% trans "Join us with e-mail" %}</h2>
-        <form data-parsley-validate>
-            <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-            <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
-            <input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
-            <input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
-            <p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans "I have acknowledged" %} <a href="#">{% trans "Terms & conditions" %}</a> {% trans "and" %} <a href="#">{% trans "Privacy policy" %}</a></p>
+        <form id="form-registration" data-parsley-validate>
+            {% csrf_token %}
+            <input type="text" name="username" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+            <input type="password" name="password" class="jednalinia" id="password" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+            <input type="email" name="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
+            <input type="checkemail" name="checkemail" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
+            <p class="rules"><input type="checkbox" name="regulamin" id="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans "I have acknowledged" %} <a href="#">{% trans "Terms & conditions" %}</a> {% trans "and" %} <a href="#">{% trans "Privacy policy" %}</a></p>
 
-            <input type="submit" class="przycisk" value="Zarejestruj się">
+            <input id="form-registration-submit" type="submit" class="przycisk" value="Zarejestruj się">
 
         </form>
         <div class="other"><p>{% trans "Have Twitter or Facebook?" %} <a href="#" class="show-rejestracja">{% trans "Join us quicker" %}</a>.</p></div>

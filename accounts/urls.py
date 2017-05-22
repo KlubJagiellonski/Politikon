@@ -3,13 +3,13 @@ from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import reverse_lazy
 
 from .views import UsersListView, UserDetailView, UserUpdateView, UserProfileDetailView, PortfolioListView, \
-    NotificationsListView, TransactionsListView
+    NotificationsListView, TransactionsListView, UserProfileCreateView
 
 
 urlpatterns = patterns('',
     url(r'^login/$', login, name='login'),
-    url(r'^logout/$', logout, {'next_page': reverse_lazy('home')},
-        name='logout'),
+    url(r'^logout/$', logout, {'next_page': reverse_lazy('home')}, name='logout'),
+    url(r'^create/$', UserProfileCreateView.as_view(), name='create'),
     url(r'^rank/$', UsersListView.as_view(), name='rank'),
     url(r'^(?P<pk>[0-9]+)/$', UserDetailView.as_view(), name='user'),  # '/accounts/<pk>/'
     url(r'^(?P<pk>[0-9]+)/zawartoscportfela/$', PortfolioListView.as_view(), name='user_portfolio'),
