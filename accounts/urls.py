@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, url
-from django.contrib.auth.views import login, logout
+from django.contrib.auth.views import logout
 from django.core.urlresolvers import reverse_lazy
 
 from .views import UsersListView, UserDetailView, UserUpdateView, UserProfileDetailView, PortfolioListView, \
-    NotificationsListView, TransactionsListView, UserProfileCreateView
+    NotificationsListView, TransactionsListView, UserProfileCreateView, login
 
 
 urlpatterns = patterns('',

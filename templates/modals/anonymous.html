@@ -16,8 +16,8 @@
         <p class="or"><span>lub zaloguj się przez e-mail</span></p>
         <form id="form-login" method="post" action="{% url 'accounts:login' %}" data-parsley-validate >
             {% csrf_token %}
-            <input name="username" type="text" class="jednalinia" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
-            <input name="password" type="password" class="jednalinia" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
+            <input id="login-username" name="username" type="text" class="jednalinia" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
+            <input id="login-password" name="password" type="password" class="jednalinia" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
             <input id="next-to-redirect" name="next" type="hidden" >
             <input id="send-login-form" type="submit" class="przycisk" value="Zaloguj się">
         </form>
