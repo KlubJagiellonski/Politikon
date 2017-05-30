@@ -8,26 +8,23 @@ from events.models import Bet
 register = template.Library()
 
 
-@register.inclusion_tag('events/render_bet.html')
-def render_bet(event, bet_line):
+@register.inclusion_tag('events/render_bet.html', takes_context=True)
+def render_bet(context, event):
     return {
         'event': event,
-        'bet': bet_line,
+        'bet': event.get_user_bet(context['request'].user)
     }
 
 
-@register.inclusion_tag('events/render_event.html')
-def render_event(event, bet_line):
+@register.inclusion_tag('events/render_events.html', takes_context=True)
+def render_events(context, events):
+    try:
+        r_events = [event.object for event in events]
+    except AttributeError:
+        r_events = events
     return {
-        'event': event,
-        'bet_line': bet_line,
-    }
-
-
-@register.inclusion_tag('events/render_events.html')
-def render_events(events):
-    return {
-        'events': events,
+        'events': r_events,
+        'request': context.get('request')
     }
 
 
@@ -68,6 +65,10 @@ def outcome(event):
 @register.inclusion_tag('events/finish_date.html')
 def render_finish_date(event):
     state = 'finished'
+    if not event.finish_date:
+        return {
+            'state': 'none'
+        }
     if event.is_in_progress:
         state = 'no-result' if timezone.now() > event.finish_date else 'ongoing'
     return {

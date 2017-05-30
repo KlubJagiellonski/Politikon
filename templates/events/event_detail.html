@@ -77,7 +77,7 @@ twttr.ready(function (twttr) {
         {% endif %}
     </div>
     <div class="prawa">
-        <button id="share-event"><i class="share-icon"></i><p>{% trans "Share" %}</p></button>
+        <button id="share-event" class="big-button"><i class="share-icon"></i><p>{% trans "Share" %}</p></button>
 {#        <a href="#"><div id="share-event"><i class="share-icon"></i><span>{% trans "Share" %}</span></div></a>#}
     </div>
 </section>
@@ -113,7 +113,7 @@ twttr.ready(function (twttr) {
             </ul>
             <div class="voted">{{ bet_social.no_count }}</div>
         </div>
-        {% render_bet event bet_line %}
+        {% render_bet event %}
     </div>
 </section>
 <section id="bet-desc" class="astable">
@@ -121,7 +121,7 @@ twttr.ready(function (twttr) {
         <p>Tagi:</p>
         <ul class="tags tabs">
         {% for tag in event.tags.all %}
-            <li class="active"><a href="{% url 'events:events' %}?tag={{ tag }}">{{ tag }}</a></li>
+            <li class="active"><a href="{% url 'events:events' %}?q={{ tag }}">{{ tag }}</a></li>
         {% endfor %}
         </ul>
     </div>
@@ -166,6 +166,7 @@ twttr.ready(function (twttr) {
 {% if similar_events %}
 <section id="betfeed" class="hotbets">
     <h3 class="orangeheader goupheader">{% trans "Related events" %}</h3>
+{#  {{ similar_events }}#}
     <div>
         {% render_events similar_events %}
     </div>

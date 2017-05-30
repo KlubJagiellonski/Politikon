@@ -70,8 +70,8 @@ footer ul a, footer .socialmedia div,
         -moz-box-shadow:    0px 0px 20px 0px rgba(0, 0, 0, 0.4);
         box-shadow:         0px 0px 20px 0px rgba(0, 0, 0, 0.4);
 }
-.modal-opened aside {padding: 35px 0 0; text-align: center; display: none; opacity: 0;}
-.modal-opened p, .modal-opened h2, .modal-opened div, .modal-opened form {width: 71.43%; margin: 0 auto;}
+.modal-opened aside {padding: 15px 0 0; text-align: center; display: none; opacity: 0;}
+.modal-opened p, .modal-opened h2, .modal-opened div, .modal-opened form {width: 90%; margin: 0 auto;}
 .modal-opened p {color: #666;}
 .modal-opened a, .modal-opened a:visited {color: #ea6a2a;}
 .modal-opened a:hover {color: #c84d28;}
@@ -95,7 +95,7 @@ footer ul a, footer .socialmedia div,
 .modal-opened h2 {font-size: 1.125em; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; color: #666;}
 .modal-opened .spaceafter {margin-bottom: 25px;}
 .jednalinia, .wielelinii {border: 1px solid #ccc; margin-bottom: 10px; font-family: 'Exo 2', Arial, sans-serif; font-size: 1em; color: #666;}
-.modal-opened .jednalinia {width: 90%; padding: 20px 5%;}
+.modal-opened .jednalinia {width: 90%; padding: 10px;}
 .modal-opened form {margin-bottom: 20px;}
 .modal-opened .jednalinia:hover {border-color: #aaa;}
 .modal-opened .jednalinia:focus {border-color: #999;}
@@ -131,7 +131,7 @@ footer ul a, footer .socialmedia div,
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5f5f5f', endColorstr='#7e7e7e',GradientType=0 );
 }
 .modal-opened .login-close {background: url(../img/login-close.png) top left no-repeat; width: 17px; height: 17px; cursor: pointer;}
-.modal-big {width: 900px; margin-left: -450px;}
+.modal-big {width: 700px; margin-left: -350px;}
 
 .parsley-errors-list li {width: 100%; background: #fff5f5; border: 1px solid #8c0808; padding: 5px 0; color: #8c0808; font-weight: 700; margin: -11px 0 10px;}
 
@@ -428,19 +428,19 @@ ul.language-bar li.active a img, ul.language-bar li a:hover img {
     line-height: 1.2em;
 }
 
-#partners {height: 130px; background: #ffffff;}
-#partners .logo {height: 100px; margin-left: 100px; margin-top: 15px; width: 250px; float: left;}
-#partners .kj {background: url(../img/partners/kj.png) center left no-repeat;}
-#partners .kj h5, #partners .kj p {margin-left: 100px;}
-#partners .kj:hover {color: #000000;}
-#partners .kj h5 {text-transform: none !important; margin-top: 30px;}
-#partners .kdp {background: url(../img/partners/kdp-duze.png) center center no-repeat;}
-#partners .kdp:hover {background: url(../img/partners/kdp-duze-gray.png) center center no-repeat;}
-#partners .erasmus-plus {background: url(../img/partners/erasmus-plus.png) center center no-repeat;}
-#partners .erasmus-plus:hover {background: url(../img/partners/erasmus-plus-gray.png) center center no-repeat;}
+section#partners {min-height: 130px; background: #ffffff;}
+section#partners .logo {height: 100px; margin-left: 100px; margin-top: 15px; width: 250px; float: left;}
+section#partners .kj {background: url(../img/partners/kj.png) center left no-repeat;}
+section#partners .kj h5, #partners .kj p {margin-left: 100px;}
+section#partners .kj:hover {color: #000000;}
+section#partners .kj h5 {text-transform: none !important; margin-top: 30px;}
+section#partners .kdp {background: url(../img/partners/kdp-duze.png) center center no-repeat;}
+section#partners .kdp:hover {background: url(../img/partners/kdp-duze-gray.png) center center no-repeat;}
+section#partners .erasmus-plus {background: url(../img/partners/erasmus-plus.png) center center no-repeat;}
+section#partners .erasmus-plus:hover {background: url(../img/partners/erasmus-plus-gray.png) center center no-repeat;}
 
-#erasmus-info {height: 30px; background: #ffffff;}
-#erasmus-info p {text-align: center;}
+section#erasmus-info {height: 30px; background: #ffffff; padding: 10px;}
+section#erasmus-info p {text-align: center;}
 
 footer {height: 120px; background: url(../img/footer-bg.jpg) top center repeat-x;}
 footer .logo {width: 174px; height: 129px; background: url(../img/footer-logo-politikon.png) top center no-repeat; position: absolute; margin-top: -50px; margin-left:-87px; left:50%;}
@@ -448,7 +448,8 @@ footer .lewa {width: 30%}
 footer .prawa {width: 60%;}
 footer .lewa, footer .prawa {margin-top: 20px; color: #7a7a7a; font-size: .875em;}
 
-footer ul {float: left; margin-right: 10%;}
+footer ul {float: left; margin-right: 10%; max-width: 25%;}
+footer ul:last-child {margin-right: 0;}
 footer h5 {font-size: 1.14em; color: #e8e7e7; text-transform: uppercase; font-weight: 700; margin-bottom: 1em;}
 footer ul:nth-child(2) li:first-of-type {margin-top: 2.35em;}
 footer ul a:hover {color: #a1a1a1;}
@@ -467,7 +468,7 @@ footer .socialmedia .gp {background-position: -95px 0;}
 
 /* zakładki */
 ul.tabs {list-style-type: none; margin: 0; padding: 0;}
-ul.tabs li {float: left; margin: 0 .625em 0 0; padding: 8px 15px; background: #d1d1d1; border-radius: 5px; color: #999; text-transform: uppercase; font-weight: 700;}
+ul.tabs li {float: left; margin: 0 0 0 .625em; padding: 8px 15px; background: #d1d1d1; border-radius: 5px; color: #999; text-transform: uppercase; font-weight: 700;}
 ul.tabs li.active {background: #c84d28;;color: #fff;}
 .clr {clear: both;}
 .zakladki-content {margin-top: 30px;}
@@ -732,6 +733,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #profileuser .uservip .image {border: 3px solid #c84d28;}
 #profileuser .nickname {width: 100%; text-align: center; font-size: 2.25em; font-weight: 700; color: #333; margin-top: 25px; margin-bottom: -25px;}
 #profileuser .nickname h1 {display: inline-block;}
+#profileuser .nickname h1 small {font-size: 0.75em; color: #b4b4b4;}
 #profileuser .nickname .nickvip {font-size: .44em; padding: 5px 15px; border-radius: 10px; font-weight: 500; color: #fff; background: #c84d28; float: right; margin: 8px 0 0 15px;}
 
 .user-social {width: 34.2%;}
@@ -752,6 +754,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .ranking-event .rank {width: 7.2%;}
 #userinfo .ranking-event .lewa .image {float: left; width: 80px; height: 80px; border-radius: 50%; margin-right: 5%;background-size: cover;  background-position: center;}
 #userinfo .ranking-event .nickname {color: #58585a; font-size: 1.25em;}
+#userinfo .ranking-event .nickname small {font-size: 0.75em; color: #b4b4b4;}
 
 #userinfo .ranking-event .uservip .nickname {font-weight: 700;}
 #userinfo .ranking-event .uservip .nickname:after {content: 'VIP'; font-size: .5em; color: #fff; background: #c84d28; padding: 3px 7px; border-radius: 5px; margin-left: .7em; margin-top: 3px; position: absolute;}
@@ -796,8 +799,8 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 
 .settings-form span {font-size: 1.125em; font-weight: 700; color: #666; margin-bottom: 10px; display: inline-block;}
 .settings-form .lewa, .settings-form .prawa {width: 48.5%;}
-.settings-form .jednalinia {width: 90%; padding: 20px 5%;}
-.settings-form .wielelinii {width: 90%; max-width: 90%; padding: 20px 5%; min-height: 150px;}
+.settings-form .jednalinia {width: 90%; padding: 10px;}
+.settings-form .wielelinii {width: 90%; max-width: 90%; padding: 10px; min-height: 150px;}
 .settings-form .jednalinia, .settings-form .wielelinii {margin-bottom: 20px;}
 #haslo .settings-form .jednalinia {margin-bottom: 10px;}
 
@@ -934,7 +937,8 @@ a.twitter-timeline:focus {
 #cookie-info-container {position: fixed; bottom: 0; width: 100%; z-index: 8500; margin: auto; text-align: center; background-color: white; padding: 3px; font-size: 12px; border-top: 1px solid; box-shadow: darkgray; cursor: pointer;}
 
 #widget-box {background: #f6f6f6; border-radius: 4px; border: 1px solid #999999; min-height: 100px; box-shadow: 0 2px 11px -4px;}
-#widget-box .widget.widget-thumbnail {max-width: 100px; border-right: 1px solid #999999;}
+#widget-box .widget.widget-thumbnail {width: 100px; height: 100px; background: url(../img/avatar-small.png) no-repeat center center;}
+#widget-box .widget.widget-thumbnail h1 {position: absolute; top: 80px; left: 10px; font-weight: 700;}
 #widget-box .widget.widget-body {max-width: 325px; padding: 10px;}
 #widget-box .widget.widget-body .event-title {height: 30px;}
 #widget-box .widget.widget-body .event-body .event-info {width: 135px; float: left; text-align: center; padding: 20px; text-decoration: underline;}
@@ -943,23 +947,10 @@ a.twitter-timeline:focus {
 #widget-box .widget.widget-body .event-body .event-chance h1 {font-weight: bold; font-size: 45px; text-align: center;}
 #widget-box .widget {float: left;}
 
-#share-event {
+button.big-button {
     height: 50px; width: 200px;
-    -moz-box-shadow:inset 0px 1px 3px 0px #91b8b3;
-	-webkit-box-shadow:inset 0px 1px 3px 0px #91b8b3;
-	box-shadow:inset 0px 1px 3px 0px #91b8b3;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #768d87), color-stop(1, #6c7c7c));
-	background:-moz-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
-	background:-webkit-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
-	background:-o-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
-	background:-ms-linear-gradient(top, #768d87 5%, #6c7c7c 100%);
-	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#768d87', endColorstr='#6c7c7c',GradientType=0);
-	background-color:#768d87;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-	border:1px solid #566963;
+    background-color: #ea6a2a;
+	border: none;
 	display:inline-block;
 	cursor:pointer;
 	color:#ffffff;
@@ -967,22 +958,38 @@ a.twitter-timeline:focus {
 	font-size:15px;
 	font-weight:bold;
     padding-left: 11px;
-	text-decoration:none;
-	text-shadow:0px -1px 0px #2b665e;
+	text-decoration: none;
 }
-#share-event:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6c7c7c), color-stop(1, #768d87));
-	background:-moz-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
-	background:-webkit-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
-	background:-o-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
-	background:-ms-linear-gradient(top, #6c7c7c 5%, #768d87 100%);
-	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6c7c7c', endColorstr='#768d87',GradientType=0);
-	background-color:#6c7c7c;
+button.big-button:hover {
+	background-color: #c84d28;
 }
-#share-event:active {
-	position:relative;
-	top:1px;
-}
-#share-event p {padding-top: 13px;}
+
+button.big-button p {padding-top: 13px;}
 .share-icon {background: url(../img/share-icon.png) no-repeat center center; height: 100%; width: 40px; float: left; padding: 0;}
+
+.fixed-vertical-left-btn-div {position: fixed; top: 30%; left: 0%; z-index: 1000; transform-origin: left bottom; transform: rotate(90deg);}
+.fixed-vertical-left-btn-div a.side-helper {width: auto; height: 31px; color: #fff; text-align: center; background-color: #ea6a2a; line-height: 31px; padding: 0 8px 0 8px; float: left; position: relative; left: 0%; border-radius: 4px 4px 0 0;}
+.fixed-vertical-left-btn-div a.side-helper:hover {background: #c84d28;}
+
+#add-event-form {width: 100%;}
+.form-group {clear: both; padding: 10px;}
+.form-group label {font-size: 1.125em; color: #666; font-weight: 700; float: left; width: 25%; text-align: right; padding-right: 15px;}
+.form-group input {float: left; max-width: 65%;}
+.form-group textarea {float: left; max-width: 65%;}
+.form-group.required label:after {content: "*"; color: #a94442;}
+
+input[type=text].searchbar {
+    border: 1px solid #ccc;
+    margin: 20px 0px;
+    padding: 10px;
+    height: 28px;
+    font-family: 'Exo 2', Arial, sans-serif;
+    font-size: 1em; color: #666;
+    width: 300px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+button.search-button {margin: 20px 0; text-align: center; background-color: #ea6a2a; line-height: 31px; padding: 11px 30px; margin-left: -4px; border-radius: 0 4px 4px 0;}
+
+.text-center{text-align: center;}

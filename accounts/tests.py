@@ -11,7 +11,7 @@ from django.http import HttpResponseForbidden
 from django.test import TestCase
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
-from .models import UserProfile, get_image_path
+from .models import UserProfile, get_user_avatar_path
 from .tasks import topup_accounts_task, update_portfolio_value, create_accounts_snapshot, \
     update_users_classification
 from .templatetags.user import user_home, user_rank
@@ -52,13 +52,13 @@ class UserProfileModelTestCase(TestCase):
         }, user.statistics_dict)
         self.assertEqual(0, user.current_portfolio_value)
 
-    def test_get_image_path(self):
+    def test_get_user_avatar_path(self):
         """
         Get image path
         """
         user = UserFactory(username='johnsmith')
 
-        path = get_image_path(user, 'my-avatar.png')
+        path = get_user_avatar_path(user, 'my-avatar.png')
         self.assertEqual('avatars/johnsmith.png', path)
 
     def test_user_urls(self):

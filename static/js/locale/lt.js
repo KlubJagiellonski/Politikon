@@ -6,9 +6,9 @@
 var words = {
     'yes': 'Yes',
     'no': 'No',
-    'youYes': 'You have YES bets',
-    'youNo': 'You have NO bets',
-    'buyYes': 'Buy more YES',
-    'buyNo': 'Buy more NO',
-    'sellBet': 'sell bet'
+    'youYes': 'Your prediction: YES',
+    'youNo': 'Your prediction: NO',
+    'buyYes': 'Buy more: YES',
+    'buyNo': 'Buy more: NO',
+    'sellBet': 'sell a bet'
 };

@@ -22,7 +22,7 @@ $(function () {
 </section>
 <section id="profileuser" data-user_id="{{ object.id }}">
     <div class="profile-avatar{% if object.is_vip %} uservip{% endif %}"><div class="image" style="background-image: url({{ object.get_avatar_url }});"/></div></div>
-    <div class="nickname"><h1>{{ object.name }}{% if object.is_vip %}<span class="nickvip">VIP</span>{% endif %}</h1></div>
+    <div class="nickname"><h1>{{ object.name }}{% if object.team %} <small>({{ object.team }})</small>{% endif %}{% if object.is_vip %}<span class="nickvip">VIP</span>{% endif %}</h1></div>
 </section>
 
 {% userstats object overall_rank month_rank week_rank %}

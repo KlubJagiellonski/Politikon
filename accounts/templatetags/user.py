@@ -28,6 +28,18 @@ def user_rank(context, user, item_class="", profit=None, counter=1):
     }
 
 
+@register.inclusion_tag('accounts/team_rank.html', takes_context=True)
+def team_rank(context, team, item_class="", profit=None, counter=1):
+    return {
+        'request': context['request'],
+        'item_class': item_class,
+        'team': team,
+        'profit': profit,
+        'showProfit': profit is not None,
+        'counter': counter,
+    }
+
+
 @register.inclusion_tag('accounts/user_portfolio.html', takes_context=True)
 def user_portfolio(context):
     return {

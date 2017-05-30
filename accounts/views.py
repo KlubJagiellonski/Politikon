@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 
 from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
-from .models import UserProfile
+from .models import UserProfile, Team
 
 from events.models import Bet, Transaction
 from politikon.decorators import class_view_decorator
@@ -230,6 +230,7 @@ class UsersListView(ListView):
             context['json_data'] = json.dumps(user.get_reputation_history())
         context.update({
             'best_weekly': UserProfile.objects.get_best_weekly(),
-            'best_monthly': UserProfile.objects.get_best_monthly()
+            'best_monthly': UserProfile.objects.get_best_monthly(),
+            'team_leaders': Team.objects.all().order_by('avg_weekly_result')
         })
         return context

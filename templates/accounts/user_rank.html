@@ -6,7 +6,7 @@
         <div class="lewa{% if user.is_vip %} uservip{% endif %}">
             <p class="rank">{{ counter }}</p>
             <div class="image" style="background-image: url({{ user.get_avatar_url }})"></div>
-            <p class="nickname">{{ user.name }}</p>
+            <p class="nickname">{{ user.name }}{% if user.team %} <small>({{ user.team }})</small>{% endif %}</p>
         </div>
         <div class="prawa">
             <p class="rank-wallet">{{ user.portfolio_value|formatted }}</p>

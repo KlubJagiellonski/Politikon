@@ -1,28 +1,9 @@
-from django.shortcuts import redirect
 from rest_framework import generics
 
 from .serializers import (
-    EventProposeSerializer,
     EventSerializer, BetSerializer, TransactionSerializer
 )
 from .models import Event, Bet, Transaction
-
-
-class CreateEventView(generics.CreateAPIView):
-    model = Event
-    queryset = Event.objects.all()
-    serializer_class = EventProposeSerializer
-    # permissions = []
-
-    def perform_create(self, serializer):
-        """Force author to the current user on save"""
-        instance = serializer.save(created_by=self.request.user, is_published=False)
-        self.redirect_to = instance.get_relative_url()
-        return instance
-
-    def post(self, request, *args, **kwargs):
-        super(CreateEventView, self).post(request, *args, **kwargs)
-        return redirect(self.redirect_to)
 
 
 class EventMixin(object):

@@ -82,3 +82,14 @@ django-imagekit
 # configured in django-admin fields: description and outcome_reason
 django-wysiwyg==0.8.0
 django-ckeditor==5.1.1
+
+# search
+# elasticsearch>=1.0.0,<2.0.0
+# django-haystack>=1.0.0,<2.0.0
+elasticsearch
+django-haystack
+git+https://github.com/liberation/django_elasticsearch.git
+celery-haystack
+
+# certifi for search
+certifi==0.0.8

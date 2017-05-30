@@ -14,10 +14,11 @@ def staff_modals(event):
     }
 
 
-@register.inclusion_tag('modals/authenticated.html')
-def authenticated_modals(user):
+@register.inclusion_tag('modals/authenticated.html', takes_context=True)
+def authenticated_modals(context, user):
     return {
         'user': user,
+        'request': context.get('request')
     }
 
 
@@ -33,10 +34,11 @@ def anyuser_modals(context):
     return context
 
 
-@register.inclusion_tag('modals/all.html')
-def choose_modal(user, event):
+@register.inclusion_tag('modals/all.html', takes_context=True)
+def choose_modal(context, user, event):
     return {
         'user': user,
         'event': event,
+        'request': context.get('request')
     }
 

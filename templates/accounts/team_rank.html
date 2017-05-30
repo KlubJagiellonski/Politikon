@@ -1,0 +1,26 @@
+{% load format %}
+{% load user %}
+
+<div class="{{ item_class }}-item">
+    <div class="ranking-event{% if team == request.user.team %} ranking-you{% endif %}">
+        <div class="lewa">
+            <p class="rank">{{ counter }}</p>
+            <div class="image" style="background-image: url({{ team.get_avatar_url }})"></div>
+            <p class="nickname">{{ team.name }}</p>
+        </div>
+        <div class="prawa">
+            <p class="rank-wallet">{{ team.avg_portfolio_value|formatted }}</p>
+            <p class="rank-freereputy">{{ team.avg_total_cash|formatted }}</p>
+            {% if showProfit %}
+            <p class="rank-reputation">
+            {{ team.avg_reputation }}%
+            ({% if profit > 0 %}<span style="color: green;">&#9650;</span>{% endif %}{% if profit < 0 %}<span style="color: red;">&#9660;</span>{% endif %}{% if profit == 0 %}&#9658;{% endif %}{{ profit|absolute }}%)
+            </p>
+            {% else %}
+            <p class="rank-reputation">{{ team.avg_weekly_result|formatted }}%
+            {% if profit %}<br/><span class="small">({{ team.avg_weekly_result|formatted:"True" }}%)</span>{% endif %}
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>

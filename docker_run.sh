@@ -3,6 +3,8 @@
 NAME='politikon'
 DB_NAME='politikon_db'
 PSQL_VER='postgres:latest'
+ES_NAME='politikon_es'
+ES_VER='docker.elastic.co/elasticsearch/elasticsearch:5.4.0'
 NODE_NAME='politikon_instance'
 RUN_AS_DEAMON=false
 
@@ -23,6 +25,22 @@ fi
 
 if ! docker ps -a | grep $DB_NAME | grep Up >/dev/null; then
     pri '!!' "cannot start $DB_NAME - exiting"
+    exit 1
+fi
+
+# > > ES  < <
+if   ! docker ps -a | grep $ES_NAME >/dev/null; then
+    pri 'es' "$ES_NAME creating and running"
+    docker run -d --name $ES_NAME -p 9200:9200 -e "http.host=0.0.0.0" -e "transport.host=127.0.0.1" $ES_VER
+elif ! docker ps -a | grep $ES_NAME | grep Up >/dev/null; then
+    pri 'es' "existing $ES_NAME starting..."
+    docker start $ES_NAME
+else
+    pri 'es' "nothing to do - $ES_NAME is running..."
+fi
+
+if ! docker ps -a | grep $ES_NAME | grep Up >/dev/null; then
+    pri '!!' "cannot start $ES_NAME - exiting"
     exit 1
 fi
 

@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from accounts.models import UserProfile
 from events.models import Event
+from haystack.query import SearchQuerySet
 
 
 class HomeView(TemplateView):
@@ -18,20 +19,22 @@ class HomeView(TemplateView):
 
         context = super(HomeView, self).get_context_data(*args, **kwargs)
 
-        last_minute_events = list(Event.objects.get_events('last-minute')[:3])
+        last_minute_events = SearchQuerySet().filter(outcome=Event.IN_PROGRESS).order_by('estimated_end_date')[:3]
+        home_events_exclude = []
         for event in last_minute_events:
-            event.bet_line = event.get_user_bet(user)
+            home_events_exclude.append(event.object.pk)
+            event.object.bet_line = event.object.get_user_bet(user)
 
-        home_events = list(Event.objects.get_featured_events().order_by('?')[:7])
+        home_events = SearchQuerySet().filter(outcome=Event.IN_PROGRESS).filter(is_featured=True)[:7]
         for event in home_events:
-            event.bet_line = event.get_user_bet(user)
+            event.object.bet_line = event.object.get_user_bet(user)
 
         if home_events:
             front_event = home_events[0]
             if front_event:
                 context.update({
-                    'front_event': front_event,
-                    'bet_line': front_event.get_user_bet(user),
+                    'front_event': front_event.object,
+                    'bet_line': front_event.object.get_user_bet(user),
                 })
             featured_events = home_events[1:7]
 

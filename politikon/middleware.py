@@ -17,7 +17,7 @@ class SetLastVisitMiddleware(object):
             if request.user.is_authenticated():
                 # Update last visit time after request finished processing.
                 UserProfile.objects.filter(pk=request.user.pk).update(last_visit=now())
-        except:
+        except AttributeError:
             logger.exception(
                 "Fatal error saving user last visit: {0}".format(sys.exc_info()[0])
             )

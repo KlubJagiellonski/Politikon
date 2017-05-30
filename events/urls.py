@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 
 from .api import (
-    CreateEventView,
     EventList, EventDetail,
     BetList, BetDetail,
     TransactionList, TransactionDetail
@@ -14,7 +13,6 @@ from .views import (
 
 api_urls = [
     url(r'^event/$', EventList.as_view(), name='event-list'),
-    url(r'^event/create/$', CreateEventView.as_view(), name='event-create'),
     url(r'^event/(?P<pk>\d+)$', EventDetail.as_view(), name='event-detail'),
     url(r'^bet/$', BetList.as_view(), name='bet-list'),
     url(r'^bet/(?P<pk>\d+)$', BetDetail.as_view(), name='bet-detail'),

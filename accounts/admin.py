@@ -4,9 +4,13 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import UserCreationForm, UserChangeForm
-from .models import UserProfile
+from .models import Team, UserProfile
 
 from constance import config
+
+
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ('name', 'avg_reputation')
 
 
 class MyUserAdmin(UserAdmin):
@@ -24,7 +28,7 @@ class MyUserAdmin(UserAdmin):
     actions = ['topup', 'set_active', 'make_vip', 'block']
 
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'email')}),
+        (None, {'fields': ('username', 'password', 'email', 'team')}),
         (None, {'fields': ('name', )}),
         (None, {'fields': ('total_cash', 'total_given_cash')}),
         (_('Permissions'), {'fields': ('is_active', 'is_admin', 'is_staff', 'is_vip')}),
@@ -72,4 +76,6 @@ class MyUserAdmin(UserAdmin):
             user.save(update_fields=['is_deleted'])
     block.short_description = 'Zablokuj wybrane konta'
 
+
+admin.site.register(Team, TeamAdmin)
 admin.site.register(UserProfile, MyUserAdmin)

@@ -13,50 +13,38 @@
         <p>Uwaga! Przy podwyższeniu limitu reputów wyrównamy wartość portfela + wolnych punktów, ale zmianie NIE ulegną Wasze dokonane inwestycje (czyli czekające na rozstrzygnięcie zakłady).</p>
         <p>Mamy nadzieję, że dzięki tym poprawkom Politikon będzie lepiej odpowiadał Waszym potrzebom. Pamiętajcie, że cały czas jesteśmy do dyspozycji - możecie do nas pisać poprzez Facebooka albo Twittera.</p>
     </aside>
-    <div class="other"><p>Ekipa Politikonu</p></div>
+    <div class="other"><p class="text-center">Zespół Politikonu</p></div>
 </div>
 {% endif %}
-<div id="add-event" class="modal-opened modal-big">
-    <div class="header">Dodaj wydarzenie <span class="prawa login-close"></span></div>
+<div id="add-event-modal" class="modal-opened modal-big asblock opacity">
+    <div class="header">{% trans "Suggest an event" %} <span class="prawa login-close"></span></div>
 
-    <aside id="add-event-content" class="asblock opacity rules">
-        <form id="add-event-form" action="/api/events/event/create/" method="post" class="settings-form" enctype="multipart/form-data">
+    <aside id="add-event-content" class="asblock opacity">
+        <form id="add-event-form" action="/api/events/event/" method="post" class="settings-form" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-group">
-                <span class="col-sm-2">{% trans 'Event title' %}</span>
-                <div class="col-sm-10">
-                    <input name="title" class="jednalinia" type="text" />
-                </div>
+            <div class="form-group required">
+                <label for="title">{% trans "Event title" %}</label>
+                <input name="title" class="jednalinia" type="text" required />
             </div>
             <div class="form-group">
-                <span class="col-sm-2">{% trans 'Small image' %}</span>
-                <div class="col-sm-10">
-                    <input name="small_image" type="file" />
-                </div>
+                <label for="small_image">{% trans "Small image" %}</label>
+                <input name="small_image" type="file" accept="image/*" />
             </div>
             <div class="form-group">
-                <span class="col-sm-2">{% trans 'Big image' %}</span>
-                <div class="col-sm-10">
-                    <input name="big_image" type="file" />
-                </div>
+                <label for="big_image">{% trans "Big image" %}</label>
+                <input name="big_image" type="file" accept="image/*" />
             </div>
             <div class="form-group">
-                <span class="col-sm-2">{% trans 'Description' %}</span>
-                <div class="col-sm-10">
-                    <textarea name="description" class="jednalinia"></textarea>
-                </div>
+                <label for="description">{% trans "Description" %}</label>
+                <textarea name="description" class="jednalinia"></textarea>
             </div>
-            <div class="form-group">
-                <span class="col-sm-2">{% trans 'Prediction end of event' %}</span>
-                <div class="col-sm-10">
-                    <input name="estimated_end_date" class="jednalinia" type="datetime-local" />
-                </div>
-            </div>
-            <div class="loadmore">
-                <span class="col-sm-2">&nbsp;</span>
-                <button id="add-event-submit" class="btn astable" title="Send">{% trans 'Send' %}</button>
+            <div class="form-group text-center">
+                <button id="add-event-submit"
+                        class="big-button"
+                        type="submit"
+                        title="{% trans "Suggest an event" %}">{% trans "Suggest an event" %}</button>
             </div>
         </form>
     </aside>
-    <div class="other">&nbsp;</div>
+    <div class="other"><p class="text-center">{% trans "Politikon team will revise your suggestion ASAP. Thank you!" %} :)</p></div>
 </div>

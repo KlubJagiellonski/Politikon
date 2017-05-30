@@ -52,7 +52,7 @@
                 <div class="opis">
                     <a href="{{ front_event.get_relative_url }}"><h1 class="skroc lewa">{{ front_event.title }}</h1></a>
                     <div id="makeabet" class="prawa collapsible{% if front_event_bet.extension.has_any %} morebets{% endif %}">
-                        {% render_bet front_event bet_line %}
+                        {% render_bet front_event %}
                     </div>
                 </div>
             </figcaption>
@@ -79,7 +79,7 @@
         </ul>
         <div class="clr"></div>
         <div id="userrank_content" class="zakladki-content">
-            <article id="tydzien">
+            <article id="tydzien" class="active">
                 {% for user in best_weekly %}
                 {% user_home user user.weekly_result True %}
                 {% endfor %}
@@ -97,12 +97,12 @@
         </div>
     </section>
 
-    <section id="loadmore">
-        <a href="{% url 'events:events' %}"><div class="btn astable">{% trans "Show more events" %}</div></a>
-        <div class="more lewa"></div>
-        <div class="more prawa"></div>
-        <div class="more centrum"></div>
-    </section>
+{#    <section id="loadmore">#}
+{#        <a href="{% url 'events:events' %}"><div class="btn astable">{% trans "Show more events" %}</div></a>#}
+{#        <div class="more lewa"></div>#}
+{#        <div class="more prawa"></div>#}
+{#        <div class="more centrum"></div>#}
+{#    </section>#}
 
 
 {% endblock %}

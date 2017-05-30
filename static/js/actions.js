@@ -134,7 +134,15 @@
 
         // Add new event proposition
         $('#add-event-button').on('click', function () {
-            showModal('add-event');
+            $('#successfully-added-event').removeClass('opacity');
+            $('#successfully-added-event').removeClass('asblock');
+            $('#add-event-content').addClass('opacity');
+            $('#add-event-content').addClass('asblock');
+            showModal('add-event-modal');
+        });
+
+        $('#close-adding-event').on('click', function () {
+            hideModal();
         });
 
         $('#share-event').on('click', function () {
@@ -575,9 +583,6 @@
                 });
             }
         }
-        // tabs
-        $('.zakladki-content article').removeClass('active');
-        $('.zakladki-content article:first').addClass('active');
         // Switch to other tab
         $('ul.tabs li').on('click', function () {
             $('ul.tabs li').removeClass('active');
