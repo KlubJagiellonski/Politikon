@@ -4,32 +4,29 @@
 
 {% block js_scripts %}
 <script type="text/javascript" src="{% static 'js/intro/scenario-wydarzenia.js' %}"></script>
-
 {% endblock %}
 
 {% block content %}
-
-<script type="text/javascript">
-$(function() {
-{#    var EVENTS_DATA = {{ json_data|safe }};#}
-{#    if (renderCharts) {#}
-{#        renderCharts(EVENTS_DATA);#}
-{#    }#}
-});
-</script>
-
 <section id="header"  class="body-margin">
     <h2>{% trans "Events" %}</h2>
-    <ul class="tabs prawa">
-        <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}">{% trans "Most popular" %}</a></li>
-        <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}">{% trans "Ending" %}</a></li>
-        <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}">{% trans "Changes" %}</a></li>
-        <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}">{% trans "Newest" %}</a></li>
-        <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}">{% trans "Finished" %}</a></li>
-        {% if user.is_authenticated and user.is_staff %}
-        <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}">{% trans "Anteroom" %}</a></li>
-        {% endif %}
-    </ul>
+    <div class="prawa">
+        <ul class="tabs">
+            <li {% if active == "popular" %} class="active"{% endif %}><a href="{% url 'events:events' mode='popular' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Most popular" %}</a></li>
+            <li {% if active == "last-minute" %} class="active"{% endif %}><a href="{% url 'events:events' mode='last-minute' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Ending" %}</a></li>
+            <li {% if active == "changed" %} class="active"{% endif %}><a href="{% url 'events:events' mode='changed' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Changes" %}</a></li>
+            <li {% if active == "latest" %} class="active"{% endif %}><a href="{% url 'events:events' mode='latest' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Newest" %}</a></li>
+            <li {% if active == "finished" %} class="active"{% endif %}><a href="{% url 'events:events' mode='finished' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Finished" %}</a></li>
+            {% if user.is_authenticated and user.is_staff %}
+            <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Anteroom" %}</a></li>
+            {% endif %}
+        </ul>
+        <div class="search prawa">
+            <form id="search-form" action="." method="get">
+                <input class="searchbar" type="text" name="q" placeholder="{% trans "Type search phrase" %}" value="{{ query }}">
+                <button class="big-button search-button" type="submit">{% trans "Search" %}</button>
+            </form>
+        </div>
+    </div>
 {#    <div class="tabs prawa filters">#}
 {#        sortuj według:#}
 {#        <select>#}
@@ -46,14 +43,12 @@ $(function() {
 {#        {% endfor %}#}
 {#    </ul>#}
 </section>
-
 <section id="betfeed">
-    {% render_events events %}
+    {% render_events object_list %}
 </section>
-
 {% if page_obj.has_next %}
 <section class="loadmore">
-    <a href="?page={{ page_obj.next_page_number }}" class="event-loadmore"><div class="btn astable">{% trans "show more events" %}</div></a>
+    <a href="?q={{ query|default:"*" }}&page={{ page_obj.next_page_number }}" class="event-loadmore"><div class="btn astable">{% trans "show more events" %}</div></a>
     <div class="more lewa"></div>
     <div class="more prawa"></div>
     <div class="more centrum"></div>

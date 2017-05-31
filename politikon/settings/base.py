@@ -78,6 +78,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.update_portfolio_value',
         'schedule': timedelta(minutes=60)
     },
+    'update_teams_score': {
+        'task': 'accounts.tasks.update_teams_score',
+        'schedule': timedelta(minutes=60)
+    },
     'create_hourly_open_events_snapshot': {
         'task': 'events.tasks.create_open_events_snapshot',
         'schedule': crontab(minute=11)
@@ -296,6 +300,8 @@ INSTALLED_APPS = (
     # django_wysiwyg and tinymce is used in django-admin description, title and others
     'django_wysiwyg',
     'ckeditor',
+    'haystack',
+    'celery_haystack',
 
     'grappelli',
     'django.contrib.admin',
@@ -409,3 +415,24 @@ REST_FRAMEWORK = {
 
 # wysiwig for django admin.
 DJANGO_WYSIWYG_FLAVOR = "ckeditor"
+
+# HAYSTACK settings
+ELASTIC_PORT = os.environ.get('ELASTIC_PORT', 'http://elasticsearch:9200/')
+ELASTIC_KEY = os.environ.get('ELASTIC_KEY', 'elastic')
+ELASTIC_SECRET = os.environ.get('ELASTIC_SECRET', 'changeme')
+
+# HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'celery_haystack.signals.CelerySignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': ELASTIC_PORT,
+        'INDEX_NAME': 'haystack',
+        'TIMEOUT': 60,
+        'INCLUDE_SPELLING': True,
+        'KWARGS': {
+            'http_auth': (ELASTIC_KEY, ELASTIC_SECRET),
+        }
+    },
+}

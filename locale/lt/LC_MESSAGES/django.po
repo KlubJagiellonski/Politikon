@@ -1,190 +1,165 @@
-# -*- coding: utf-8 -*-
-# Politikon
-# Copyright (C) 2016
-# This file is distributed under the same license as the 0.1 package.
-# Piotr Pęczek <ppeczek@gmail.com>, 2016
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-31 00:04+0200\n"
+"POT-Creation-Date: 2017-05-23 02:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
-"Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
-"Language: PL\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: accounts/admin.py:34 accounts/admin.py:45
+#: accounts/admin.py:30 accounts/admin.py:41
 msgid "Permissions"
-msgstr "Uprawnienia"
+msgstr "Leidimai"
 
-#: accounts/admin.py:35
+#: accounts/admin.py:31
 msgid "Important dates"
-msgstr "Ważne daty"
+msgstr "Svarbios datos"
 
-#: accounts/models.py:34
-msgid "name"
-msgstr "nazwa"
+#: accounts/models.py:35
+msgid "user"
+msgstr "žaidėjas"
 
 #: accounts/models.py:36
-msgid "average reputation"
-msgstr "średnia reputacja"
-
-#: accounts/models.py:40 accounts/models.py:81
-msgid "team"
-msgstr "drużyna"
-
-#: accounts/models.py:41
-msgid "teams"
-msgstr "drużyny"
-
-#: accounts/models.py:50
-msgid "user"
-msgstr "użytkownik"
-
-#: accounts/models.py:51
 msgid "users"
-msgstr "użytkownicy"
-
-#: accounts/models.py:93
-msgid "reputation"
-msgstr "reputacja"
+msgstr "žaidėjai"
 
 #: cms/models.py:14
 msgid "Is published"
-msgstr "Opublikowane"
+msgstr ""
 
 #: cms/models.py:20 cms/models.py:65
 msgid "Author"
-msgstr "Autor"
+msgstr ""
 
 #: cms/models.py:23
 msgid "News title"
-msgstr "Tytuł newsa"
+msgstr ""
 
 #: cms/models.py:27
 msgid "Slug url"
-msgstr "Slug url"
+msgstr ""
 
 #: cms/models.py:31 cms/models.py:72
 msgid "Creation date"
-msgstr "Data utworzenia"
+msgstr ""
 
 #: cms/models.py:35 cms/models.py:76
 msgid "Edition date"
-msgstr "Data edycji"
+msgstr ""
 
 #: cms/models.py:39 cms/models.py:80
 msgid "Content"
-msgstr "Zawartość"
+msgstr ""
 
 #: cms/models.py:42 cms/models.py:83
 msgid "Language"
-msgstr "Język"
+msgstr ""
 
 #: cms/models.py:69
 msgid "Tag code"
-msgstr "Tag"
+msgstr ""
 
 #: events/managers.py:80 events/managers.py:140
 msgid "Requested event does not exist."
-msgstr "Wydarzenie nie istnieje."
+msgstr "Įvykis neegzistuoja."
 
 #: events/managers.py:83 events/managers.py:143
 msgid "Event is no longer in progress."
-msgstr "Wydarzenie zostało zakończone."
+msgstr "Įvykis buvo užbaigtas."
 
 #: events/managers.py:94
 msgid "Unknown outcome."
-msgstr "Nieprawidłowy zakład."
+msgstr "Rezultatas nežinomas."
 
 #: events/managers.py:176 events/managers.py:253
 msgid "Event is currently a draft."
-msgstr "Wydarzenie jest szkicem."
+msgstr "Kol kas įvykis yra juodraščio būsenos."
 
 #: events/managers.py:184 events/managers.py:258
 msgid "Price has changed."
-msgstr "Cena uległa zmianie."
+msgstr "Kaina pakito."
 
 #: events/managers.py:190
 msgid "You don't have enough cash."
-msgstr "Nie masz wystarczająco reputów."
+msgstr "Neturite pakankamai taškų žaisti."
 
 #: events/managers.py:264
 msgid "You don't have enough shares."
-msgstr "Nie masz wystarczająco zakładów."
+msgstr "Neturite pakankamai statymų."
 
-#: events/views.py:170
+#: events/views.py:154
 msgid "Something went wrong, try again in a few seconds."
-msgstr "Coś nie poszło, spróbuj ponownie."
+msgstr "Kažkas ne taip, pabandykite iš naujo."
 
 #: politikon/settings/base.py:38
 msgid "Polish"
-msgstr "Polski"
+msgstr "Lenkų"
 
 #: politikon/settings/base.py:39
 msgid "English"
-msgstr "Angielski"
+msgstr "Anglų"
 
 #: politikon/settings/base.py:40
 msgid "Lithuanian"
-msgstr "Litewski"
+msgstr "Lietuvių"
 
 #: templates/accounts/rank.html:31
 msgid "Weekly leaders"
-msgstr "Ranking 7-dniowy"
+msgstr "Savaitės reitingas"
 
 #: templates/accounts/rank.html:32
 msgid "Monthly leaders"
-msgstr "Ranking miesięczny"
+msgstr "Mėnesio reitingas"
 
-#: templates/accounts/rank.html:33 templates/base.html:110
-#: templates/base.html.py:140
+#: templates/accounts/rank.html:33 templates/base.html:107
+#: templates/base.html.py:137
 msgid "Leaderboard"
-msgstr "Rankingi"
-
-#: templates/accounts/rank.html:34
-msgid "Team leaders"
-msgstr "Ranking drużynowy"
+msgstr "Reitingas"
 
 #: templates/accounts/user_detail.html:58
 msgid "On bet"
-msgstr "Zawartość portfela"
+msgstr "Portfelio vertė"
 
 #: templates/accounts/user_detail.html:59
 msgid "Prediction results"
-msgstr "Powiadomienia o wynikach"
+msgstr "Rezultatų prognozė"
 
 #: templates/accounts/user_detail.html:60
 msgid "Prediction history"
-msgstr "Historia transakcji"
+msgstr "Prognozių istorija"
 
 #: templates/accounts/user_notifications.html:15
 msgid "explanation of the result:"
-msgstr "skrócone uzasadnienie wyniku:"
+msgstr "Rezultato paaiškinimas"
 
 #: templates/accounts/user_notifications.html:19 templates/logged_in.html:71
 msgid "profit"
-msgstr "zysk"
+msgstr "pelnas"
 
 #: templates/accounts/user_notifications.html:19 templates/logged_in.html:71
 msgid "loss"
-msgstr "strata"
+msgstr "nuostolis"
 
 #: templates/accounts/user_notifications.html:29
 msgid "show more results"
-msgstr "wyświetl więcej wyników"
+msgstr "rodyti daugiau rezultatų"
 
 #: templates/accounts/user_portfolio.html:11
 #: templates/events/render_bet_status.html:4
 msgid "Bet"
-msgstr "Zakład"
+msgstr "Spėjimas"
 
 #: templates/accounts/user_portfolio.html:11
 #: templates/events/render_bet.html:11 templates/events/render_bet.html:16
@@ -193,7 +168,7 @@ msgstr "Zakład"
 #: templates/events/render_bet_status.html:4
 #: templates/events/render_bet_status.html:5
 msgid "YES"
-msgstr "TAK"
+msgstr "TAIP"
 
 #: templates/accounts/user_portfolio.html:11
 #: templates/events/render_bet.html:29 templates/events/render_bet.html:32
@@ -202,318 +177,304 @@ msgstr "TAK"
 #: templates/events/render_bet_status.html:4
 #: templates/events/render_bet_status.html:5
 msgid "NO"
-msgstr "NIE"
+msgstr "NE"
 
 #: templates/accounts/user_portfolio.html:11
 msgid "current price"
-msgstr "aktualna cena"
+msgstr "dabartinė kaina"
 
-#: templates/accounts/user_portfolio.html:20 templates/events/events.html:51
-#: templates/search/search.html:52
+#: templates/accounts/user_portfolio.html:20 templates/events/events.html:56
 msgid "show more events"
-msgstr "wyświetl więcej zakładów"
+msgstr "daugiau įvykių"
 
 #: templates/accounts/user_settings.html:18
 msgid "change avatar"
-msgstr "zmień avatar"
+msgstr "pakeisti avatarą"
 
 #: templates/accounts/user_settings.html:31
 msgid "Player"
-msgstr "Użytkownik"
+msgstr "Žaidėjas"
 
 #: templates/accounts/user_settings.html:32
 msgid "Joined game"
-msgstr "Dołączył do gry"
+msgstr "Prisijungė prie žaidimo"
 
 #: templates/accounts/user_settings.html:35
 msgid "E-mail address"
-msgstr "Adres e-mail"
+msgstr "El. pašto adresas"
 
 #: templates/accounts/user_settings.html:36
 #: templates/accounts/user_settings.html:68
 msgid "Connected accounts"
-msgstr "Połączone konta"
+msgstr "Sujungtos paskyros"
 
 #: templates/accounts/user_settings.html:51
 msgid "Your profile"
-msgstr "Twój profil"
+msgstr "Tavo profilis"
 
 #: templates/accounts/user_settings.html:60
 msgid "Name as presented"
-msgstr "Wyświetlane imię i nazwisko"
+msgstr "Rodomas vardas"
 
 #: templates/accounts/user_settings.html:62
 msgid "Player's description"
-msgstr "Opis użytkownika"
+msgstr "Žaidėjo aprašymas"
 
 #: templates/accounts/user_settings.html:66
 msgid "Your website"
-msgstr "Twoja strona www"
+msgstr "Tavo interneto svetainė"
 
 #: templates/accounts/user_settings.html:83
 msgid "Change e-mail address"
-msgstr "Zmień adres e-mail"
+msgstr "Keisti el. pašto adresą"
 
 #: templates/accounts/user_settings.html:105
 msgid "Save changes"
-msgstr "Zapisz zmiany"
+msgstr "Išsaugoti pakeitimus"
 
 #: templates/accounts/user_stats.html:7 templates/logged_in.html:33
 msgid "portfolio value"
-msgstr "wartość portfela"
+msgstr "portfelio vertė"
 
 #: templates/accounts/user_stats.html:11 templates/logged_in.html:40
 msgid "points to use"
-msgstr "wolne reputy"
+msgstr "laisvi taškai"
 
 #: templates/accounts/user_stats.html:15 templates/logged_in.html:47
 msgid "performance"
-msgstr "reputacja"
+msgstr "reputacija"
 
 #: templates/accounts/user_stats.html:19
 msgid "classification"
-msgstr "ranking"
+msgstr "reitingas"
 
 #: templates/accounts/user_stats.html:20 templates/home.html:77
 msgid "monthly"
-msgstr "miesiąc"
+msgstr "mėnuo"
 
 #: templates/accounts/user_stats.html:21 templates/home.html:76
 msgid "weekly"
-msgstr "tydzień"
+msgstr "savaitė"
 
 #: templates/accounts/user_transactions.html:19
 msgid "show more predictions"
-msgstr "wyświetl więcej transakcji"
+msgstr "rodyti daugiau spėjimų"
 
-#: templates/base.html:97
+#: templates/base.html:94
 msgid ""
 "Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz "
 "zgodę na ich używanie, zgodnie z ustawieniami przeglądarki."
 msgstr ""
 
-#: templates/base.html:109 templates/base.html.py:139
-#: templates/events/events.html:11 templates/search/search.html:11
+#: templates/base.html:106 templates/base.html.py:136
+#: templates/events/events.html:22
 msgid "Events"
-msgstr "Wydarzenia"
+msgstr "Renginiai"
 
-#: templates/base.html:111 templates/base.html.py:141
+#: templates/base.html:108 templates/base.html.py:138
 msgid "Tutorial"
-msgstr "Jak grać?"
+msgstr "Kaip žaisti?"
 
-#: templates/base.html:145
+#: templates/base.html:142
 msgid "Partners"
-msgstr "Partnerzy"
+msgstr "Partneriai"
 
-#: templates/base.html:147
-msgid "Code for Poland"
-msgstr "Koduj dla Polski"
+#: templates/base.html:171
+msgid "Beta version"
+msgstr "Beta versija"
 
 #: templates/base.html:174
-msgid "Beta version"
-msgstr "Wersja beta"
-
-#: templates/base.html:177
 msgid "Expect changes and forgive us!"
-msgstr "Po publikacji stracisz reputy"
+msgstr "Paviešinus dings taškai"
 
 #: templates/events/event_detail.html:73
 msgid "Resolve"
-msgstr "Rozstrzygnij"
+msgstr "Išspręsti"
 
 #: templates/events/event_detail.html:76
 msgid "Event's draft"
-msgstr "Szkic wydarzenia"
+msgstr "Įvykio juodraštis"
 
 #: templates/events/event_detail.html:80
 msgid "Share"
-msgstr "Podziel się"
+msgstr "Dalinkis"
 
 #: templates/events/event_detail.html:132
+#: templates/modals/authenticated.html:30
 msgid "Estimated closure"
-msgstr "Przewidywana data rozstrzygnięcia"
+msgstr "Numatoma sprendimo data"
 
 #: templates/events/event_detail.html:133
 msgid "Termination"
-msgstr "Data rozstrzygnięcia"
+msgstr "Sprendimo data"
 
 #: templates/events/event_detail.html:169
 msgid "Related events"
-msgstr "Powiązane wydarzenia"
+msgstr "Susiję įvykiai"
 
 #: templates/events/event_embed_detail.html:39
 msgid "Predict!"
-msgstr "Załóż się!"
+msgstr "Lažinkis!"
 
 #: templates/events/event_embed_detail.html:42
 msgid "odds"
-msgstr "szanse"
+msgstr "galimybės"
 
-#: templates/events/events.html:14 templates/search/search.html:14
+#: templates/events/events.html:24
 msgid "Most popular"
-msgstr "Najpopularniejsze"
+msgstr "Populiariausi"
 
-#: templates/events/events.html:15 templates/home.html:67
-#: templates/search/search.html:15
+#: templates/events/events.html:25 templates/home.html:67
 msgid "Ending"
-msgstr "Kończące się"
+msgstr "Besibaigiantys"
 
-#: templates/events/events.html:16 templates/search/search.html:16
+#: templates/events/events.html:26
 msgid "Changes"
-msgstr "Największe zmiany"
+msgstr "Pokyčiai"
 
-#: templates/events/events.html:17 templates/search/search.html:17
+#: templates/events/events.html:27
 msgid "Newest"
-msgstr "Najnowsze"
+msgstr "Naujausi"
 
-#: templates/events/events.html:18 templates/search/search.html:18
+#: templates/events/events.html:28
 msgid "Finished"
-msgstr "Zakończone"
+msgstr "Užbaigti"
 
-#: templates/events/events.html:20 templates/search/search.html:20
+#: templates/events/events.html:30
 msgid "Anteroom"
-msgstr "Poczekalnia"
+msgstr "Laukiamasis"
 
-#: templates/events/events.html:25 templates/search/search.html:25
-msgid "Type search phrase"
-msgstr "Wpisz wyszukiwaną frazę"
-
-#: templates/events/events.html:26 templates/search/search.html:26
-msgid "Search"
-msgstr "Szukaj"
-
-#: templates/events/finish_date.html:2
-msgid "No end date"
-msgstr "Brak daty końcowej"
-
-#: templates/events/finish_date.html:3 templates/home.html:45
+#: templates/events/finish_date.html:2 templates/home.html:45
 msgid "Estimated closure:"
-msgstr "Rozstrzygnięcie"
+msgstr "Numatoma sprendimo data:"
+
+#: templates/events/finish_date.html:3
+msgid "Terminated:"
+msgstr "Baigtas"
 
 #: templates/events/finish_date.html:4
-msgid "Terminated:"
-msgstr "Zakończony"
-
-#: templates/events/finish_date.html:5
 msgid "Waiting to be resolved"
-msgstr "Czeka na rozstrzygnięcie"
+msgstr "Laukia sprendimo"
 
 #: templates/events/render_bet.html:11 templates/events/render_bet.html:29
 msgid "acquire more for"
-msgstr "dokup na"
+msgstr "reikia dar"
 
 #: templates/events/render_bet.html:13 templates/events/render_bet.html:27
 msgid "sell share"
-msgstr "sprzedaj zakład"
+msgstr "parduok spėjimus"
 
 #: templates/events/render_bet.html:39
 msgid "You predict"
-msgstr "Jesteś na"
+msgstr "Esi"
 
-#: templates/events/render_bet.html:49 templates/events/render_events.html:37
+#: templates/events/render_bet.html:49 templates/events/render_event.html:36
 msgid "Cancelled"
-msgstr "Anulowane"
+msgstr "Atšaukta"
 
 #: templates/events/render_bet.html:55 templates/events/render_bet.html:61
 msgid "Outcome:"
-msgstr "Było"
+msgstr "Buvo:"
 
 #: templates/events/render_bet.html:68
 msgid "You didn't participate."
-msgstr "Nie brałeś udziału."
+msgstr "Nedalyvavai"
 
 #: templates/events/render_bet.html:70
 msgid "You predicted:"
-msgstr "Byłeś na"
+msgstr "Buvai:"
 
 #: templates/events/render_bet_status.html:5
 msgid "Result"
-msgstr "Wynik"
+msgstr "Rezultatas"
 
 #: templates/events/render_bet_status.html:5
 msgid "CANCELLED"
-msgstr "ANULOWANE"
+msgstr "ATŠAUKTA"
 
-#: templates/events/render_events.html:28
+#: templates/events/render_event.html:27
 msgid "event's draft"
-msgstr "szkic wydarzenia"
+msgstr "įvykio juodraštis"
 
-#: templates/events/render_events.html:44
+#: templates/events/render_event.html:43
 msgid "Happened"
-msgstr "Wydarzyło się"
+msgstr "Įvyko"
 
-#: templates/events/render_events.html:51
+#: templates/events/render_event.html:50
 msgid "Didn't happen"
-msgstr "Nie wydarzyło się"
+msgstr "Neįvyko"
 
 #: templates/home.html:74
 msgid "Best players"
-msgstr "Najlepsi gracze"
+msgstr "Geriausi žaidėjai"
 
 #: templates/home.html:78
 msgid "overall"
-msgstr "całość"
+msgstr "iš viso"
+
+#: templates/home.html:101
+msgid "Show more events"
+msgstr "Rodyti daugiau įvykių"
 
 #: templates/logged_in.html:6 templates/modals/authenticated.html:20
-#: templates/modals/authenticated.html:45
-msgid "Suggest an event"
-msgstr "Zaproponuj wydarzenie"
+msgid "Add event"
+msgstr ""
 
 #: templates/logged_in.html:13
 msgid "My profile"
-msgstr "Mój profil"
+msgstr "Mano profilis"
 
 #: templates/logged_in.html:14
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "Nustatymai"
 
 #: templates/logged_in.html:15
 msgid "Log out"
-msgstr "Wyloguj"
+msgstr "Atsijunk"
 
 #: templates/logged_in.html:57
 msgid "fresh outcomes"
-msgstr "najnowsze wyniki"
+msgstr "naujausi rezultatai"
 
 #: templates/logged_in.html:58
 msgid "Mark as read"
-msgstr "Oznacz wszystkie jako przeczytane"
+msgstr "Pažymėti kaip skaitytą"
 
 #: templates/logged_in.html:79
 msgid "Show all results"
-msgstr "Wyświetl wszystkie wyniki"
+msgstr "Rodyti visus rezultatus"
 
 #: templates/modals/anonymous.html:3
 msgid "Play Politikon!"
-msgstr "Graj w Politikon!"
+msgstr "Žaisk Politikon!"
 
 #: templates/modals/anonymous.html:8
 msgid "You can also sign up, using"
-msgstr "Możesz także zarejestrować się używając"
+msgstr "Gali prisijungti naudodamas"
 
 #: templates/modals/anonymous.html:8
 msgid "e-mail address"
-msgstr "adresu e-mail"
+msgstr "el. pašto adresą"
 
 #: templates/modals/anonymous.html:9
 msgid "Have an account?"
-msgstr "Masz już konto?"
+msgstr "Ar jau esi sukūręs paskyrą?"
 
 #: templates/modals/anonymous.html:9
 msgid "Log in here"
-msgstr "Zaloguj się tutaj"
+msgstr "Prisijungti"
 
 #: templates/modals/anonymous.html:13 templates/modals/anonymous.html.py:14
 msgid "Log in with"
-msgstr "Zaloguj się przez"
+msgstr "Prisijunk naudodamas"
 
 #: templates/modals/anonymous.html:13
 msgid "Twitter"
-msgstr "Twittera"
+msgstr "Twitter"
 
 #: templates/modals/anonymous.html:14
 msgid "Facebook"
-msgstr "Facebooka"
+msgstr "Facebook"
 
 #: templates/modals/anonymous.html:15
 msgid "Zaloguj się przez G+"
@@ -521,90 +482,80 @@ msgstr ""
 
 #: templates/modals/anonymous.html:25
 msgid "Don't have an account yet?"
-msgstr "Nie masz jeszcze konta?"
+msgstr "Dar neturi savo paskyros?"
 
 #: templates/modals/anonymous.html:25
 msgid "Join the game!"
-msgstr "Zarejestruj się!"
+msgstr "Prisijunk!"
 
 #: templates/modals/anonymous.html:42
 msgid "Join us with e-mail"
-msgstr "Zarejestruj się przy użyciu adresu e-mail"
+msgstr "Prisijunk naudodamas el. paštą"
 
 #: templates/modals/anonymous.html:48
 msgid "I have acknowledged"
-msgstr "Zapoznałem się z"
+msgstr "Susipažinau su"
 
 #: templates/modals/anonymous.html:48
 msgid "Terms & conditions"
-msgstr "Regulaminem"
+msgstr "taisyklėmis ir sąlygomis"
 
 #: templates/modals/anonymous.html:48
 msgid "and"
-msgstr "i"
+msgstr "ir"
 
 #: templates/modals/anonymous.html:48
 msgid "Privacy policy"
-msgstr "Polityką Prywatności"
+msgstr "privatumo politika"
 
 #: templates/modals/anonymous.html:53
 msgid "Have Twitter or Facebook?"
-msgstr "Masz TT lub FB?"
+msgstr "Ar turi FB ar Twitter profilį?"
 
 #: templates/modals/anonymous.html:53
 msgid "Join us quicker"
-msgstr "Zarejestruj się szybciej"
+msgstr "Prisiregistruok greičiau"
 
 #: templates/modals/any.html:4
 msgid "Share the event!"
-msgstr "Podziel się wydarzeniem!"
+msgstr "Pasidalink įvykiu"
 
 #: templates/modals/any.html:7
 msgid "Share on Twitter"
-msgstr "Podziel się na Twitterze"
+msgstr "Dalinkis Twitteryje"
 
 #: templates/modals/any.html:8
 msgid "Share on Facebook"
-msgstr "Podziel się na Facebooku"
+msgstr "Dalinkis Facebooke"
 
 #: templates/modals/any.html:9
 msgid "Share on Webpage:"
-msgstr "Podziel się na swojej stronie:"
+msgstr "Dalinkis savo svetainėje:"
 
 #: templates/modals/authenticated.html:26
 msgid "Event title"
-msgstr "Tytuł wydarzenia"
-
-#: templates/modals/authenticated.html:30
-msgid "Small image"
-msgstr "Mały obrazek"
+msgstr "Įvykio pavadinimas"
 
 #: templates/modals/authenticated.html:34
-msgid "Big image"
-msgstr "Duży obrazek"
+msgid "Small image"
+msgstr "Mažas paveikslėlis"
 
 #: templates/modals/authenticated.html:38
-msgid "Description"
-msgstr "Opis"
+msgid "Big image"
+msgstr "Didelis paveikslėlis"
 
-#: templates/modals/authenticated.html:49
-msgid "Politikon team will revise your suggestion ASAP. Thank you!"
-msgstr "Redakcja Politikonu sprawdzi Twoją propozycję ASAP. Dzięki! :)"
+#: templates/modals/authenticated.html:42
+msgid "Description"
+msgstr "Aprašas"
+
+#: templates/modals/authenticated.html:50
+msgid "Suggest an event"
+msgstr ""
+
+#: templates/modals/authenticated.html:54
+msgid "Redakcja Politikonu"
+msgstr ""
 
 #: templates/not_logged_in.html:4
 msgid "PLAY"
-msgstr "GRAJ"
-
-#~ msgid "Show more events"
-#~ msgstr "Wyświetl więcej zakładów"
-
-#~ msgid "Add event"
-#~ msgstr "Dodaj wydarzenie"
-
-#~ msgid "Send"
-#~ msgstr "Wyślij"
-
-#, fuzzy
-#~| msgid "Prediction results"
-#~ msgid "Prediction end of event"
-#~ msgstr "Powiadomienia o wynikach"
+msgstr "Žaisk"

@@ -25,9 +25,54 @@ from events.models import Bet, Event, Transaction
 logger = logging.getLogger(__name__)
 
 
-def get_image_path(instance, filename):
+def get_user_avatar_path(instance, filename):
     ext = filename.split('.')[-1]
     return os.path.join('avatars', str(instance.username)+'.'+ext)
+
+
+def get_team_avatar_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return os.path.join('avatars', str(instance.name)+'.'+ext)
+
+
+class Team(models.Model):
+    name = models.CharField(_(u'name'), max_length=128, unique=True)
+    avatar = models.ImageField(upload_to=get_team_avatar_path, blank=True, null=True)
+    avg_reputation = models.DecimalField(
+        _(u'reputation'), max_digits=12, decimal_places=2, null=True, blank=True
+    )
+    avg_total_cash = models.DecimalField(
+        _(u'total cash'), max_digits=12, decimal_places=2, null=True, blank=True
+    )
+    avg_portfolio_value = models.DecimalField(
+        _(u'portfolio value'), max_digits=12, decimal_places=2, null=True, blank=True
+    )
+    avg_weekly_result = models.DecimalField(
+        _(u'weekly result'), decimal_places=2, max_digits=7, null=True, blank=True
+    )
+    avg_monthly_result = models.DecimalField(
+        _(u'monthly result'), decimal_places=2, max_digits=7, null=True, blank=True
+    )
+
+    class Meta:
+        verbose_name = _('team')
+        verbose_name_plural = _('teams')
+        ordering = ['avg_reputation']
+
+    def __unicode__(self):
+        return self.name
+
+    def get_avatar_url(self):
+        """
+        Get this user avatar url
+
+        :return: avatar url
+        :rtype: str
+        """
+        if self.avatar:
+            return self.avatar.url
+        else:
+            return settings.STATIC_URL + "img/blank-avatar.jpg"
 
 
 class UserProfile(AbstractBaseUser):
@@ -45,7 +90,7 @@ class UserProfile(AbstractBaseUser):
 
     username = models.CharField(u"username", max_length=100, unique=True)
     email = models.CharField(u"email", max_length=255, null=True, blank=True)
-    avatar = models.ImageField(upload_to=get_image_path, blank=True, null=True)
+    avatar = models.ImageField(upload_to=get_user_avatar_path, blank=True, null=True)
 
     name = models.CharField(max_length=100, blank=True)
     is_admin = models.BooleanField(u"is an administrator", default=False)
@@ -62,6 +107,9 @@ class UserProfile(AbstractBaseUser):
     # last buy/sell transaction
     last_transaction = models.DateTimeField(null=True, blank=True)
 
+    # Team of an account
+    team = models.ForeignKey('accounts.Team', verbose_name=_(u'team'), null=True, blank=True)
+
     # TODO: czy to potrzebne?
     # Every new network relations also has to have 'related_name="django_user"'
     #     facebook_user = models.OneToOneField(FacebookUser, null=True,
@@ -71,8 +119,9 @@ class UserProfile(AbstractBaseUser):
 
     total_cash = models.IntegerField(u"ilość gotówki", default=0.)
     total_given_cash = models.IntegerField(u"ilość przyznanej gotówki w historii", default=0.)
-    reputation = models.DecimalField(u"reputation", default=100, max_digits=12, decimal_places=2,
-                                     null=True)
+    reputation = models.DecimalField(
+        _(u'reputation'), default=100, max_digits=12, decimal_places=2, null=True
+    )
     portfolio_value = models.IntegerField(u"wartość portfela", default=0.)
     weekly_result = models.DecimalField(u"wynik tygodniowy", decimal_places=2, max_digits=7, null=True, blank=True)
     monthly_result = models.DecimalField(u"wynik miesięczny", decimal_places=2, max_digits=7, null=True, blank=True)

@@ -21,26 +21,42 @@ from .exceptions import (
 from .models import Event, Bet, SolutionVote
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
+from haystack.generic_views import SearchView
+# from haystack.query import SearchQuerySet
 
 
 logger = logging.getLogger(__name__)
 
 
-class EventsListView(ListView):
+class EventsListView(SearchView):
     template_name = 'events/events.html'
-    context_object_name = 'events'
-    paginate_by = 6
+    paginate_by = 12
 
     def get_queryset(self):
-        events = Event.objects.get_events(self.kwargs['mode'])
-        tag = self.request.GET.get('tag')
-        if tag:
-            events = Event.objects.filter(tags__name__in=[tag]).distinct()
+        queryset = super(EventsListView, self).get_queryset()
         if not self.request.user.is_authenticated() or not self.request.user.is_staff:
-            events = events.exclude(is_published=False)
-        for event in events:
-            event.bet_line = event.get_user_bet(self.request.user)
-        return events
+            queryset = queryset.filter(is_published=True)
+        mode = self.kwargs.get('mode')
+        if mode == 'popular':
+            queryset = queryset.filter(outcome=Event.IN_PROGRESS).order_by('-turnover')
+        elif mode == 'last-minute':
+            queryset = queryset.filter(outcome=Event.IN_PROGRESS).order_by('estimated_end_date')
+        elif mode == 'latest':
+            queryset = queryset.filter(outcome=Event.IN_PROGRESS).order_by('-created_date')
+        elif mode == 'changed':
+            queryset = queryset.filter(outcome=Event.IN_PROGRESS).order_by('-absolute_price_change')
+        elif mode == 'finished':
+            queryset = queryset.exclude(outcome=Event.IN_PROGRESS).order_by('-end_date')
+        elif mode == 'draft':
+            queryset = queryset.exclude(is_published=True)
+
+        # events = Event.objects.get_events(self.kwargs['mode'])
+        # tag = self.request.GET.get('tag')
+        # if tag:
+        #     queryset = queryset.filter(tags__name__in=[tag]).distinct()
+        for event in queryset:
+            event.object.bet_line = event.object.get_user_bet(self.request.user)
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
@@ -88,10 +104,10 @@ class EventDetailView(DetailView):
                 pass
 
         # Similar events
-        similar_events = [x for x in event.tags.similar_objects() if \
-                          x.outcome == Event.IN_PROGRESS]
+        # similar_events = SearchQuerySet().more_like_this(event)
+        similar_events = [x for x in event.tags.similar_objects() if x.outcome == Event.IN_PROGRESS]
         for similar_event in similar_events:
-            similar_event.my_bet = similar_event.get_user_bet(self.request.user)
+            similar_event.bet_line = similar_event.get_user_bet(self.request.user)
 
         # Share module
         if bet_line:

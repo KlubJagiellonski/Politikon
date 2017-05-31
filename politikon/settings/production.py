@@ -98,5 +98,23 @@ AWS_QUERYSTRING_AUTH = False
 
 ASSETS_AUTO_BUILD = False
 
+from urlparse import urlparse
+ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
+ELASTIC_KEY = os.environ.get('ELASTIC_KEY', 'elastic')
+ELASTIC_SECRET = os.environ.get('ELASTIC_SECRET', 'changeme')
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': ES_URL.scheme + '://' + ES_URL.hostname + ':443',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+if ES_URL.username:
+    HAYSTACK_CONNECTIONS['default']['KWARGS'] = {"http_auth": ES_URL.username + ':' + ES_URL.password}
+
 # uncomment when certificate renewing
 # SSLIFY_DISABLE = True

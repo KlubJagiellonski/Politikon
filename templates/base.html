@@ -59,6 +59,9 @@
 {#<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>#}
 <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dotdotdot.min.js' %}"></script>
+<!-- validation -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 <!-- infinite scrolling -->
 <script type="text/javascript" src="{% static 'js/waypoints/jquery.waypoints.min.js?v=401' %}"></script>
 <script type="text/javascript" src="{% static 'js/waypoints/infinite.min.js?v=401' %}"></script>
@@ -92,7 +95,7 @@
 
 <div id="cookie-info-container" style="display: none;">
     {% trans 'Ta strona używa cookie w celach statystycznych. Korzystając z niej wyrażasz zgodę na ich używanie, zgodnie z ustawieniami przeglądarki.' %}
-    &nbsp; &nbsp; <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+&nbsp; &nbsp; <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
 </div>
 <div id="body-wrapper">
     <section id="maintop" class="section-nopadding">
@@ -123,10 +126,12 @@
         <a href="http://erasmusplus.org.pl/"><div class="logo erasmus-plus"></div></a>
         <a href="http://kodujdlapolski.pl/"><div class="logo kdp"></div></a>
         <a href="http://www.kj.org.pl/"><div class="logo kj"><h5>Klub Jagielloński</h5><p>www.kj.org.pl</p></div></a>
+        <div class="clr"></div>
     </section>
 
     <section id="erasmus-info">
       <p>Projekt finansowany ze środków Unii Europejskiej w ramach programu Erasmus+</p>
+      <div class="clr"></div>
     </section>
 
     <footer>
@@ -141,7 +146,7 @@
             <ul>
                 <h5>{% trans "Partners" %}</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>
-                <li><a href="http://kodujdlapolski.pl/">Koduj dla Polski</a></li>
+                <li><a href="http://kodujdlapolski.pl/">{% trans "Code for Poland" %}</a></li>
             </ul>
         </div>
         <div class="prawa">
@@ -155,24 +160,25 @@
             </nav>
         </div>
     </footer>
-    <div id="beta-emblem" style="
-        position: fixed;
-        top: 36px;
-        left: -145px;
-        background: white;
-        padding: 1em 0.5em;
-        z-index: 99999;
-        min-width: 400px;
-        text-align: center;
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
-        -moz-transfrom: rotate(-45deg);
-        font-size: 98%;
-    ">{% trans "Beta version" %} <span style="
-        display: block;
-        font-size: 80%;
-    ">{% trans "Expect changes and forgive us!" %} :-o</span>
-    </div>
+{#    <div id="beta-emblem" style="#}
+{#        position: fixed;#}
+{#        top: 36px;#}
+{#        left: -145px;#}
+{#        background: white;#}
+{#        padding: 1em 0.5em;#}
+{#        z-index: 8001;#}
+{#        min-width: 400px;#}
+{#        text-align: center;#}
+{#        transform: rotate(-45deg);#}
+{#        -webkit-transform: rotate(-45deg);#}
+{#        -moz-transfrom: rotate(-45deg);#}
+{#        font-size: 98%;#}
+{#    ">{% trans "Beta version" %} <span style="#}
+{#        display: block;#}
+{#        font-size: 80%;#}
+{#    ">{% trans "Expect changes and forgive us!" %} :-o</span>#}
+{#    </div>#}
+
 </div>
 
 <!-- ChartJS scripts -->
@@ -189,6 +195,7 @@
 <script type="text/javascript" language="javascript" src="{% static locale_path %}"></script>
 {% endwith %}
 
+<script type="text/javascript" language="javascript" src="{% static 'js/api.js' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/actions.js?v=8' %}"></script>
 <script type="text/javascript" language="javascript" src="{% static 'js/charts/betfeed_featured.js' %}"></script>
 

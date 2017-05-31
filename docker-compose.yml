@@ -1,0 +1,35 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    restart: on-failure
+  redis:
+    image: redis:alpine
+    restart: on-failure
+  elasticsearch:
+    image: "elasticsearch:2.4-alpine"
+    restart: on-failure
+    ports:
+      - "9200:9200"
+  politikon:
+    image: politikon
+    links:
+      - postgres
+      - redis
+      - elasticsearch
+    ports:
+      - "2233:22"
+      - "8000:8000"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - "POSTGRES_PORT_5432_TCP_PORT=5432"
+      - "POSTGRES_PORT_5432_TCP_ADDR=postgres"
+      - "DJANGO_SETTINGS_MODULE=politikon.settings.dev"
+      - "BONSAI_URL=http://elasticsearch:9200/"
+      - "ELASTIC_USERNAME=elastic"
+      - "ELASTIC_PASSWORD=changeme"
+    volumes:
+      - $PWD:/app
+    restart: on-failure

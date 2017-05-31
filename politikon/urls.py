@@ -37,7 +37,6 @@ urlpatterns += i18n_patterns(
 
     # CMS pages
     url(r'^pages/', include('cms.urls', namespace='cms')),
-
     url(r'^$', HomeView.as_view(), name='home')
 )
 

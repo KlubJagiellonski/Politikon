@@ -19,16 +19,16 @@ from .managers import EventManager, BetManager, TransactionManager
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
+from django_elasticsearch.models import EsIndexable
 from constance import config
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-# from taggit.managers import TaggableManager
 from taggit_autosuggest.managers import TaggableManager
 
 logger = logging.getLogger(__name__)
 
 
-class Event(models.Model):
+class Event(EsIndexable, models.Model):
     """
     Event model represents exactly real question which you can answer YES or NO.
     """
@@ -122,7 +122,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, verbose_name=u'utworzone przez', null=True, related_name='created_by'
     )
-    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia')
+    estimated_end_date = models.DateTimeField(u'przewidywana data rozstrzygnięcia', null=True, blank=False)
     end_date = models.DateTimeField(u'data rozstrzygnięcia', null=True, blank=True)
 
     current_buy_for_price = models.IntegerField(
@@ -322,9 +322,9 @@ class Event(models.Model):
             'is_user': False,
             'has': 0,
             'avgPrice': 0,
-            'outcome': None,    # note: None is the same as False
-            'buyNO': 'true',    # default option is buy bet
-            'buyYES': 'true',   # default option is buy bet
+            'outcome': None,  # note: None is the same as False
+            'buyNO': 'true',  # default option is buy bet
+            'buyYES': 'true',  # default option is buy bet
             'priceYES': self.current_buy_for_price,
             'priceNO': self.current_buy_against_price,
         }
@@ -483,7 +483,7 @@ class Event(models.Model):
                     price=self.PRIZE_FOR_WINNING
                 )
             # TODO: tutaj wallet change
-            #  bet.user.portfolio_value -= bet.has
+            # bet.user.portfolio_value -= bet.has
             bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True

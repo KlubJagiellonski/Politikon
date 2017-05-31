@@ -3,15 +3,6 @@ from rest_framework import serializers
 from .models import Event, Transaction, Bet
 
 
-class EventProposeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = ('title', 'small_image', 'big_image', 'description', 'estimated_end_date')
-
-    small_image = serializers.ImageField(required=False)
-    big_image = serializers.ImageField(required=False)
-
-
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event

@@ -3,8 +3,9 @@ import logging
 from celery import task
 from constance import config
 from django.db import transaction
+from django.db.models import Avg
 
-from accounts.models import UserProfile
+from accounts.models import UserProfile, Team
 from events.models import Transaction
 
 
@@ -42,6 +43,27 @@ def update_portfolio_value():
             user.save(update_fields=['portfolio_value'])
 
     logger.debug("'accounts:tasks:update_portfolio_value' finished.")
+
+
+@task
+def update_teams_score():
+    """
+    Update teams score
+    """
+    logger.debug("'accounts:tasks:update_teams_score' worker up")
+
+    for team in Team.objects.all():
+        team.avg_reputation = UserProfile.objects.filter(team=team).\
+            aggregate(Avg('reputation'))['reputation__avg']
+        team.avg_total_cash = UserProfile.objects.filter(team=team).\
+            aggregate(Avg('total_cash'))['total_cash__avg']
+        team.avg_portfolio_value = UserProfile.objects.filter(team=team).\
+            aggregate(Avg('portfolio_value'))['portfolio_value__avg']
+        team.avg_weekly_result = UserProfile.objects.filter(team=team).\
+            aggregate(Avg('weekly_result'))['weekly_result__avg']
+        team.avg_monthly_result = UserProfile.objects.filter(team=team).\
+            aggregate(Avg('monthly_result'))['monthly_result__avg']
+        team.save()
 
 
 @task
