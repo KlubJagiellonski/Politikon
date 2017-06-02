@@ -671,7 +671,78 @@
                 });
             });
         }
+
+        // user registration by form (e-mail)
+        $('#form-registration-submit').on('click', function () {
+            $.ajax({
+                type: 'POST',
+                data: $('#form-registration').serialize(),
+                url: '/en/accounts/create/',
+                success: function (data) {
+                    if ('errors' in data) {
+                        for (var name in data.errors) {
+                            var errors2 = data.errors[name];
+                            var el = $('#' + name);
+                            if (el.attr('type') == 'checkbox') {
+                                var errContainer = el.parent().next('ul');
+                            } else {
+                                var errContainer = el.next('ul');
+                            }
+                            errContainer.html('');
+                            for (var key in errors2) {
+                                errContainer.append('<li>' + errors2[key] + '</li>');
+                            }
+                        }
+                    } else {
+                        // success - user is registered
+                        var el = $('#form-registration');
+                        el.parent().html('<h2>' + data.message + '</h2>');
+                    }
+                }
+            });
+            return false;
+        });
+
+        // logowanie
+        $('#send-login-form').on('click', function () {
+            $.ajax({
+                type: 'POST',
+                data: $('#form-login').serialize(),
+                url: '/en/accounts/login/',
+                success: function (data) {
+                    if ('errors' in data) {
+                        for (var name in data.errors) {
+                            var errors2 = data.errors[name];
+                            console.log('name = ' + name);
+                            if (name == "__all__") {
+                                var el = $('#login-password');
+                            } else {
+                                var el = $('#login-' + name);
+                            }
+                            var errContainer = el.next('ul');
+                            errContainer.html('');
+                            for (var key in errors2) {
+                                errContainer.append('<li>' + errors2[key] + '</li>');
+                            }
+                        }
+                    } else if ('redirect_to' in data) {
+                        window.location = data.redirect_to;
+                    } else {
+                        // success - user is registered
+                        var el = $('#form-login');
+                        el.parent().html('<h2>' + data.message + '</h2>');
+                    }
+                }
+            });
+            return false;
+        });
+
         // for redirect after user logged in.
         $('input#next-to-redirect').val(window.location.href);
+
+        // It shows login popup on the login site
+        if (window.location.href.endsWith('/accounts/login/')) {
+            showModal('login');
+        }
     });
 })();

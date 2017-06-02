@@ -3,18 +3,21 @@ from django import forms
 from django.contrib.auth.admin import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from .models import UserProfile
 
 
 class UserCreationForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
-    fields, plus a repeated password."""
+    """
+    Form for creating new users. Includes all the required fields
+    and repeated password. Used on admin site.
+    """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = '__all__'
 
     def clean_password2(self):
@@ -29,6 +32,25 @@ class UserCreationForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+
+
+class UserSelfRegisterForm(forms.ModelForm):
+    """A form for creating new users from popup on website."""
+    checkemail = forms.EmailField(label='Repeat email')
+    regulamin = forms.BooleanField(label='Acknowledge')
+
+    class Meta:
+        model = UserProfile
+        fields = ['password', 'username', 'email', 'checkemail', 'regulamin']
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(UserSelfRegisterForm, self).save(commit=False)
+        user.is_active = False
+        user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
         return user

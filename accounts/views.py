@@ -4,15 +4,29 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse_lazy
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.utils.translation import ugettext as _
 
-from .forms import UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm
+from .forms import (
+    UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm,
+    UserSelfRegisterForm
+)
 from .models import UserProfile, Team
 
 from events.models import Bet, Transaction
 from politikon.decorators import class_view_decorator
 from politikon.forms import MultiFormsView
+
+# these bellow imports are for login function
+from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import resolve_url
+from django.utils.http import is_safe_url
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.response import TemplateResponse
 
 
 PORTFOLIO_ON_PAGE = 12
@@ -234,3 +248,98 @@ class UsersListView(ListView):
             'team_leaders': Team.objects.all().order_by('avg_weekly_result')
         })
         return context
+
+
+class UserProfileCreateView(CreateView):
+    """
+    Create user when he chose e-mail registration from popup on website
+    """
+    model = UserProfile
+    form_class = UserSelfRegisterForm
+
+    def post(self, request, *args, **kwargs):
+        """
+
+        :param request: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
+        return super(UserProfileCreateView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """
+        User is created, return message to ajax.
+        :return: 
+        """
+        results = super(UserProfileCreateView, self).form_valid(form)
+        # results.url - url to new user profile
+        message = _('Wait please for verification by editor.')
+        return JsonResponse({'message': message})
+
+    def render_to_response(self, context, **response_kwargs):
+        """
+        
+        :param context: 
+        :param response_kwargs: 
+        :return: 
+        """
+        response = {}
+        if hasattr(context['form'], 'errors'):
+            response['errors'] = {}
+            for field_name, error_message in context['form'].errors.items():
+                response['errors'][field_name] = error_message
+        else:
+            pass
+        return JsonResponse(response)
+
+
+def login(request, template_name='registration/login.html',
+          redirect_field_name=REDIRECT_FIELD_NAME,
+          authentication_form=AuthenticationForm,
+          current_app=None, extra_context=None):
+    """
+    Displays the login form and handles the login action.
+    """
+    redirect_to = request.POST.get(redirect_field_name,
+                                   request.GET.get(redirect_field_name, ''))
+
+    if request.method == "POST":
+        form = authentication_form(request, data=request.POST)
+        response = {}
+        if form.is_valid():
+
+            # Ensure the user-originating redirection url is safe.
+            if not is_safe_url(url=redirect_to, host=request.get_host()):
+                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+
+            # Okay, security check complete. Log the user in.
+            auth_login(request, form.get_user())
+            return JsonResponse({'redirect_to': redirect_to})
+        else:
+            if hasattr(form, 'errors'):
+                response['errors'] = {}
+                for field_name, error_message in form.errors.items():
+                    response['errors'][field_name] = error_message
+            else:
+                pass
+        return JsonResponse(response)
+
+    else:
+        form = authentication_form(request)
+
+    current_site = get_current_site(request)
+
+    context = {
+        'form': form,
+        redirect_field_name: redirect_to,
+        'site': current_site,
+        'site_name': current_site.name,
+    }
+    if extra_context is not None:
+        context.update(extra_context)
+
+    if current_app is not None:
+        request.current_app = current_app
+
+    return TemplateResponse(request, template_name, context)

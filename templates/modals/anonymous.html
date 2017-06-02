@@ -12,12 +12,12 @@
     <aside class="logowanie asblock opacity">
         <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans "Log in with" %} {% trans "Twitter" %}</span></div></a>
         <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans "Log in with" %} {% trans "Facebook" %}</span></div></a>
-        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="google-login"><span>{% trans 'Zaloguj się przez G+' %}</span></div></a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="googleplus-login"><span>{% trans "Log in with" %} {% trans "Google+" %}</span></div></a>
         <p class="or"><span>lub zaloguj się przez e-mail</span></p>
         <form id="form-login" method="post" action="{% url 'accounts:login' %}" data-parsley-validate >
             {% csrf_token %}
-            <input name="username" type="text" class="jednalinia" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
-            <input name="password" type="password" class="jednalinia" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
+            <input id="login-username" name="username" type="text" class="jednalinia" placeholder="Nazwa użytkownika" data-parsley-minlength="1" data-parsley-trigger="focusout" required>
+            <input id="login-password" name="password" type="password" class="jednalinia" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="1" required>
             <input id="next-to-redirect" name="next" type="hidden" >
             <input id="send-login-form" type="submit" class="przycisk" value="Zaloguj się">
         </form>
@@ -40,14 +40,15 @@
 
     <aside class="rejestracjaemail">
         <h2 class="spaceafter">{% trans "Join us with e-mail" %}</h2>
-        <form data-parsley-validate>
-            <input type="text" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
-            <input type="password" class="jednalinia" id="pass" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
-            <input type="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
-            <input type="email" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
-            <p class="rules"><input type="checkbox" name="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans "I have acknowledged" %} <a href="#">{% trans "Terms & conditions" %}</a> {% trans "and" %} <a href="#">{% trans "Privacy policy" %}</a></p>
+        <form id="form-registration" data-parsley-validate>
+            {% csrf_token %}
+            <input type="text" name="username" class="jednalinia" id="username" placeholder="Nazwa użytkownika" data-parsley-minlength="3" data-parsley-trigger="focusout" required>
+            <input type="password" name="password" class="jednalinia" id="password" placeholder="Hasło" data-parsley-trigger="focusout" data-parsley-minlength="4" required>
+            <input type="email" name="email" class="jednalinia" id="email" placeholder="adres e-mail" data-parsley-trigger="focusout" required>
+            <input type="checkemail" name="checkemail" class="jednalinia" id="checkemail" placeholder="powtórz adres e-mail" data-parsley-equalto="#email" data-parsley-trigger="focusout" required>
+            <p class="rules"><input type="checkbox" name="regulamin" id="regulamin" value="regulamin" data-parsley-mincheck="1" required/> {% trans "I have acknowledged" %} <a href="#">{% trans "Terms & conditions" %}</a> {% trans "and" %} <a href="#">{% trans "Privacy policy" %}</a></p>
 
-            <input type="submit" class="przycisk" value="Zarejestruj się">
+            <input id="form-registration-submit" type="submit" class="przycisk" value="Zarejestruj się">
 
         </form>
         <div class="other"><p>{% trans "Have Twitter or Facebook?" %} <a href="#" class="show-rejestracja">{% trans "Join us quicker" %}</a>.</p></div>
