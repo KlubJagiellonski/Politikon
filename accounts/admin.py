@@ -17,9 +17,10 @@ class MyUserAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('username', 'name', 'last_login', 'is_admin', 'is_active', 'is_vip',
-                    'is_staff', 'is_deleted', 'facebook_user', 'twitter_user', 'last_visit',
-                    'last_transaction', 'reset_date')
+    list_display = (
+        'username', 'name', 'last_login', 'is_admin', 'is_active', 'is_vip', 'is_staff',
+        'is_deleted', 'facebook_user', 'twitter_user', 'last_visit', 'last_transaction', 'reset_date'
+    )
     search_fields = ['username', 'name']
     list_filter = ('is_admin', 'is_active', 'is_staff', 'is_deleted')
     ordering = ('id', )

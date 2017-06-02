@@ -9,8 +9,10 @@ from .models import UserProfile
 
 
 class UserCreationForm(forms.ModelForm):
-    """A form for creating new users. Includes all the required
-    fields, plus a repeated password. This is used on admin site."""
+    """
+    Form for creating new users. Includes all the required fields
+    and repeated password. Used on admin site.
+    """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 

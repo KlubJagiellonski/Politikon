@@ -79,9 +79,11 @@ footer ul a, footer .socialmedia div,
 .modal-opened .twitter-login:hover {background-color: #7fc2f1;}
 .modal-opened .facebook-login {height: 70px; background: #395183 url(../img/login-socialmedia.png) 0 -70px no-repeat; margin-bottom: 10px;}
 .modal-opened .facebook-login:hover {background-color: #5370ad;}
+.modal-opened .googleplus-login {height: 70px; background: #d34132 url(../img/login-socialmedia.png) 0 -140px no-repeat; margin-bottom: 10px;}
+.modal-opened .googleplus-login:hover {background-color: #ff5947;}
 .modal-opened .website-share {height: 70px; background: #449e2e url(../img/www-icon-small.png) 15px center no-repeat; margin-bottom: 35px;}
 .modal-opened .website-share:hover {background-color: #5eb847;}
-.modal-opened .twitter-login span, .modal-opened .facebook-login span, .modal-opened .website-share span {color: #fff; font-size: 1.125em; float: left; margin: 25px 0 0 95px;}
+.modal-opened .twitter-login span, .modal-opened .facebook-login span, .modal-opened .googleplus-login span, .modal-opened .website-share span {color: #fff; font-size: 1.125em; float: left; margin: 25px 0 0 95px;}
 .modal-opened .website-share span {margin-top: 10px;}
 .modal-opened .website-share input {width: 260px; margin: 5px 0 0 60px; padding: 5px;}
 .modal-opened .other {width: 100%; height: 80px; background: #efefef url(../img/login-logo-politikon.png) left no-repeat; margin-top: 25px;}

@@ -12,7 +12,7 @@
     <aside class="logowanie asblock opacity">
         <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans "Log in with" %} {% trans "Twitter" %}</span></div></a>
         <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans "Log in with" %} {% trans "Facebook" %}</span></div></a>
-        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="google-login"><span>{% trans 'Zaloguj się przez G+' %}</span></div></a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="googleplus-login"><span>{% trans "Log in with" %} {% trans "Google+" %}</span></div></a>
         <p class="or"><span>lub zaloguj się przez e-mail</span></p>
         <form id="form-login" method="post" action="{% url 'accounts:login' %}" data-parsley-validate >
             {% csrf_token %}
