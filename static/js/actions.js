@@ -694,10 +694,13 @@
                             }
                         }
                     } else {
-                        // success - user is registered
-                        var el = $('#form-registration');
-                        el.hide();
-                        el.parent().appendHtml('<h2>' + data.message + '</h2>');
+                        $('.rejestracjaemail').removeClass('opacity');
+
+                        setTimeout(function () {
+                            $('.rejestracjaemail').removeClass('asblock');
+                            $('.rejestracjaemail-done').addClass('asblock');
+                            $('.rejestracjaemail-done').addClass('opacity');
+                        }, 150); // opoznienie
                     }
                 }
             });

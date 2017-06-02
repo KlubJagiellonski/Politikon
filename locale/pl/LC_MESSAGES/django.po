@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-02 17:26+0200\n"
+"POT-Creation-Date: 2017-06-02 18:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
 "Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
@@ -68,11 +68,6 @@ msgstr "użytkownik"
 #: accounts/models.py:81
 msgid "users"
 msgstr "użytkownicy"
-
-#: accounts/views.py:277
-msgid ""
-"Your account is inactive yet. Please wait for the verification. Thank you."
-msgstr ""
 
 #: cms/models.py:12
 msgid "is published"
@@ -547,10 +542,8 @@ msgstr "Graj w Politikon!"
 
 #: templates/modals/anonymous.html:6 templates/modals/anonymous.html.py:7
 #: templates/modals/anonymous.html:8
-#, fuzzy
-#| msgid "Log in with"
 msgid "Sign in with"
-msgstr "Zaloguj się przez"
+msgstr "Zarejestruj się przez"
 
 #: templates/modals/anonymous.html:6 templates/modals/anonymous.html.py:14
 msgid "Twitter"
@@ -620,6 +613,15 @@ msgstr "Masz TT lub FB?"
 #: templates/modals/anonymous.html:55
 msgid "Join us quicker"
 msgstr "Zarejestruj się szybciej"
+
+#: templates/modals/anonymous.html:59
+msgid ""
+"Your account is inactive yet. Please wait for the verification. Thank you."
+msgstr "Twoje konto jest jeszcze nieaktywne. Poczekaj na weryfikację redaktorów."
+
+#: templates/modals/anonymous.html:60
+msgid "Come back soon and play!"
+msgstr "Już nie długo będziesz mógł dołączyć do gry!"
 
 #: templates/modals/any.html:4
 msgid "Share the event!"

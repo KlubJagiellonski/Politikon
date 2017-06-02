@@ -270,7 +270,7 @@ class UserProfileCreateView(CreateView):
     def form_valid(self, form):
         """
         User is created, return message to ajax.
-        :return: 
+        :return:
         """
         results = super(UserProfileCreateView, self).form_valid(form)
         # results.url - url to new user profile
