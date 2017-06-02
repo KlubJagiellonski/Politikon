@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-02 16:25+0200\n"
+"POT-Creation-Date: 2017-06-02 17:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
 "Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: accounts/admin.py:34 accounts/admin.py:45
+#: accounts/admin.py:35 accounts/admin.py:46
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: accounts/admin.py:35
+#: accounts/admin.py:36
 msgid "Important dates"
 msgstr "Ważne daty"
 
@@ -68,6 +68,11 @@ msgstr "użytkownik"
 #: accounts/models.py:81
 msgid "users"
 msgstr "użytkownicy"
+
+#: accounts/views.py:277
+msgid ""
+"Your account is inactive yet. Please wait for the verification. Thank you."
+msgstr ""
 
 #: cms/models.py:12
 msgid "is published"
@@ -540,71 +545,79 @@ msgstr "Wyświetl wszystkie wyniki"
 msgid "Play Politikon!"
 msgstr "Graj w Politikon!"
 
+#: templates/modals/anonymous.html:6 templates/modals/anonymous.html.py:7
 #: templates/modals/anonymous.html:8
-msgid "You can also sign up, using"
-msgstr "Możesz także zarejestrować się używając"
-
-#: templates/modals/anonymous.html:8
-msgid "e-mail address"
-msgstr "adresu e-mail"
-
-#: templates/modals/anonymous.html:9
-msgid "Have an account?"
-msgstr "Masz już konto?"
-
-#: templates/modals/anonymous.html:9
-msgid "Log in here"
-msgstr "Zaloguj się tutaj"
-
-#: templates/modals/anonymous.html:13 templates/modals/anonymous.html.py:14
-msgid "Log in with"
+#, fuzzy
+#| msgid "Log in with"
+msgid "Sign in with"
 msgstr "Zaloguj się przez"
 
-#: templates/modals/anonymous.html:13
+#: templates/modals/anonymous.html:6 templates/modals/anonymous.html.py:14
 msgid "Twitter"
 msgstr "Twittera"
 
-#: templates/modals/anonymous.html:14
+#: templates/modals/anonymous.html:7 templates/modals/anonymous.html.py:15
 msgid "Facebook"
 msgstr "Facebooka"
 
-#: templates/modals/anonymous.html:15
-msgid "Zaloguj się przez G+"
+#: templates/modals/anonymous.html:8 templates/modals/anonymous.html.py:16
+msgid "Google+"
 msgstr ""
 
-#: templates/modals/anonymous.html:25
+#: templates/modals/anonymous.html:9
+msgid "You can also sign up, using"
+msgstr "Możesz także zarejestrować się używając"
+
+#: templates/modals/anonymous.html:9
+msgid "e-mail address"
+msgstr "adresu e-mail"
+
+#: templates/modals/anonymous.html:10
+msgid "Have an account?"
+msgstr "Masz już konto?"
+
+#: templates/modals/anonymous.html:10
+msgid "Log in here"
+msgstr "Zaloguj się tutaj"
+
+#: templates/modals/anonymous.html:14 templates/modals/anonymous.html.py:15
+#: templates/modals/anonymous.html:16
+msgid "Log in with"
+msgstr "Zaloguj się przez"
+
+#: templates/modals/anonymous.html:26
 msgid "Don't have an account yet?"
 msgstr "Nie masz jeszcze konta?"
 
-#: templates/modals/anonymous.html:25
+#: templates/modals/anonymous.html:26
 msgid "Join the game!"
 msgstr "Zarejestruj się!"
 
-#: templates/modals/anonymous.html:42
+#: templates/modals/anonymous.html:43
 msgid "Join us with e-mail"
 msgstr "Zarejestruj się przy użyciu adresu e-mail"
 
-#: templates/modals/anonymous.html:48
+#: templates/modals/anonymous.html:50
 msgid "I have acknowledged"
 msgstr "Zapoznałem się z"
 
-#: templates/modals/anonymous.html:48
+#: templates/modals/anonymous.html:50
 msgid "Terms & conditions"
 msgstr "Regulaminem"
 
-#: templates/modals/anonymous.html:48
+#: templates/modals/anonymous.html:50
 msgid "and"
 msgstr "i"
 
-#: templates/modals/anonymous.html:48
+#: templates/modals/anonymous.html:50
 msgid "Privacy policy"
 msgstr "Polityką Prywatności"
 
-#: templates/modals/anonymous.html:53
+#: templates/modals/anonymous.html:55
 msgid "Have Twitter or Facebook?"
 msgstr "Masz TT lub FB?"
 
-#: templates/modals/anonymous.html:53
+#: templates/modals/anonymous.html:55
 msgid "Join us quicker"
 msgstr "Zarejestruj się szybciej"
 

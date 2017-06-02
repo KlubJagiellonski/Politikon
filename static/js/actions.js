@@ -696,7 +696,8 @@
                     } else {
                         // success - user is registered
                         var el = $('#form-registration');
-                        el.parent().html('<h2>' + data.message + '</h2>');
+                        el.hide();
+                        el.parent().appendHtml('<h2>' + data.message + '</h2>');
                     }
                 }
             });
