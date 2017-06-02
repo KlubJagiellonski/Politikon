@@ -3,8 +3,9 @@
     <div class="header">{% trans "Play Politikon!" %} <span class="prawa login-close"></span></div>
 
     <aside class="rejestracja">
-{#        <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>Zarejestruj się przez Twittera</span></div></a>#}
-{#        <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>Zarejestruj się przez Facebooka</span></div></a>#}
+        <a href="{% url 'social:begin' 'twitter' %}"><div class="twitter-login"><span>{% trans "Sign in with" %} {% trans "Twitter" %}</span></div></a>
+        <a href="{% url 'social:begin' 'facebook' %}"><div class="facebook-login"><span>{% trans "Sign in with" %} {% trans "Facebook" %}</span></div></a>
+        <a href="{% url 'social:begin' 'google-oauth2' %}"><div class="googleplus-login"><span>{% trans "Sign in with" %} {% trans "Google+" %}</span></div></a>
         <p>{% trans "You can also sign up, using" %} <a href="#" class="show-rejestracjaemail">{% trans "e-mail address" %}</a></p>
         <div class="other"><p>{% trans "Have an account?" %} <a href="#" class="show-logowanie">{% trans "Log in here" %}</a>.</p></div>
     </aside>
@@ -21,7 +22,7 @@
             <input id="next-to-redirect" name="next" type="hidden" >
             <input id="send-login-form" type="submit" class="przycisk" value="Zaloguj się">
         </form>
-        <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>
+{#        <p class="tip"><a href="#" class="show-przypomnienie">Zapomniałeś hasła?</a></p>#}
         <div class="other"><p>{% trans "Don't have an account yet?" %} <a href="#" class="show-rejestracja">{% trans "Join the game!" %}</a></p></div>
     </aside>
 
@@ -52,5 +53,10 @@
 
         </form>
         <div class="other"><p>{% trans "Have Twitter or Facebook?" %} <a href="#" class="show-rejestracja">{% trans "Join us quicker" %}</a>.</p></div>
+    </aside>
+
+    <aside class="rejestracjaemail-done">
+        <h2 class="spaceafter">{% trans "Your account is inactive yet. Please wait for the verification. Thank you." %}</h2>
+        <div class="other"><p>{% trans "Come back soon and play!" %}.</p></div>
     </aside>
 </div>

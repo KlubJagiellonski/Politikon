@@ -270,11 +270,11 @@ class UserProfileCreateView(CreateView):
     def form_valid(self, form):
         """
         User is created, return message to ajax.
-        :return: 
+        :return:
         """
         results = super(UserProfileCreateView, self).form_valid(form)
         # results.url - url to new user profile
-        message = _('Wait please for verification by editor.')
+        message = _('Your account is inactive yet. Please wait for the verification. Thank you.')
         return JsonResponse({'message': message})
 
     def render_to_response(self, context, **response_kwargs):

@@ -310,7 +310,7 @@
 
         // kupowanie i sprzedawanie zakładów
         function play_bet() {
-            $('.a_bet').each(function () {
+            $('#makeabet.a_bet').each(function () {
                 if ($(this).data('click') == true) {
                     // to prevent bind multi click action to one existed elements
                     return null;
@@ -694,9 +694,13 @@
                             }
                         }
                     } else {
-                        // success - user is registered
-                        var el = $('#form-registration');
-                        el.parent().html('<h2>' + data.message + '</h2>');
+                        $('.rejestracjaemail').removeClass('opacity');
+
+                        setTimeout(function () {
+                            $('.rejestracjaemail').removeClass('asblock');
+                            $('.rejestracjaemail-done').addClass('asblock');
+                            $('.rejestracjaemail-done').addClass('opacity');
+                        }, 150); // opoznienie
                     }
                 }
             });
@@ -745,4 +749,9 @@
             showModal('login');
         }
     });
+
+    $('input.immutable-input').on('change', function () {
+       $(this).val($(this).data('value.'));
+    });
+
 })();

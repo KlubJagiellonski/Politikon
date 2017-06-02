@@ -469,7 +469,7 @@ footer .socialmedia .gp {background-position: -95px 0;}
 .prefooter-margin {margin-bottom: 110px !important;}
 
 /* zakładki */
-ul.tabs {list-style-type: none; margin: 0; padding: 0;}
+ul.tabs {list-style-type: none; margin: 0; padding: 10px;}
 ul.tabs li {float: left; margin: 0 0 0 .625em; padding: 8px 15px; background: #d1d1d1; border-radius: 5px; color: #999; text-transform: uppercase; font-weight: 700;}
 ul.tabs li.active {background: #c84d28;;color: #fff;}
 .clr {clear: both;}
@@ -995,3 +995,6 @@ input[type=text].searchbar {
 button.search-button {margin: 20px 0; text-align: center; background-color: #ea6a2a; line-height: 31px; padding: 11px 30px; margin-left: -4px; border-radius: 0 4px 4px 0;}
 
 .text-center{text-align: center;}
+
+#contact {max-width: 800px; margin: 0 auto; margin-bottom: 100px;}
+#contact-done h1 {font-size: 1.75em; font-weight: 500;}

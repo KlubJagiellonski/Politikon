@@ -28,6 +28,18 @@ from taggit_autosuggest.managers import TaggableManager
 logger = logging.getLogger(__name__)
 
 
+class EventCategory(models.Model):
+    name = models.CharField(u'tytuł wydarzenia', max_length=255, unique=True)
+    slug = models.SlugField(verbose_name=_('Slug url'), unique=True)
+
+    class Meta:
+        verbose_name = u'kategoria'
+        verbose_name_plural = u'kategorie'
+
+    def __unicode__(self):
+        return self.name
+
+
 class Event(EsIndexable, models.Model):
     """
     Event model represents exactly real question which you can answer YES or NO.
@@ -74,6 +86,7 @@ class Event(EsIndexable, models.Model):
         verbose_name=u'tytuł promocyjny wydarzenia', max_length=255, default='', blank=True
     )
     description = models.TextField(u'pełny opis wydarzenia', default='')
+    categories = models.ManyToManyField('events.EventCategory', verbose_name=u'kategorie', blank=True)
     is_featured = models.BooleanField(u'wyróżniony', default=False)
     is_published = models.BooleanField(u'opublikowano', default=True)
 

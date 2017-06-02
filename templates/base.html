@@ -141,8 +141,9 @@
                 <li><a href="{% url 'events:events' %}">{% trans "Events" %}</a></li>
                 <li><a href="{% url 'accounts:rank' %}">{% trans "Leaderboard" %}</a></li>
                 <li><a href="javascript:void(0);" onclick="startIntro();">{% trans "Tutorial" %}</a></li>
+                <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
             </ul>
-                {% published_pages %}
+            {% published_pages %}
             <ul>
                 <h5>{% trans "Partners" %}</h5>
                 <li><a href="http://jagiellonski24.pl/">jagielloński24</a></li>

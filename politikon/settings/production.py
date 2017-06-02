@@ -40,6 +40,8 @@ SOCIAL_AUTH_TWITTER_SECRET = TWITTER_CONSUMER_SECRET
 SOCIAL_AUTH_FACEBOOK_KEY = FACEBOOK_APPLICATION_ID
 SOCIAL_AUTH_FACEBOOK_SECRET = FACEBOOK_APPLICATION_SECRET_KEY
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile']
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'  # TODO to avoid missing
 # registration/login.html error
 
@@ -74,11 +76,12 @@ else:
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_HOST_USER = os.environ.get('MAILGUN_USERNAME', '')
-EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_PASSWORD', '')
+EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN', '')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD', '')
 EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT', 587)
 EMAIL_USE_TLS = True
 DEFAULT_EMAIL_FROM = 'Politikon <' + EMAIL_HOST_USER + '>'
+EMAIL_DEFAULT_RECIPIENT = 'politikon.org.pl@gmail.com'
 
 SERVE_STATIC_FILES = True
 

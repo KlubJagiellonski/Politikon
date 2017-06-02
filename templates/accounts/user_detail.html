@@ -61,9 +61,15 @@ $(function () {
     </ul>
     <div class="clr"></div>
     <div class="zakladki-content">
-        {% user_portfolio %}
-        {% user_notifications %}
-        {% user_transactions %}
+        <article id="zawartoscportfela" class="active">
+            {% user_portfolio %}
+        </article>
+        <article id="powiadomieniaowynikach">
+            {% user_notifications %}
+        </article>
+        <article id="historiatransakcji">
+            {% user_transactions %}
+        </article>
     </div>
 </section>
 {% endblock %}

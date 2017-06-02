@@ -5,6 +5,7 @@ from events.models import Event
 
 class EventIndex(CelerySearchIndex, indexes.ModelSearchIndex, indexes.Indexable):
     tags = indexes.MultiValueField()
+    categories = indexes.MultiValueField()
 
     class Meta:
         model = Event
@@ -15,3 +16,6 @@ class EventIndex(CelerySearchIndex, indexes.ModelSearchIndex, indexes.Indexable)
 
     def prepare_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
+
+    def prepare_categories(self, obj):
+        return [category.name for category in obj.categories.all()]

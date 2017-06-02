@@ -20,8 +20,14 @@
             <li {% if active == "draft" %} class="active"{% endif %}><a href="{% url 'events:events' mode='draft' %}{% if query %}?q={{ query }}{% endif %}">{% trans "Anteroom" %}</a></li>
             {% endif %}
         </ul>
+        <div class="clr"></div>
+        <ul class="tabs">
+        {% for category in categories %}
+            <li {% if active == category.slug %} class="active"{% endif %}><a href="{% url 'events:events' category=category.slug %}{% if query %}?q={{ query }}{% endif %}">{{ category.name }}</a></li>
+        {% endfor %}
+        </ul>
         <div class="search prawa">
-            <form id="search-form" action="." method="get">
+            <form id="search-form" action="{% url 'events:events' mode='any' %}" method="get">
                 <input class="searchbar" type="text" name="q" placeholder="{% trans "Type search phrase" %}" value="{{ query }}">
                 <button class="big-button search-button" type="submit">{% trans "Search" %}</button>
             </form>
