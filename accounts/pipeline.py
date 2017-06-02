@@ -44,6 +44,7 @@ def save_profile(strategy, user, response, details, is_new=False, *args, **kwarg
 
     backend = kwargs['backend']
 
+    print(backend.name)
     if backend.name == 'twitter':
         if is_new or not user.is_active:
             # playing_followers_count = 0
@@ -146,3 +147,5 @@ def save_profile(strategy, user, response, details, is_new=False, *args, **kwarg
             else:
                 user.avatar.save('{0}_social.jpg'.format(user.username),
                                  ContentFile(response.content))
+
+    # if backend.name == ''
