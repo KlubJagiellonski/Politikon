@@ -49,6 +49,10 @@ class HomeView(TemplateView):
         return context
 
 
+class ContactView(TemplateView):
+    template_name = 'contact.html'
+
+
 def acme_challenge(request, acme):
     """
     Make sure your web server displays the following content at

@@ -310,7 +310,7 @@
 
         // kupowanie i sprzedawanie zakładów
         function play_bet() {
-            $('.a_bet').each(function () {
+            $('#makeabet.a_bet').each(function () {
                 if ($(this).data('click') == true) {
                     // to prevent bind multi click action to one existed elements
                     return null;
@@ -745,4 +745,9 @@
             showModal('login');
         }
     });
+
+    $('input.immutable-input').on('change', function () {
+       $(this).val($(this).data('value.'));
+    });
+
 })();

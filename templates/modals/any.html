@@ -6,7 +6,7 @@
     <aside class="asblock opacity">
         <a href="https://twitter.com/intent/tweet?url={{ event.get_absolute_url }}"><div class="twitter-login" id="twitter-share"><span>{% trans "Share on Twitter" %}</span></div></a>
         <a href="#"><div class="facebook-login" id="facebook-share"><span>{% trans "Share on Facebook" %}</span></div></a>
-        <div class="website-share"><span>{% trans "Share on Webpage:" %}</span><input type="text" value="{% small_iframe %}" disabled /></div>
+        <div class="website-share"><span>{% trans "Share on Webpage:" %}</span><input type="text" class="immutable-input" value="{% small_iframe %}" data-value="{% small_iframe %}" /></div>
         <div class="other"></div>
     </aside>
 </div>

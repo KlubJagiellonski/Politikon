@@ -4,7 +4,7 @@ from django.db import models
 from django.forms import Textarea, TextInput
 
 from .forms import EventForm
-from .models import Bet, Event, Transaction
+from .models import Bet, Event, Transaction, EventCategory
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -19,7 +19,8 @@ class EventAdmin(admin.ModelAdmin):
         (u'Główne', {
             'fields': (
                 'description', 'estimated_end_date', 'small_image',
-                'big_image', 'title', 'is_published', 'is_featured', 'tags'
+                'big_image', 'title', 'is_published', 'is_featured', 'tags',
+                'categories'
             )
         }),
         ('Social media', {
@@ -90,3 +91,4 @@ EventAdmin.list_per_page = 10000
 admin.site.register(Event, EventAdmin)
 admin.site.register(Bet, BetAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(EventCategory)

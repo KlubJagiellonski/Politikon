@@ -12,13 +12,13 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_headers
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView
 
 from .exceptions import (
     NonexistantEvent, DraftEvent, PriceMismatch, EventNotInProgress,
     UnknownOutcome, InsufficientBets, InsufficientCash
 )
-from .models import Event, Bet, SolutionVote
+from .models import Event, Bet, SolutionVote, EventCategory
 from accounts.models import UserProfile
 from bladepolska.http import JSONResponse, JSONResponseBadRequest
 from haystack.generic_views import SearchView
@@ -36,6 +36,7 @@ class EventsListView(SearchView):
         queryset = super(EventsListView, self).get_queryset()
         if not self.request.user.is_authenticated() or not self.request.user.is_staff:
             queryset = queryset.filter(is_published=True)
+
         mode = self.kwargs.get('mode')
         if mode == 'popular':
             queryset = queryset.filter(outcome=Event.IN_PROGRESS).order_by('-turnover')
@@ -50,6 +51,11 @@ class EventsListView(SearchView):
         elif mode == 'draft':
             queryset = queryset.exclude(is_published=True)
 
+        category = self.kwargs.get('category')
+        if category:
+            event_category = get_object_or_404(EventCategory, slug=category)
+            queryset = queryset.filter(categories__in=[event_category])
+
         # events = Event.objects.get_events(self.kwargs['mode'])
         # tag = self.request.GET.get('tag')
         # if tag:
@@ -60,8 +66,12 @@ class EventsListView(SearchView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventsListView, self).get_context_data(*args, **kwargs)
-        context['active'] = self.kwargs['mode']
+        if 'mode' in self.kwargs:
+            context['active'] = self.kwargs['mode']
+        if 'category' in self.kwargs:
+            context['active'] = self.kwargs['category']
         context['popular_tags'] = Event.tags.most_common()[:10]
+        context['categories'] = EventCategory.objects.all()
         return context
 
 

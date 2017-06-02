@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-31 00:04+0200\n"
+"POT-Creation-Date: 2017-06-02 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Tomasz Kołodziejczuk <kolotom@gmail.com>\n"
 "Language-Team: LANGUAGE <ll@politikon.org.pl>\n"
@@ -28,69 +28,106 @@ msgstr "Uprawnienia"
 msgid "Important dates"
 msgstr "Ważne daty"
 
-#: accounts/models.py:34
+#: accounts/models.py:39 cms/models.py:66
 msgid "name"
 msgstr "nazwa"
 
-#: accounts/models.py:36
-msgid "average reputation"
-msgstr "średnia reputacja"
-
-#: accounts/models.py:40 accounts/models.py:81
-msgid "team"
-msgstr "drużyna"
-
-#: accounts/models.py:41
-msgid "teams"
-msgstr "drużyny"
-
-#: accounts/models.py:50
-msgid "user"
-msgstr "użytkownik"
-
-#: accounts/models.py:51
-msgid "users"
-msgstr "użytkownicy"
-
-#: accounts/models.py:93
+#: accounts/models.py:42 accounts/models.py:123
 msgid "reputation"
 msgstr "reputacja"
 
-#: cms/models.py:14
-msgid "Is published"
-msgstr "Opublikowane"
+#: accounts/models.py:45
+msgid "total cash"
+msgstr "politicoiny"
 
-#: cms/models.py:20 cms/models.py:65
-msgid "Author"
-msgstr "Autor"
+#: accounts/models.py:48 templates/accounts/user_stats.html:7
+#: templates/logged_in.html:33
+msgid "portfolio value"
+msgstr "wartość portfela"
 
-#: cms/models.py:23
-msgid "News title"
-msgstr "Tytuł newsa"
+#: accounts/models.py:51
+msgid "weekly result"
+msgstr "wynik tygodniowy"
+
+#: accounts/models.py:54
+msgid "monthly result"
+msgstr "wynik miesięczny"
+
+#: accounts/models.py:58 accounts/models.py:111
+msgid "team"
+msgstr "drużyna"
+
+#: accounts/models.py:59
+msgid "teams"
+msgstr "drużyny"
+
+#: accounts/models.py:80
+msgid "user"
+msgstr "użytkownik"
+
+#: accounts/models.py:81
+msgid "users"
+msgstr "użytkownicy"
+
+#: cms/models.py:12
+msgid "is published"
+msgstr "opublikowane"
+
+#: cms/models.py:17 cms/models.py:51 cms/models.py:68
+msgid "author"
+msgstr "autor"
+
+#: cms/models.py:19
+msgid "news title"
+msgstr "tytuł newsa"
+
+#: cms/models.py:20
+msgid "slug url"
+msgstr "slug url"
+
+#: cms/models.py:21 cms/models.py:55 cms/models.py:69
+msgid "creation date"
+msgstr "data utworzenia"
+
+#: cms/models.py:22 cms/models.py:56
+msgid "edition date"
+msgstr "data edycji"
+
+#: cms/models.py:23 cms/models.py:57
+msgid "content"
+msgstr "zawartość"
+
+#: cms/models.py:24 cms/models.py:58
+msgid "language"
+msgstr "język"
 
 #: cms/models.py:27
-msgid "Slug url"
-msgstr "Slug url"
+msgid "page"
+msgstr "strona"
 
-#: cms/models.py:31 cms/models.py:72
-msgid "Creation date"
-msgstr "Data utworzenia"
+#: cms/models.py:28
+msgid "pages"
+msgstr "strony"
 
-#: cms/models.py:35 cms/models.py:76
-msgid "Edition date"
-msgstr "Data edycji"
+#: cms/models.py:54
+msgid "tag code"
+msgstr "tag"
 
-#: cms/models.py:39 cms/models.py:80
-msgid "Content"
-msgstr "Zawartość"
+#: cms/models.py:61
+msgid "extra content"
+msgstr "dodatkowa zawartość"
 
-#: cms/models.py:42 cms/models.py:83
-msgid "Language"
-msgstr "Język"
+#: cms/models.py:62
+msgid "extra contents"
+msgstr "dodatkowa zawartość"
 
-#: cms/models.py:69
-msgid "Tag code"
-msgstr "Tag"
+#: cms/models.py:72
+msgid "gallery image"
+msgstr "obrazek"
+
+#: cms/models.py:73
+msgid "gallery images"
+msgstr "obrazki"
 
 #: events/managers.py:80 events/managers.py:140
 msgid "Requested event does not exist."
@@ -120,7 +157,11 @@ msgstr "Nie masz wystarczająco reputów."
 msgid "You don't have enough shares."
 msgstr "Nie masz wystarczająco zakładów."
 
-#: events/views.py:170
+#: events/models.py:33
+msgid "Slug url"
+msgstr "Slug url"
+
+#: events/views.py:180
 msgid "Something went wrong, try again in a few seconds."
 msgstr "Coś nie poszło, spróbuj ponownie."
 
@@ -145,7 +186,7 @@ msgid "Monthly leaders"
 msgstr "Ranking miesięczny"
 
 #: templates/accounts/rank.html:33 templates/base.html:110
-#: templates/base.html.py:140
+#: templates/base.html.py:142
 msgid "Leaderboard"
 msgstr "Rankingi"
 
@@ -165,28 +206,28 @@ msgstr "Powiadomienia o wynikach"
 msgid "Prediction history"
 msgstr "Historia transakcji"
 
-#: templates/accounts/user_notifications.html:15
+#: templates/accounts/user_notifications.html:13
 msgid "explanation of the result:"
 msgstr "skrócone uzasadnienie wyniku:"
 
-#: templates/accounts/user_notifications.html:19 templates/logged_in.html:71
+#: templates/accounts/user_notifications.html:17 templates/logged_in.html:71
 msgid "profit"
 msgstr "zysk"
 
-#: templates/accounts/user_notifications.html:19 templates/logged_in.html:71
+#: templates/accounts/user_notifications.html:17 templates/logged_in.html:71
 msgid "loss"
 msgstr "strata"
 
-#: templates/accounts/user_notifications.html:29
+#: templates/accounts/user_notifications.html:27
 msgid "show more results"
 msgstr "wyświetl więcej wyników"
 
-#: templates/accounts/user_portfolio.html:11
+#: templates/accounts/user_portfolio.html:9
 #: templates/events/render_bet_status.html:4
 msgid "Bet"
 msgstr "Zakład"
 
-#: templates/accounts/user_portfolio.html:11
+#: templates/accounts/user_portfolio.html:9
 #: templates/events/render_bet.html:11 templates/events/render_bet.html:16
 #: templates/events/render_bet.html:39 templates/events/render_bet.html:55
 #: templates/events/render_bet.html:70
@@ -195,7 +236,7 @@ msgstr "Zakład"
 msgid "YES"
 msgstr "TAK"
 
-#: templates/accounts/user_portfolio.html:11
+#: templates/accounts/user_portfolio.html:9
 #: templates/events/render_bet.html:29 templates/events/render_bet.html:32
 #: templates/events/render_bet.html:39 templates/events/render_bet.html:61
 #: templates/events/render_bet.html:70
@@ -204,11 +245,11 @@ msgstr "TAK"
 msgid "NO"
 msgstr "NIE"
 
-#: templates/accounts/user_portfolio.html:11
+#: templates/accounts/user_portfolio.html:9
 msgid "current price"
 msgstr "aktualna cena"
 
-#: templates/accounts/user_portfolio.html:20 templates/events/events.html:51
+#: templates/accounts/user_portfolio.html:18 templates/events/events.html:57
 #: templates/search/search.html:52
 msgid "show more events"
 msgstr "wyświetl więcej zakładów"
@@ -258,10 +299,6 @@ msgstr "Zmień adres e-mail"
 msgid "Save changes"
 msgstr "Zapisz zmiany"
 
-#: templates/accounts/user_stats.html:7 templates/logged_in.html:33
-msgid "portfolio value"
-msgstr "wartość portfela"
-
 #: templates/accounts/user_stats.html:11 templates/logged_in.html:40
 msgid "points to use"
 msgstr "wolne reputy"
@@ -282,7 +319,7 @@ msgstr "miesiąc"
 msgid "weekly"
 msgstr "tydzień"
 
-#: templates/accounts/user_transactions.html:19
+#: templates/accounts/user_transactions.html:17
 msgid "show more predictions"
 msgstr "wyświetl więcej transakcji"
 
@@ -292,30 +329,46 @@ msgid ""
 "zgodę na ich używanie, zgodnie z ustawieniami przeglądarki."
 msgstr ""
 
-#: templates/base.html:109 templates/base.html.py:139
+#: templates/base.html:109 templates/base.html.py:141
 #: templates/events/events.html:11 templates/search/search.html:11
 msgid "Events"
 msgstr "Wydarzenia"
 
-#: templates/base.html:111 templates/base.html.py:141
+#: templates/base.html:111 templates/base.html.py:143
 msgid "Tutorial"
 msgstr "Jak grać?"
 
-#: templates/base.html:145
+#: templates/base.html:144 templates/contact.html:7
+msgid "Contact"
+msgstr "Kontakt"
+
+#: templates/base.html:148
 msgid "Partners"
 msgstr "Partnerzy"
 
-#: templates/base.html:147
+#: templates/base.html:150
 msgid "Code for Poland"
 msgstr "Koduj dla Polski"
 
-#: templates/base.html:174
-msgid "Beta version"
-msgstr "Wersja beta"
+#: templates/contact.html:14
+msgid "First name"
+msgstr "Imię"
 
-#: templates/base.html:177
-msgid "Expect changes and forgive us!"
-msgstr "Po publikacji stracisz reputy"
+#: templates/contact.html:18
+msgid "Email"
+msgstr "Email"
+
+#: templates/contact.html:22
+msgid "Message"
+msgstr "Wiadomość"
+
+#: templates/contact.html:29
+msgid "Send message"
+msgstr "Wyślij wiadomość"
+
+#: templates/contact.html:34
+msgid "Thank you for the message. We will reply as soon as we can."
+msgstr "Dzięki za wiadomość. Niebawem odpiszemy."
 
 #: templates/events/event_detail.html:73
 msgid "Resolve"
@@ -374,11 +427,11 @@ msgstr "Zakończone"
 msgid "Anteroom"
 msgstr "Poczekalnia"
 
-#: templates/events/events.html:25 templates/search/search.html:25
+#: templates/events/events.html:31 templates/search/search.html:25
 msgid "Type search phrase"
 msgstr "Wpisz wyszukiwaną frazę"
 
-#: templates/events/events.html:26 templates/search/search.html:26
+#: templates/events/events.html:32 templates/search/search.html:26
 msgid "Search"
 msgstr "Szukaj"
 
@@ -594,6 +647,20 @@ msgstr "Redakcja Politikonu sprawdzi Twoją propozycję ASAP. Dzięki! :)"
 #: templates/not_logged_in.html:4
 msgid "PLAY"
 msgstr "GRAJ"
+
+#, fuzzy
+#~| msgid "Your profile"
+#~ msgid "Your email"
+#~ msgstr "Twój profil"
+
+#~ msgid "average reputation"
+#~ msgstr "średnia reputacja"
+
+#~ msgid "Beta version"
+#~ msgstr "Wersja beta"
+
+#~ msgid "Expect changes and forgive us!"
+#~ msgstr "Po publikacji stracisz reputy"
 
 #~ msgid "Show more events"
 #~ msgstr "Wyświetl więcej zakładów"

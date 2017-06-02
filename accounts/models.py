@@ -480,6 +480,8 @@ class UserProfile(AbstractBaseUser):
             old_reputation = self.reputation_formula(
                 snapshots[0].portfolio_value, snapshots[0].total_cash
             )
+            if old_reputation == 0:
+                old_reputation = 100
             return (self.reputation - old_reputation)*100/old_reputation
         else:
             return self.reputation - 100

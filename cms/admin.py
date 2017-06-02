@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Page, ExtraContent
+from .models import Page, ExtraContent, GalleryImage
+
+from imagekit.admin import AdminThumbnail
 
 
 class PageAdmin(admin.ModelAdmin):
@@ -21,5 +23,18 @@ class ExtraContentAdmin(admin.ModelAdmin):
         'lang',
     ]
 
+
+class GalleryImageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'author', 'admin_thumbnail']
+    fields = ('name', 'image')
+    admin_thumbnail = AdminThumbnail(image_field='image')
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.author = request.user
+        obj.save()
+
+
 admin.site.register(Page, PageAdmin)
 admin.site.register(ExtraContent, ExtraContentAdmin)
+admin.site.register(GalleryImage, GalleryImageAdmin)

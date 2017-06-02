@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+
+{% block content %}
+    <section id="header" class="body-margin">
+        <h3 class="orangetxt">{% trans 'Contact' %}</h3>
+    </section>
+    <section id="contact">
+        <div id="contact-us">
+            <form id="contact-form" action="/api/contact/" method="post" class="settings-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group required">
+                    <label for="name">{% trans "First name" %}</label>
+                    <input name="name" class="jednalinia" type="text" required />
+                </div>
+                <div class="form-group required">
+                    <label for="email">{% trans "Email" %}</label>
+                    <input name="email" class="jednalinia" type="email" required />
+                </div>
+                <div class="form-group required">
+                    <label for="message">{% trans "Message" %}</label>
+                    <textarea name="message" class="jednalinia"></textarea>
+                </div>
+                <div class="form-group text-center">
+                    <button id="send-message-submit"
+                            class="big-button"
+                            type="submit"
+                            title="{% trans "Send message" %}">{% trans "Send message" %}</button>
+                </div>
+            </form>
+        </div>
+        <div id="contact-done" class="nodisplay">
+            <h1>{% trans "Thank you for the message. We will reply as soon as we can." %} :)</h1>
+        </div>
+
+    </section>
+
+    <div class="clr"></div>
+{% endblock %}

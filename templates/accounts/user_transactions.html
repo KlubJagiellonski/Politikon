@@ -1,22 +1,19 @@
 {% load format i18n %}
-
-<article id="historiatransakcji">
-    <div id="transactions-list">
-        {% for transaction in objects_list %}
-        <div class="history-event transactions-item">
-            <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
-            <div class="prawa">
-                <span class="history-action">{{ transaction.get_type_display|upper }}</span>
-                <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.price|formatted:"True" }}</span>
-                {# <span class="wallet-change {% if transaction.total_wallet >= 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total_wallet|formatted:"True" }}</span>#}
-                <span class="event-date">{{ transaction.date }}</span>
-            </div>
+<div id="transactions-list">
+    {% for transaction in objects_list %}
+    <div class="history-event transactions-item">
+        <span class="skroc lewa {# changeYES changeNO #}">{{ transaction.event.title }}</span>
+        <div class="prawa">
+            <span class="history-action">{{ transaction.get_type_display|upper }}</span>
+            <span class="reputy-change {% if transaction.price > 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.price|formatted:"True" }}</span>
+            {# <span class="wallet-change {% if transaction.total_wallet >= 0 %}changeYES{% else %}changeNO{% endif %}"><span class="reputy-small"></span>{{ transaction.total_wallet|formatted:"True" }}</span>#}
+            <span class="event-date">{{ transaction.date }}</span>
         </div>
-        {% endfor %}
     </div>
-    {% if page_obj.has_next %}
-    <a class="transactions-loadmore loadmore" href="{% url 'accounts:user_transactions' pk=user_pk %}?page={{ page_obj.next_page_number }}">
-        <div class="btn astable">{% trans "show more predictions" %}</div>
-    </a>
-    {% endif %}
-</article>
+    {% endfor %}
+</div>
+{% if page_obj.has_next %}
+<a class="transactions-loadmore loadmore" href="{% url 'accounts:user_transactions' pk=user_pk %}?page={{ page_obj.next_page_number }}">
+    <div class="btn astable">{% trans "show more predictions" %}</div>
+</a>
+{% endif %}
