@@ -25,9 +25,13 @@ class ExtraContentAdmin(admin.ModelAdmin):
 
 
 class GalleryImageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'author', 'admin_thumbnail']
+    list_display = ['name', 'author', 'admin_thumbnail', 'get_image_url']
     fields = ('name', 'image')
     admin_thumbnail = AdminThumbnail(image_field='image')
+
+    def get_image_url(self, obj):
+        return '<a href="{0}">{1}</a>'.format(obj.image.url, obj.image.url)
+    get_image_url.allow_tags = True
 
     def save_model(self, request, obj, form, change):
         if not change:
