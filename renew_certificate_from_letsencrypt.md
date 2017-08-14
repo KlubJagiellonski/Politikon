@@ -1,27 +1,11 @@
-git clone https://github.com/letsencrypt/letsencrypt
+Install Certbot (https://certbot.eff.org/#pip-other):
+curl https://dl.eff.org/certbot-auto >certbot-auto
+chmod a+x certbot-auto
 
-cd letsencrypt/
+./certbot-auto certonly -d www.politikon.org.pl -m koduj-z-kj@googlegroups.com --manual --debug --agree-tos --manual-public-ip-logging-ok --preferred-challenges dns
 
-disable SSL by putting:
-SSLIFY_DISABLE = True
-to productionsettings.py
+sudo cp /etc/letsencrypt/live/www.politikon.org.pl/fullchain.pem .
 
-commit and push to production
+sudo cp /etc/letsencrypt/live/www.politikon.org.pl/privkey.pem .
 
-./letsencrypt-auto certonly --manual
-
-put: www.politikon.org.pl
-
-modify politikon/urls.py & politikon/views.py according to instructions
-
-cp /etc/letsencrypt/www.politikon.org.pl/* .
-
-heroku certs:update fullchain.pem privkey.pem -a politikon
-
-remove the line
-SSLIFY_DISABLE = True
-from productionsettings.py
-
-commit and push to production
-
-done :)
+heroku certs:add fullchain.pem privkey.pem -a politikon --confirm politikon --type sni
