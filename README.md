@@ -81,8 +81,18 @@ See [syncing the fork](https://help.github.com/articles/syncing-a-fork/) for mor
 If you found out some other possibility faster than us - please contribute!
 
 * Build and run your docker container:
+```bash
+$ docker build -t politikon .
 ```
-$ ./docker_run.sh --build
+
+* Build other necessary containers and start them all:
+```bash
+$ docker-compose up -d
+```
+
+* Connect to docker:
+```bash
+$ docker-compose exec politikon bash
 ```
 
 Parameter force Docker container check (rebuild). It keeps your container up-to-date.
@@ -92,13 +102,6 @@ When propt appears you are in Docker instance (VM).
 ```
 root@asdf1234:/app#
 ```
-
-Tip no.1: if needed you could run many shells - just run `./docker_run.sh` in next shell
-
-Tip no.2: if you won't interactive and building - just run `./docker_run.sh --no-build`
-
-Tip no.2: if disk space matters to remove intermediate containers after a successful build add `--clean`
-to scripts `docker_run.sh` and `docker_rebuild.sh`.
 
 * When on VM you could install dependencies with pip manually:
 ```
@@ -119,7 +122,7 @@ export POSTGRES_PORT_5432_TCP_ADDR="politikon_db"
 * Connect as 'postgres' user to PostgreSQL instance and create db 'politikon':
 ```
 root@asdf1234:/app# psql -h ${POSTGRES_PORT_5432_TCP_ADDR} -U postgres
-postgres=# CREATE DATABASE politikon;
+postgres=# CREATE DATABASE politikon WITH ENCODING='UTF8';
 ```
 
 * Migrate the database:
