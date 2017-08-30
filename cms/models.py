@@ -17,7 +17,7 @@ class Page(models.Model):
         verbose_name=_('author'),
     )
     title = models.CharField(verbose_name=_('news title'), max_length=255)
-    slug = models.SlugField(verbose_name=_('slug url'), unique=True)
+    slug = models.SlugField(verbose_name=_('slug url'), unique=False)
     created_at = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name=_('edition date'), auto_now_add=True)
     content = models.TextField(verbose_name=_('content'))
