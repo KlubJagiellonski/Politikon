@@ -103,7 +103,11 @@ AWS_QUERYSTRING_AUTH = False
 
 ASSETS_AUTO_BUILD = False
 
-from urlparse import urlparse
+try:
+    import urlparse
+except ImportError:
+    from urllib.parse  import urlparse
+
 ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
 ELASTIC_KEY = os.environ.get('ELASTIC_KEY', 'elastic')
 ELASTIC_SECRET = os.environ.get('ELASTIC_SECRET', 'changeme')

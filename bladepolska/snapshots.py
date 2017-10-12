@@ -143,7 +143,7 @@ class SnapshotDescriptor(object):
             return create_snapshot_manager_with_pk(self.manager, self.pk_attribute, instance)
 
     def __set__(self, instance, value):
-        raise AttributeError, "Snapshot manager may not be edited in this manner."
+        raise AttributeError("Snapshot manager may not be edited in this manner.")
 
 
 def create_snapshot_model(cls, fields=[]):
