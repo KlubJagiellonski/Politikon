@@ -8,4 +8,4 @@ sudo cp /etc/letsencrypt/live/www.politikon.org.pl/fullchain.pem .
 
 sudo cp /etc/letsencrypt/live/www.politikon.org.pl/privkey.pem .
 
-heroku certs:add fullchain.pem privkey.pem -a politikon --confirm politikon --type sni
+heroku certs:update fullchain.pem privkey.pem -a politikon --confirm politikon
