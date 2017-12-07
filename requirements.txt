@@ -18,7 +18,7 @@ coveralls
 flake8
 
 djangorestframework
-djoser
+djoser==0.6.0
 newrelic
 
 # Admin skin

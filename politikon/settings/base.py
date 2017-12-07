@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import urlparse
+try:
+    import urlparse
+except ImportError:
+    import urllib.parse as urlparse
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -9,6 +12,7 @@ from celery.schedules import crontab
 from constance import config
 from datetime import timedelta
 from path import path
+
 
 
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname().dirname()
