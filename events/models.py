@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import sys
 
 from dateutil.relativedelta import relativedelta
 from math import exp
@@ -638,6 +639,9 @@ class Bet(models.Model):
 
     def __unicode__(self):
         return u'zakłady %s na %s' % (self.user, self.event)
+
+    if sys.version_info.major == 3:
+        __str__ = __unicode__
 
     def current_event_price(self):
         """

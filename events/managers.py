@@ -197,8 +197,8 @@ class BetManager(models.Manager):
             price=current_tx_price * -1
         )
 
-        event_total_bought_price = (bet.bought_avg_price * bet.bought)
-        after_bought_quantity = bet.bought + quantity
+        event_total_bought_price = (bet.bought_avg_price * bet.has)
+        after_bought_quantity = bet.has + quantity
 
         bet.bought_avg_price = (event_total_bought_price + bought_for_total) / after_bought_quantity
         bet.has += quantity
@@ -278,9 +278,15 @@ class BetManager(models.Manager):
         after_sold_quantity = bet.sold + quantity
 
         bet.sold_avg_price = (event_total_sold_price + sold_for_total) / after_sold_quantity
+        # update bought average price after selling a bet
+        event_total_bought_price = (bet.bought_avg_price * bet.has)
         bet.has -= quantity
+        try:
+            bet.bought_avg_price = (event_total_bought_price - sold_for_total) / bet.has
+        except ZeroDivisionError:
+            bet.bought_avg_price = 0
         bet.sold += quantity
-        bet.save(update_fields=['sold_avg_price', 'has', 'sold'])
+        bet.save(update_fields=['sold_avg_price', 'has', 'sold', 'bought_avg_price'])
 
         user.total_cash += sold_for_total
         user.portfolio_value -= sold_for_total
