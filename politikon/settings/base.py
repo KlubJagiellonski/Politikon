@@ -427,7 +427,8 @@ ELASTIC_KEY = os.environ.get('ELASTIC_KEY', 'elastic')
 ELASTIC_SECRET = os.environ.get('ELASTIC_SECRET', 'changeme')
 
 # HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
-HAYSTACK_SIGNAL_PROCESSOR = 'celery_haystack.signals.CelerySignalProcessor'
+# HAYSTACK_SIGNAL_PROCESSOR = 'celery_haystack.signals.CelerySignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'events.signalprocessors.EventSignalProcessor'
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
 HAYSTACK_CONNECTIONS = {
     'default': {
