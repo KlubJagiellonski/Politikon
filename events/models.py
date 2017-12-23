@@ -40,6 +40,9 @@ class EventCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+    if sys.version_info.major == 3:
+        __str__ = __unicode__
+
 
 class Event(EsIndexable, models.Model):
     """
@@ -176,6 +179,9 @@ class Event(EsIndexable, models.Model):
 
     def __unicode__(self):
         return self.title
+
+    if sys.version_info.major == 3:
+        __str__ = __unicode__
 
     def save(self, *args, **kwargs):
         """
@@ -496,8 +502,8 @@ class Event(EsIndexable, models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
-            # TODO: tutaj wallet change
-            # bet.user.portfolio_value -= bet.has
+            # update portfolio value
+            bet.user.portfolio_value -= bet.get_invested()
             bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
@@ -781,6 +787,9 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return u'%s przez %s' % (self.get_type_display(), self.user)
+
+    if sys.version_info.major == 3:
+        __str__ = __unicode__
 
     @property
     def total_cash(self):
