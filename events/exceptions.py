@@ -6,6 +6,10 @@ class DraftEvent(Exception):
     pass
 
 
+class EventWaitingToBeResolved(Exception):
+    pass
+
+
 class PriceMismatch(Exception):
     def __init__(self, message, updated_event):
         super(PriceMismatch, self).__init__(message)
