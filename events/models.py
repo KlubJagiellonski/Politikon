@@ -14,6 +14,7 @@ from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.encoding import python_2_unicode_compatible 
 
 from .exceptions import UnknownOutcome, EventNotInProgress
 from .managers import EventManager, BetManager, TransactionManager
@@ -37,11 +38,9 @@ class EventCategory(models.Model):
         verbose_name = u'kategoria'
         verbose_name_plural = u'kategorie'
 
-    def __unicode__(self):
+    @python_2_unicode_compatible
+    def __str__(self):
         return self.name
-
-    if sys.version_info.major == 3:
-        __str__ = __unicode__
 
 
 class Event(EsIndexable, models.Model):
