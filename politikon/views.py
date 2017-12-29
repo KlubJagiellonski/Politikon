@@ -31,6 +31,7 @@ class HomeView(TemplateView):
 
         if home_events:
             front_event = home_events[0]
+            print(front_event)
             if front_event:
                 context.update({
                     'front_event': front_event.object,
