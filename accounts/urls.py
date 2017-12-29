@@ -11,7 +11,6 @@ urlpatterns = patterns('',
     url(r'^logout/$', logout, {'next_page': reverse_lazy('home')}, name='logout'),
     url(r'^create/$', UserProfileCreateView.as_view(), name='create'),
     url(r'^rank/$', UsersListView.as_view(), name='rank'),
-    url(r'^groups/(?P<pk>[0-9]+)(/)*$', UsersGroupListView.as_view(), name='groups'),
     url(r'^(?P<pk>[0-9]+)/$', UserDetailView.as_view(), name='user'),  # '/accounts/<pk>/'
     url(r'^(?P<pk>[0-9]+)/zawartoscportfela/$', PortfolioListView.as_view(), name='user_portfolio'),
     url(r'^(?P<pk>[0-9]+)/powiadomieniaowynikach/$', NotificationsListView.as_view(), name='user_notifications'),
