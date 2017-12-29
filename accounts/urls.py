@@ -2,9 +2,18 @@ from django.conf.urls import patterns, url
 from django.contrib.auth.views import logout
 from django.core.urlresolvers import reverse_lazy
 
-from .views import UsersListView, UserDetailView, UserUpdateView, UserProfileDetailView, PortfolioListView, \
-    NotificationsListView, TransactionsListView, UserProfileCreateView, login
-
+from .views import (
+    NotificationsListView,
+    PortfolioListView,
+    TransactionsListView,
+    UserDetailView,
+    UserProfileCreateView,
+    UserProfileDetailView,
+    UsersGroupListView,
+    UsersListView,
+    UserUpdateView,
+    login,
+)
 
 urlpatterns = patterns('',
     url(r'^login/$', login, name='login'),
