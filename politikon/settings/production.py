@@ -112,7 +112,7 @@ ES_URL = urlparse(os.environ.get('BONSAI_URL') or 'http://127.0.0.1:9200/')
 ELASTIC_KEY = os.environ.get('ELASTIC_KEY', 'elastic')
 ELASTIC_SECRET = os.environ.get('ELASTIC_SECRET', 'changeme')
 
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'events.signalprocessors.EventSignalProcessor'
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 12
 HAYSTACK_CONNECTIONS = {
     'default': {
