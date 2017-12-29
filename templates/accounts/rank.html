@@ -55,7 +55,7 @@
 
         <article class="active" id="druzyna">
             {% for team in team_leaders %}
-            <a href="../groups/{{ team.id }}">{% team_rank team "dryzyna" team.avg_weekly_result forloop.counter %}</a>
+            {% team_rank team "dryzyna" team.avg_weekly_result forloop.counter %}
             {% endfor %}
         </article>
     </div>

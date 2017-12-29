@@ -164,8 +164,3 @@ class UserProfileManager(BaseUserManager):
             'month_rank': month_rank,
             'overall_rank': overall_rank
         }
-
-    def get_user_by_group(self, pk):
-        return self.get_users().\
-            filter(team_id=pk).\
-            order_by('id')

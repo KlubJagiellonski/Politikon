@@ -263,30 +263,6 @@ class UsersListView(ListView):
         })
         return context
 
-class UsersGroupListView(ListView):
-    """
-    Users list in rank
-    """
-    template_name = 'accounts/groups.html'
-
-    def get_queryset(self):
-        """
-        Users list
-        :return:
-        :rtype: QuerySet
-        """
-        return UserProfile.objects.get_best_overall()
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(UsersGroupListView, self).get_context_data(*args, **kwargs)
-
-        context.update({
-            'group': Team.objects.all().filter(id=self.kwargs['pk'])
-        })
-        context.update({
-            'group_users': UserProfile.objects.get_user_by_group(self.kwargs['pk'])
-        })
-        return context
 
 class UserProfileCreateView(CreateView):
     """
@@ -298,10 +274,10 @@ class UserProfileCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         """
 
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
+        :param request: 
+        :param args: 
+        :param kwargs: 
+        :return: 
         """
         return super(UserProfileCreateView, self).post(request, *args, **kwargs)
 
@@ -317,10 +293,10 @@ class UserProfileCreateView(CreateView):
 
     def render_to_response(self, context, **response_kwargs):
         """
-
-        :param context:
-        :param response_kwargs:
-        :return:
+        
+        :param context: 
+        :param response_kwargs: 
+        :return: 
         """
         response = {}
         if hasattr(context['form'], 'errors'):
