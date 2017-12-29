@@ -11,7 +11,7 @@ from django.http import HttpResponseForbidden
 from django.test import TestCase
 
 from .factories import UserFactory, UserWithAvatarFactory, AdminFactory
-from .models import UserProfile, get_user_avatar_path
+from .models import UserProfile, get_user_avatar_path, TeamAccessKey, Team
 from .tasks import topup_accounts_task, update_portfolio_value, create_accounts_snapshot, \
     update_users_classification
 from .templatetags.user import user_home, user_rank
@@ -563,3 +563,28 @@ class UserUtilsTestCase(TestCase):
         UserFactory(username='zazolcgeslajazn')
         username2 = process_username(u"zażółćgęśląjaźń")
         self.assertNotEqual('zazolcgeslajazn', username2)
+
+
+class TeamAccessTokenModelTestCase(TestCase):
+    def test_distinction_of_tokens(self):
+        team = Team.objects.create(name='TestTeam')
+        key1 = TeamAccessKey.objects.create(team=team)
+        key2 = TeamAccessKey.objects.create(team=team)
+        self.assertEqual(TeamAccessKey.objects.count(), 2)
+        self.assertNotEqual(key1.value, key2.value)
+        self.assertIsNotNone(key1.team)
+        self.assertIsNotNone(key2.team)
+        self.assertIs(key1.team, team)
+        self.assertIs(key2.team, team)
+
+        key3 = TeamAccessKey(team=team)
+        key4 = TeamAccessKey(team=team)
+        key3.save()
+        key4.save()
+        self.assertEqual(TeamAccessKey.objects.count(), 4)
+        self.assertNotEqual(key3.value, key4.value)
+        self.assertIsNotNone(key3.team)
+        self.assertIsNotNone(key4.team)
+        self.assertIs(key3.team, team)
+        self.assertIs(key4.team, team)
+
