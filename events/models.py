@@ -248,7 +248,7 @@ class Event(EsIndexable, models.Model):
         """
         Return True if event is waiting to be resolved.
         """
-        return datetime.now(pytz.timezone(settings.TIME_ZONE)) >= self.finish_date
+        return timezone.now() >= self.finish_date
 
     def price_for_outcome(self, outcome, direction=True):
         if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:
