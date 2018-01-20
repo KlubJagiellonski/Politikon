@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import UserCreationForm, UserChangeForm
-from .models import Team, UserProfile
+from .models import Team, UserProfile, TeamAccessKey
 
 from constance import config
 
@@ -80,3 +80,4 @@ class MyUserAdmin(UserAdmin):
 
 admin.site.register(Team, TeamAdmin)
 admin.site.register(UserProfile, MyUserAdmin)
+admin.site.register(TeamAccessKey)
