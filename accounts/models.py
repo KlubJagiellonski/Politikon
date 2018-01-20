@@ -64,6 +64,9 @@ class Team(models.Model):
     def __unicode__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
     def get_avatar_url(self):
         """
         Get this user avatar url

@@ -151,6 +151,7 @@ footer ul a, footer .socialmedia div,
 #maintop nav ul li:hover {color: #ea6a2a;}
 #maintop nav ul li.active {color: #ea6a2a;}
 #maintop nav ul li a {color: inherit;}
+.anp_banner {clear:both; text-align:center; background-color:#e0e0e0; text-transform: uppercase; color: #111; padding:1%}
 
 ul.language-bar li {
     float: right !important;

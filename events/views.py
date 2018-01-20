@@ -16,7 +16,7 @@ from django.views.generic import DetailView
 
 from .exceptions import (
     NonexistantEvent, DraftEvent, PriceMismatch, EventNotInProgress,
-    UnknownOutcome, InsufficientBets, InsufficientCash
+    UnknownOutcome, InsufficientBets, InsufficientCash, EventWaitingToBeResolved
 )
 from .models import Event, Bet, SolutionVote, EventCategory
 from accounts.models import UserProfile
@@ -185,9 +185,9 @@ def create_transaction(request, event_id):
             user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
     except NonexistantEvent:
         raise Http404
-    except DraftEvent as e:
+    except (DraftEvent, EventWaitingToBeResolved) as e:
         result = {
-            'error': unicode(e.message.decode('utf-8')),
+            'error': str(e),
         }
         return JSONResponseBadRequest(json.dumps(result))
     except PriceMismatch as e:

@@ -117,6 +117,11 @@
     {% else %}
         {% include 'logged_in.html' %}
     {% endif %}
+    {% if user.team_id %}
+        <div class='anp_banner'>
+            <a href="/{{ LANGUAGE_CODE }}/pages/anp"> {% trans "Akademia Nowoczesnego Patriotyzmu - Dowiedz się więcej "%} </a>
+        </div>
+    {% endif %}
 
     </section>
 
@@ -152,8 +157,8 @@
         </div>
         <div class="prawa">
             <div class="socialmedia prawa">
-                <a href="https://twitter.com/PolitikonOrgPl"><div class="tt lewa"></div></a>
-                <a href="https://www.facebook.com/politikon.stawiamy.na.polityke/"><div class="fb lewa"></div></a>
+                <a href="https://twitter.com/Politikon_KJ"><div class="tt lewa"></div></a>
+                <a href="https://www.facebook.com/politikon.game/"><div class="fb lewa"></div></a>
                 {#<a href="http://plus.google.com/"><div class="gp lewa"></div></a>#}
             </div>
             <nav class="languages">
@@ -161,25 +166,6 @@
             </nav>
         </div>
     </footer>
-    <div id="beta-emblem" style="
-        position: fixed;
-        top: 36px;
-        left: -145px;
-        background: white;
-        padding: 1em 0.5em;
-        z-index: 8001;
-        min-width: 400px;
-        text-align: center;
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
-        -moz-transfrom: rotate(-45deg);
-        font-size: 98%;
-    "><span style="
-        display: block;
-        font-size: 80%;
-    "><a href="/{{ LANGUAGE_CODE }}/pages/anp">{% trans "Akademia <br />Nowoczesnego Patriotyzmu" %}</a></span>
-    </div>
-
 </div>
 
 <!-- ChartJS scripts -->
