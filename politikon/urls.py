@@ -13,6 +13,7 @@ admin.autodiscover()
 
 api_urls = [
     url(r'contact/', ContactAPIView.as_view(), name='api-contact'),
+    # Responsible for betting
     url(r'events/', include(event_api, namespace='api-events')),
     url(r'^auth/', include('djoser.urls.authtoken'))
 ]

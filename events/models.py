@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
+import pytz
 import sys
 
 from dateutil.relativedelta import relativedelta
+from datetime import datetime
 from math import exp
 from unidecode import unidecode
 
@@ -246,6 +248,13 @@ class Event(EsIndexable, models.Model):
             return self.estimated_end_date
         else:
             return self.end_date
+
+    @property
+    def to_be_resolved(self):
+        """
+        Return True if event is waiting to be resolved.
+        """
+        return timezone.now() >= self.finish_date
 
     def price_for_outcome(self, outcome, direction=True):
         if (direction, outcome) not in Bet.BET_OUTCOMES_TO_PRICE_ATTR:

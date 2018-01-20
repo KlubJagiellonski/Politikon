@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from .exceptions import (
     NonexistantEvent, DraftEvent, PriceMismatch, EventNotInProgress,
-    UnknownOutcome, InsufficientCash, InsufficientBets
+    UnknownOutcome, InsufficientCash, InsufficientBets, EventWaitingToBeResolved
 )
 # from vendor.Pubnub import Pubnub as PubNub
 
@@ -172,6 +172,9 @@ class BetManager(models.Manager):
 
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, bet_outcome)
 
+        if event.to_be_resolved:
+            raise EventWaitingToBeResolved(_('Event waiting to be resolved'))
+
         if not event.is_published:
             raise DraftEvent(_("Event is currently a draft."))
 
@@ -248,6 +251,9 @@ class BetManager(models.Manager):
         from events.models import Transaction, Bet
 
         user, event, bet = self.get_user_event_and_bet_for_update(user, event_id, bet_outcome)
+
+        if event.to_be_resolved:
+            raise EventWaitingToBeResolved(_('Event waiting to be resolved'))
 
         if not event.is_published:
             raise DraftEvent(_("Event is currently a draft."))
