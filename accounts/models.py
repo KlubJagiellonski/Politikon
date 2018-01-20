@@ -12,12 +12,14 @@ from django.db import models
 from django.db.models import F, Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
+from django.utils.encoding import python_2_unicode_compatible
 
 from bladepolska.snapshots import SnapshotAddon
 from constance import config
 from politikon.templatetags.format import formatted
 
 from .managers import UserProfileManager
+from .utils import generate_random_string
 
 from events.models import Bet, Event, Transaction
 
@@ -147,7 +149,7 @@ class UserProfile(AbstractBaseUser):
         return "%s" % self.username
 
     def __str__(self):
-        return self.name
+        return self.username
 
     def save(self, **kwargs):
         """
@@ -507,3 +509,21 @@ class UserProfile(AbstractBaseUser):
         :rtype: int
         """
         return self.get_reputation_change(now()-relativedelta(months=1))
+
+
+class TeamAccessKey(models.Model):
+    """
+    AccessKey to easily add user(s) to teams
+    """
+    team = models.ForeignKey(Team, verbose_name=_(u'team'), null=False)
+    value = models.CharField(default=generate_random_string,
+            max_length=60, null=False)
+
+    class Meta:
+        verbose_name = _('team access key')
+        verbose_name_plural = _('team access keys')
+
+    @python_2_unicode_compatible
+    def __str__(self):
+        return '{}:{}'.format(self.team.name, self.value)
+

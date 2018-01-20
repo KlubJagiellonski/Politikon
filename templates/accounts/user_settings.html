@@ -50,6 +50,7 @@
     <ul class="tabs lewa">
         <li class="active"><a href="#profil">{% trans "Your profile" %}</a></li>
         <li><a href="#haslo">E-mail</a></li>
+        <li><a href="#group">{% trans "Group" %}</a></li>
     </ul>
     <div class="clr"></div>
     <div class="zakladki-content">
@@ -93,6 +94,24 @@
                 </div>
                 {% endcomment %}
             </form>
+        </article>
+
+        <article id="group">
+            {% if user.team %}
+                <div class="lewa">
+                    <a href={% url 'accounts:groups' user.team.pk %}>
+                        {{ user.team.name }}
+                    </a>
+                </div>
+            {% else %}
+                <form action="{% url 'accounts:user_settings' %}" method="post" class="settings-form" id="group">
+                    {% csrf_token %}
+                    <div class="lewa">
+                        <span>{% trans "Enter group access key" %}:</span>
+                        <input name="value" type="text" class="jednalinia" required>
+                    </div>
+                </form>
+            {% endif %}
         </article>
     </div>
 </section>

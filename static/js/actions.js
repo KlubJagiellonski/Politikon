@@ -299,6 +299,9 @@
             } else if ($('.active').find('a').attr('href') == '#haslo') {
                 action = 'email';
                 form = '#haslo form';
+            } else if ($('.active').find('a').attr('href') == '#group') {
+                action = 'group';
+                form = '#group form';
             }
             $('form#avatar').find('.hidden').appendTo(form);
             $('<input />').attr('type', 'hidden')

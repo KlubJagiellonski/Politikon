@@ -123,3 +123,7 @@ class UserProfileEmailForm(forms.ModelForm):
             self._errors['checkemail'] = 'Email addresses do not match.'
             # raise ValidationError('Email addresses do not match.')
         return self.cleaned_data
+
+
+class TeamAccessKeyForm(forms.Form):
+    value = forms.CharField(label='Klucz Grupy', max_length=60)

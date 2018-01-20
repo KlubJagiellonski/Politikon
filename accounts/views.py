@@ -11,9 +11,9 @@ from django.utils.translation import ugettext as _
 
 from .forms import (
     UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm,
-    UserSelfRegisterForm
+    UserSelfRegisterForm, TeamAccessKeyForm
 )
-from .models import UserProfile, Team
+from .models import UserProfile, Team, TeamAccessKey
 
 from events.models import Bet, Transaction
 from politikon.decorators import class_view_decorator
@@ -44,7 +44,8 @@ class UserUpdateView(MultiFormsView):
     form_classes = {
         'main': UserProfileForm,
         'email': UserProfileEmailForm,
-        'avatar': UserProfileAvatarForm
+        'avatar': UserProfileAvatarForm,
+        'group': TeamAccessKeyForm
     }
     model = UserProfile
     success_url = reverse_lazy('accounts:user_settings')
@@ -69,6 +70,19 @@ class UserUpdateView(MultiFormsView):
             user.avatar = self.request.FILES.get('avatar')
         user.save()
         return redirect(self.success_url)
+
+    def group_form_valid(self, form):
+        key_value = form.data.get('value')
+        try:
+            access_key = TeamAccessKey.objects.get(value=key_value)
+            user = self.get_object()
+            user.team = access_key.team
+            user.save()
+        except TeamAccessKey.DoesNotExist:
+            pass
+        return redirect(self.success_url)
+
+
 
 
 @class_view_decorator(login_required)
