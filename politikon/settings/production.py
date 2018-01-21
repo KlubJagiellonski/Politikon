@@ -83,7 +83,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD', '')
 EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT', 587)
 EMAIL_USE_TLS = True
 DEFAULT_EMAIL_FROM = 'Politikon <' + EMAIL_HOST_USER + '>'
-EMAIL_DEFAULT_RECIPIENT = 'politikon.org.pl@gmail.com'
+EMAIL_DEFAULT_RECIPIENT = 'politikon.kj@gmail.com'
 
 SERVE_STATIC_FILES = True
 
