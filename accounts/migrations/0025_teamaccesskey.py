@@ -8,15 +8,15 @@ import accounts.utils
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0025_auto_20171215_2210'),
+        ('accounts', '0024_auto_20170531_0031'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='TeamAccessKey',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('value', models.CharField(max_length=60, default=accounts.utils.generate_random_string)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('value', models.CharField(default=accounts.utils.generate_random_string, max_length=60)),
                 ('team', models.ForeignKey(verbose_name='team', to='accounts.Team')),
             ],
             options={
