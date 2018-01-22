@@ -39,7 +39,7 @@
             {% trans "You predict" %} {% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}
         </p>
         <p>
-            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
+            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span title="Wartość zaokrąglona">{{ bet.avgPrice|formatted }}</span>
         </p>
     </div>
 {% else %}
@@ -71,7 +71,7 @@
             {% endif %}
         </p>
         <p {% if bet.has == 0 %}hidden{% endif %}>
-            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price">{{ bet.avgPrice|formatted }}</span>
+            <span class="has_bets">{{ bet.has }}</span> x <span class="reputy-small"></span> <span class="bought_avg_price" title="Wartość zaokrąglona">{{ bet.avgPrice|formatted }}</span>
         </p>
     </div>
 {% endif %}
