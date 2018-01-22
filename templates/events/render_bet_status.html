@@ -1,6 +1,6 @@
 {% load format i18n %}
 <div class="status">
     <h3 class="skroc">{{ bet.event }}</h3>
-    <p><span class="betdetails">{% trans "Bet" %}:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span> {{ bet.bought_avg_price|formatted }}</p>
+    <p title="Wartość zaokrąglona"><span class="betdetails">{% trans "Bet" %}:</span> <span class="{% if bet.outcome %}changeYES{% else %}changeNO{% endif %}">{% if bet.outcome %}{% trans "YES" %}{% else %}{% trans "NO" %}{% endif %}</span> {{ bet.has }} x <span class="reputy-small"></span>{{ bet.bought_avg_price|formatted }}</p>
     <p><span class="betdetails">{% trans "Result" %}:</span> <span class="{% if bet.is_finished_yes %}changeYES{% elif bet.is_finished_no %}changeNO{% endif %}">{% if bet.is_cancelled %}{% trans "CANCELLED" %}{% elif bet.is_finished_yes %}{% trans "YES" %}{% elif bet.is_finished_no %}{% trans "NO" %}{% endif %}</span></p>
 </div>
