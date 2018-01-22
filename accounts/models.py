@@ -21,7 +21,7 @@ from politikon.templatetags.format import formatted
 from .managers import UserProfileManager
 from .utils import generate_random_string
 
-from events.models import Bet, Event, Transaction
+from events.models import Bet, Event, TeamResult, Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -55,6 +55,15 @@ class Team(models.Model):
     avg_monthly_result = models.DecimalField(
         _(u'monthly result'), decimal_places=2, max_digits=7, null=True, blank=True
     )
+
+    def get_last_result(self):
+        return self.results.order_by('-created').first()
+
+    def get_elo(self):
+        last_result = self.get_last_result()
+        if last_result:
+            return last_result.elo
+        return 1400
 
     class Meta:
         verbose_name = _('team')
@@ -511,6 +520,7 @@ class UserProfile(AbstractBaseUser):
         return self.get_reputation_change(now()-relativedelta(months=1))
 
 
+@python_2_unicode_compatible
 class TeamAccessKey(models.Model):
     """
     AccessKey to easily add user(s) to teams
@@ -523,7 +533,5 @@ class TeamAccessKey(models.Model):
         verbose_name = _('team access key')
         verbose_name_plural = _('team access keys')
 
-    @python_2_unicode_compatible
     def __str__(self):
         return '{}:{}'.format(self.team.name, self.value)
-

@@ -121,6 +121,9 @@ class BetManager(models.Manager):
     def get_user_bets_for_events(self, user, events):
         return self.filter(user__id=user.id, event__in=events)
 
+    def get_team_bets_for_events(self, team, events):
+        return self.filter(user__team=team, event__in=events)
+
     def get_user_event_and_bet_for_update(self, user, event_id, bet_outcome):
         """
         Return user event and bet info

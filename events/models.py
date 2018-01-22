@@ -4,6 +4,7 @@ import logging
 import pytz
 import sys
 
+from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from math import exp
@@ -18,6 +19,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.encoding import python_2_unicode_compatible 
 
+from .elo import EloMatch
 from .exceptions import UnknownOutcome, EventNotInProgress
 from .managers import EventManager, BetManager, TransactionManager
 
@@ -32,6 +34,7 @@ from taggit_autosuggest.managers import TaggableManager
 logger = logging.getLogger(__name__)
 
 
+@python_2_unicode_compatible
 class EventCategory(models.Model):
     name = models.CharField(u'tytuł wydarzenia', max_length=255, unique=True)
     slug = models.SlugField(verbose_name=_('Slug url'), unique=True)
@@ -40,7 +43,6 @@ class EventCategory(models.Model):
         verbose_name = u'kategoria'
         verbose_name_plural = u'kategorie'
 
-    @python_2_unicode_compatible
     def __str__(self):
         return self.name
 
@@ -492,6 +494,56 @@ class Event(EsIndexable, models.Model):
         self.save()
 
     @transaction.atomic
+    def __finish_teams_outcome(self, teams_with_bets):
+        team_results = []
+        for team in teams_with_bets:
+            bets = teams_with_bets[team]
+            team_results.append(TeamResult(
+                team=team,
+                event=self,
+                initial_elo=team.get_elo(),
+                rewarded_total=sum(bet.rewarded_total for bet in bets),
+                prev_result=team.get_last_result(),
+                bets_count=len(bets),
+            ))
+
+        elo_match = EloMatch()
+        team_results = sorted(
+            team_results,
+            key=lambda x: (x.rewarded_total, x.bets_count),
+            reverse=True
+        )
+        prev_result = None
+        for result in team_results:
+            place = team_results.index(result) + 1
+
+            # Set draws
+            if (
+                prev_result
+                and (prev_result.rewarded_total, prev_result.bets_count) ==
+                (result.rewarded_total, result.bets_count)
+            ):
+                place = next(
+                    player.place for player in elo_match.players
+                    if player.idx == prev_result.team.id
+                )
+
+            elo_match.add_player(
+                idx=result.team.id,
+                place=place,
+                elo=result.initial_elo,
+            )
+            prev_result = result
+
+        elo_match.calculate_elos()
+
+        for team_result in team_results:
+            team_result.elo = elo_match.get_elo(team_result.team.id)
+            team_result.save()
+
+        return team_results
+
+    @transaction.atomic
     def __finish_with_outcome(self, outcome):
         """
         main finish status
@@ -499,6 +551,7 @@ class Event(EsIndexable, models.Model):
         :type outcome: Choices
         """
         self.__finish(outcome)
+        teams_with_bets = defaultdict(list)
         for bet in Bet.objects.filter(event=self):
             if bet.outcome == self.BOOLEAN_OUTCOME_DICT[outcome]:
                 bet.rewarded_total = self.PRIZE_FOR_WINNING * bet.has
@@ -510,12 +563,23 @@ class Event(EsIndexable, models.Model):
                     quantity=bet.has,
                     price=self.PRIZE_FOR_WINNING
                 )
+
+            if bet.user.team:
+                teams_with_bets[bet.user.team].append(bet)
             # update portfolio value
             bet.user.portfolio_value -= bet.get_invested()
             bet.user.save()
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
             bet.save()
+        if teams_with_bets:
+            team_results = self.__finish_teams_outcome(teams_with_bets)
+            for team_result in team_results:
+                (
+                    Bet.objects
+                    .get_team_bets_for_events(team_result.team, [self])
+                    .update(team_result=team_result)
+                )
 
     @transaction.atomic
     def finish_yes(self):
@@ -565,6 +629,34 @@ class Event(EsIndexable, models.Model):
                 price=refund
             )
 
+
+class TeamResult(models.Model):
+    """
+    Result of team after event is resolved
+    """
+
+    team = models.ForeignKey(
+        'accounts.Team', related_name='results', related_query_name='result'
+    )
+    prev_result = models.OneToOneField(
+        'self', on_delete=models.PROTECT, null=True
+    )
+    elo = models.IntegerField(u'ranking', null=True, blank=True)
+    initial_elo = models.IntegerField(u'początkowy ranking', default=1400)
+    rewarded_total = models.IntegerField(
+        u'nagroda za wynik', default=0, null=False
+    )
+    event = models.ForeignKey(
+        Event, related_query_name='team_result', related_name='team_results'
+    )
+    bets_count = models.PositiveIntegerField(u'liczba zakładów')
+    created = models.DateTimeField(
+        auto_now_add=True, verbose_name=u'utworzono'
+    )
+
+    class Meta:
+        verbose_name = 'rezultat drużyny'
+        verbose_name_plural = 'rezultaty drużyn'
 
 class SolutionVote(models.Model):
     """
@@ -628,6 +720,9 @@ class Bet(models.Model):
     rewarded_total = models.IntegerField(u'nagroda za wynik', default=0, null=False)
     # this is used to show event in my wallet.
     is_new_resolved = models.BooleanField(u'ostatnio rozstrzygnięte', default=False, null=False)
+    team_result = models.ForeignKey(
+        TeamResult, null=True, related_name='bets', related_query_name='bet'
+    )
 
     objects = BetManager()
 
