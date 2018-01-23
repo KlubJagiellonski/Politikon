@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
-from django.db.models import F, Q, Sum
+from django.db.models import Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.utils.encoding import python_2_unicode_compatible
@@ -21,7 +21,7 @@ from politikon.templatetags.format import formatted
 from .managers import UserProfileManager
 from .utils import generate_random_string
 
-from events.models import Bet, Event, TeamResult, Transaction
+from events.models import Bet, Event, Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,7 @@ def get_team_avatar_path(instance, filename):
     return os.path.join('avatars', str(instance.name)+'.'+ext)
 
 
+@python_2_unicode_compatible
 class Team(models.Model):
     name = models.CharField(_(u'name'), max_length=128, unique=True)
     avatar = models.ImageField(upload_to=get_team_avatar_path, blank=True, null=True)
@@ -70,9 +71,6 @@ class Team(models.Model):
         verbose_name_plural = _('teams')
         ordering = ['avg_reputation']
 
-    def __unicode__(self):
-        return self.name
-
     def __str__(self):
         return self.name
 
@@ -89,6 +87,7 @@ class Team(models.Model):
             return settings.STATIC_URL + "img/blank-avatar.jpg"
 
 
+@python_2_unicode_compatible
 class UserProfile(AbstractBaseUser):
     class Meta:
         verbose_name = _('user')
@@ -153,9 +152,6 @@ class UserProfile(AbstractBaseUser):
     REQUIRED_FIELDS = ['email']
     FACEBOOK_URL = 'https://www.facebook.com/{0}'
     TWITTER_URL = 'https://twitter.com/{0}'
-
-    def __unicode__(self):
-        return "%s" % self.username
 
     def __str__(self):
         return self.username
@@ -534,4 +530,4 @@ class TeamAccessKey(models.Model):
         verbose_name_plural = _('team access keys')
 
     def __str__(self):
-        return '{}:{}'.format(self.team.name, self.value)
+        return u'{}:{}'.format(self.team.name, self.value)
