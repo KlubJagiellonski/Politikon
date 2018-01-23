@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import logging
-import pytz
-import sys
-
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
 from math import exp
 from unidecode import unidecode
 
@@ -17,7 +13,7 @@ from django.db import models, transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from django.utils.encoding import python_2_unicode_compatible 
+from django.utils.encoding import python_2_unicode_compatible
 
 from .elo import EloMatch
 from .exceptions import UnknownOutcome, EventNotInProgress
@@ -47,6 +43,7 @@ class EventCategory(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class Event(EsIndexable, models.Model):
     """
     Event model represents exactly real question which you can answer YES or NO.
@@ -180,11 +177,8 @@ class Event(EsIndexable, models.Model):
         verbose_name = 'wydarzenie'
         verbose_name_plural = 'wydarzenia'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
-
-    if sys.version_info.major == 3:
-        __str__ = __unicode__
 
     def save(self, *args, **kwargs):
         """
@@ -655,8 +649,9 @@ class TeamResult(models.Model):
     )
 
     class Meta:
-        verbose_name = 'rezultat drużyny'
-        verbose_name_plural = 'rezultaty drużyn'
+        verbose_name = u'rezultat drużyny'
+        verbose_name_plural = u'rezultaty drużyn'
+
 
 class SolutionVote(models.Model):
     """
@@ -676,13 +671,14 @@ class SolutionVote(models.Model):
     outcome = models.IntegerField(u'rozwiązanie wydarzenia', choices=VOTE_OUTCOME_CHOICES, null=True)
 
 
+@python_2_unicode_compatible
 class Bet(models.Model):
     """
     Created when user choose YES or NO for event.
     """
     class Meta:
-        verbose_name = 'zakład'
-        verbose_name_plural = 'zakłady'
+        verbose_name = u'zakład'
+        verbose_name_plural = u'zakłady'
 
     YES = True
     NO = False
@@ -746,11 +742,8 @@ class Bet(models.Model):
             'rewarded_total': self.rewarded_total,
         }
 
-    def __unicode__(self):
+    def __str__(self):
         return u'zakłady %s na %s' % (self.user, self.event)
-
-    if sys.version_info.major == 3:
-        __str__ = __unicode__
 
     def current_event_price(self):
         """
@@ -837,6 +830,7 @@ class Bet(models.Model):
         return self.event.outcome == Event.CANCELLED
 
 
+@python_2_unicode_compatible
 class Transaction(models.Model):
     """
     Operation buy or sell or other for user and event
@@ -888,11 +882,8 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    def __unicode__(self):
-        return u'%s przez %s' % (self.get_type_display(), self.user)
-
-    if sys.version_info.major == 3:
-        __str__ = __unicode__
+    def __str__(self):
+        return u'{} przez {}'.format(self.get_type_display(), self.user)
 
     @property
     def total_cash(self):
