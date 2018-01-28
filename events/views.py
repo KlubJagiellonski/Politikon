@@ -185,9 +185,15 @@ def create_transaction(request, event_id):
             user, event, bet = Bet.objects.sell_a_bet(request.user, event_id, outcome, for_price)
     except NonexistantEvent:
         raise Http404
-    except (DraftEvent, EventWaitingToBeResolved) as e:
+    except DraftEvent as e:
         result = {
             'error': str(e),
+        }
+        return JSONResponseBadRequest(json.dumps(result))
+    except EventWaitingToBeResolved as e:
+        result ={
+                'error': str(e),
+                'error_type': 'EventWaitingToBeResolved'
         }
         return JSONResponseBadRequest(json.dumps(result))
     except PriceMismatch as e:

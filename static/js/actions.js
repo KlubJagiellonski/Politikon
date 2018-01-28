@@ -428,7 +428,11 @@
                         },
                         error: function (data) {
                             var response = JSON.parse(data.responseText);
-                            notify(response.error, 'error');
+                            if (response.error_type === 'EventWaitingToBeResolved') {
+                                notify(response.error, 'error', 'center', 3000);
+                            } else {
+                                notify(response.error, 'error');
+                            }
                         }
                     }); // ajax
                 });
@@ -465,11 +469,14 @@
         }
 
         // powiadomienia
-        function notify(text, type) {
+        function notify(text, type, layout, timeout) {
+            layout = layout || 'topRight';
+            timeout = timeout || false;
             return noty({
-                layout: 'topRight',
+                layout: layout,
                 text: text,
-                type: type
+                type: type,
+                timeout: timeout
             });
         }
 
