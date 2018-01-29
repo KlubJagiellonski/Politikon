@@ -347,8 +347,8 @@ msgid "Partners"
 msgstr "Partnerzy"
 
 #: templates/base.html:150
-msgid "Code for Poland"
-msgstr "Koduj dla Polski"
+msgid "Academy of Modern Patriotism"
+msgstr "Akademia Nowoczesnego Patriotyzmu"
 
 #: templates/contact.html:14
 msgid "First name"
