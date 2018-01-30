@@ -279,6 +279,10 @@ msgstr "Połączone konta"
 msgid "Your profile"
 msgstr "Twój profil"
 
+#: templates/accounts/user_settings.html:53
+msgid "Group"
+msgstr "Grupa"
+
 #: templates/accounts/user_settings.html:60
 msgid "Name as presented"
 msgstr "Wyświetlane imię i nazwisko"
@@ -604,7 +608,7 @@ msgstr "i"
 
 #: templates/modals/anonymous.html:50
 msgid "Privacy policy"
-msgstr "Polityką Prywatności"
+msgstr "Polityką prywatności"
 
 #: templates/modals/anonymous.html:55
 msgid "Have Twitter or Facebook?"

@@ -13,8 +13,6 @@ from constance import config
 from datetime import timedelta
 from path import path
 
-
-
 DJANGO_PROJECT_ROOT = path(__file__).abspath().dirname().dirname().dirname()
 
 # Django settings for politikon project.
