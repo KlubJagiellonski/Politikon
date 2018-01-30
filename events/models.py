@@ -566,7 +566,7 @@ class Event(EsIndexable, models.Model):
             # This cause display event in "latest outcome"
             bet.is_new_resolved = True
             bet.save()
-        if teams_with_bets:
+        if len(teams_with_bets) > 1:
             team_results = self.__finish_teams_outcome(teams_with_bets)
             for team_result in team_results:
                 (
