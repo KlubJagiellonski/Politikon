@@ -1,13 +1,10 @@
-import json
-
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 
 from accounts.exceptions import TeamJoiningError
-from bladepolska.http import JSONResponseBadRequest
 
 
 class MultiFormMixin(ContextMixin):
