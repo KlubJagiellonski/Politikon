@@ -2,6 +2,7 @@ import json
 
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 
@@ -44,10 +45,10 @@ class MultiFormMixin(ContextMixin):
             try:
                 return getattr(self, form_valid_method)(forms[form_name])
             except TeamJoiningError as e:
-                return JSONResponseBadRequest(json.dumps({
-                    'error': str(e),
-                    'error_type': e.__class__.__name__
-                    }))
+                return render(
+                        self.request,
+                        'accounts/user_settings.html',
+                        context={'error': str(e)})
         else:
             return HttpResponseRedirect(self.get_success_url(form_name))
 

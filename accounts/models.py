@@ -521,7 +521,7 @@ class UserProfile(AbstractBaseUser):
         Return True if user should be able to join the team
         """
         if self.bets.count():
-            raise UserAlreadyPlayed(u"Nie można dołączyć do grupy - użytkownik dokonał zakupu zakładów")
+            raise UserAlreadyPlayed(u"Nie możesz dołączyć do drużyny, ponieważ w przeszłości Twoje konto brało udział w obstawianiu wydarzeń. Aby się do niej zapisać, stwórz nowe konto i nie obstawiaj żadnych wydarzeń do momentu, aż nie zapiszesz się do drużyny.")
         self.team = team
         self.save()
 

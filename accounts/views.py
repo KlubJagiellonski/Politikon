@@ -83,11 +83,7 @@ class UserUpdateView(MultiFormsView):
             user.join_team(access_key.team)
         except TeamAccessKey.DoesNotExist:
             raise InvalidAccessKey(u"Podany klucz dostępu jest nieprawidłowy")
-        except UserAlreadyPlayed as e:
-            raise e
         return redirect(self.success_url)
-
-
 
 
 @class_view_decorator(login_required)

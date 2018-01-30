@@ -4,6 +4,7 @@
 
 {% block js_scripts %}
 <script type="text/javascript" src="{% static 'js/intro/scenario-settings.js' %}"></script>
+{% if error %}<script type="text/javascript">alert('{{ error }}')</script>{% endif %}
 {% endblock %}
 
 {% block content %}
