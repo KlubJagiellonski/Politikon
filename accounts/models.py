@@ -18,6 +18,7 @@ from bladepolska.snapshots import SnapshotAddon
 from constance import config
 from politikon.templatetags.format import formatted
 
+from .exceptions import UserAlreadyPlayed
 from .managers import UserProfileManager
 from .utils import generate_random_string
 
@@ -514,6 +515,15 @@ class UserProfile(AbstractBaseUser):
         :rtype: int
         """
         return self.get_reputation_change(now()-relativedelta(months=1))
+
+    def join_team(self, team):
+        """
+        Return True if user should be able to join the team
+        """
+        if self.bets.count():
+            raise UserAlreadyPlayed(u"Nie można dołączyć do grupy - użytkownik dokonał zakupu zakładów")
+        self.team = team
+        self.save()
 
 
 @python_2_unicode_compatible

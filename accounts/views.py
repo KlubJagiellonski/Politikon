@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.utils.translation import ugettext as _
 
+from .exceptions import UserAlreadyPlayed, InvalidAccessKey
 from .forms import (
     UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm,
     UserSelfRegisterForm, TeamAccessKeyForm
@@ -72,14 +73,18 @@ class UserUpdateView(MultiFormsView):
         return redirect(self.success_url)
 
     def group_form_valid(self, form):
+        """
+        view which adds user to a group
+        """
         key_value = form.data.get('value')
         try:
             access_key = TeamAccessKey.objects.get(value=key_value)
             user = self.get_object()
-            user.team = access_key.team
-            user.save()
+            user.join_team(access_key.team)
         except TeamAccessKey.DoesNotExist:
-            pass
+            raise InvalidAccessKey(u"Podany klucz dostępu jest nieprawidłowy")
+        except UserAlreadyPlayed as e:
+            raise e
         return redirect(self.success_url)
 
 

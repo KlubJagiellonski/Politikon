@@ -1,7 +1,12 @@
+import json
+
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseRedirect
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
+
+from accounts.exceptions import TeamJoiningError
+from bladepolska.http import JSONResponseBadRequest
 
 
 class MultiFormMixin(ContextMixin):
@@ -36,7 +41,13 @@ class MultiFormMixin(ContextMixin):
     def forms_valid(self, forms, form_name=None):
         form_valid_method = '%s_form_valid' % form_name
         if hasattr(self, form_valid_method):
-            return getattr(self, form_valid_method)(forms[form_name])
+            try:
+                return getattr(self, form_valid_method)(forms[form_name])
+            except TeamJoiningError as e:
+                return JSONResponseBadRequest(json.dumps({
+                    'error': str(e),
+                    'error_type': e.__class__.__name__
+                    }))
         else:
             return HttpResponseRedirect(self.get_success_url(form_name))
 
