@@ -17,7 +17,8 @@ factory_boy
 coveralls
 flake8
 
-djangorestframework
+# Since 3.7 DRF no longer supports Django 1.8
+djangorestframework==3.6.4
 djoser==0.6.0
 newrelic
 

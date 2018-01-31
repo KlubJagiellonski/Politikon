@@ -32,9 +32,9 @@ TIME_ZONE = 'Europe/Warsaw'
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 LANGUAGE_CODE = 'en-us'
 
-LOCALE_PATHS = [
-    '/app/locale',
-]
+LOCALE_PATHS = (
+    DJANGO_PROJECT_ROOT / 'locale',
+)
 
 LANGUAGES = [
     ('pl', _('Polish')),
