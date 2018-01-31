@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse_lazy
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView
 from django.utils.translation import ugettext as _
 
-from .exceptions import UserAlreadyPlayed, InvalidAccessKey
+from .exceptions import InvalidAccessKey, TeamJoiningError
 from .forms import (
     UserProfileAvatarForm, UserProfileForm, UserProfileEmailForm,
     UserSelfRegisterForm, TeamAccessKeyForm
@@ -84,6 +84,15 @@ class UserUpdateView(MultiFormsView):
         except TeamAccessKey.DoesNotExist:
             raise InvalidAccessKey(u"Podany klucz dostępu jest nieprawidłowy")
         return redirect(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return super(UserUpdateView, self).post(request, *args, **kwargs)
+        except TeamJoiningError as e:
+            return render(
+                    self.request,
+                    'accounts/user_settings.html',
+                    context={'error': str(e)})
 
 
 @class_view_decorator(login_required)

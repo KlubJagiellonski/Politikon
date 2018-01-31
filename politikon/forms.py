@@ -1,10 +1,7 @@
 from django.http import HttpResponseForbidden
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
-
-from accounts.exceptions import TeamJoiningError
 
 
 class MultiFormMixin(ContextMixin):
@@ -39,13 +36,7 @@ class MultiFormMixin(ContextMixin):
     def forms_valid(self, forms, form_name=None):
         form_valid_method = '%s_form_valid' % form_name
         if hasattr(self, form_valid_method):
-            try:
-                return getattr(self, form_valid_method)(forms[form_name])
-            except TeamJoiningError as e:
-                return render(
-                        self.request,
-                        'accounts/user_settings.html',
-                        context={'error': str(e)})
+            return getattr(self, form_valid_method)(forms[form_name])
         else:
             return HttpResponseRedirect(self.get_success_url(form_name))
 
