@@ -18,6 +18,7 @@ from bladepolska.snapshots import SnapshotAddon
 from constance import config
 from politikon.templatetags.format import formatted
 
+from .exceptions import UserAlreadyPlayed
 from .managers import UserProfileManager
 from .utils import generate_random_string
 
@@ -514,6 +515,15 @@ class UserProfile(AbstractBaseUser):
         :rtype: int
         """
         return self.get_reputation_change(now()-relativedelta(months=1))
+
+    def join_team(self, team):
+        """
+        Add user to a team or raise exception
+        """
+        if self.bets.count():
+            raise UserAlreadyPlayed(u"Nie możesz dołączyć do drużyny, ponieważ w przeszłości Twoje konto brało udział w obstawianiu wydarzeń. Aby się do niej zapisać, stwórz nowe konto i nie obstawiaj żadnych wydarzeń do momentu, aż nie zapiszesz się do drużyny.")
+        self.team = team
+        self.save()
 
 
 @python_2_unicode_compatible
