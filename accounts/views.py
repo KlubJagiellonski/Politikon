@@ -92,7 +92,7 @@ class UserUpdateView(MultiFormsView):
             return render(
                     self.request,
                     'accounts/user_settings.html',
-                    context={'error': str(e)})
+                    context={'error': e.message})
 
 
 @class_view_decorator(login_required)
