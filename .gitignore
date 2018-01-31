@@ -2,6 +2,7 @@
 *.swp
 .coverage
 .idea/
+.vscode/
 .pycharm_helpers/*
 avatars/*
 src/*
