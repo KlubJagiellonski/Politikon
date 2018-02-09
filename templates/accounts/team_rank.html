@@ -8,7 +8,7 @@
             <div class="image" style="background-image: url({{ team.get_avatar_url }})"></div>
             <p class="nickname">{{ team.name }}</p>
         </div>
-        <div class="prawa">
+        <div class="prawa team">
             <p class="rank-wallet">{{ team.avg_portfolio_value|formatted }}</p>
             <p class="rank-freereputy">{{ team.avg_total_cash|formatted }}</p>
             {% if showProfit %}
@@ -21,6 +21,7 @@
             {% if profit %}<br/><span class="small">({{ team.avg_weekly_result|formatted:"True" }}%)</span>{% endif %}
             </p>
             {% endif %}
+            <p class="rank-elo">{{ team.get_elo|formatted }}</p>
         </div>
     </div>
 </div>

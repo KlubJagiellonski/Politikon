@@ -34,6 +34,7 @@
  
 #userinfo .notinwallet .status {width: 30%;}
 
+#userinfo .ranking-event .prawa.team {width: 36%;}
 #userinfo .ranking-event .prawa {width: 25%;}
 #userinfo .ranking-event .prawa p {width: 26%;}
  
@@ -66,7 +67,7 @@ footer .kj {padding-left: 0px; background: none;}
 
 .arrowup, #maintop .userdata .stats p:first-of-type, #featured .details, #betfeed .details-chart, #makeabet .change, #ranking-short, footer .logo, footer .prawa,
 #bet-desc .rss-related .rss-news img, #bet-details .bet-social ul li:nth-last-child(3), #userinfo .notinwallet .status-explanation, #userinfo .history-event .event-date,
-#userinfo .ranking-event .prawa .rank-freereputy
+#userinfo .ranking-event .prawa .rank-freereputy, #userinfo .ranking-event .prawa.team .rank-wallet
 {display: none !important;}
 
 section, footer {width: 96%; padding: 0 2%;}
@@ -101,8 +102,8 @@ footer .lewa {width: 100%; }
 #userinfo .notinwallet .status-change {width: 20%; margin-right: -1.5%;}
 #userinfo .betinwallet .detailed-status {opacity: 1;}
 
-#userinfo .ranking-event .prawa {width: 16%;}
-#userinfo .ranking-event .prawa p {width: 60%;}
+#userinfo .ranking-event .prawa, #userinfo .ranking-event .prawa.team {width: 16%;}
+#userinfo .ranking-event .prawa p, #userinfo .ranking-event .prawa.team p {width: 60%;}
 
 #settings-profile .current-settings div {margin-top: 0px;}
 #settings-profile .current-settings h2 {font-size: 1.125em;}
