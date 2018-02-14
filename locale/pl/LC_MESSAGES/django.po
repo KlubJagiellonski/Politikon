@@ -157,6 +157,10 @@ msgstr "Nie masz wystarczająco reputów."
 msgid "You don't have enough shares."
 msgstr "Nie masz wystarczająco zakładów."
 
+#: events/managers.py:179 events/managers.py:259
+msgid "Event waiting to be resolved"
+msgstr "Wydarzenie czeka na rozstrzygnięcie"
+
 #: events/models.py:33
 msgid "Slug url"
 msgstr "Slug url"
