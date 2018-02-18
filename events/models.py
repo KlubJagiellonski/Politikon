@@ -17,7 +17,12 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from .elo import EloMatch
 from .exceptions import UnknownOutcome, EventNotInProgress
-from .managers import EventManager, BetManager, TransactionManager
+from .managers import (
+    EventManager,
+    BetManager,
+    TeamResultManager,
+    TransactionManager,
+)
 
 from bladepolska.snapshots import SnapshotAddon
 from bladepolska.site import current_domain
@@ -628,6 +633,8 @@ class TeamResult(models.Model):
     """
     Result of team after event is resolved
     """
+
+    objects = TeamResultManager()
 
     team = models.ForeignKey(
         'accounts.Team', related_name='results', related_query_name='result'

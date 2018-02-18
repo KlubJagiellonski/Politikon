@@ -21,7 +21,7 @@
             {% if profit %}<br/><span class="small">({{ team.avg_weekly_result|formatted:"True" }}%)</span>{% endif %}
             </p>
             {% endif %}
-            <p class="rank-elo">{{ team.get_elo|formatted }}</p>
+            <p class="rank-elo">{% if elo %}{{ elo|formatted }}{% else %}n.d.{% endif %}</p>
         </div>
     </div>
 </div>

@@ -29,11 +29,12 @@ def user_rank(context, user, item_class="", profit=None, counter=1):
 
 
 @register.inclusion_tag('accounts/team_rank.html', takes_context=True)
-def team_rank(context, team, item_class="", profit=None, counter=1):
+def team_rank(context, team, elo, item_class="", profit=None, counter=1):
     return {
         'request': context['request'],
         'item_class': item_class,
         'team': team,
+        'elo': elo,
         'profit': profit,
         'showProfit': profit is not None,
         'counter': counter,
