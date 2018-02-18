@@ -756,7 +756,7 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 #userinfo .ranking-event .lewa {width: 60%;}
 #userinfo .ranking-event .rank {width: 7.2%;}
 #userinfo .ranking-event .lewa .image {float: left; width: 80px; height: 80px; border-radius: 50%; margin-right: 5%;background-size: cover;  background-position: center;}
-#userinfo .ranking-event .nickname {color: #58585a; font-size: 1.25em;}
+#userinfo .ranking-event .nickname {width: 60%; color: #58585a; font-size: 1.25em;}
 #userinfo .ranking-event .nickname small {font-size: 0.75em; color: #b4b4b4;}
 
 #userinfo .ranking-event .uservip .nickname {font-weight: 700;}
@@ -769,13 +769,16 @@ ul.tabs li.active {background: #c84d28;;color: #fff;}
 }
 
 #userinfo .ranking-event .prawa {width: 37%;}
+#userinfo .ranking-event .prawa.team {width: 40%;}
 #userinfo .ranking-event:hover {background: #58585a;}
 #userinfo .ranking-event:hover p {color: #fff !important;}
 #userinfo .ranking-event .prawa p {width: 20%; height: 24px; margin-top: 23px !important; padding: 10px 0 0 50px; background-image: url(../img/rank-icons.png); background-repeat: no-repeat;}
+#userinfo .ranking-event .prawa.team p {display: table-cell; width: 13%;}
 
 #userinfo .ranking-event .prawa .rank-wallet {background-position: 0 0;}
 #userinfo .ranking-event .prawa .rank-freereputy {background-position: 0 -34px;}
 #userinfo .ranking-event .prawa .rank-reputation {background-position: 0 -68px;}
+#userinfo .ranking-event .prawa .rank-elo {background-position: 0 -102px; color: #ea6a2a;}
 
 #userinfo .ranking-you {background: #f5f5f5;}
 

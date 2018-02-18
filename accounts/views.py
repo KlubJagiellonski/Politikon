@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import namedtuple
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -16,7 +17,7 @@ from .forms import (
 )
 from .models import UserProfile, Team, TeamAccessKey
 
-from events.models import Bet, Transaction
+from events.models import Bet, TeamResult, Transaction
 from politikon.decorators import class_view_decorator
 from politikon.forms import MultiFormsView
 
@@ -266,10 +267,18 @@ class UsersListView(ListView):
         if user.is_authenticated():
             context.update(UserProfile.objects.get_user_positions(user))
             context['json_data'] = json.dumps(user.get_reputation_history())
+        TeamRank = namedtuple('TeamRank', 'team, elo')
+        team_results = TeamResult.objects.get_ranking_view()
+        other_teams = Team.objects.exclude(
+            id__in=team_results.values_list('team_id', flat=True)
+        )
+        team_leaders = [
+            TeamRank(result.team, result.elo) for result in team_results
+        ] + [TeamRank(team, None) for team in other_teams]
         context.update({
             'best_weekly': UserProfile.objects.get_best_weekly(),
             'best_monthly': UserProfile.objects.get_best_monthly(),
-            'team_leaders': Team.objects.all().order_by('avg_weekly_result')
+            'team_leaders': team_leaders
         })
         return context
 

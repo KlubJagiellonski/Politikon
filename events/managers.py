@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.contrib import auth
 from django.db import models
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -348,6 +348,24 @@ class BetManager(models.Manager):
         ).filter(Q(event__end_date__isnull=True) | Q(event__end_date__gte=user.reset_date)).\
             order_by('-event__end_date').select_related('event')
 
+
+class TeamResultManager(models.Manager):
+    def get_last(self):
+        return (
+            self.model.objects
+            .order_by('team_id', '-created')
+            .distinct('team_id')
+        )
+    
+    def get_ranking_view(self):
+        return (
+            self.model.objects
+            .filter(id__in=self.get_last())
+            .select_related('team')
+            .annotate(players_count=Count('team__userprofile'))
+            .filter(players_count__gt=4)
+            .order_by('-elo')
+        )
 
 class TransactionManager(models.Manager):
     """

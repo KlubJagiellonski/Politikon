@@ -15,7 +15,7 @@
     <div class="zakladki-content">
         <article class="active" id="druzyna">
           {% for team in group %}
-          {% team_rank team "dryzyna" team.avg_weekly_result forloop.counter %}
+          {% team_rank team team.get_elo "dryzyna" team.avg_weekly_result forloop.counter %}
           {% endfor %}
         </article>
     </div>
