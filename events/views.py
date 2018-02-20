@@ -60,8 +60,6 @@ class EventsListView(SearchView):
         # tag = self.request.GET.get('tag')
         # if tag:
         #     queryset = queryset.filter(tags__name__in=[tag]).distinct()
-        for event in queryset:
-            event.object.bet_line = event.object.get_user_bet(self.request.user)
         return queryset
 
     def get_context_data(self, *args, **kwargs):
@@ -72,6 +70,10 @@ class EventsListView(SearchView):
             context['active'] = self.kwargs['category']
         context['popular_tags'] = Event.tags.most_common()[:10]
         context['categories'] = EventCategory.objects.all()
+        for event in context['object_list']:
+            event.object.bet_line = event.object.get_user_bet(
+                self.request.user
+            )
         return context
 
 
