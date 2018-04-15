@@ -623,13 +623,12 @@ msgid "Join us quicker"
 msgstr "Zarejestruj się szybciej"
 
 #: templates/modals/anonymous.html:59
-msgid ""
-"Your account is inactive yet. Please wait for the verification. Thank you."
-msgstr "Twoje konto jest jeszcze nieaktywne. Poczekaj na weryfikację redaktorów."
+msgid "Your account is inactive yet. For adderss email provided during registration we will send you information about activating your account. If you haven't receive such email please check SPAM directory. In case of any troubles, please contact us using contact form in \"contact\" section"
+msgstr "Twoje konto jest jeszcze NIEAKTYWNE. Na podany podczas rejestracji adres email wkrótce wyślemy informację o aktywacji konta. Zdarza się, że nasze wiadomości trafiają do folderu \"Spam\", bardzo prosimy o jego sprawdzenie. W razie problemów zachęcamy do kontaktu poprzez zakładkę \"Kontakt\" na dole strony."
 
 #: templates/modals/anonymous.html:60
 msgid "Come back soon and play!"
-msgstr "Już nie długo będziesz mógł dołączyć do gry!"
+msgstr "Już niedługo będziesz mógł dołączyć do gry i zakładać się razem z innymi graczami!"
 
 #: templates/modals/any.html:4
 msgid "Share the event!"
