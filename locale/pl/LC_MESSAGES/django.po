@@ -628,7 +628,7 @@ msgstr "Twoje konto jest jeszcze NIEAKTYWNE. Na podany podczas rejestracji adres
 
 #: templates/modals/anonymous.html:60
 msgid "Come back soon and play!"
-msgstr "Już nie długo będziesz mógł dołączyć do gry!"
+msgstr "Już niedługo będziesz mógł dołączyć do gry i zakładać się razem z innymi graczami!"
 
 #: templates/modals/any.html:4
 msgid "Share the event!"
